@@ -1,0 +1,234 @@
+namespace ca.mcgill.ecse.mmss.model; 
+
+class MuseumManagement { 
+  1 <@>- 0..1 Manager manager;
+  1 <@>- * Visitor visitors; 
+  1 <@>- 0..20 Employee employees; 
+  1 <@>- * User users; 
+  1 <@>- * WorkDay workingDays; 
+  1 <@>- * Room rooms; 
+  1 <@>- * Ticket tickets;
+  1 <@>- * Tour tours;
+  1 <@>- * Item items;
+  1 <@>- * Loan loans; 
+  1 <@>- * Donation donations; 
+
+  Date date;
+} 
+
+
+class Item { 
+  1 -> 0..1 Loan loan; 
+  autounique itemId; 
+  itemName;
+  description; 
+  Boolean canLoan; 
+  Integer insuranceFee; 
+  Integer loanFee; 
+} 
+
+class Room { 
+  0..1 -> * Item items;
+  unique roomID; 
+  enum { Large,Small,Storage};
+  Integer itemCount = 0;
+} 
+
+
+
+
+
+class User { 
+  1 -> 1..2 AccountType;
+  autounique userId;
+  firstName; 
+  lastName; 
+ 
+
+} 
+
+class AccountType{ 
+  abstract; 
+  unique username; 
+  password;
+
+} 
+
+class Manager{ // unique ID is username
+  isA AccountType;
+} 
+
+class Visitor { // unique ID is username
+  isA AccountType;
+  1 -> 0..5 Loan visitorLoans;
+  1 -> * Donation userDonations;
+  1 -> * Ticket tickets; 
+  1 -> * Tour tours; 
+  balance= 0;
+
+} 
+
+class Employee { // unique ID is username
+  isA AccountType;
+  * -> * WorkDay atWorkDays; 
+
+
+} 
+
+class Exchange { 
+  abstract; 
+  Date submittedDate; 
+  Boolean approved; 
+  } 
+
+class Loan {
+  isA Exchange;
+  autounique loanId;
+  Date dueDate; 
+
+} 
+
+class Donation {
+  isA Exchange;
+  autounique donationId;
+  itemName;
+  descripton;
+} 
+
+class WorkDay { 
+  unique Date workingDate; 
+
+}
+
+class Booking { 
+  abstract; 
+  Date date; 
+  Integer price; 
+
+} 
+
+class Ticket { 
+  isA Booking;
+  autounique ticketID;
+
+} 
+
+class Tour { 
+  isA Booking;
+  autounique tourID;
+
+}
+
+
+// make sure to copy paste this section into umple online seperately.
+
+namespace -;
+
+
+class Item
+{
+  position.association Item__Loan:loan 0,136 6,0;
+  position 21 22 171.808 143.7;
+}
+
+class Visitor
+{
+  position.association Tour:tours__Visitor 122,59 98,0;
+  position.association Ticket:tickets__Visitor 46,58 137,23;
+    position.association Donation:userDonations__Visitor 0,0 157,31;
+  position.association Loan:loans__Visitor 0,28 154,40;
+  position.association Loan:visitorLoans__Visitor 0,20 127,53;
+position 510 441 135.594 58.3594;
+}
+
+class MuseumManagement
+{
+  position 288 215 166.172 58.3594;
+  position.association Manager:manager__MuseumManagement 167,35 0,28;
+  position.association MuseumManagement__Visitor:visitors 150,58 52,0;
+  position.association MuseumManagement__WorkDay:workingDays 167,56 0,10;
+  position.association Booking:bookings__MuseumManagement 112,59 63,0;
+  position.association Employee:employees__MuseumManagement 167,7 0,3;
+  position.association Item:items__MuseumManagement 21,0 124,143;
+  position.association Loan:loans__MuseumManagement 0,11 126,0;
+  position.association MuseumManagement__User:users 147,0 0,86;
+  position.association MuseumManagement__SmallRoom:smallRooms 11,0 36,42;
+  position.association LargeRoom:largeRooms__MuseumManagement 113,0 7,42;
+  position.association Donation:donations__MuseumManagement 64,58 75,0;
+  position.association MuseumManagement__Room:rooms 62,0 41,59;
+  position.association MuseumManagement__Ticket:tickets 0,51 15,0;
+  position.association MuseumManagement__Tour:tours 128,58 0,28;
+}
+
+class Item
+{
+  position 21 22 171.808 143.7;
+}
+
+class User
+{
+  position 595 80 143.137 92.9625;
+  position.association AccountType__User 142,34 0,15;
+}
+
+class AccountType
+{
+  position 819 78 141.913 91.9625;
+}
+
+class Manager
+{
+  position 686 267 109 41.3594;
+}
+
+class Visitor
+{
+  position 510 441 135.594 58.3594;
+}
+
+class Employee
+{
+  position 901 232 109 41.9625;
+  position.association Employee__WorkDay:atWorkDays 24,42 109,0;
+}
+
+class Loan
+{
+  position 22 397 126.406 75.3594;
+}
+
+class Donation
+{
+  position 272 328 156.484 92.3594;
+}
+
+class WorkDay
+{
+  position 749 386 161.675 58.9625;
+}
+
+class Booking
+{
+  position 287 467 116.828 91.3594;
+}
+
+class Ticket
+{
+  position 112 630 128.266 58.3594;
+}
+
+class Tour
+{
+  position 535 622 118.922 58.3594;
+}
+
+class Room
+{
+  position 269 49 153.641 75.3594;
+  position.association Item:items__Room 0,10 172,17;
+}
+
+class Exchange
+{
+  position 59 209 165.125 91.3594;
+}
