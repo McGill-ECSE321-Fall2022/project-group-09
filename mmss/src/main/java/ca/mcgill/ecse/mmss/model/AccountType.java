@@ -2,18 +2,11 @@
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
 
 package ca.mcgill.ecse.mmss.model;
-import java.util.*;
 
-// line 50 "../../../../../mmss.ump"
-// line 174 "../../../../../mmss.ump"
+// line 31 "../../../../../mmss.ump"
+// line 123 "../../../../../mmss.ump"
 public abstract class AccountType
 {
-
-  //------------------------
-  // STATIC VARIABLES
-  //------------------------
-
-  private static Map<String, AccountType> accounttypesByUsername = new HashMap<String, AccountType>();
 
   //------------------------
   // MEMBER VARIABLES
@@ -29,11 +22,8 @@ public abstract class AccountType
 
   public AccountType(String aUsername, String aPassword)
   {
+    username = aUsername;
     password = aPassword;
-    if (!setUsername(aUsername))
-    {
-      throw new RuntimeException("Cannot create due to duplicate username. See http://manual.umple.org?RE003ViolationofUniqueness.html");
-    }
   }
 
   //------------------------
@@ -43,19 +33,8 @@ public abstract class AccountType
   public boolean setUsername(String aUsername)
   {
     boolean wasSet = false;
-    String anOldUsername = getUsername();
-    if (anOldUsername != null && anOldUsername.equals(aUsername)) {
-      return true;
-    }
-    if (hasWithUsername(aUsername)) {
-      return wasSet;
-    }
     username = aUsername;
     wasSet = true;
-    if (anOldUsername != null) {
-      accounttypesByUsername.remove(anOldUsername);
-    }
-    accounttypesByUsername.put(aUsername, this);
     return wasSet;
   }
 
@@ -71,16 +50,6 @@ public abstract class AccountType
   {
     return username;
   }
-  /* Code from template attribute_GetUnique */
-  public static AccountType getWithUsername(String aUsername)
-  {
-    return accounttypesByUsername.get(aUsername);
-  }
-  /* Code from template attribute_HasUnique */
-  public static boolean hasWithUsername(String aUsername)
-  {
-    return getWithUsername(aUsername) != null;
-  }
 
   public String getPassword()
   {
@@ -88,9 +57,7 @@ public abstract class AccountType
   }
 
   public void delete()
-  {
-    accounttypesByUsername.remove(getUsername());
-  }
+  {}
 
 
   public String toString()

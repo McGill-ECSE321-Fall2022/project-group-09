@@ -4,83 +4,47 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 116 "../../../../../mmss.ump"
-// line 220 "../../../../../mmss.ump"
+// line 104 "../../../../../mmss.ump"
+// line 169 "../../../../../mmss.ump"
 public class Tour extends Booking
 {
-
-  //------------------------
-  // STATIC VARIABLES
-  //------------------------
-
-  private static int nextTourID = 1;
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Autounique Attributes
-  private int tourID;
-
-  //Tour Associations
-  private MuseumManagement museumManagement;
+  //Tour Attributes
+  private String tourID;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Tour(Date aDate, int aPrice, MuseumManagement aMuseumManagement)
+  public Tour(Date aDate, int aPrice, String aTourID)
   {
     super(aDate, aPrice);
-    tourID = nextTourID++;
-    boolean didAddMuseumManagement = setMuseumManagement(aMuseumManagement);
-    if (!didAddMuseumManagement)
-    {
-      throw new RuntimeException("Unable to create tour due to museumManagement. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    tourID = aTourID;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public int getTourID()
-  {
-    return tourID;
-  }
-  /* Code from template association_GetOne */
-  public MuseumManagement getMuseumManagement()
-  {
-    return museumManagement;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setMuseumManagement(MuseumManagement aMuseumManagement)
+  public boolean setTourID(String aTourID)
   {
     boolean wasSet = false;
-    if (aMuseumManagement == null)
-    {
-      return wasSet;
-    }
-
-    MuseumManagement existingMuseumManagement = museumManagement;
-    museumManagement = aMuseumManagement;
-    if (existingMuseumManagement != null && !existingMuseumManagement.equals(aMuseumManagement))
-    {
-      existingMuseumManagement.removeTour(this);
-    }
-    museumManagement.addTour(this);
+    tourID = aTourID;
     wasSet = true;
     return wasSet;
   }
 
+  public String getTourID()
+  {
+    return tourID;
+  }
+
   public void delete()
   {
-    MuseumManagement placeholderMuseumManagement = museumManagement;
-    this.museumManagement = null;
-    if(placeholderMuseumManagement != null)
-    {
-      placeholderMuseumManagement.removeTour(this);
-    }
     super.delete();
   }
 
@@ -88,7 +52,6 @@ public class Tour extends Booking
   public String toString()
   {
     return super.toString() + "["+
-            "tourID" + ":" + getTourID()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "museumManagement = "+(getMuseumManagement()!=null?Integer.toHexString(System.identityHashCode(getMuseumManagement())):"null");
+            "tourID" + ":" + getTourID()+ "]";
   }
 }

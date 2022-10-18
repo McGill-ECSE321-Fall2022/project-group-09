@@ -4,51 +4,43 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 91 "../../../../../mmss.ump"
-// line 200 "../../../../../mmss.ump"
+// line 72 "../../../../../mmss.ump"
+// line 149 "../../../../../mmss.ump"
 public class Donation extends Exchange
 {
-
-  //------------------------
-  // STATIC VARIABLES
-  //------------------------
-
-  private static int nextDonationId = 1;
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //Donation Attributes
+  private String donationId;
   private String itemName;
   private String descripton;
-
-  //Autounique Attributes
-  private int donationId;
-
-  //Donation Associations
-  private MuseumManagement museumManagement;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Donation(Date aSubmittedDate, boolean aApproved, String aItemName, String aDescripton, MuseumManagement aMuseumManagement)
+  public Donation(Date aSubmittedDate, boolean aApproved, String aDonationId, String aItemName, String aDescripton)
   {
     super(aSubmittedDate, aApproved);
+    donationId = aDonationId;
     itemName = aItemName;
     descripton = aDescripton;
-    donationId = nextDonationId++;
-    boolean didAddMuseumManagement = setMuseumManagement(aMuseumManagement);
-    if (!didAddMuseumManagement)
-    {
-      throw new RuntimeException("Unable to create donation due to museumManagement. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setDonationId(String aDonationId)
+  {
+    boolean wasSet = false;
+    donationId = aDonationId;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setItemName(String aItemName)
   {
@@ -66,6 +58,11 @@ public class Donation extends Exchange
     return wasSet;
   }
 
+  public String getDonationId()
+  {
+    return donationId;
+  }
+
   public String getItemName()
   {
     return itemName;
@@ -76,43 +73,8 @@ public class Donation extends Exchange
     return descripton;
   }
 
-  public int getDonationId()
-  {
-    return donationId;
-  }
-  /* Code from template association_GetOne */
-  public MuseumManagement getMuseumManagement()
-  {
-    return museumManagement;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setMuseumManagement(MuseumManagement aMuseumManagement)
-  {
-    boolean wasSet = false;
-    if (aMuseumManagement == null)
-    {
-      return wasSet;
-    }
-
-    MuseumManagement existingMuseumManagement = museumManagement;
-    museumManagement = aMuseumManagement;
-    if (existingMuseumManagement != null && !existingMuseumManagement.equals(aMuseumManagement))
-    {
-      existingMuseumManagement.removeDonation(this);
-    }
-    museumManagement.addDonation(this);
-    wasSet = true;
-    return wasSet;
-  }
-
   public void delete()
   {
-    MuseumManagement placeholderMuseumManagement = museumManagement;
-    this.museumManagement = null;
-    if(placeholderMuseumManagement != null)
-    {
-      placeholderMuseumManagement.removeDonation(this);
-    }
     super.delete();
   }
 
@@ -122,7 +84,6 @@ public class Donation extends Exchange
     return super.toString() + "["+
             "donationId" + ":" + getDonationId()+ "," +
             "itemName" + ":" + getItemName()+ "," +
-            "descripton" + ":" + getDescripton()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "museumManagement = "+(getMuseumManagement()!=null?Integer.toHexString(System.identityHashCode(getMuseumManagement())):"null");
+            "descripton" + ":" + getDescripton()+ "]";
   }
 }

@@ -4,16 +4,10 @@
 package ca.mcgill.ecse.mmss.model;
 import java.util.*;
 
-// line 30 "../../../../../mmss.ump"
-// line 225 "../../../../../mmss.ump"
+// line 13 "../../../../../mmss.ump"
+// line 174 "../../../../../mmss.ump"
 public class Room
 {
-
-  //------------------------
-  // STATIC VARIABLES
-  //------------------------
-
-  private static Map<String, Room> roomsByRoomID = new HashMap<String, Room>();
 
   //------------------------
   // MEMBER VARIABLES
@@ -21,33 +15,24 @@ public class Room
 
   //Room Attributes
   private String roomID;
-  private int itemCount;
+  private int artefactCount;
 
   //Room State Machines
   public enum Enum { Large, Small, Storage }
   private Enum enum;
 
   //Room Associations
-  private List<Item> items;
-  private MuseumManagement museumManagement;
+  private List<Artefact> artefacts;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Room(String aRoomID, MuseumManagement aMuseumManagement)
+  public Room(String aRoomID)
   {
-    itemCount = 0;
-    if (!setRoomID(aRoomID))
-    {
-      throw new RuntimeException("Cannot create due to duplicate roomID. See http://manual.umple.org?RE003ViolationofUniqueness.html");
-    }
-    items = new ArrayList<Item>();
-    boolean didAddMuseumManagement = setMuseumManagement(aMuseumManagement);
-    if (!didAddMuseumManagement)
-    {
-      throw new RuntimeException("Unable to create room due to museumManagement. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    roomID = aRoomID;
+    artefactCount = 0;
+    artefacts = new ArrayList<Artefact>();
     setEnum(Enum.Large);
   }
 
@@ -58,26 +43,15 @@ public class Room
   public boolean setRoomID(String aRoomID)
   {
     boolean wasSet = false;
-    String anOldRoomID = getRoomID();
-    if (anOldRoomID != null && anOldRoomID.equals(aRoomID)) {
-      return true;
-    }
-    if (hasWithRoomID(aRoomID)) {
-      return wasSet;
-    }
     roomID = aRoomID;
     wasSet = true;
-    if (anOldRoomID != null) {
-      roomsByRoomID.remove(anOldRoomID);
-    }
-    roomsByRoomID.put(aRoomID, this);
     return wasSet;
   }
 
-  public boolean setItemCount(int aItemCount)
+  public boolean setArtefactCount(int aArtefactCount)
   {
     boolean wasSet = false;
-    itemCount = aItemCount;
+    artefactCount = aArtefactCount;
     wasSet = true;
     return wasSet;
   }
@@ -86,20 +60,10 @@ public class Room
   {
     return roomID;
   }
-  /* Code from template attribute_GetUnique */
-  public static Room getWithRoomID(String aRoomID)
-  {
-    return roomsByRoomID.get(aRoomID);
-  }
-  /* Code from template attribute_HasUnique */
-  public static boolean hasWithRoomID(String aRoomID)
-  {
-    return getWithRoomID(aRoomID) != null;
-  }
 
-  public int getItemCount()
+  public int getArtefactCount()
   {
-    return itemCount;
+    return artefactCount;
   }
 
   public String getEnumFullName()
@@ -119,127 +83,96 @@ public class Room
     return true;
   }
   /* Code from template association_GetMany */
-  public Item getItem(int index)
+  public Artefact getArtefact(int index)
   {
-    Item aItem = items.get(index);
-    return aItem;
+    Artefact aArtefact = artefacts.get(index);
+    return aArtefact;
   }
 
-  public List<Item> getItems()
+  public List<Artefact> getArtefacts()
   {
-    List<Item> newItems = Collections.unmodifiableList(items);
-    return newItems;
+    List<Artefact> newArtefacts = Collections.unmodifiableList(artefacts);
+    return newArtefacts;
   }
 
-  public int numberOfItems()
+  public int numberOfArtefacts()
   {
-    int number = items.size();
+    int number = artefacts.size();
     return number;
   }
 
-  public boolean hasItems()
+  public boolean hasArtefacts()
   {
-    boolean has = items.size() > 0;
+    boolean has = artefacts.size() > 0;
     return has;
   }
 
-  public int indexOfItem(Item aItem)
+  public int indexOfArtefact(Artefact aArtefact)
   {
-    int index = items.indexOf(aItem);
+    int index = artefacts.indexOf(aArtefact);
     return index;
   }
-  /* Code from template association_GetOne */
-  public MuseumManagement getMuseumManagement()
-  {
-    return museumManagement;
-  }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfItems()
+  public static int minimumNumberOfArtefacts()
   {
     return 0;
   }
   /* Code from template association_AddUnidirectionalMany */
-  public boolean addItem(Item aItem)
+  public boolean addArtefact(Artefact aArtefact)
   {
     boolean wasAdded = false;
-    if (items.contains(aItem)) { return false; }
-    items.add(aItem);
+    if (artefacts.contains(aArtefact)) { return false; }
+    artefacts.add(aArtefact);
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeItem(Item aItem)
+  public boolean removeArtefact(Artefact aArtefact)
   {
     boolean wasRemoved = false;
-    if (items.contains(aItem))
+    if (artefacts.contains(aArtefact))
     {
-      items.remove(aItem);
+      artefacts.remove(aArtefact);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addItemAt(Item aItem, int index)
+  public boolean addArtefactAt(Artefact aArtefact, int index)
   {  
     boolean wasAdded = false;
-    if(addItem(aItem))
+    if(addArtefact(aArtefact))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfItems()) { index = numberOfItems() - 1; }
-      items.remove(aItem);
-      items.add(index, aItem);
+      if(index > numberOfArtefacts()) { index = numberOfArtefacts() - 1; }
+      artefacts.remove(aArtefact);
+      artefacts.add(index, aArtefact);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveItemAt(Item aItem, int index)
+  public boolean addOrMoveArtefactAt(Artefact aArtefact, int index)
   {
     boolean wasAdded = false;
-    if(items.contains(aItem))
+    if(artefacts.contains(aArtefact))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfItems()) { index = numberOfItems() - 1; }
-      items.remove(aItem);
-      items.add(index, aItem);
+      if(index > numberOfArtefacts()) { index = numberOfArtefacts() - 1; }
+      artefacts.remove(aArtefact);
+      artefacts.add(index, aArtefact);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addItemAt(aItem, index);
+      wasAdded = addArtefactAt(aArtefact, index);
     }
     return wasAdded;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setMuseumManagement(MuseumManagement aMuseumManagement)
-  {
-    boolean wasSet = false;
-    if (aMuseumManagement == null)
-    {
-      return wasSet;
-    }
-
-    MuseumManagement existingMuseumManagement = museumManagement;
-    museumManagement = aMuseumManagement;
-    if (existingMuseumManagement != null && !existingMuseumManagement.equals(aMuseumManagement))
-    {
-      existingMuseumManagement.removeRoom(this);
-    }
-    museumManagement.addRoom(this);
-    wasSet = true;
-    return wasSet;
   }
 
   public void delete()
   {
-    roomsByRoomID.remove(getRoomID());
-    items.clear();
-    MuseumManagement placeholderMuseumManagement = museumManagement;
-    this.museumManagement = null;
-    if(placeholderMuseumManagement != null)
-    {
-      placeholderMuseumManagement.removeRoom(this);
-    }
+    artefacts.clear();
   }
 
 
@@ -247,7 +180,6 @@ public class Room
   {
     return super.toString() + "["+
             "roomID" + ":" + getRoomID()+ "," +
-            "itemCount" + ":" + getItemCount()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "museumManagement = "+(getMuseumManagement()!=null?Integer.toHexString(System.identityHashCode(getMuseumManagement())):"null");
+            "artefactCount" + ":" + getArtefactCount()+ "]";
   }
 }

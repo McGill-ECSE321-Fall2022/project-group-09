@@ -4,63 +4,58 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 20 "../../../../../mmss.ump"
-// line 128 "../../../../../mmss.ump"
-// line 163 "../../../../../mmss.ump"
-public class Item
+// line 3 "../../../../../mmss.ump"
+// line 193 "../../../../../mmss.ump"
+// line 198 "../../../../../mmss.ump"
+// line 210 "../../../../../mmss.ump"
+public class Artefact
 {
-
-  //------------------------
-  // STATIC VARIABLES
-  //------------------------
-
-  private static int nextItemId = 1;
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Item Attributes
-  private String itemName;
+  //Artefact Attributes
+  private String artefactId;
+  private String artefactName;
   private String description;
   private boolean canLoan;
   private int insuranceFee;
   private int loanFee;
 
-  //Autounique Attributes
-  private int itemId;
-
-  //Item Associations
+  //Artefact Associations
   private Loan loan;
-  private MuseumManagement museumManagement;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Item(String aItemName, String aDescription, boolean aCanLoan, int aInsuranceFee, int aLoanFee, MuseumManagement aMuseumManagement)
+  public Artefact(String aArtefactId, String aArtefactName, String aDescription, boolean aCanLoan, int aInsuranceFee, int aLoanFee)
   {
-    itemName = aItemName;
+    artefactId = aArtefactId;
+    artefactName = aArtefactName;
     description = aDescription;
     canLoan = aCanLoan;
     insuranceFee = aInsuranceFee;
     loanFee = aLoanFee;
-    itemId = nextItemId++;
-    boolean didAddMuseumManagement = setMuseumManagement(aMuseumManagement);
-    if (!didAddMuseumManagement)
-    {
-      throw new RuntimeException("Unable to create item due to museumManagement. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setItemName(String aItemName)
+  public boolean setArtefactId(String aArtefactId)
   {
     boolean wasSet = false;
-    itemName = aItemName;
+    artefactId = aArtefactId;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setArtefactName(String aArtefactName)
+  {
+    boolean wasSet = false;
+    artefactName = aArtefactName;
     wasSet = true;
     return wasSet;
   }
@@ -97,9 +92,14 @@ public class Item
     return wasSet;
   }
 
-  public String getItemName()
+  public String getArtefactId()
   {
-    return itemName;
+    return artefactId;
+  }
+
+  public String getArtefactName()
+  {
+    return artefactName;
   }
 
   public String getDescription()
@@ -121,11 +121,6 @@ public class Item
   {
     return loanFee;
   }
-
-  public int getItemId()
-  {
-    return itemId;
-  }
   /* Code from template attribute_IsBoolean */
   public boolean isCanLoan()
   {
@@ -142,11 +137,6 @@ public class Item
     boolean has = loan != null;
     return has;
   }
-  /* Code from template association_GetOne */
-  public MuseumManagement getMuseumManagement()
-  {
-    return museumManagement;
-  }
   /* Code from template association_SetUnidirectionalOptionalOne */
   public boolean setLoan(Loan aNewLoan)
   {
@@ -155,48 +145,22 @@ public class Item
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setMuseumManagement(MuseumManagement aMuseumManagement)
-  {
-    boolean wasSet = false;
-    if (aMuseumManagement == null)
-    {
-      return wasSet;
-    }
-
-    MuseumManagement existingMuseumManagement = museumManagement;
-    museumManagement = aMuseumManagement;
-    if (existingMuseumManagement != null && !existingMuseumManagement.equals(aMuseumManagement))
-    {
-      existingMuseumManagement.removeItem(this);
-    }
-    museumManagement.addItem(this);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
     loan = null;
-    MuseumManagement placeholderMuseumManagement = museumManagement;
-    this.museumManagement = null;
-    if(placeholderMuseumManagement != null)
-    {
-      placeholderMuseumManagement.removeItem(this);
-    }
   }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "itemId" + ":" + getItemId()+ "," +
-            "itemName" + ":" + getItemName()+ "," +
+            "artefactId" + ":" + getArtefactId()+ "," +
+            "artefactName" + ":" + getArtefactName()+ "," +
             "description" + ":" + getDescription()+ "," +
             "canLoan" + ":" + getCanLoan()+ "," +
             "insuranceFee" + ":" + getInsuranceFee()+ "," +
             "loanFee" + ":" + getLoanFee()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "loan = "+(getLoan()!=null?Integer.toHexString(System.identityHashCode(getLoan())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "museumManagement = "+(getMuseumManagement()!=null?Integer.toHexString(System.identityHashCode(getMuseumManagement())):"null");
+            "  " + "loan = "+(getLoan()!=null?Integer.toHexString(System.identityHashCode(getLoan())):"null");
   }
 }

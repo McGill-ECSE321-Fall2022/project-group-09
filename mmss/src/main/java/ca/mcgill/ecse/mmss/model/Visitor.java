@@ -5,9 +5,9 @@ package ca.mcgill.ecse.mmss.model;
 import java.util.*;
 import java.sql.Date;
 
-// line 61 "../../../../../mmss.ump"
-// line 134 "../../../../../mmss.ump"
-// line 184 "../../../../../mmss.ump"
+// line 42 "../../../../../mmss.ump"
+// line 113 "../../../../../mmss.ump"
+// line 133 "../../../../../mmss.ump"
 public class Visitor extends AccountType
 {
 
@@ -23,13 +23,12 @@ public class Visitor extends AccountType
   private List<Donation> userDonations;
   private List<Ticket> tickets;
   private List<Tour> tours;
-  private MuseumManagement museumManagement;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Visitor(String aUsername, String aPassword, MuseumManagement aMuseumManagement)
+  public Visitor(String aUsername, String aPassword)
   {
     super(aUsername, aPassword);
     balance = 0;
@@ -37,11 +36,6 @@ public class Visitor extends AccountType
     userDonations = new ArrayList<Donation>();
     tickets = new ArrayList<Ticket>();
     tours = new ArrayList<Tour>();
-    boolean didAddMuseumManagement = setMuseumManagement(aMuseumManagement);
-    if (!didAddMuseumManagement)
-    {
-      throw new RuntimeException("Unable to create visitor due to museumManagement. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
   }
 
   //------------------------
@@ -179,11 +173,6 @@ public class Visitor extends AccountType
   {
     int index = tours.indexOf(aTour);
     return index;
-  }
-  /* Code from template association_GetOne */
-  public MuseumManagement getMuseumManagement()
-  {
-    return museumManagement;
   }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfVisitorLoans()
@@ -445,25 +434,6 @@ public class Visitor extends AccountType
     }
     return wasAdded;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setMuseumManagement(MuseumManagement aMuseumManagement)
-  {
-    boolean wasSet = false;
-    if (aMuseumManagement == null)
-    {
-      return wasSet;
-    }
-
-    MuseumManagement existingMuseumManagement = museumManagement;
-    museumManagement = aMuseumManagement;
-    if (existingMuseumManagement != null && !existingMuseumManagement.equals(aMuseumManagement))
-    {
-      existingMuseumManagement.removeVisitor(this);
-    }
-    museumManagement.addVisitor(this);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
@@ -471,12 +441,6 @@ public class Visitor extends AccountType
     userDonations.clear();
     tickets.clear();
     tours.clear();
-    MuseumManagement placeholderMuseumManagement = museumManagement;
-    this.museumManagement = null;
-    if(placeholderMuseumManagement != null)
-    {
-      placeholderMuseumManagement.removeVisitor(this);
-    }
     super.delete();
   }
 
@@ -484,7 +448,6 @@ public class Visitor extends AccountType
   public String toString()
   {
     return super.toString() + "["+
-            "balance" + ":" + getBalance()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "museumManagement = "+(getMuseumManagement()!=null?Integer.toHexString(System.identityHashCode(getMuseumManagement())):"null");
+            "balance" + ":" + getBalance()+ "]";
   }
 }

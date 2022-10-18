@@ -4,8 +4,8 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 78 "../../../../../mmss.ump"
-// line 231 "../../../../../mmss.ump"
+// line 59 "../../../../../mmss.ump"
+// line 181 "../../../../../mmss.ump"
 public abstract class Exchange
 {
 

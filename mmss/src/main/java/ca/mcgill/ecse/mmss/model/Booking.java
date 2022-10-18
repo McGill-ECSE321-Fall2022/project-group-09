@@ -4,8 +4,8 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 103 "../../../../../mmss.ump"
-// line 210 "../../../../../mmss.ump"
+// line 91 "../../../../../mmss.ump"
+// line 159 "../../../../../mmss.ump"
 public abstract class Booking
 {
 

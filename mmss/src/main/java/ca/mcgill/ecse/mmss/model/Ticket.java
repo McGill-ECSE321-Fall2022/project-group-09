@@ -4,83 +4,47 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 110 "../../../../../mmss.ump"
-// line 215 "../../../../../mmss.ump"
+// line 98 "../../../../../mmss.ump"
+// line 164 "../../../../../mmss.ump"
 public class Ticket extends Booking
 {
-
-  //------------------------
-  // STATIC VARIABLES
-  //------------------------
-
-  private static int nextTicketID = 1;
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Autounique Attributes
-  private int ticketID;
-
-  //Ticket Associations
-  private MuseumManagement museumManagement;
+  //Ticket Attributes
+  private String ticketID;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Ticket(Date aDate, int aPrice, MuseumManagement aMuseumManagement)
+  public Ticket(Date aDate, int aPrice, String aTicketID)
   {
     super(aDate, aPrice);
-    ticketID = nextTicketID++;
-    boolean didAddMuseumManagement = setMuseumManagement(aMuseumManagement);
-    if (!didAddMuseumManagement)
-    {
-      throw new RuntimeException("Unable to create ticket due to museumManagement. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    ticketID = aTicketID;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public int getTicketID()
-  {
-    return ticketID;
-  }
-  /* Code from template association_GetOne */
-  public MuseumManagement getMuseumManagement()
-  {
-    return museumManagement;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setMuseumManagement(MuseumManagement aMuseumManagement)
+  public boolean setTicketID(String aTicketID)
   {
     boolean wasSet = false;
-    if (aMuseumManagement == null)
-    {
-      return wasSet;
-    }
-
-    MuseumManagement existingMuseumManagement = museumManagement;
-    museumManagement = aMuseumManagement;
-    if (existingMuseumManagement != null && !existingMuseumManagement.equals(aMuseumManagement))
-    {
-      existingMuseumManagement.removeTicket(this);
-    }
-    museumManagement.addTicket(this);
+    ticketID = aTicketID;
     wasSet = true;
     return wasSet;
   }
 
+  public String getTicketID()
+  {
+    return ticketID;
+  }
+
   public void delete()
   {
-    MuseumManagement placeholderMuseumManagement = museumManagement;
-    this.museumManagement = null;
-    if(placeholderMuseumManagement != null)
-    {
-      placeholderMuseumManagement.removeTicket(this);
-    }
     super.delete();
   }
 
@@ -88,7 +52,6 @@ public class Ticket extends Booking
   public String toString()
   {
     return super.toString() + "["+
-            "ticketID" + ":" + getTicketID()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "museumManagement = "+(getMuseumManagement()!=null?Integer.toHexString(System.identityHashCode(getMuseumManagement())):"null");
+            "ticketID" + ":" + getTicketID()+ "]";
   }
 }
