@@ -1,38 +1,33 @@
-namespace ca.mcgill.ecse.mmss.model; 
-
 class Artefact { 
-  1 -> 0..1 Loan loan; 
-  artefactId; 
+  1 artefact <- 0..1 Loan loan;
+  Integer artefactId; 
   artefactName;
   description; 
-  Boolean canLoan; 
+  Boolean canLoan=false; 
   Integer insuranceFee; 
   Integer loanFee; 
 } 
 
 class Room { 
-  0..1 -> * Artefact artefacts;
-  roomID; 
-  enum { Large,Small,Storage};
+  0..1 room <- * Artefact artefacts;
+  Integer roomID; 
   Integer artefactCount = 0;
+  enum {Large,Small,Storage};
 } 
-
-
 
 class Person { 
-  1 -> 1..2 AccountType accounts;
-  userId;
+  // Enforce [1..2] with a constraint
+  1 person <- * AccountType accounts;
+  Integer userId;
   firstName; 
   lastName; 
- 
-
 } 
 
+// What generalization strategies?
 class AccountType{ 
   abstract; 
   username; 
   password;
-
 } 
 
 class Manager{ // unique ID is username
@@ -41,74 +36,62 @@ class Manager{ // unique ID is username
 
 class Visitor { // unique ID is username
   isA AccountType;
-  1 -> 0..5 Loan visitorLoans;
-  1 -> * Donation userDonations;
-  1 -> * Ticket tickets; 
-  1 -> * Tour tours; 
+  // Enfore [0,5] with constraint
+  1 visitor <- * Loan visitorLoans;
+  1 visitor <- * Donation userDonations;
+  1 visitor <- * Ticket tickets; 
+  1 visitor <- * Tour tours; 
   balance= 0;
-
 } 
 
 class Employee { // unique ID is username
   isA AccountType;
-   
-
-
 } 
 
 class Exchange { 
   abstract; 
   Date submittedDate; 
-  Boolean approved; 
+  Boolean approved=false; 
   } 
 
 class Loan {
   isA Exchange;
-  loanId;
+  Integer loanId;
   Date dueDate; 
-
 } 
 
 class Donation {
   isA Exchange;
-  donationId;
+  Integer donationId;
   itemName;
   descripton;
 } 
 
 class Shift { 
+  Integer shiftId;   
+  Date workingDate;
   enum {Morning, Afternoon, Evening};
-  0..1 -> * Employee workingOnShift; 
-  0..1 -> * WorkDay workDaysOnShift;
-    
-}
-
-class WorkDay { 
-Date workingDate; 
-
+  0..1 shift <- * Employee assignedEmployees;     
 }
 
 class Booking { 
   abstract; 
   Date date; 
   Integer price; 
-
 } 
 
 class Ticket { 
   isA Booking;
-  ticketID;
-
+  Integer ticketID;
 } 
 
 class Tour { 
   isA Booking;
-  tourID;
-
+  Integer tourID;
+  Integer numberOfParticipants;
 }
 
 namespace -;
-
 
 class Visitor
 {
@@ -117,6 +100,10 @@ class Visitor
     position.association Donation:userDonations__Visitor 0,0 149,26;
   position.association Loan:loans__Visitor 0,28 154,40;
   position.association Loan:visitorLoans__Visitor 0,20 123,21;
+  position.association Loan:visitorLoans__Visitor:visitor 0,10 123,20;
+  position.association Donation:userDonations__Visitor:visitor 0,10 152,82;
+  position.association Ticket:tickets__Visitor:visitor 0,10 7,0;
+  position.association Tour:tours__Visitor:visitor 56,114 0,10;
 position 510 441 135.594 58.3594;
 }
 
@@ -151,11 +138,6 @@ class Donation
   position 272 328 156.484 92.3594;
 }
 
-class WorkDay
-{
-  position 743 384 151.062 58.6979;
-}
-
 class Booking
 {
   position 502 540 116.854 91.6979;
@@ -176,6 +158,7 @@ class Room
   position 326 68 153.667 75.6979;
   position.association Item:items__Room 0,10 173,45;
   position.association Artefact:artefacts__Room 0,10 173,20;
+  position.association Artefact:artefacts__Room:room 0,10 167,17;
 }
 
 class Exchange
@@ -188,6 +171,7 @@ class Person
   position 559 80 140.719 92.6979;
   position.association AccountType__Person 142,8 0,10;
   position.association AccountType:accounts__Person 142,9 0,10;
+  position.association AccountType:accounts__Person:person 137,3 0,10;
 }
 
 class Artefact
@@ -217,4 +201,7 @@ class Shift
   position 994 328 109 41.6979;
   position.association Employee:workingOnShift__Shift 38,0 60,42;
   position.association Shift__WorkDay:workDaysOnShift 0,27 112,0;
+  position.association Employee:assignedEmplyees__Shift:shift 2,0 104,41;
+  position.association Shift:shift__WorkDay:workDaysOnShift 0,10 45,0;
+  position.association Employee:assignedEmployees__Shift:shift 2,0 104,41;
 }
