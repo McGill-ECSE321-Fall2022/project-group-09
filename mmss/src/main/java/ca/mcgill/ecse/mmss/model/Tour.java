@@ -4,8 +4,8 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 104 "../../../../../mmss.ump"
-// line 169 "../../../../../mmss.ump"
+// line 90 "../../../../../mmss.ump"
+// line 153 "../../../../../mmss.ump"
 public class Tour extends Booking
 {
 
@@ -14,37 +14,61 @@ public class Tour extends Booking
   //------------------------
 
   //Tour Attributes
-  private String tourID;
+  private int numberOfParticipants;
+
+  //Tour Associations
+  private Visitor visitor;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Tour(Date aDate, int aPrice, String aTourID)
+  public Tour(int aBookingId, Date aDate, int aPrice, int aNumberOfParticipants, Visitor aVisitor)
   {
-    super(aDate, aPrice);
-    tourID = aTourID;
+    super(aBookingId, aDate, aPrice);
+    numberOfParticipants = aNumberOfParticipants;
+    if (!setVisitor(aVisitor))
+    {
+      throw new RuntimeException("Unable to create Tour due to aVisitor. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setTourID(String aTourID)
+  public boolean setNumberOfParticipants(int aNumberOfParticipants)
   {
     boolean wasSet = false;
-    tourID = aTourID;
+    numberOfParticipants = aNumberOfParticipants;
     wasSet = true;
     return wasSet;
   }
 
-  public String getTourID()
+  public int getNumberOfParticipants()
   {
-    return tourID;
+    return numberOfParticipants;
+  }
+  /* Code from template association_GetOne */
+  public Visitor getVisitor()
+  {
+    return visitor;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setVisitor(Visitor aNewVisitor)
+  {
+    boolean wasSet = false;
+    if (aNewVisitor != null)
+    {
+      visitor = aNewVisitor;
+      wasSet = true;
+    }
+    return wasSet;
   }
 
   public void delete()
   {
+    visitor = null;
     super.delete();
   }
 
@@ -52,6 +76,7 @@ public class Tour extends Booking
   public String toString()
   {
     return super.toString() + "["+
-            "tourID" + ":" + getTourID()+ "]";
+            "numberOfParticipants" + ":" + getNumberOfParticipants()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "visitor = "+(getVisitor()!=null?Integer.toHexString(System.identityHashCode(getVisitor())):"null");
   }
 }

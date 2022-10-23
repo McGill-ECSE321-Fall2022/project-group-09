@@ -4,8 +4,8 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 91 "../../../../../mmss.ump"
-// line 159 "../../../../../mmss.ump"
+// line 78 "../../../../../mmss.ump"
+// line 143 "../../../../../mmss.ump"
 public abstract class Booking
 {
 
@@ -14,6 +14,7 @@ public abstract class Booking
   //------------------------
 
   //Booking Attributes
+  private int bookingId;
   private Date date;
   private int price;
 
@@ -21,8 +22,9 @@ public abstract class Booking
   // CONSTRUCTOR
   //------------------------
 
-  public Booking(Date aDate, int aPrice)
+  public Booking(int aBookingId, Date aDate, int aPrice)
   {
+    bookingId = aBookingId;
     date = aDate;
     price = aPrice;
   }
@@ -30,6 +32,14 @@ public abstract class Booking
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setBookingId(int aBookingId)
+  {
+    boolean wasSet = false;
+    bookingId = aBookingId;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setDate(Date aDate)
   {
@@ -45,6 +55,11 @@ public abstract class Booking
     price = aPrice;
     wasSet = true;
     return wasSet;
+  }
+
+  public int getBookingId()
+  {
+    return bookingId;
   }
 
   public Date getDate()
@@ -64,6 +79,7 @@ public abstract class Booking
   public String toString()
   {
     return super.toString() + "["+
+            "bookingId" + ":" + getBookingId()+ "," +
             "price" + ":" + getPrice()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null");
   }

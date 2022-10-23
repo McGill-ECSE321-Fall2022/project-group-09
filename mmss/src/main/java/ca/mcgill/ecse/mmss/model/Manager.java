@@ -3,8 +3,8 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-// line 38 "../../../../../mmss.ump"
-// line 128 "../../../../../mmss.ump"
+// line 35 "../../../../../mmss.ump"
+// line 117 "../../../../../mmss.ump"
 public class Manager extends AccountType
 {
 
@@ -16,9 +16,9 @@ public class Manager extends AccountType
   // CONSTRUCTOR
   //------------------------
 
-  public Manager(String aUsername, String aPassword)
+  public Manager(String aUsername, String aPassword, Person aPerson)
   {
-    super(aUsername, aPassword);
+    super(aUsername, aPassword, aPerson);
   }
 
   //------------------------

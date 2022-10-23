@@ -2,12 +2,11 @@
 /*This code was generated using the UMPLE 1.31.1.5860.78bb27cc6 modeling language!*/
 
 package ca.mcgill.ecse.mmss.model;
-import java.sql.Date;
 
 // line 3 "../../../../../mmss.ump"
-// line 193 "../../../../../mmss.ump"
-// line 198 "../../../../../mmss.ump"
-// line 210 "../../../../../mmss.ump"
+// line 179 "../../../../../mmss.ump"
+// line 185 "../../../../../mmss.ump"
+// line 197 "../../../../../mmss.ump"
 public class Artefact
 {
 
@@ -16,7 +15,7 @@ public class Artefact
   //------------------------
 
   //Artefact Attributes
-  private String artefactId;
+  private int artefactId;
   private String artefactName;
   private String description;
   private boolean canLoan;
@@ -24,18 +23,18 @@ public class Artefact
   private int loanFee;
 
   //Artefact Associations
-  private Loan loan;
+  private Room room;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Artefact(String aArtefactId, String aArtefactName, String aDescription, boolean aCanLoan, int aInsuranceFee, int aLoanFee)
+  public Artefact(int aArtefactId, String aArtefactName, String aDescription, int aInsuranceFee, int aLoanFee)
   {
     artefactId = aArtefactId;
     artefactName = aArtefactName;
     description = aDescription;
-    canLoan = aCanLoan;
+    canLoan = false;
     insuranceFee = aInsuranceFee;
     loanFee = aLoanFee;
   }
@@ -44,7 +43,7 @@ public class Artefact
   // INTERFACE
   //------------------------
 
-  public boolean setArtefactId(String aArtefactId)
+  public boolean setArtefactId(int aArtefactId)
   {
     boolean wasSet = false;
     artefactId = aArtefactId;
@@ -92,7 +91,7 @@ public class Artefact
     return wasSet;
   }
 
-  public String getArtefactId()
+  public int getArtefactId()
   {
     return artefactId;
   }
@@ -127,28 +126,28 @@ public class Artefact
     return canLoan;
   }
   /* Code from template association_GetOne */
-  public Loan getLoan()
+  public Room getRoom()
   {
-    return loan;
+    return room;
   }
 
-  public boolean hasLoan()
+  public boolean hasRoom()
   {
-    boolean has = loan != null;
+    boolean has = room != null;
     return has;
   }
   /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setLoan(Loan aNewLoan)
+  public boolean setRoom(Room aNewRoom)
   {
     boolean wasSet = false;
-    loan = aNewLoan;
+    room = aNewRoom;
     wasSet = true;
     return wasSet;
   }
 
   public void delete()
   {
-    loan = null;
+    room = null;
   }
 
 
@@ -161,6 +160,6 @@ public class Artefact
             "canLoan" + ":" + getCanLoan()+ "," +
             "insuranceFee" + ":" + getInsuranceFee()+ "," +
             "loanFee" + ":" + getLoanFee()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "loan = "+(getLoan()!=null?Integer.toHexString(System.identityHashCode(getLoan())):"null");
+            "  " + "room = "+(getRoom()!=null?Integer.toHexString(System.identityHashCode(getRoom())):"null");
   }
 }

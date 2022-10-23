@@ -4,8 +4,8 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 59 "../../../../../mmss.ump"
-// line 181 "../../../../../mmss.ump"
+// line 53 "../../../../../mmss.ump"
+// line 166 "../../../../../mmss.ump"
 public abstract class Exchange
 {
 
@@ -14,6 +14,7 @@ public abstract class Exchange
   //------------------------
 
   //Exchange Attributes
+  private int exchangeId;
   private Date submittedDate;
   private boolean approved;
 
@@ -21,15 +22,24 @@ public abstract class Exchange
   // CONSTRUCTOR
   //------------------------
 
-  public Exchange(Date aSubmittedDate, boolean aApproved)
+  public Exchange(int aExchangeId, Date aSubmittedDate)
   {
+    exchangeId = aExchangeId;
     submittedDate = aSubmittedDate;
-    approved = aApproved;
+    approved = false;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setExchangeId(int aExchangeId)
+  {
+    boolean wasSet = false;
+    exchangeId = aExchangeId;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setSubmittedDate(Date aSubmittedDate)
   {
@@ -45,6 +55,11 @@ public abstract class Exchange
     approved = aApproved;
     wasSet = true;
     return wasSet;
+  }
+
+  public int getExchangeId()
+  {
+    return exchangeId;
   }
 
   public Date getSubmittedDate()
@@ -69,6 +84,7 @@ public abstract class Exchange
   public String toString()
   {
     return super.toString() + "["+
+            "exchangeId" + ":" + getExchangeId()+ "," +
             "approved" + ":" + getApproved()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "submittedDate" + "=" + (getSubmittedDate() != null ? !getSubmittedDate().equals(this)  ? getSubmittedDate().toString().replaceAll("  ","    ") : "this" : "null");
   }

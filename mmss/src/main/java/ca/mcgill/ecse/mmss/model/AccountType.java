@@ -3,8 +3,11 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-// line 31 "../../../../../mmss.ump"
-// line 123 "../../../../../mmss.ump"
+/**
+ * What generalization strategies?
+ */
+// line 29 "../../../../../mmss.ump"
+// line 112 "../../../../../mmss.ump"
 public abstract class AccountType
 {
 
@@ -16,14 +19,21 @@ public abstract class AccountType
   private String username;
   private String password;
 
+  //AccountType Associations
+  private Person person;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public AccountType(String aUsername, String aPassword)
+  public AccountType(String aUsername, String aPassword, Person aPerson)
   {
     username = aUsername;
     password = aPassword;
+    if (!setPerson(aPerson))
+    {
+      throw new RuntimeException("Unable to create AccountType due to aPerson. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
   }
 
   //------------------------
@@ -55,15 +65,34 @@ public abstract class AccountType
   {
     return password;
   }
+  /* Code from template association_GetOne */
+  public Person getPerson()
+  {
+    return person;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setPerson(Person aNewPerson)
+  {
+    boolean wasSet = false;
+    if (aNewPerson != null)
+    {
+      person = aNewPerson;
+      wasSet = true;
+    }
+    return wasSet;
+  }
 
   public void delete()
-  {}
+  {
+    person = null;
+  }
 
 
   public String toString()
   {
     return super.toString() + "["+
             "username" + ":" + getUsername()+ "," +
-            "password" + ":" + getPassword()+ "]";
+            "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "person = "+(getPerson()!=null?Integer.toHexString(System.identityHashCode(getPerson())):"null");
   }
 }

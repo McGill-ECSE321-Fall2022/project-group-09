@@ -4,8 +4,8 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 98 "../../../../../mmss.ump"
-// line 164 "../../../../../mmss.ump"
+// line 86 "../../../../../mmss.ump"
+// line 148 "../../../../../mmss.ump"
 public class Ticket extends Booking
 {
 
@@ -13,45 +13,46 @@ public class Ticket extends Booking
   // MEMBER VARIABLES
   //------------------------
 
-  //Ticket Attributes
-  private String ticketID;
+  //Ticket Associations
+  private Visitor visitor;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Ticket(Date aDate, int aPrice, String aTicketID)
+  public Ticket(int aBookingId, Date aDate, int aPrice, Visitor aVisitor)
   {
-    super(aDate, aPrice);
-    ticketID = aTicketID;
+    super(aBookingId, aDate, aPrice);
+    if (!setVisitor(aVisitor))
+    {
+      throw new RuntimeException("Unable to create Ticket due to aVisitor. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
   }
 
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setTicketID(String aTicketID)
+  /* Code from template association_GetOne */
+  public Visitor getVisitor()
+  {
+    return visitor;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setVisitor(Visitor aNewVisitor)
   {
     boolean wasSet = false;
-    ticketID = aTicketID;
-    wasSet = true;
+    if (aNewVisitor != null)
+    {
+      visitor = aNewVisitor;
+      wasSet = true;
+    }
     return wasSet;
-  }
-
-  public String getTicketID()
-  {
-    return ticketID;
   }
 
   public void delete()
   {
+    visitor = null;
     super.delete();
   }
 
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "ticketID" + ":" + getTicketID()+ "]";
-  }
 }

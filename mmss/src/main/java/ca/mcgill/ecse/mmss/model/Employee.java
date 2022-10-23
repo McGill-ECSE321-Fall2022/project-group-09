@@ -3,8 +3,8 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-// line 52 "../../../../../mmss.ump"
-// line 138 "../../../../../mmss.ump"
+// line 49 "../../../../../mmss.ump"
+// line 127 "../../../../../mmss.ump"
 public class Employee extends AccountType
 {
 
@@ -12,21 +12,44 @@ public class Employee extends AccountType
   // MEMBER VARIABLES
   //------------------------
 
+  //Employee Associations
+  private Shift shift;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Employee(String aUsername, String aPassword)
+  public Employee(String aUsername, String aPassword, Person aPerson)
   {
-    super(aUsername, aPassword);
+    super(aUsername, aPassword, aPerson);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+  /* Code from template association_GetOne */
+  public Shift getShift()
+  {
+    return shift;
+  }
+
+  public boolean hasShift()
+  {
+    boolean has = shift != null;
+    return has;
+  }
+  /* Code from template association_SetUnidirectionalOptionalOne */
+  public boolean setShift(Shift aNewShift)
+  {
+    boolean wasSet = false;
+    shift = aNewShift;
+    wasSet = true;
+    return wasSet;
+  }
 
   public void delete()
   {
+    shift = null;
     super.delete();
   }
 

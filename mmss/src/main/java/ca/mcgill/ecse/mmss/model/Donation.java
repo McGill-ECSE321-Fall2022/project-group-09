@@ -4,8 +4,8 @@
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
-// line 72 "../../../../../mmss.ump"
-// line 149 "../../../../../mmss.ump"
+// line 65 "../../../../../mmss.ump"
+// line 138 "../../../../../mmss.ump"
 public class Donation extends Exchange
 {
 
@@ -14,33 +14,30 @@ public class Donation extends Exchange
   //------------------------
 
   //Donation Attributes
-  private String donationId;
   private String itemName;
   private String descripton;
+
+  //Donation Associations
+  private Visitor visitor;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Donation(Date aSubmittedDate, boolean aApproved, String aDonationId, String aItemName, String aDescripton)
+  public Donation(int aExchangeId, Date aSubmittedDate, String aItemName, String aDescripton, Visitor aVisitor)
   {
-    super(aSubmittedDate, aApproved);
-    donationId = aDonationId;
+    super(aExchangeId, aSubmittedDate);
     itemName = aItemName;
     descripton = aDescripton;
+    if (!setVisitor(aVisitor))
+    {
+      throw new RuntimeException("Unable to create Donation due to aVisitor. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
   }
 
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setDonationId(String aDonationId)
-  {
-    boolean wasSet = false;
-    donationId = aDonationId;
-    wasSet = true;
-    return wasSet;
-  }
 
   public boolean setItemName(String aItemName)
   {
@@ -58,11 +55,6 @@ public class Donation extends Exchange
     return wasSet;
   }
 
-  public String getDonationId()
-  {
-    return donationId;
-  }
-
   public String getItemName()
   {
     return itemName;
@@ -72,9 +64,26 @@ public class Donation extends Exchange
   {
     return descripton;
   }
+  /* Code from template association_GetOne */
+  public Visitor getVisitor()
+  {
+    return visitor;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setVisitor(Visitor aNewVisitor)
+  {
+    boolean wasSet = false;
+    if (aNewVisitor != null)
+    {
+      visitor = aNewVisitor;
+      wasSet = true;
+    }
+    return wasSet;
+  }
 
   public void delete()
   {
+    visitor = null;
     super.delete();
   }
 
@@ -82,8 +91,8 @@ public class Donation extends Exchange
   public String toString()
   {
     return super.toString() + "["+
-            "donationId" + ":" + getDonationId()+ "," +
             "itemName" + ":" + getItemName()+ "," +
-            "descripton" + ":" + getDescripton()+ "]";
+            "descripton" + ":" + getDescripton()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "visitor = "+(getVisitor()!=null?Integer.toHexString(System.identityHashCode(getVisitor())):"null");
   }
 }
