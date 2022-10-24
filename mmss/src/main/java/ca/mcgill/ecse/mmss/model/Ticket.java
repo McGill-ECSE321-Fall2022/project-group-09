@@ -5,7 +5,7 @@ package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
 // line 86 "../../../../../mmss.ump"
-// line 148 "../../../../../mmss.ump"
+// line 150 "../../../../../mmss.ump"
 public class Ticket extends Booking
 {
 
@@ -20,9 +20,9 @@ public class Ticket extends Booking
   // CONSTRUCTOR
   //------------------------
 
-  public Ticket(int aBookingId, Date aDate, int aPrice, Visitor aVisitor)
+  public Ticket(int aBookingId, Date aDate, int aPricePerPerson, Visitor aVisitor)
   {
-    super(aBookingId, aDate, aPrice);
+    super(aBookingId, aDate, aPricePerPerson);
     if (!setVisitor(aVisitor))
     {
       throw new RuntimeException("Unable to create Ticket due to aVisitor. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");

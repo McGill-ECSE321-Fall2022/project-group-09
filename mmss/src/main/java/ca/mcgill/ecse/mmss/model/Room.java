@@ -4,7 +4,7 @@
 package ca.mcgill.ecse.mmss.model;
 
 // line 13 "../../../../../mmss.ump"
-// line 158 "../../../../../mmss.ump"
+// line 163 "../../../../../mmss.ump"
 public class Room
 {
 

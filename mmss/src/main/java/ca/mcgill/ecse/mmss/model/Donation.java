@@ -5,7 +5,7 @@ package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
 // line 65 "../../../../../mmss.ump"
-// line 138 "../../../../../mmss.ump"
+// line 140 "../../../../../mmss.ump"
 public class Donation extends Exchange
 {
 

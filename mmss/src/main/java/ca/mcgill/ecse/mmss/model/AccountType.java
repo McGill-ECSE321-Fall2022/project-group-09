@@ -7,7 +7,7 @@ package ca.mcgill.ecse.mmss.model;
  * What generalization strategies?
  */
 // line 29 "../../../../../mmss.ump"
-// line 112 "../../../../../mmss.ump"
+// line 114 "../../../../../mmss.ump"
 public abstract class AccountType
 {
 

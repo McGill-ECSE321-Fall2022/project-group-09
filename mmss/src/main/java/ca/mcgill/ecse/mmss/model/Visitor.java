@@ -4,8 +4,8 @@
 package ca.mcgill.ecse.mmss.model;
 
 // line 39 "../../../../../mmss.ump"
-// line 98 "../../../../../mmss.ump"
-// line 122 "../../../../../mmss.ump"
+// line 100 "../../../../../mmss.ump"
+// line 124 "../../../../../mmss.ump"
 public class Visitor extends AccountType
 {
 

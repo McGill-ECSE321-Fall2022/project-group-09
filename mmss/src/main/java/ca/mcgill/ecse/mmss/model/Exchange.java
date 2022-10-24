@@ -5,7 +5,7 @@ package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
 // line 53 "../../../../../mmss.ump"
-// line 166 "../../../../../mmss.ump"
+// line 171 "../../../../../mmss.ump"
 public abstract class Exchange
 {
 
@@ -16,7 +16,10 @@ public abstract class Exchange
   //Exchange Attributes
   private int exchangeId;
   private Date submittedDate;
-  private boolean approved;
+
+  //Exchange State Machines
+  public enum Enum { Pending, Declined, Approved }
+  private Enum enum;
 
   //------------------------
   // CONSTRUCTOR
@@ -26,7 +29,7 @@ public abstract class Exchange
   {
     exchangeId = aExchangeId;
     submittedDate = aSubmittedDate;
-    approved = false;
+    setEnum(Enum.Pending);
   }
 
   //------------------------
@@ -49,14 +52,6 @@ public abstract class Exchange
     return wasSet;
   }
 
-  public boolean setApproved(boolean aApproved)
-  {
-    boolean wasSet = false;
-    approved = aApproved;
-    wasSet = true;
-    return wasSet;
-  }
-
   public int getExchangeId()
   {
     return exchangeId;
@@ -67,14 +62,21 @@ public abstract class Exchange
     return submittedDate;
   }
 
-  public boolean getApproved()
+  public String getEnumFullName()
   {
-    return approved;
+    String answer = enum.toString();
+    return answer;
   }
-  /* Code from template attribute_IsBoolean */
-  public boolean isApproved()
+
+  public Enum getEnum()
   {
-    return approved;
+    return enum;
+  }
+
+  public boolean setEnum(Enum aEnum)
+  {
+    enum = aEnum;
+    return true;
   }
 
   public void delete()
@@ -84,8 +86,7 @@ public abstract class Exchange
   public String toString()
   {
     return super.toString() + "["+
-            "exchangeId" + ":" + getExchangeId()+ "," +
-            "approved" + ":" + getApproved()+ "]" + System.getProperties().getProperty("line.separator") +
+            "exchangeId" + ":" + getExchangeId()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "submittedDate" + "=" + (getSubmittedDate() != null ? !getSubmittedDate().equals(this)  ? getSubmittedDate().toString().replaceAll("  ","    ") : "this" : "null");
   }
 }

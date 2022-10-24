@@ -5,7 +5,7 @@ class Artefact {
   Integer artefactId; 
   artefactName;
   description; 
-  Boolean canLoan=false; 
+  Boolean canLoan; 
   Integer insuranceFee; 
   Integer loanFee; 
 } 
@@ -32,11 +32,11 @@ class AccountType{
   password;
 } 
 
-class Manager{ // unique ID is username
+class Manager{ 
   isA AccountType;
 } 
 
-class Visitor { // unique ID is username
+class Visitor { 
   isA AccountType;
   // Enforce [0,5] with constraint
   1 visitor <- * Loan visitorLoans;
@@ -46,7 +46,7 @@ class Visitor { // unique ID is username
   balance= 0;
 } 
 
-class Employee { // unique ID is username
+class Employee { 
   isA AccountType;
 } 
 
@@ -54,7 +54,7 @@ class Exchange {
   abstract; 
   Integer exchangeId;
   Date submittedDate; 
-  Boolean approved=false; 
+  enum {Pending, Declined, Approved}; 
   } 
 
 class Loan {
@@ -79,7 +79,7 @@ class Booking {
   abstract; 
   Integer bookingId;
   Date date; 
-  Integer price; 
+  Integer pricePerPerson; 
 
 } 
 
@@ -89,7 +89,9 @@ class Ticket {
 
 class Tour { 
   isA Booking;
+  0..1 tours -> 1 Employee tourGuide;
   Integer numberOfParticipants;
+  enum {Morning, Afternoon, Evening};
 }
 
 
@@ -102,10 +104,10 @@ class Visitor
     position.association Donation:userDonations__Visitor 0,0 149,26;
   position.association Loan:loans__Visitor 0,28 154,40;
   position.association Loan:visitorLoans__Visitor 0,20 123,21;
-  position.association Loan:visitorLoans__Visitor:visitor 0,10 123,20;
-  position.association Donation:userDonations__Visitor:visitor 35,0 146,27;
-  position.association Ticket:tickets__Visitor:visitor 0,52 7,0;
-  position.association Tour:tours__Visitor:visitor 118,59 86,0;
+  position.association Loan:visitorLoans__Visitor:visitor 0,10 124,13;
+  position.association Donation:userDonations__Visitor:visitor 19,0 146,44;
+  position.association Ticket:tickets__Visitor:visitor 0,52 28,0;
+  position.association Tour:tours__Visitor:visitor 137,52 96,0;
 position 510 441 135.594 58.3594;
 }
 
@@ -142,17 +144,20 @@ class Donation
 
 class Booking
 {
-  position 502 540 116.854 91.6979;
+  position 485 532 182.984 108.359;
 }
 
 class Ticket
 {
-  position 338 681 137.01 58.6979;
+  position 337 655 103.953 41.3594;
 }
 
 class Tour
 {
-  position 640 683 127.667 58.6979;
+  position 631 654 229.109 58.3594;
+  position.association Employee:guideForTours__Tour 6,0 0,10;
+  position.association Employee:tourGuide__Tour 183,0 0,10;
+  position.association Employee:tourGuide__Tour:tours 223,0 0,10;
 }
 
 class Room
@@ -160,7 +165,7 @@ class Room
   position 326 68 153.667 75.6979;
   position.association Item:items__Room 0,10 173,45;
   position.association Artefact:artefacts__Room 0,10 173,20;
-  position.association Artefact:artefacts__Room:room 0,10 173,21;
+  position.association Artefact:artefacts__Room:room 0,10 173,10;
 }
 
 class Exchange
@@ -173,7 +178,7 @@ class Person
   position 559 65 140.719 92.6979;
   position.association AccountType__Person 142,8 0,10;
   position.association AccountType:accounts__Person 142,9 0,10;
-  position.association AccountType:accounts__Person:person 142,16 0,27;
+  position.association AccountType:accounts__Person:person 141,11 0,27;
 }
 
 class Artefact
@@ -189,7 +194,7 @@ class Artefact
 
 class Shift
 {
-  position 936 347 151.062 75.6979;
+  position 959 351 151.031 75.3594;
   position.association Employee:workingOnShift__Shift 38,0 60,42;
   position.association Shift__WorkDay:workDaysOnShift 0,27 112,0;
 }
@@ -201,10 +206,10 @@ class Artefact
 
 class Shift
 {
-  position 936 347 151.062 75.6979;
+  position 959 351 151.031 75.3594;
   position.association Employee:workingOnShift__Shift 38,0 60,42;
   position.association Shift__WorkDay:workDaysOnShift 0,27 112,0;
   position.association Employee:assignedEmplyees__Shift:shift 2,0 104,41;
   position.association Shift:shift__WorkDay:workDaysOnShift 0,10 45,0;
-  position.association Employee:assignedEmployees__Shift:shift 57,0 74,42;
+  position.association Employee:assignedEmployees__Shift:shift 33,0 89,41;
 }

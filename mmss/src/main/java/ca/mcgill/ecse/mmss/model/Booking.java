@@ -5,7 +5,7 @@ package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
 // line 78 "../../../../../mmss.ump"
-// line 143 "../../../../../mmss.ump"
+// line 145 "../../../../../mmss.ump"
 public abstract class Booking
 {
 
@@ -16,17 +16,17 @@ public abstract class Booking
   //Booking Attributes
   private int bookingId;
   private Date date;
-  private int price;
+  private int pricePerPerson;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Booking(int aBookingId, Date aDate, int aPrice)
+  public Booking(int aBookingId, Date aDate, int aPricePerPerson)
   {
     bookingId = aBookingId;
     date = aDate;
-    price = aPrice;
+    pricePerPerson = aPricePerPerson;
   }
 
   //------------------------
@@ -49,10 +49,10 @@ public abstract class Booking
     return wasSet;
   }
 
-  public boolean setPrice(int aPrice)
+  public boolean setPricePerPerson(int aPricePerPerson)
   {
     boolean wasSet = false;
-    price = aPrice;
+    pricePerPerson = aPricePerPerson;
     wasSet = true;
     return wasSet;
   }
@@ -67,9 +67,9 @@ public abstract class Booking
     return date;
   }
 
-  public int getPrice()
+  public int getPricePerPerson()
   {
-    return price;
+    return pricePerPerson;
   }
 
   public void delete()
@@ -80,7 +80,7 @@ public abstract class Booking
   {
     return super.toString() + "["+
             "bookingId" + ":" + getBookingId()+ "," +
-            "price" + ":" + getPrice()+ "]" + System.getProperties().getProperty("line.separator") +
+            "pricePerPerson" + ":" + getPricePerPerson()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null");
   }
 }

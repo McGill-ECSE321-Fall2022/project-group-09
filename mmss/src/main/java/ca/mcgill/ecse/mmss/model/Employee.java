@@ -4,7 +4,7 @@
 package ca.mcgill.ecse.mmss.model;
 
 // line 49 "../../../../../mmss.ump"
-// line 127 "../../../../../mmss.ump"
+// line 129 "../../../../../mmss.ump"
 public class Employee extends AccountType
 {
 

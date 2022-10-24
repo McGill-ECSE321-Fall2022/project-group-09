@@ -4,7 +4,7 @@
 package ca.mcgill.ecse.mmss.model;
 
 // line 20 "../../../../../mmss.ump"
-// line 171 "../../../../../mmss.ump"
+// line 176 "../../../../../mmss.ump"
 public class Person
 {
 

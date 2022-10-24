@@ -4,9 +4,9 @@
 package ca.mcgill.ecse.mmss.model;
 
 // line 3 "../../../../../mmss.ump"
-// line 179 "../../../../../mmss.ump"
-// line 185 "../../../../../mmss.ump"
-// line 197 "../../../../../mmss.ump"
+// line 184 "../../../../../mmss.ump"
+// line 190 "../../../../../mmss.ump"
+// line 202 "../../../../../mmss.ump"
 public class Artefact
 {
 
@@ -29,12 +29,12 @@ public class Artefact
   // CONSTRUCTOR
   //------------------------
 
-  public Artefact(int aArtefactId, String aArtefactName, String aDescription, int aInsuranceFee, int aLoanFee)
+  public Artefact(int aArtefactId, String aArtefactName, String aDescription, boolean aCanLoan, int aInsuranceFee, int aLoanFee)
   {
     artefactId = aArtefactId;
     artefactName = aArtefactName;
     description = aDescription;
-    canLoan = false;
+    canLoan = aCanLoan;
     insuranceFee = aInsuranceFee;
     loanFee = aLoanFee;
   }

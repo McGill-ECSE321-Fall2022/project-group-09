@@ -5,8 +5,8 @@ package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
 
 // line 71 "../../../../../mmss.ump"
-// line 190 "../../../../../mmss.ump"
-// line 202 "../../../../../mmss.ump"
+// line 195 "../../../../../mmss.ump"
+// line 207 "../../../../../mmss.ump"
 public class Shift
 {
 

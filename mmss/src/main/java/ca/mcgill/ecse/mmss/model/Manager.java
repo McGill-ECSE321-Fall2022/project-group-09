@@ -4,7 +4,7 @@
 package ca.mcgill.ecse.mmss.model;
 
 // line 35 "../../../../../mmss.ump"
-// line 117 "../../../../../mmss.ump"
+// line 119 "../../../../../mmss.ump"
 public class Manager extends AccountType
 {
 
