@@ -1,0 +1,270 @@
+class Artefact { 
+  1 artefact <- 0..1 Loan loan;
+  Integer artefactId; 
+  artefactName;
+  description; 
+  Boolean canLoan; 
+  Integer insuranceFee; 
+  Integer loanFee; 
+} 
+
+class Room { 
+  0..1 room <- * Artefact artefacts;
+  Integer roomId; 
+  Integer artefactCount = 0;
+  enum RoomType {Large,Small,Storage};
+} 
+
+class Person { 
+  // Enforce [1..2] with a constraint
+  1 person <- * AccountType accounts;
+  Integer personId;
+  firstName; 
+  lastName; 
+} 
+
+// What generalization strategies?
+class AccountType{ 
+  abstract; 
+  username; 
+  password;
+} 
+
+class Manager{ 
+  isA AccountType;
+} 
+
+class Visitor { 
+  isA AccountType;
+  // Enforce [0,5] with constraint
+  1 visitor <- * Loan visitorLoans;
+  1 visitor <- * Donation userDonations;
+  1 visitor <- * Ticket tickets; 
+  1 visitor <- * Tour tours; 
+  balance= 0;
+} 
+
+class Employee { 
+  isA AccountType;
+  phoneNumber; 
+} 
+
+class Exchange { 
+  abstract; 
+  Integer exchangeId;
+  Date submittedDate; 
+  enum ExchangeStatus {Pending, Declined, Approved}; 
+  } 
+
+class Loan {
+  isA Exchange;
+  * loans -> 0..1 OpenDay dueDate; 
+} 
+
+class Donation {
+  isA Exchange;
+  itemName;
+  descripton;
+} 
+
+class Shift { 
+  Integer shiftId;   
+  enum ShiftTime {Morning, Afternoon, Evening};
+  0..1 shift <- * Employee assignedEmployees;     
+}
+
+class OpenDay { 
+  Date date;  
+}
+
+class WeeklySchedule {
+  Integer weeklyScheduleId;
+  0..1 weeklySchedule <- * OpenDay openDays;
+  1 weeklySchedule <- * Shift shifts;
+}
+
+class Booking { 
+  abstract; 
+  * bookings -> 1 OpenDay date; 
+  Integer bookingId;
+  Integer pricePerPerson; 
+
+} 
+
+class Ticket { 
+  isA Booking;
+} 
+
+class Tour { 
+  isA Booking;
+  0..1 tours -> 0..1 Employee tourGuide;
+  Integer numberOfParticipants;
+  enum ShiftTime {Morning, Afternoon, Evening};
+}
+
+class Notification { 
+  Integer notificationId;
+  String message;
+  Date date;
+} 
+
+class Communication { 
+  Integer communicationId;
+  0..1 communication <- * AccountType accounts;
+  1 sentNotification <- * Notification notifications;
+  
+} 
+
+namespace -;
+
+class Visitor
+{
+  position.association Tour:tours__Visitor 122,59 98,0;
+  position.association Ticket:tickets__Visitor 8,59 30,0;
+    position.association Donation:userDonations__Visitor 0,0 149,26;
+  position.association Loan:loans__Visitor 0,28 154,40;
+  position.association Loan:visitorLoans__Visitor 0,20 123,21;
+  position.association Loan:visitorLoans__Visitor:visitor 0,8 105,39;
+  position.association Donation:userDonations__Visitor:visitor 0,52 146,46;
+  position.association Ticket:tickets__Visitor:visitor 68,59 63,0;
+  position.association Tour:tours__Visitor:visitor 124,54 75,0;
+position 344 419 135.615 58.6979;
+}
+
+class AccountType
+{
+  position 819 78 141.913 91.9625;
+  position.association AccountType__SentNotification:notification 143,21 0,19;
+  position.association AccountType:account__SentNotification:notification 143,18 0,10;
+}
+
+class Manager
+{
+  position 687 271 109 41.6979;
+}
+
+class Visitor
+{
+  position 344 419 135.615 58.6979;
+}
+
+class Employee
+{
+  position 901 232 109 41.9625;
+  position.association Employee__WorkDay:atWorkDays 24,42 109,0;
+}
+
+class Loan
+{
+  position 21 401 55.6562 41.6979;
+  position.association Loan__OpenDay:date 124,16 0,42;
+  position.association Loan__OpenDay:dueddDate 24,0 0,10;
+  position.association Loan:loans__OpenDay:dueDate 57,6 0,10;
+}
+
+class Donation
+{
+  position 126 495 145.167 75.6979;
+}
+
+class Booking
+{
+  position 598 435 183.021 91.6979;
+  position.association Booking__OpenDay:date 0,10 43,76;
+  position.association Booking:bookings__OpenDay:date 0,47 13,59;
+}
+
+class Ticket
+{
+  position 405 631 103.979 41.6979;
+}
+
+class Tour
+{
+  position 633 611 229.156 58.6979;
+  position.association Employee:guideForTours__Tour 6,0 0,10;
+  position.association Employee:tourGuide__Tour 183,0 0,10;
+  position.association Employee:tourGuide__Tour:tours 223,0 29,42;
+}
+
+class Room
+{
+  position 326 68 153.667 75.6979;
+  position.association Item:items__Room 0,10 173,45;
+  position.association Artefact:artefacts__Room 0,10 173,20;
+  position.association Artefact:artefacts__Room:room 0,10 173,5;
+}
+
+class Exchange
+{
+  position 93 236 165.156 91.6979;
+}
+
+class Person
+{
+  position 559 65 140.719 92.6979;
+  position.association AccountType__Person 142,8 0,10;
+  position.association AccountType:accounts__Person 142,9 0,10;
+  position.association AccountType:accounts__Person:person 145,12 0,27;
+}
+
+class Artefact
+{
+  position.association Artefact__Loan:loan 0,45 41,0;
+  position.association Artefact:artefact__Loan:loan 12,144 41,0;
+  position 50 29 171.802 143.698;
+}
+
+class Artefact
+{
+  position 50 29 171.802 143.698;
+}
+
+class Shift
+{
+  position 1024 411 127.208 58.6979;
+  position.association Employee:workingOnShift__Shift 38,0 60,42;
+  position.association Shift__WorkDay:workDaysOnShift 0,27 112,0;
+}
+
+class Artefact
+{
+  position 50 29 171.802 143.698;
+}
+
+class Shift
+{
+  position 1024 411 127.208 58.6979;
+  position.association Employee:workingOnShift__Shift 38,0 60,42;
+  position.association Shift__WorkDay:workDaysOnShift 0,27 112,0;
+  position.association Employee:assignedEmplyees__Shift:shift 2,0 104,41;
+  position.association Shift:shift__WorkDay:workDaysOnShift 0,10 45,0;
+  position.association Employee:assignedEmployees__Shift:shift 33,0 158,59;
+}
+
+class OpenDay
+{
+  position 446 236 103.979 58.6979;
+}
+
+class WeeklySchedule
+{
+  position 669 345 205.25 58.6979;
+  position.association Shift:shifts__WeeklySchedule:weeklySchedule 206,30 0,16;
+  position.association OpenDay:openDays__WeeklySchedule:weeklySchedule 0,0 86,52;
+}
+
+class Notification
+{
+  position 1148 184 157.292 92.6979;
+}
+
+class Communication
+{
+  position 1098 59 127.958 58.6979;
+  position.association AccountType:account__Communication:inbox 0,6 142,7;
+  position.association Communication:sentNotification__Notification:notifications 57,59 1,0;
+  position.association AccountType:accounts__Communication:inbox 0,10 143,13;
+  position.association AccountType:accounts__Communication:communication 0,10 130,1;
+}
+
