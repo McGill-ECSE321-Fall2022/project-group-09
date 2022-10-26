@@ -75,6 +75,17 @@ class Shift {
   0..1 shift <- * Employee assignedEmployees;     
 }
 
+class OpenDay { 
+  Integer openDayId;   
+  Date date;  
+}
+
+class WeeklySchedule {
+  Integer weeklyScheduleId;
+  1 weeklySchedule <- * OpenDay openDays;
+  1 weeklySchedule <- * Shift shifts;
+}
+
 class Booking { 
   abstract; 
   Integer bookingId;
@@ -93,7 +104,6 @@ class Tour {
   Integer numberOfParticipants;
   enum {Morning, Afternoon, Evening};
 }
-
 
 namespace -;
 
@@ -212,4 +222,16 @@ class Shift
   position.association Employee:assignedEmplyees__Shift:shift 2,0 104,41;
   position.association Shift:shift__WorkDay:workDaysOnShift 0,10 45,0;
   position.association Employee:assignedEmployees__Shift:shift 33,0 89,41;
+}
+
+class OpenDay
+{
+  position 361 214 152.53125 75.453125;
+}
+
+class WeeklySchedule
+{
+  position 655 353 199.5 58.453125;
+  position.association Shift:shifts__WeeklySchedule:weeklySchedule 200,9 0,10;
+  position.association OpenDay:openDays__WeeklySchedule:weeklySchedule 0,10 139,75;
 }
