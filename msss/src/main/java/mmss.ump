@@ -97,7 +97,7 @@ class Ticket {
 
 class Tour { 
   isA Booking;
-  0..1 tours -> 1 Employee tourGuide;
+  0..1 tours -> 0..1 Employee tourGuide;
   Integer numberOfParticipants;
   enum {Morning, Afternoon, Evening};
 }
