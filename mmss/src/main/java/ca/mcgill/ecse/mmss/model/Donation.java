@@ -3,7 +3,6 @@
 
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -31,7 +30,7 @@ public class Donation extends Exchange
   // CONSTRUCTOR
   //------------------------
   
-  protected Donation () {}
+  public Donation () {}
 
   public Donation(int aExchangeId, Date aSubmittedDate, String aItemName, String aDescripton, Visitor aVisitor)
   {

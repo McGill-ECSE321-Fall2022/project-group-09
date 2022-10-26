@@ -3,16 +3,15 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-// line 73 "../../../../../../model.ump"
-// line 227 "../../../../../../model.ump"
-// line 239 "../../../../../../model.ump"
+// line 75 "../../../../../../model.ump"
+// line 231 "../../../../../../model.ump"
+// line 243 "../../../../../../model.ump"
 
 @Entity
 public class Shift
@@ -20,7 +19,7 @@ public class Shift
 
   //------------------------
   // ENUMERATIONS
-  //------------------------  
+  //------------------------
 
   public enum ShiftTime { Morning, Afternoon, Evening }
 
@@ -29,9 +28,12 @@ public class Shift
   //------------------------
 
   //Shift Attributes
+  
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)  
   private int shiftId;
+  
+  private ShiftTime shiftTime;
 
   //Shift Associations
   @ManyToOne(optional = false)
@@ -41,11 +43,12 @@ public class Shift
   // CONSTRUCTOR
   //------------------------
   
-  protected Shift () {}
+  public Shift() {}
 
-  public Shift(int aShiftId, WeeklySchedule aWeeklySchedule)
+  public Shift(int aShiftId, ShiftTime aShiftTime, WeeklySchedule aWeeklySchedule)
   {
     shiftId = aShiftId;
+    shiftTime = aShiftTime;
     if (!setWeeklySchedule(aWeeklySchedule))
     {
       throw new RuntimeException("Unable to create Shift due to aWeeklySchedule. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -64,9 +67,22 @@ public class Shift
     return wasSet;
   }
 
+  public boolean setShiftTime(ShiftTime aShiftTime)
+  {
+    boolean wasSet = false;
+    shiftTime = aShiftTime;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getShiftId()
   {
     return shiftId;
+  }
+
+  public ShiftTime getShiftTime()
+  {
+    return shiftTime;
   }
   /* Code from template association_GetOne */
   public WeeklySchedule getWeeklySchedule()
@@ -95,6 +111,7 @@ public class Shift
   {
     return super.toString() + "["+
             "shiftId" + ":" + getShiftId()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "shiftTime" + "=" + (getShiftTime() != null ? !getShiftTime().equals(this)  ? getShiftTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "weeklySchedule = "+(getWeeklySchedule()!=null?Integer.toHexString(System.identityHashCode(getWeeklySchedule())):"null");
   }
 }

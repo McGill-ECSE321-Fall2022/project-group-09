@@ -20,7 +20,7 @@ public class Manager extends AccountType
   // CONSTRUCTOR
   //------------------------
 
-  protected Manager () {}
+  public Manager () {}
   
   public Manager(String aUsername, String aPassword, Person aPerson)
   {

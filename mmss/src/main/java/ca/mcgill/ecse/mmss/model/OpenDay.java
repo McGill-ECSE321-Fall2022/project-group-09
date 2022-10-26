@@ -32,7 +32,7 @@ public class OpenDay
   // CONSTRUCTOR
   //------------------------
   
-  protected OpenDay () {}
+  public OpenDay () {}
 
   public OpenDay(Date aDate)
   {

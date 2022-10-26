@@ -3,7 +3,6 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +34,7 @@ public abstract class Booking
   // CONSTRUCTOR
   //------------------------
 
-  protected Booking () {}
+  public Booking () {}
   
   
   public Booking(int aBookingId, int aPricePerPerson, OpenDay aDate)

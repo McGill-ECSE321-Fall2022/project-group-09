@@ -1,7 +1,7 @@
 package ca.mcgill.ecse.mmss.dao;
 import org.springframework.data.repository.CrudRepository;
-package ca.mcgill.ecse.mmss.model.Employee;
+import ca.mcgill.ecse.mmss.model.Employee;
 
-public interface EmployeeTypeRepository extends CrudRepository<Employee, String> {
-    Employee findEmployeeTypeByUsername(String userName);
+public interface EmployeeRepository extends CrudRepository<Employee, String> {
+    Employee findEmployeeByUsername(String userName);
 }

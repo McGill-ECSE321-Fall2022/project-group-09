@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 // line 14 "../../../../../../model.ump"
-// line 194 "../../../../../../model.ump"
+// line 198 "../../../../../../model.ump"
 
 @Entity
 public class Room
@@ -30,18 +30,21 @@ public class Room
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int roomId;
+  
   private int artefactCount;
+  private RoomType roomType;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
   
-  protected Room () {}
+  public Room () {}
 
-  public Room(int aRoomId)
+  public Room(int aRoomId, RoomType aRoomType)
   {
     roomId = aRoomId;
     artefactCount = 0;
+    roomType = aRoomType;
   }
 
   //------------------------
@@ -64,6 +67,14 @@ public class Room
     return wasSet;
   }
 
+  public boolean setRoomType(RoomType aRoomType)
+  {
+    boolean wasSet = false;
+    roomType = aRoomType;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getRoomId()
   {
     return roomId;
@@ -74,6 +85,11 @@ public class Room
     return artefactCount;
   }
 
+  public RoomType getRoomType()
+  {
+    return roomType;
+  }
+
   public void delete()
   {}
 
@@ -82,6 +98,7 @@ public class Room
   {
     return super.toString() + "["+
             "roomId" + ":" + getRoomId()+ "," +
-            "artefactCount" + ":" + getArtefactCount()+ "]";
+            "artefactCount" + ":" + getArtefactCount()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "roomType" + "=" + (getRoomType() != null ? !getRoomType().equals(this)  ? getRoomType().toString().replaceAll("  ","    ") : "this" : "null");
   }
 }

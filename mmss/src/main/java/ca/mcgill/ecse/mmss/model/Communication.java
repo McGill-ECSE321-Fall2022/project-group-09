@@ -28,7 +28,7 @@ public class Communication
   // CONSTRUCTOR
   //------------------------
 
-  protected Communication () {}
+  public Communication () {}
   
   public Communication(int aCommunicationId)
   {

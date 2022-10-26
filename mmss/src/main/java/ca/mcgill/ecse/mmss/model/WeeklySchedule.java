@@ -28,7 +28,7 @@ public class WeeklySchedule
   // CONSTRUCTOR
   //------------------------
   
-  protected WeeklySchedule () {}
+  public WeeklySchedule () {}
 
   public WeeklySchedule(int aWeeklyScheduleId)
   {

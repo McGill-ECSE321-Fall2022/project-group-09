@@ -42,7 +42,7 @@ public class Artefact
   // CONSTRUCTOR
   //------------------------
 
-  protected Artefact () {}
+  public Artefact () {}
   
   public Artefact(int aArtefactId, String aArtefactName, String aDescription, boolean aCanLoan, int aInsuranceFee, int aLoanFee)
   {

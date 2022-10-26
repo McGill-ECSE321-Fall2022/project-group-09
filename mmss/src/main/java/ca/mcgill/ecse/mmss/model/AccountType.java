@@ -3,7 +3,6 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -39,7 +38,7 @@ public abstract class AccountType
   // CONSTRUCTOR
   //------------------------
 
-  protected AccountType () {} 
+  public AccountType () {} 
   
   public AccountType(String aUsername, String aPassword, Person aPerson)
   {

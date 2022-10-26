@@ -3,7 +3,6 @@
 
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -32,7 +31,7 @@ public class Loan extends Exchange
   //------------------------
   // CONSTRUCTOR
   //------------------------
-  protected Loan () {}
+  public Loan () {}
 
   public Loan(int aExchangeId, Date aSubmittedDate, Artefact aArtefact, Visitor aVisitor)
   {

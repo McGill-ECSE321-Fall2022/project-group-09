@@ -31,7 +31,7 @@ public class Person
   // CONSTRUCTOR
   //------------------------
 
-  protected Person () { 
+  public Person () { 
     
   }
   

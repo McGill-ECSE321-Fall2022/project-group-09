@@ -24,7 +24,8 @@ public class Visitor extends AccountType
   // CONSTRUCTOR
   //------------------------
 
-  protected Visitor () {}
+  public Visitor () {}
+  
   public Visitor(String aUsername, String aPassword, Person aPerson)
   {
     super(aUsername, aPassword, aPerson);

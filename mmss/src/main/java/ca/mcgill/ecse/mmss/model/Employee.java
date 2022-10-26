@@ -27,7 +27,7 @@ public class Employee extends AccountType
   //------------------------
   // CONSTRUCTOR
   //------------------------
-  protected Employee () {}
+  public Employee () {}
   
   public Employee(String aUsername, String aPassword, Person aPerson, String aPhoneNumber)
   {

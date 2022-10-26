@@ -3,7 +3,6 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -26,7 +25,7 @@ public class Ticket extends Booking
   // CONSTRUCTOR
   //------------------------
 
-  protected Ticket () {}
+  public Ticket () {}
   
   public Ticket(int aBookingId, int aPricePerPerson, OpenDay aDate, Visitor aVisitor)
   {

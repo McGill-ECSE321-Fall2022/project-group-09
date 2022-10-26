@@ -8,9 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-
-// line 55 "../../../../../../model.ump"
-// line 202 "../../../../../../model.ump"
+// line 56 "../../../../../../model.ump"
+// line 206 "../../../../../../model.ump"
 
 @MappedSuperclass
 public abstract class Exchange
@@ -27,21 +26,25 @@ public abstract class Exchange
   //------------------------
 
   //Exchange Attributes
+  
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int exchangeId;
+  
   private Date submittedDate;
+  private ExchangeStatus exchangeStatus;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
   
-  protected Exchange() {}
+  public Exchange () {}
 
   public Exchange(int aExchangeId, Date aSubmittedDate)
   {
     exchangeId = aExchangeId;
     submittedDate = aSubmittedDate;
+    exchangeStatus = ExchangeStatus.Pending;
   }
 
   //------------------------
@@ -64,6 +67,14 @@ public abstract class Exchange
     return wasSet;
   }
 
+  public boolean setExchangeStatus(ExchangeStatus aExchangeStatus)
+  {
+    boolean wasSet = false;
+    exchangeStatus = aExchangeStatus;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getExchangeId()
   {
     return exchangeId;
@@ -74,6 +85,11 @@ public abstract class Exchange
     return submittedDate;
   }
 
+  public ExchangeStatus getExchangeStatus()
+  {
+    return exchangeStatus;
+  }
+
   public void delete()
   {}
 
@@ -82,6 +98,7 @@ public abstract class Exchange
   {
     return super.toString() + "["+
             "exchangeId" + ":" + getExchangeId()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "submittedDate" + "=" + (getSubmittedDate() != null ? !getSubmittedDate().equals(this)  ? getSubmittedDate().toString().replaceAll("  ","    ") : "this" : "null");
+            "  " + "submittedDate" + "=" + (getSubmittedDate() != null ? !getSubmittedDate().equals(this)  ? getSubmittedDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "exchangeStatus" + "=" + (getExchangeStatus() != null ? !getExchangeStatus().equals(this)  ? getExchangeStatus().toString().replaceAll("  ","    ") : "this" : "null");
   }
 }

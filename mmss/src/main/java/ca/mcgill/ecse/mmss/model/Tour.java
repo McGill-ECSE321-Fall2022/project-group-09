@@ -3,12 +3,11 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
-// line 101 "../../../../../../model.ump"
-// line 186 "../../../../../../model.ump"
+// line 104 "../../../../../../model.ump"
+// line 190 "../../../../../../model.ump"
 
 @Entity
 public class Tour extends Booking
@@ -26,6 +25,7 @@ public class Tour extends Booking
 
   //Tour Attributes
   private int numberOfParticipants;
+  private ShiftTime tourTime;
 
   //Tour Associations
   @ManyToOne(optional = false)
@@ -38,12 +38,13 @@ public class Tour extends Booking
   // CONSTRUCTOR
   //------------------------
   
-  protected Tour () {}
+  public Tour () {}
 
-  public Tour(int aBookingId, int aPricePerPerson, OpenDay aDate, int aNumberOfParticipants, Visitor aVisitor)
+  public Tour(int aBookingId, int aPricePerPerson, OpenDay aDate, int aNumberOfParticipants, ShiftTime aTourTime, Visitor aVisitor)
   {
     super(aBookingId, aPricePerPerson, aDate);
     numberOfParticipants = aNumberOfParticipants;
+    tourTime = aTourTime;
     if (!setVisitor(aVisitor))
     {
       throw new RuntimeException("Unable to create Tour due to aVisitor. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -62,9 +63,22 @@ public class Tour extends Booking
     return wasSet;
   }
 
+  public boolean setTourTime(ShiftTime aTourTime)
+  {
+    boolean wasSet = false;
+    tourTime = aTourTime;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getNumberOfParticipants()
   {
     return numberOfParticipants;
+  }
+
+  public ShiftTime getTourTime()
+  {
+    return tourTime;
   }
   /* Code from template association_GetOne */
   public Employee getTourGuide()
@@ -114,6 +128,7 @@ public class Tour extends Booking
   {
     return super.toString() + "["+
             "numberOfParticipants" + ":" + getNumberOfParticipants()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "tourTime" + "=" + (getTourTime() != null ? !getTourTime().equals(this)  ? getTourTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "tourGuide = "+(getTourGuide()!=null?Integer.toHexString(System.identityHashCode(getTourGuide())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "visitor = "+(getVisitor()!=null?Integer.toHexString(System.identityHashCode(getVisitor())):"null");
   }
