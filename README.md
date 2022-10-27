@@ -1,7 +1,17 @@
 # Museum Management Software System
 
+## Project Members
+* Athmane Benarous
+* Mohamed Elsamadouny
+* Sasha Denouvilliez-Pech
+* Saviru Perera
+* Shidan Javaheri
+* Shyam Desai
+
 ## Project Scope
 This system is designed for a museum of a small town to support their community and provide better services. It allows visitors to login, browse artefacts, donate artefacts, request to loan artefacts, check loan status, book tickets, and book tours. It allows employees to create and move artefacts. It allows manager to manage employees and their shifts.
+
+The domain model for the system and the key design decisions made for it are [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Domain-Model). The 15 most important requirements are listed [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Requirements). The use-case diagrams along with descriptions for the six most important requirements are listed [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Use-Case-Diagrams), and the use-case specifications for them are [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Use-Case-Specifications). The project report detailing meeting minutes and key decisions throughout the deliverable are [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report).
 
 ## Deliverable 1 Contribution
 | Name             | Responsibilities                                                  | Hours (incl. meetings) |
