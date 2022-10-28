@@ -66,7 +66,7 @@ class Loan {
 class Donation {
   isA Exchange;
   itemName;
-  descripton;
+  description;
 } 
 
 class Shift { 
@@ -80,10 +80,10 @@ class OpenDay {
   Date date;  
 }
 
-class WeeklySchedule {
-  Integer weeklyScheduleId;
-  0..1 weeklySchedule <- * OpenDay openDays;
-  1 weeklySchedule <- * Shift shifts;
+class Schedule {
+  Integer scheduleId;
+  0..1 Schedule <- * OpenDay openDays;
+  1 Schedule <- * Shift shifts;
 }
 
 class Booking { 

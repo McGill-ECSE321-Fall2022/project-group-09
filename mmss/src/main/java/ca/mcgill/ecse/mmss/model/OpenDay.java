@@ -26,7 +26,7 @@ public class OpenDay
   //OpenDay Associations
   
   @ManyToOne
-  private WeeklySchedule weeklySchedule;
+  private Schedule weeklySchedule;
 
   //------------------------
   // CONSTRUCTOR
@@ -56,7 +56,7 @@ public class OpenDay
     return date;
   }
   /* Code from template association_GetOne */
-  public WeeklySchedule getWeeklySchedule()
+  public Schedule getWeeklySchedule()
   {
     return weeklySchedule;
   }
@@ -67,7 +67,7 @@ public class OpenDay
     return has;
   }
   /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setWeeklySchedule(WeeklySchedule aNewWeeklySchedule)
+  public boolean setWeeklySchedule(Schedule aNewWeeklySchedule)
   {
     boolean wasSet = false;
     weeklySchedule = aNewWeeklySchedule;

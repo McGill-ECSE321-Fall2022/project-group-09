@@ -16,10 +16,10 @@ import ca.mcgill.ecse.mmss.model.Room.RoomType;
 @SpringBootTest
 public class ArtefactRepositoryTests {
   
-  // repository we are testing
+  // the repository we are testing
   @Autowired
   private ArtefactRepository artefactRepository; 
-  
+
   // also need a room in order to add an artefact
   @Autowired  
   private RoomRepository roomRepository; 
@@ -30,55 +30,75 @@ public class ArtefactRepositoryTests {
       // make sure the artefact is deleted first, because artefacts cannot exist without a room
       artefactRepository.deleteAll();
       
-      // then you can delete all the rooms
-      roomRepository.deleteAll(); 
+      // delete the room after each test
+      roomRepository.deleteAll();
   }
 
   @Test 
   public void testPersistAndLoadArtefact() { 
-    
-    // create the room for the artefact
-    Room room = new Room();
-    room.setRoomType(RoomType.Storage); 
-    roomRepository.save(room); 
-    
-    // create the Artefact and populate its feilds          
-    Artefact artefact = new Artefact() ;
-    String artefactName = "lightSaber"; 
-    String description = "Found in the remains of the Death Star";      
-    artefact.setArtefactName(artefactName); 
-    artefact.setDescription(description); 
-    artefact.setCanLoan(false); 
-    artefact.setInsuranceFee(200); 
-    artefact.setLoanFee(20); 
-    artefact.setRoom(room); 
-    
-    // save the Artefact    
+	  
+// MANDATORY CLASS TESTS
+
+	// create the artefact and set its attributes        
+	Artefact artefact = new Artefact() ;
+	String artefactName = "lightSaber"; 
+	String description = "Found in the remains of the Death Star";    
+	artefact.setArtefactName(artefactName); 
+	artefact.setDescription(description); 
+	artefact.setCanLoan(false); 
+	artefact.setInsuranceFee(200); 
+	artefact.setLoanFee(20); 
+
+    // save the artefact
     artefactRepository.save(artefact); 
     
-    // get its id ( that was set automatically by spring )    
-    int artefactId = artefact.getArtefactId();   
+    // get the artefactId then save it to a variable
+    int artefactId = artefact.getArtefactId();
     
-    // set artefact to null    
+    // set artefact variable to null    
     artefact = null;
     
-    // get the artefact from the database using the Id
+    // get the artefact back from the database using the Id
     artefact = artefactRepository.findArtefactByArtefactId(artefactId); 
     
-    // run J-Unit tests
+    // make sure artefact is not null
     assertNotNull(artefact);
+
+    // make sure the database artefact's Id corresponds to the initial artefact Id
     assertEquals(artefactId, artefact.getArtefactId());
+    
+    
+// OPTIONAL CLASS TESTS
+    
+	// create a room for the artefact and set its attributes
+    Room room = new Room();
+    room.setRoomType(RoomType.Storage);
+
+    // save the room
+    roomRepository.save(room); 
+    
+    // set the room to the artefact and save the artefact
+    artefact.setRoom(room);
+    artefactRepository.save(artefact);
+
+    // get the roomId then save it to a variable
+    int roomId = room.getRoomId();
+
+    // set artefact and room variables to null
+    artefact = null;
+    room = null;
+
+    // get the artefact back from the database using the Id
+    artefact = artefactRepository.findArtefactByArtefactId(artefactId); 
+    
+    // make sure artefact and room accessed from artefact are not null
+    assertNotNull(artefact);
+    assertNotNull(artefact.getRoom());
+    
+    // make sure the database artefact's Id and room's Id correspond to the initial artefact Id and room Id
+    assertEquals(artefactId, artefact.getArtefactId());
+    assertEquals(roomId, artefact.getRoom().getRoomId());
     assertEquals(artefactName, artefact.getArtefactName()); 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
   }
 }
