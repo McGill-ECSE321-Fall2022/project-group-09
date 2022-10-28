@@ -3,11 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 // line 107 "../../../../../mmss.ump"
 // line 259 "../../../../../mmss.ump"
@@ -25,8 +21,10 @@ public class Notification
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int notificationId;
-  
+
+  @Column(nullable = false)
   private String message;
+  @Column(nullable = false)
   private Date date;
 
   //Notification Associations

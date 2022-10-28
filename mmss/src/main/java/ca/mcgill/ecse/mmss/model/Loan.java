@@ -19,7 +19,7 @@ public class Loan extends Exchange
   //------------------------
 
   //Loan Associations
-  @ManyToOne(optional = false)
+  @ManyToOne
   private OpenDay dueDate;
   
   @OneToOne(optional = false)

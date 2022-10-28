@@ -3,11 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 // line 3 "../../../../../mmss.ump"
 // line 213 "../../../../../mmss.ump"
@@ -26,16 +22,18 @@ public class Artefact
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int artefactId;
-  
-  
+
+  @Column(nullable = false)
   private String artefactName;
+  @Column(nullable = false)
   private String description;
+  @Column(nullable = false)
   private boolean canLoan;
   private int insuranceFee;
   private int loanFee;
 
   //Artefact Associations
-  @ManyToOne(optional = false)
+  @ManyToOne
   private Room room;
 
   //------------------------

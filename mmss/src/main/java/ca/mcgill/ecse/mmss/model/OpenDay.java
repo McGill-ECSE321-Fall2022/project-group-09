@@ -25,7 +25,7 @@ public class OpenDay
 
   //OpenDay Associations
   
-  @ManyToOne(optional = false)
+  @ManyToOne
   private WeeklySchedule weeklySchedule;
 
   //------------------------

@@ -3,6 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -24,6 +25,7 @@ public abstract class AccountType
   //AccountType Attributes
   @Id
   private String username;
+  @Column(nullable = false)
   private String password;
 
   //AccountType Associations
@@ -31,7 +33,7 @@ public abstract class AccountType
   @ManyToOne(optional = false)
   private Person person;
   
-  @ManyToOne(optional = false)
+  @ManyToOne
   private Communication communication;
 
   //------------------------

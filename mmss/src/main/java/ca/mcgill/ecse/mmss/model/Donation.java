@@ -3,6 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -18,7 +19,9 @@ public class Donation extends Exchange
   //------------------------
 
   //Donation Attributes
+  @Column(nullable = false)
   private String itemName;
+  @Column(nullable = false)
   private String description;
 
   //Donation Associations
