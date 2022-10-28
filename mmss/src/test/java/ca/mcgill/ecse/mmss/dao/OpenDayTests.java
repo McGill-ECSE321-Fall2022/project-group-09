@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.OpenDay;
+import ca.mcgill.ecse.mmss.model.WeeklySchedule;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -22,36 +23,63 @@ public class OpenDayTests {
   @Autowired
   private OpenDayRepository openDayRepository; 
   
+  @Autowired 
+  private WeeklyScheduleRepository weeklyScheduleRepository; 
+  
   @AfterEach
   public void clearDatabase() {
-	  
-      // empty openDayRepository
-      openDayRepository.deleteAll();
       
+      // empty openDayRepository
+      openDayRepository.deleteAll(); 
+      
+      // delete the weekly schedule afterwards
+      weeklyScheduleRepository.deleteAll();
   }
 
   @Test 
   public void testPersistAndLoadManager() { 
     
+    // TEST CASE 1: No weekly schedule with open day
 	// create OpenDay to be added
-	Date date = Date.valueOf("2022-10-28");
-	OpenDay openDay = new OpenDay(date);
+	Date date1 = Date.valueOf("2022-10-28");
+	OpenDay openDay1 = new OpenDay(date1);
 	
 	// save the OpenDay to repository
-	openDayRepository.save(openDay);
+	openDayRepository.save(openDay1);
 
-    // get open day date
-	Date openDayDate = openDay.getDate();
-    
-	// set the OpenDay to null
-	openDay = null;
+    // get openDay1 date
+	Date openDay1Date = openDay1.getDate();
 	
-    // get the OpenDay using the date
-    openDay = openDayRepository.findOpenDayByDate(openDayDate); 
+	// TEST CASE 2: Weekly schedule associated with Day
+	// create OpenDay to be added
+    Date date2 = Date.valueOf("2022-10-29");
+    OpenDay openDay2 = new OpenDay(date2);
+    
+    // create the weekly schedule to add
+    WeeklySchedule schedule = new WeeklySchedule(); 
+    weeklyScheduleRepository.save(schedule); 
+    openDay2.setWeeklySchedule(schedule); 
+    
+    // save the OpenDay to repository
+    openDayRepository.save(openDay1);
+    openDayRepository.save(openDay2); 
+
+    // get openDay2 date
+    Date openDay2Date = openDay2.getDate(); 
+    
+	// set the OpenDays to null
+	openDay1 = null;
+	openDay2 = null; 
+	
+    // get the OpenDays using the date
+    openDay1 = openDayRepository.findOpenDayByDate(openDay1Date); 
+    openDay2 = openDayRepository.findOpenDayByDate(openDay2Date); 
     
     // run J-Unit tests
-    assertNotNull(openDay);
-    assertEquals(date, openDay.getDate());
+    assertNotNull(openDay1);
+    assertNotNull(openDay2);
+    assertEquals(date1, openDay1.getDate());
+    assertEquals(date2, openDay2.getDate()); 
    
   }
 }
