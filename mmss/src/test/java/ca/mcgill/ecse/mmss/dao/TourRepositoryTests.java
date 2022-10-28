@@ -164,6 +164,10 @@ public class TourRepositoryTests {
     assertNotNull(tour1.getTourGuide());
     assertNotNull(tour1.getVisitor());
     assertNotNull(tour1.getDate());
+    
+    // check an attribute is stored properly
+    assertEquals(numParticipants, tour1.getNumberOfParticipants()); 
+
 
     // check the primary key and foreign key constraints
 	assertEquals(bookingId1, tour1.getBookingId());
@@ -178,6 +182,9 @@ public class TourRepositoryTests {
     assertNotNull(tour2);
     assertNotNull(tour2.getVisitor());
     assertNotNull(tour2.getDate());
+    
+    // check an attribute is stored properly
+    assertEquals(numParticipants, tour2.getNumberOfParticipants()); 
 
     // check the primary key and foreign key constraints
     assertEquals(bookingId2, tour2.getBookingId());

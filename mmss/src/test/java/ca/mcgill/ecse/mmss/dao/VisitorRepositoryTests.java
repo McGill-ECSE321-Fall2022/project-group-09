@@ -121,6 +121,7 @@ public class VisitorRepositoryTests {
 	    assertNotNull(visitor.getPerson());
 		assertNotNull(visitor.getCommunication());
 	    
+        // check an attribute is stored properly
 		assertEquals(username1, visitor.getUsername());
 		assertEquals(personId, visitor.getPerson().getPersonId());
 		assertEquals(communicationId, visitor.getCommunication().getCommunicationId());
@@ -129,7 +130,11 @@ public class VisitorRepositoryTests {
 	    assertNotNull(visitor2);
 	    assertNotNull(visitor2.getPerson());
 	    
+        // check an attribute is stored properly
 		assertEquals(userName2, visitor2.getUsername());
 		assertEquals(personId2, visitor2.getPerson().getPersonId());
+		
+
+
 	  }
 }

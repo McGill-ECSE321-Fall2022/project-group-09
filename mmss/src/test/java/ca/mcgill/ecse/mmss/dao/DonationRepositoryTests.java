@@ -71,7 +71,8 @@ public class DonationRepositoryTests {
     
     // create the Donation and set its attributes   
     Donation donation = new Donation() ;
-    donation.setItemName("Mona Lisa"); 
+    String name = "Mona Lisa"; 
+    donation.setItemName(name); 
     donation.setDescription("Leonardo DaVinci's most famous artwork!"); 
     donation.setSubmittedDate(Date.valueOf("2022-10-06")); 
     donation.setExchangeStatus(ExchangeStatus.Pending); 
@@ -102,6 +103,9 @@ public class DonationRepositoryTests {
     assertEquals(exchangeId, donation.getExchangeId());
     assertEquals(username, donation.getVisitor().getUsername());
     assertEquals(personId, donation.getVisitor().getPerson().getPersonId());
+    
+    // check an attribute is stored properly
+    assertEquals(name, donation.getItemName()); 
     
   }
 }

@@ -51,6 +51,7 @@ public class RoomRepositoryTests {
     // check not null and primary key
     assertNotNull(room);
     assertEquals(roomId, room.getRoomId());
+    assertEquals(artefactCount, room.getArtefactCount()); 
    
   }
 }

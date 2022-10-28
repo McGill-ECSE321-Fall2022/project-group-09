@@ -51,6 +51,9 @@ public class PersonRepositoryTests {
     // check not null and primary key
     assertNotNull(person);
     assertEquals(personId, person.getPersonId());
+    
+    // check an attribute is stored properly
+    assertEquals(firstName, person.getFirstName()); 
    
   }
 }

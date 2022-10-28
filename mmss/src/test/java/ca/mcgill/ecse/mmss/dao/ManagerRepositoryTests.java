@@ -70,6 +70,7 @@ public class ManagerRepositoryTests {
     assertNotNull(manager.getPerson());
     
     // check primary key and foreign key constraints
+    // check an attribute is stored properly
     assertEquals(username, manager.getUsername());
     assertEquals(person.getPersonId(), manager.getPerson().getPersonId()); 
    

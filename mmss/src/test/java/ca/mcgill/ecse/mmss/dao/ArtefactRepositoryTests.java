@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Artefact;
-import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 
@@ -99,6 +98,7 @@ public class ArtefactRepositoryTests {
     // make sure the database artefact's Id and room's Id correspond to the initial artefact Id and room Id
     assertEquals(artefactId, artefact.getArtefactId());
     assertEquals(roomId, artefact.getRoom().getRoomId());
+    assertEquals(artefactName, artefact.getArtefactName()); 
     
   }
 }

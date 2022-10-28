@@ -12,44 +12,44 @@ import javax.persistence.Id;
 // line 252 "../../../../../mmss.ump"
 
 @Entity
-public class WeeklySchedule
+public class Schedule
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //WeeklySchedule Attributes
+  //Schedule Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private int weeklyScheduleId;
+  private int scheduleId;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
   
-  public WeeklySchedule () {}
+  public Schedule () {}
 
-  public WeeklySchedule(int aWeeklyScheduleId)
+  public Schedule(int aScheduleId)
   {
-    weeklyScheduleId = aWeeklyScheduleId;
+    scheduleId = aScheduleId;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setWeeklyScheduleId(int aWeeklyScheduleId)
+  public boolean setScheduleId(int aScheduleId)
   {
     boolean wasSet = false;
-    weeklyScheduleId = aWeeklyScheduleId;
+    scheduleId = aScheduleId;
     wasSet = true;
     return wasSet;
   }
 
-  public int getWeeklyScheduleId()
+  public int getScheduleId()
   {
-    return weeklyScheduleId;
+    return scheduleId;
   }
 
   public void delete()
@@ -59,6 +59,6 @@ public class WeeklySchedule
   public String toString()
   {
     return super.toString() + "["+
-            "weeklyScheduleId" + ":" + getWeeklyScheduleId()+ "]";
+            "ScheduleId" + ":" + getScheduleId()+ "]";
   }
 }

@@ -34,7 +34,7 @@ public class Shift
 
   //Shift Associations
   @ManyToOne(optional = false)
-  private WeeklySchedule weeklySchedule;
+  private Schedule Schedule;
 
   //------------------------
   // CONSTRUCTOR
@@ -42,13 +42,13 @@ public class Shift
   
   public Shift() {}
 
-  public Shift(int aShiftId, ShiftTime aShiftTime, WeeklySchedule aWeeklySchedule)
+  public Shift(int aShiftId, ShiftTime aShiftTime, Schedule aSchedule)
   {
     shiftId = aShiftId;
     shiftTime = aShiftTime;
-    if (!setWeeklySchedule(aWeeklySchedule))
+    if (!setSchedule(aSchedule))
     {
-      throw new RuntimeException("Unable to create Shift due to aWeeklySchedule. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create Shift due to aSchedule. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -82,17 +82,17 @@ public class Shift
     return shiftTime;
   }
   /* Code from template association_GetOne */
-  public WeeklySchedule getWeeklySchedule()
+  public Schedule getSchedule()
   {
-    return weeklySchedule;
+    return Schedule;
   }
   /* Code from template association_SetUnidirectionalOne */
-  public boolean setWeeklySchedule(WeeklySchedule aNewWeeklySchedule)
+  public boolean setSchedule(Schedule aNewSchedule)
   {
     boolean wasSet = false;
-    if (aNewWeeklySchedule != null)
+    if (aNewSchedule != null)
     {
-      weeklySchedule = aNewWeeklySchedule;
+      Schedule = aNewSchedule;
       wasSet = true;
     }
     return wasSet;
@@ -100,7 +100,7 @@ public class Shift
 
   public void delete()
   {
-    weeklySchedule = null;
+    Schedule = null;
   }
 
 
@@ -109,6 +109,6 @@ public class Shift
     return super.toString() + "["+
             "shiftId" + ":" + getShiftId()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "shiftTime" + "=" + (getShiftTime() != null ? !getShiftTime().equals(this)  ? getShiftTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "weeklySchedule = "+(getWeeklySchedule()!=null?Integer.toHexString(System.identityHashCode(getWeeklySchedule())):"null");
+            "  " + "Schedule = "+(getSchedule()!=null?Integer.toHexString(System.identityHashCode(getSchedule())):"null");
   }
 }

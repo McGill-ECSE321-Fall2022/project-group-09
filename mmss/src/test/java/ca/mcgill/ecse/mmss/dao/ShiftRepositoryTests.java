@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
-import ca.mcgill.ecse.mmss.model.WeeklySchedule;
+import ca.mcgill.ecse.mmss.model.Schedule;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -19,35 +19,35 @@ public class ShiftRepositoryTests {
 	  @Autowired
 	  private ShiftRepository shiftRepository; 
 	  
-	  // also need a weekly schedule in order to add a shift
+	  // also need a  schedule in order to add a shift
 	  @Autowired  
-	  private WeeklyScheduleRepository weeklyScheduleRepository; 
+	  private ScheduleRepository ScheduleRepository; 
 	  
 	  @AfterEach
 	  public void clearDatabase() {
 	    
-	      // make sure the shift is deleted first, because shifts cannot exist without a weekly schedule
+	      // make sure the shift is deleted first, because shifts cannot exist without a  schedule
 	      shiftRepository.deleteAll();
 	      
-	      // then you can delete the weekly schedule
-	      weeklyScheduleRepository.deleteAll(); 
+	      // then you can delete the  schedule
+	      ScheduleRepository.deleteAll(); 
 	  }
 
 	  @Test 
 	  public void testPersistAndLoadShift() { 
 	    
-	    // create the weekly schedule for the shift
-	    WeeklySchedule weeklySchedule = new WeeklySchedule(); 
-	    weeklyScheduleRepository.save(weeklySchedule); 
+	    // create the  schedule for the shift
+	    Schedule Schedule = new Schedule(); 
+	    ScheduleRepository.save(Schedule); 
 	    
 	    // retreive Id
-	    int weeklyScheduleId = weeklySchedule.getWeeklyScheduleId();
+	    int ScheduleId = Schedule.getScheduleId();
 	    
-	    // create the shift and populate its fields
+	    // create the shift and populate itsfields
 	    ShiftTime shiftTime = ShiftTime.Morning;
 	    Shift shift = new Shift() ;     
 	    shift.setShiftTime(shiftTime); 
-	    shift.setWeeklySchedule(weeklySchedule);
+	    shift.setSchedule(Schedule);
 	    // save the shift    
 	    shiftRepository.save(shift); 
 	    // get its id ( that was set automatically by spring )    
@@ -55,18 +55,21 @@ public class ShiftRepositoryTests {
 	    
 	    // set shift and dependency to null    
 	    shift = null;
-	    weeklySchedule = null;
+	    Schedule = null;
 	    
 	    // get the shift from the database using the Id
 	    shift = shiftRepository.findShiftByShiftId(shiftId); 
 	    
 	    // check objects are not null
 	    assertNotNull(shift);
-	    assertNotNull(shift.getWeeklySchedule());
+	    assertNotNull(shift.getSchedule());
 	    
 	    // check ids and foriegn key constraints
 		assertEquals(shiftId, shift.getShiftId());		
-		assertEquals(weeklyScheduleId, shift.getWeeklySchedule().getWeeklyScheduleId());
+		assertEquals(ScheduleId, shift.getSchedule().getScheduleId());
+		
+	    // check an attribute is stored properly
+		assertEquals(shiftTime, shift.getShiftTime()); 
 	    
 	  }
 

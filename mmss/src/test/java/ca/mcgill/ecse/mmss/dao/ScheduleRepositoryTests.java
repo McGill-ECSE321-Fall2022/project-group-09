@@ -8,40 +8,42 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ca.mcgill.ecse.mmss.model.WeeklySchedule;
+import ca.mcgill.ecse.mmss.model.Schedule;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class WeeklyScheduleRepositoryTests {
+public class ScheduleRepositoryTests {
 	//repository we are testing
 		@Autowired
-		private WeeklyScheduleRepository weeklyScheduleRepository;
+		private ScheduleRepository scheduleRepository;
 		
 		@AfterEach
 		public void clearDatabase() {
 			// delete all entries in database
-			weeklyScheduleRepository.deleteAll();
+			scheduleRepository.deleteAll();
 		}
 		
 		@Test
-		public void testAndPersistAndLoadWeeklySchedule() {
-			WeeklySchedule weeklySchedule = new WeeklySchedule();
+		public void testAndPersistAndLoadSchedule() {
+			Schedule Schedule = new Schedule();
 			
-			// save the weekly schedule
-			weeklyScheduleRepository.save(weeklySchedule);
+			// save the  schedule
+			scheduleRepository.save(Schedule);
 			
 			// get its id ( that was set automatically by spring )    
-		    int weeklyScheduleId = weeklySchedule.getWeeklyScheduleId(); 
+		    int ScheduleId = Schedule.getScheduleId(); 
 		    
-		    // set weekly schedule to null    
-		    weeklySchedule = null;
+		    // set  schedule to null    
+		    Schedule = null;
 		    
-		    // get weeklySchedule from database using its ID
-		    weeklySchedule = weeklyScheduleRepository.findWeeklyScheduleByWeeklyScheduleId(weeklyScheduleId); 
+		    // get Schedule from database using its ID
+		    Schedule = scheduleRepository.findScheduleByScheduleId(ScheduleId); 
 		    
 		    // check primary key and foriegn key constraints
-		    assertNotNull(weeklySchedule);
-		    assertEquals(weeklyScheduleId, weeklySchedule.getWeeklyScheduleId()); 
+		    assertNotNull(Schedule);
+	        // check an attribute is stored properly
+		    assertEquals(ScheduleId, Schedule.getScheduleId()); 
+
 			
 		}
 

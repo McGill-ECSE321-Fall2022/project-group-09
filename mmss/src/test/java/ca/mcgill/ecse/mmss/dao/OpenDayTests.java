@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.OpenDay;
-import ca.mcgill.ecse.mmss.model.WeeklySchedule;
+import ca.mcgill.ecse.mmss.model.Schedule;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -24,7 +24,7 @@ public class OpenDayTests {
   private OpenDayRepository openDayRepository; 
   
   @Autowired 
-  private WeeklyScheduleRepository weeklyScheduleRepository; 
+  private ScheduleRepository weeklyScheduleRepository; 
   
   @AfterEach
   public void clearDatabase() {
@@ -56,7 +56,7 @@ public class OpenDayTests {
     OpenDay openDay2 = new OpenDay(date2);
     
     // create the weekly schedule to add
-    WeeklySchedule schedule = new WeeklySchedule(); 
+    Schedule schedule = new Schedule(); 
     weeklyScheduleRepository.save(schedule); 
     openDay2.setWeeklySchedule(schedule); 
     
@@ -78,8 +78,10 @@ public class OpenDayTests {
     // run J-Unit tests
     assertNotNull(openDay1);
     assertNotNull(openDay2);
+    // check an attribute is stored properly
     assertEquals(date1, openDay1.getDate());
     assertEquals(date2, openDay2.getDate()); 
+    
    
   }
 }

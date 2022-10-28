@@ -15,7 +15,7 @@ import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
-import ca.mcgill.ecse.mmss.model.WeeklySchedule;
+import ca.mcgill.ecse.mmss.model.Schedule;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -37,9 +37,9 @@ public class EmployeeRepositoryTests {
   @Autowired  
   private ShiftRepository shiftRepository; 
   
-  // also need a weekly schedule repository for the shift
+  // also need a  schedule repository for the shift
   @Autowired  
-  private WeeklyScheduleRepository weeklyScheduleRepository; 
+  private ScheduleRepository ScheduleRepository; 
   
   @AfterEach
   public void clearDatabase() {
@@ -53,11 +53,11 @@ public class EmployeeRepositoryTests {
       // delete all the communications after each execution
       communicationRepository.deleteAll(); 
       
-      // delete all the shifts before the weekly schedule, because shifts cannot exist without a weekly schedule
+      // delete all the shifts before the  schedule, because shifts cannot exist without a  schedule
       shiftRepository.deleteAll(); 
       
-      // delete all the weekly schedules after each execution
-      weeklyScheduleRepository.deleteAll(); 
+      // delete all the  schedules after each execution
+      ScheduleRepository.deleteAll(); 
   }
 
   @Test 
@@ -76,7 +76,8 @@ public class EmployeeRepositoryTests {
     // create the Employee and populate its fields          
     Employee employee = new Employee() ;
     employee.setPhoneNumber("5147777777");
-    employee.setUsername("joe.swanson@mmss.qc.ca"); 
+    String employeeName = "joe.swanson@mmss.qc.ca"; 
+    employee.setUsername(employeeName); 
     employee.setPassword("VerySecurePassword");
     
     // set person to employee then save employee
@@ -105,24 +106,24 @@ public class EmployeeRepositoryTests {
     
 // OPTIONAL CLASS TESTS
     
-    // create the weekly schedule for the shift
-    WeeklySchedule weeklySchedule = new WeeklySchedule();
+    // create the  schedule for the shift
+    Schedule Schedule = new Schedule();
     
-    // save the weekly schedule
-    weeklyScheduleRepository.save(weeklySchedule);
+    // save the  schedule
+    ScheduleRepository.save(Schedule);
 
     // create the shift for the employee
     Shift shift = new Shift();
     shift.setShiftTime(ShiftTime.Morning);
     
-    // set weekly schedule to shift then save shift
-    shift.setWeeklySchedule(weeklySchedule);
+    // set  schedule to shift then save shift
+    shift.setSchedule(Schedule);
     shiftRepository.save(shift);
     
     // create the communication for the person
     Communication communication = new Communication();
     
-    // save the weekly schedule
+    // save the  schedule
     communicationRepository.save(communication);
 
     // set shift and communication to employee then save employee
@@ -149,6 +150,7 @@ public class EmployeeRepositoryTests {
     assertNotNull(employee.getCommunication());
     
     // make sure the created username, personId, shiftId, and communicationId match those in the database
+    // check an attribute is stored properly
     assertEquals(username, employee.getUsername());
     assertEquals(personId, employee.getPerson().getPersonId());
     assertEquals(shiftId, employee.getShift().getShiftId());

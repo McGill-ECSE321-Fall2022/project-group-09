@@ -73,6 +73,9 @@ public class NotificationRepositoryTests {
     // check the primary keys and foreign key constraints of the notification class
     assertEquals(notificationId, notification.getNotificationId());
     assertEquals(communication.getCommunicationId(), notification.getSentNotification().getCommunicationId());
+    
+    // check an attribute is stored properly
+    assertEquals(message, notification.getMessage()); 
    
   }
 }

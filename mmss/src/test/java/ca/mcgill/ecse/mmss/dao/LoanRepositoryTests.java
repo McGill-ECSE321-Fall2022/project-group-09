@@ -123,7 +123,8 @@ public class LoanRepositoryTests {
     // CASE 2: A LOAN WITH A DUE DATE
     // create the loan and set its attributes   
     Loan loan2 = new Loan() ;
-    loan2.setSubmittedDate(Date.valueOf("2022-10-20")); 
+    Date submitted = Date.valueOf("2022-10-20"); 
+    loan2.setSubmittedDate(submitted); 
     loan2.setExchangeStatus(ExchangeStatus.Pending);
     
     // create an open day to be the due date of the loan
@@ -177,6 +178,9 @@ public class LoanRepositoryTests {
     assertEquals(username, loan2.getVisitor().getUsername());
     assertEquals(personId, loan2.getVisitor().getPerson().getPersonId());
     assertEquals(dueDate, loan2.getDueDate().getDate());
+    
+    // check an attribute is stored properly
+    assertEquals(submitted, loan2.getSubmittedDate()); 
     
     
   }

@@ -107,8 +107,11 @@ public class TicketRepositoryTests {
 	    
 	    // check primary key and foreign key constraints 
 		assertEquals(bookingId, ticket.getBookingId());
+		
+	    // check an attribute is stored properly
 		assertEquals(visitorUsername, ticket.getVisitor().getUsername());
 		assertEquals(date, ticket.getDate().getDate());
+		
 	    
 	  }
 
