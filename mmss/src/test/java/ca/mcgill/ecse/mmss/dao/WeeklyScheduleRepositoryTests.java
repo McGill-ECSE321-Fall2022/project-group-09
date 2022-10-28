@@ -39,7 +39,7 @@ public class WeeklyScheduleRepositoryTests {
 		    // get weeklySchedule from database using its ID
 		    weeklySchedule = weeklyScheduleRepository.findWeeklyScheduleByWeeklyScheduleId(weeklyScheduleId); 
 		    
-		    // run J-Unit tests
+		    // check primary key and foriegn key constraints
 		    assertNotNull(weeklySchedule);
 		    assertEquals(weeklyScheduleId, weeklySchedule.getWeeklyScheduleId()); 
 			

@@ -30,18 +30,11 @@ public class TicketRepositoryTests {
 	  @Autowired
 	  private OpenDayRepository openDayRepository;
 	  
-	  // need weeklySchedule for open day
-	  @Autowired
-	  private WeeklyScheduleRepository weeklyScheduleRepository;
-	  
 	  // also need a visitor in order to add a tour
 	  @Autowired  
 	  private VisitorRepository visitorRepository;  
 	  
-	  @Autowired
-	  private CommunicationRepository communicationRepository;
-	  
-	  
+	  // visitor needs a person
 	  @Autowired
 	  private PersonRepository personRepository;
 	  
@@ -52,11 +45,9 @@ public class TicketRepositoryTests {
 	      ticketRepository.deleteAll();
 	      // then you can delete all the visitors and employees, open days and people
 	      visitorRepository.deleteAll();
-	      communicationRepository.deleteAll();
 	      personRepository.deleteAll(); 
 	      openDayRepository.deleteAll();
-	      // then you can delete the weekly schedule
-	      weeklyScheduleRepository.deleteAll(); 
+	 
 	  }
 
 	  @Test 
@@ -71,11 +62,6 @@ public class TicketRepositoryTests {
 		personRepository.save(person);
 		int personId = person.getPersonId();
 		
-		// create a communication for the visitor
-		Communication communication = new Communication();
-		communicationRepository.save(communication);
-		int communicationId = communication.getCommunicationId();
-		
 	    // create the visitor for the ticket
 		String username = "timGal";
 		String password = "password";
@@ -85,21 +71,14 @@ public class TicketRepositoryTests {
 	    visitor.setPassword(password);
 	    visitor.setBalance(balance);
 	    visitor.setPerson(person);
-	    visitor.setCommunication(communication);
 	    // save the visitor 
 	    visitorRepository.save(visitor); 
-	    String visitorUname = visitor.getUsername();
-	    
-	    // create the weekly schedule for the open day
-	    WeeklySchedule weeklySchedule = new WeeklySchedule(); 
-	    weeklyScheduleRepository.save(weeklySchedule); 
-	    int weeklyScheduleId = weeklySchedule.getWeeklyScheduleId();
+	    String visitorUsername = visitor.getUsername();
 	    
 	    // create Open Day and set its fields for the Ticket
 	    Date tourDate = Date.valueOf("2022-10-26");
 	    OpenDay openDay = new OpenDay();
 	    openDay.setDate(tourDate);
-	    openDay.setWeeklySchedule(weeklySchedule);
 	    // save the openDay
 	    openDayRepository.save(openDay);
 	    Date date = openDay.getDate();
@@ -123,15 +102,14 @@ public class TicketRepositoryTests {
 	    // get the ticket from the database using the Id
 	    ticket = ticketRepository.findTicketByBookingId(bookingId); 
 	    
-	    // run J-Unit tests
+	    // assert retreived objects are not null
 	    assertNotNull(ticket);
-	    assertEquals(bookingPrice, ticket.getPricePerPerson());
+	    assertNotNull(ticket.getVisitor());
+	    assertNotNull(ticket.getDate());
+	    
+	    // check primary key and foreign key constraints 
 		assertEquals(bookingId, ticket.getBookingId());
-
-		assertNotNull(ticket.getVisitor());
-		assertEquals(visitorUname, ticket.getVisitor().getUsername());
-		
-		assertNotNull(ticket.getDate());
+		assertEquals(visitorUsername, ticket.getVisitor().getUsername());
 		assertEquals(date, ticket.getDate().getDate());
 	    
 	  }
