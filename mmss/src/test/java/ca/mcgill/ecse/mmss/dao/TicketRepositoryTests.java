@@ -45,7 +45,6 @@ public class TicketRepositoryTests {
 	      visitorRepository.deleteAll();
 	      personRepository.deleteAll(); 
 	      openDayRepository.deleteAll();
-	 
 	  }
 
 	  @Test 
@@ -110,9 +109,6 @@ public class TicketRepositoryTests {
 		
 	    // check an attribute is stored properly
 		assertEquals(visitorUsername, ticket.getVisitor().getUsername());
-		assertEquals(date, ticket.getDate().getDate());
-		
-	    
+		assertEquals(date, ticket.getDate().getDate()); 
 	  }
-
 }

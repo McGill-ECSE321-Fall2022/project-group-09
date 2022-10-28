@@ -178,7 +178,7 @@ public class TourRepositoryTests {
 
     //TEST CASE 2 (NO TOURGUIDE)
 	
-    // assert tour and its dependancies are not null
+    // assert tour and its dependencies are not null
     assertNotNull(tour2);
     assertNotNull(tour2.getVisitor());
     assertNotNull(tour2.getDate());

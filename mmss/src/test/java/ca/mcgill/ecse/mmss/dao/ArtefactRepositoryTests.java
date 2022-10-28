@@ -98,7 +98,6 @@ public class ArtefactRepositoryTests {
     // make sure the database artefact's Id and room's Id correspond to the initial artefact Id and room Id
     assertEquals(artefactId, artefact.getArtefactId());
     assertEquals(roomId, artefact.getRoom().getRoomId());
-    assertEquals(artefactName, artefact.getArtefactName()); 
-    
+    assertEquals(artefactName, artefact.getArtefactName());  
   }
 }

@@ -22,8 +22,7 @@ public class CommunicationRepositoryTests {
   public void clearDatabase() {
     
       // clear communications after each execution
-      communicationRepository.deleteAll();
-      
+      communicationRepository.deleteAll();    
   }
 
   @Test 

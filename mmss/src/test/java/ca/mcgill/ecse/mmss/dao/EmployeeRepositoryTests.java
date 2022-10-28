@@ -155,6 +155,5 @@ public class EmployeeRepositoryTests {
     assertEquals(personId, employee.getPerson().getPersonId());
     assertEquals(shiftId, employee.getShift().getShiftId());
     assertEquals(communicationId, employee.getCommunication().getCommunicationId());
-  
   }
 }

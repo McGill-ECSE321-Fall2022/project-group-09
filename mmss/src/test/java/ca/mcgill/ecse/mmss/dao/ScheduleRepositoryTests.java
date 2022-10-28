@@ -14,37 +14,34 @@ import ca.mcgill.ecse.mmss.model.Schedule;
 @SpringBootTest
 public class ScheduleRepositoryTests {
 	//repository we are testing
-		@Autowired
-		private ScheduleRepository scheduleRepository;
+	@Autowired
+	private ScheduleRepository scheduleRepository;
+	
+	@AfterEach
+	public void clearDatabase() {
+		// delete all entries in database
+		scheduleRepository.deleteAll();
+	}
+	
+	@Test
+	public void testAndPersistAndLoadSchedule() {
+		Schedule Schedule = new Schedule();
 		
-		@AfterEach
-		public void clearDatabase() {
-			// delete all entries in database
-			scheduleRepository.deleteAll();
-		}
+		// save the  schedule
+		scheduleRepository.save(Schedule);
 		
-		@Test
-		public void testAndPersistAndLoadSchedule() {
-			Schedule Schedule = new Schedule();
-			
-			// save the  schedule
-			scheduleRepository.save(Schedule);
-			
-			// get its id ( that was set automatically by spring )    
-		    int ScheduleId = Schedule.getScheduleId(); 
-		    
-		    // set  schedule to null    
-		    Schedule = null;
-		    
-		    // get Schedule from database using its ID
-		    Schedule = scheduleRepository.findScheduleByScheduleId(ScheduleId); 
-		    
-		    // check primary key and foriegn key constraints
-		    assertNotNull(Schedule);
-	        // check an attribute is stored properly
-		    assertEquals(ScheduleId, Schedule.getScheduleId()); 
-
-			
-		}
-
+		// get its id ( that was set automatically by spring )    
+	    int ScheduleId = Schedule.getScheduleId(); 
+	    
+	    // set  schedule to null    
+	    Schedule = null;
+	    
+	    // get Schedule from database using its ID
+	    Schedule = scheduleRepository.findScheduleByScheduleId(ScheduleId); 
+	    
+	    // check primary key and foreign key constraints
+	    assertNotNull(Schedule);
+        // check an attribute is stored properly
+	    assertEquals(ScheduleId, Schedule.getScheduleId()); 
+	}
 }

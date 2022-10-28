@@ -81,7 +81,5 @@ public class OpenDayTests {
     // check an attribute is stored properly
     assertEquals(date1, openDay1.getDate());
     assertEquals(date2, openDay2.getDate()); 
-    
-   
   }
 }

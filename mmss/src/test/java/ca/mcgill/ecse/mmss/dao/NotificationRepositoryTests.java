@@ -31,12 +31,11 @@ public class NotificationRepositoryTests {
   @AfterEach
   public void clearDatabase() {
 	  
-      // empty notification repository
-      notificationRepository.deleteAll(); 
-      
-      // empty communication repository
-      communicationRepository.deleteAll();
-      
+	  // empty notification repository
+	  notificationRepository.deleteAll(); 
+	      
+	  // empty communication repository
+	  communicationRepository.deleteAll();     
   }
 
   @Test 
@@ -76,6 +75,5 @@ public class NotificationRepositoryTests {
     
     // check an attribute is stored properly
     assertEquals(message, notification.getMessage()); 
-   
   }
 }

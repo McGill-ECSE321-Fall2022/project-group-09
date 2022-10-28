@@ -133,8 +133,5 @@ public class VisitorRepositoryTests {
         // check an attribute is stored properly
 		assertEquals(userName2, visitor2.getUsername());
 		assertEquals(personId2, visitor2.getPerson().getPersonId());
-		
-
-
-	  }
+	}
 }
