@@ -11,8 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ca.mcgill.ecse.mmss.model.Communication;
-import ca.mcgill.ecse.mmss.model.WeeklySchedule;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Ticket;
@@ -60,7 +58,6 @@ public class TicketRepositoryTests {
 		person.setLastName(lNameOne);
 		// save to person repository
 		personRepository.save(person);
-		int personId = person.getPersonId();
 		
 	    // create the visitor for the ticket
 		String username = "timGal";
@@ -106,6 +103,7 @@ public class TicketRepositoryTests {
 	    assertNotNull(ticket);
 	    assertNotNull(ticket.getVisitor());
 	    assertNotNull(ticket.getDate());
+
 	    
 	    // check primary key and foreign key constraints 
 		assertEquals(bookingId, ticket.getBookingId());

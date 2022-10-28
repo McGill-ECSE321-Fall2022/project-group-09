@@ -11,14 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ca.mcgill.ecse.mmss.model.Artefact;
-import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
-import ca.mcgill.ecse.mmss.model.Room;
-import ca.mcgill.ecse.mmss.model.Room.RoomType;
-import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.model.Tour;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
