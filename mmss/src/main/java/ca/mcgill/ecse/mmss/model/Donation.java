@@ -3,6 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -18,8 +19,10 @@ public class Donation extends Exchange
   //------------------------
 
   //Donation Attributes
+  @Column(nullable = false)
   private String itemName;
-  private String descripton;
+  @Column(nullable = false)
+  private String description;
 
   //Donation Associations
   
@@ -32,11 +35,11 @@ public class Donation extends Exchange
   
   public Donation () {}
 
-  public Donation(int aExchangeId, Date aSubmittedDate, String aItemName, String aDescripton, Visitor aVisitor)
+  public Donation(int aExchangeId, Date aSubmittedDate, String aItemName, String aDescription, Visitor aVisitor)
   {
     super(aExchangeId, aSubmittedDate);
     itemName = aItemName;
-    descripton = aDescripton;
+    description = aDescription;
     if (!setVisitor(aVisitor))
     {
       throw new RuntimeException("Unable to create Donation due to aVisitor. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -55,10 +58,10 @@ public class Donation extends Exchange
     return wasSet;
   }
 
-  public boolean setDescripton(String aDescripton)
+  public boolean setDescription(String aDescription)
   {
     boolean wasSet = false;
-    descripton = aDescripton;
+    description = aDescription;
     wasSet = true;
     return wasSet;
   }
@@ -68,9 +71,9 @@ public class Donation extends Exchange
     return itemName;
   }
 
-  public String getDescripton()
+  public String getDescription()
   {
-    return descripton;
+    return description;
   }
   /* Code from template association_GetOne */
   public Visitor getVisitor()
@@ -100,7 +103,7 @@ public class Donation extends Exchange
   {
     return super.toString() + "["+
             "itemName" + ":" + getItemName()+ "," +
-            "descripton" + ":" + getDescripton()+ "]" + System.getProperties().getProperty("line.separator") +
+            "description" + ":" + getDescription()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "visitor = "+(getVisitor()!=null?Integer.toHexString(System.identityHashCode(getVisitor())):"null");
   }
 }

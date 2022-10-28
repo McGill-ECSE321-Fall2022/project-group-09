@@ -3,10 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 // line 20 "../../../../../mmss.ump"
 // line 205 "../../../../../mmss.ump"
@@ -24,7 +21,9 @@ public class Person
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int personId;
+  @Column(nullable = false)
   private String firstName;
+  @Column(nullable = false)
   private String lastName;
 
   //------------------------

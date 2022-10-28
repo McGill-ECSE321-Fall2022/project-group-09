@@ -3,10 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 // line 14 "../../../../../../model.ump"
 // line 198 "../../../../../../model.ump"
@@ -30,8 +27,10 @@ public class Room
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int roomId;
-  
+
+  @Column(nullable = false)
   private int artefactCount;
+  @Column(nullable = false)
   private RoomType roomType;
 
   //------------------------
