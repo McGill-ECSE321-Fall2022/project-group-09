@@ -30,13 +30,12 @@ public class VisitorRepositoryTests {
 	  @AfterEach
 	  public void clearDatabase() {
 		  
-		  
 		  // Delete all the visitors first
 	      visitorRepository.deleteAll(); 
+	     
 	      // delete communication and person repositories
 		  communicationRepository.deleteAll();
-		  personRepository.deleteAll();
-	      
+		  personRepository.deleteAll();      
 	  }
 
 	  @Test 
@@ -48,6 +47,7 @@ public class VisitorRepositoryTests {
 		Person person = new Person();
 		person.setFirstName(fName);
 		person.setLastName(lName);
+		
 		// save to personRepository
 		personRepository.save(person);
 		int personId = person.getPersonId();
@@ -56,9 +56,8 @@ public class VisitorRepositoryTests {
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
 		int communicationId = communication.getCommunicationId();
-		
 	    
-	    // create the Visitor and populate its field 
+	    // CASE 1: create the Visitor with Communication and populate its field 
 		String username = "John";
 	    String password = "password";
 	    int balance = 200; 
@@ -73,28 +72,64 @@ public class VisitorRepositoryTests {
 	    visitorRepository.save(visitor); 
 	    
 	    // get its username    
-	    String uName = visitor.getUsername();   
+	    String username1 = visitor.getUsername();   
 	    
 	    // set visitor to null    
 	    visitor = null;
 	    person = null;
 	    communication = null;
 	    
+	    visitor = visitorRepository.findVisitorByUsername(username1); 
+	    
+	    // CASE 2: create the Visitor without Communication and populate its field 
+		String fName2 = "Emily";
+		String lName2 = "Oliver";
+		Person person2 = new Person();
+		
+		person2.setFirstName(fName2);
+		person2.setLastName(lName2);
+		
+		personRepository.save(person2);
+		int personId2 = person2.getPersonId();
+		
+	    String username2 = "Emily96";
+	    String password2 = "notAPassword";
+	    
+	    int balance2 = 600;
+	    
+	    Visitor visitor2 = new Visitor();  
+	    visitor2.setPerson(person2);
+	    visitor2.setUsername(username2);
+	    visitor2.setPassword(password2);
+	    visitor2.setBalance(balance2); 
+	    
+	    // save the Visitor    
+	    visitorRepository.save(visitor2); 
+	    
+	    // get its username    
+	    String userName2 = visitor2.getUsername();   
+	    
+	    // set visitor to null    
+	    visitor2 = null;
+	    person2 = null;
+	    
 	    // get the visitor from the database using the username
-	    visitor = visitorRepository.findVisitorByUsername(uName); 
+	    visitor2 = visitorRepository.findVisitorByUsername(userName2); 
 	    
-	    // run J-Unit tests
+	    // run J-Unit tests for CASE 1: VISITOR with COMMUNICATION
 	    assertNotNull(visitor);
-	    assertEquals(balance, visitor.getBalance());
-	    assertEquals(password, visitor.getPassword());
-		assertEquals(uName, visitor.getUsername());
-
-		assertNotNull(visitor.getPerson());
-		assertEquals(personId, visitor.getPerson().getPersonId());
-
+	    assertNotNull(visitor.getPerson());
 		assertNotNull(visitor.getCommunication());
-		assertEquals(communicationId, visitor.getCommunication().getCommunicationId());
 	    
+		assertEquals(username1, visitor.getUsername());
+		assertEquals(personId, visitor.getPerson().getPersonId());
+		assertEquals(communicationId, visitor.getCommunication().getCommunicationId());
+		
+		 // run J-Unit tests for Case 2: VISITOR without COMMUNICATION
+	    assertNotNull(visitor2);
+	    assertNotNull(visitor2.getPerson());
+	    
+		assertEquals(userName2, visitor2.getUsername());
+		assertEquals(personId2, visitor2.getPerson().getPersonId());
 	  }
-
 }
