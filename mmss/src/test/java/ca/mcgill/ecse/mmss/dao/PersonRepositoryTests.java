@@ -48,10 +48,9 @@ public class PersonRepositoryTests {
     // get the Person from the repository using the ID
     person = personRepository.findPersonByPersonId(personId);
     
-    // run J-Unit tests
+    // check not null and primary key
     assertNotNull(person);
-    assertEquals(firstName, person.getFirstName());
-    assertEquals(lastName, person.getLastName()); 
+    assertEquals(personId, person.getPersonId());
    
   }
 }

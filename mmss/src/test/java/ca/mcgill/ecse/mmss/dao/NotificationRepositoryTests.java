@@ -25,6 +25,7 @@ public class NotificationRepositoryTests {
   private NotificationRepository notificationRepository; 
   
   // communication repository
+  @Autowired
   private CommunicationRepository communicationRepository;
   
   @AfterEach
@@ -42,31 +43,36 @@ public class NotificationRepositoryTests {
   public void testPersistAndLoadManager() { 
     
 	// create communication that holds notification
-	Communication comm = new Communication();
+	Communication communication = new Communication();
 	
 	// create Notification to be added
-	Notification noti = new Notification();
-	String message = "test";
-	noti.setMessage(message);
-	Date date = new Date(System.currentTimeMillis());
-	noti.setDate(date);
-	noti.setSentNotification(comm);
+	Notification notification = new Notification();
+	String message = "Taco Tuesday is around the corner!";
+	notification.setMessage(message);	
+	Date date = Date.valueOf("2022-10-28");
+	notification.setDate(date);
+	notification.setSentNotification(communication);
 	
-	// save the notification
-	notificationRepository.save(noti);
+	// save the notification and communication
+	communicationRepository.save(communication);
+	notificationRepository.save(notification);
 
     // get notification id
-	int notiId = noti.getNotificationId();
+	int notificationId = notification.getNotificationId();
     
-	noti = null;
+	// set notification to null
+	notification = null;
+	
     // get the notification from the database using the notification ID
-    noti = notificationRepository.findNotificationByNotificationId(notiId); 
+    notification = notificationRepository.findNotificationByNotificationId(notificationId); 
     
-    // run J-Unit tests
-    assertNotNull(noti);
-    assertEquals(message, noti.getMessage());
-    assertEquals(date, noti.getDate());
-    assertEquals(comm, noti.getSentNotification());
+    // make sure that notification and its communication are not null
+    assertNotNull(notification);
+    assertNotNull(notification.getSentNotification());
+    
+    // check the primary keys and foreign key constraints of the notification class
+    assertEquals(notificationId, notification.getNotificationId());
+    assertEquals(communication.getCommunicationId(), notification.getSentNotification().getCommunicationId());
    
   }
 }

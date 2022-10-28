@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Manager;
 import ca.mcgill.ecse.mmss.model.Person;
 
@@ -21,6 +22,7 @@ public class ManagerRepositoryTests {
   private ManagerRepository managerRepository; 
   
   // also need person database to store the manager
+  @Autowired
   private PersonRepository personRepository;
   
   @AfterEach
@@ -43,26 +45,34 @@ public class ManagerRepositoryTests {
 	
 	// save the person to repository
 	personRepository.save(person);
-	
-	
+		
     // create the manager with its fields         
 	String username = "manager"; 
 	String password = "bigboss"; 
-	Manager manager = new Manager(username, password, person);
+	Manager manager = new Manager(); 
+	manager.setUsername(username); 
+	manager.setPerson(person); 	
+	manager.setPassword(password); 
+	
     
     // save the manager  
     managerRepository.save(manager); 
+
     
     // set manager to null
     manager = null;
+
     		
     // get the manager from the database using the username
     manager = managerRepository.findManagerByUsername(username); 
     
-    // run J-Unit tests
+    // make sure that the manager and its person are not null
     assertNotNull(manager);
+    assertNotNull(manager.getPerson());
+    
+    // check primary key and foreign key constraints
     assertEquals(username, manager.getUsername());
-    assertEquals(password, manager.getPassword()); 
+    assertEquals(person.getPersonId(), manager.getPerson().getPersonId()); 
    
   }
 }

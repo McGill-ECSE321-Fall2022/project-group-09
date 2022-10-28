@@ -34,7 +34,7 @@ public class OpenDayTests {
   public void testPersistAndLoadManager() { 
     
 	// create OpenDay to be added
-	Date date = new Date(System.currentTimeMillis());
+	Date date = Date.valueOf("2022-10-28");
 	OpenDay openDay = new OpenDay(date);
 	
 	// save the OpenDay to repository

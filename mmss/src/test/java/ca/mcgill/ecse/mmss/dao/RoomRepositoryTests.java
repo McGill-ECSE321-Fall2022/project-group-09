@@ -32,10 +32,9 @@ public class RoomRepositoryTests {
     
 	// create Room
 	Room room = new Room();
-	int artefactCount = 20;
+	int artefactCount = 0;
 	room.setArtefactCount(artefactCount);
 	room.setRoomType(RoomType.Storage); 
-	roomRepository.save(room); 
 	
 	// Add room to repository
 	roomRepository.save(room);
@@ -49,11 +48,9 @@ public class RoomRepositoryTests {
     // get the room from the repository using the ID
     room = roomRepository.findRoomByRoomId(roomId);
     
-    // run J-Unit tests
+    // check not null and primary key
     assertNotNull(room);
     assertEquals(roomId, room.getRoomId());
-    assertEquals(artefactCount, room.getArtefactCount()); 
-
    
   }
 }
