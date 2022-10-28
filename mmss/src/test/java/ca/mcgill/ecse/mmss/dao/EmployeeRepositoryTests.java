@@ -10,8 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Person;
+import ca.mcgill.ecse.mmss.model.Shift;
+import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
+import ca.mcgill.ecse.mmss.model.WeeklySchedule;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -25,19 +29,42 @@ public class EmployeeRepositoryTests {
   @Autowired  
   private PersonRepository personRepository; 
   
+  // adding the communication repository for the employee
+  @Autowired  
+  private CommunicationRepository communicationRepository; 
+  
+  // adding the shift repository for the employee
+  @Autowired  
+  private ShiftRepository shiftRepository; 
+  
+  // also need a weekly schedule repository for the shift
+  @Autowired  
+  private WeeklyScheduleRepository weeklyScheduleRepository; 
+  
   @AfterEach
   public void clearDatabase() {
     
       // make sure employee is deleted first, because employees cannot exist without a person
       employeeRepository.deleteAll();
       
-      // then you can delete all the persons after each execution
+      // delete all the persons after each execution
       personRepository.deleteAll(); 
+      
+      // delete all the communications after each execution
+      communicationRepository.deleteAll(); 
+      
+      // delete all the shifts before the weekly schedule, because shifts cannot exist without a weekly schedule
+      shiftRepository.deleteAll(); 
+      
+      // delete all the weekly schedules after each execution
+      weeklyScheduleRepository.deleteAll(); 
   }
 
   @Test 
   public void testPersistAndLoadEmployee() { 
-    
+	  
+// MANDATORY CLASS TESTS
+	  
     // create the person for the employee
     Person person = new Person();
     person.setFirstName("Joe");
@@ -75,5 +102,57 @@ public class EmployeeRepositoryTests {
     assertEquals(username, employee.getUsername());
     assertEquals(personId, employee.getPerson().getPersonId());
     
+    
+// OPTIONAL CLASS TESTS
+    
+    // create the weekly schedule for the shift
+    WeeklySchedule weeklySchedule = new WeeklySchedule();
+    
+    // save the weekly schedule
+    weeklyScheduleRepository.save(weeklySchedule);
+
+    // create the shift for the employee
+    Shift shift = new Shift();
+    shift.setShiftTime(ShiftTime.Morning);
+    
+    // set weekly schedule to shift then save shift
+    shift.setWeeklySchedule(weeklySchedule);
+    shiftRepository.save(shift);
+    
+    // create the communication for the person
+    Communication communication = new Communication();
+    
+    // save the weekly schedule
+    communicationRepository.save(communication);
+
+    // set shift and communication to employee then save employee
+    employee.setShift(shift);
+    employee.setCommunication(communication);
+    employeeRepository.save(employee);
+    
+    // get shiftId and communicationId then save them to variables
+    int communicationId = communication.getCommunicationId();  
+    int shiftId = shift.getShiftId();
+    
+    // set the used employee, shift and communication to null
+    employee = null;
+    shift = null;
+    communication = null;
+    
+    // get the employee back from the database using the Id
+    employee = employeeRepository.findEmployeeByUsername(username); 
+    
+    // make sure employee, person, shift, and communication are not null
+    assertNotNull(employee);
+    assertNotNull(employee.getPerson());
+    assertNotNull(employee.getShift());
+    assertNotNull(employee.getCommunication());
+    
+    // make sure the created username, personId, shiftId, and communicationId match those in the database
+    assertEquals(username, employee.getUsername());
+    assertEquals(personId, employee.getPerson().getPersonId());
+    assertEquals(shiftId, employee.getShift().getShiftId());
+    assertEquals(communicationId, employee.getCommunication().getCommunicationId());
+  
   }
 }
