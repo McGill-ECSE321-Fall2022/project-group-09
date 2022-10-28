@@ -28,7 +28,9 @@ public class CommunicationRepositoryTests {
 
   @Test 
   public void testPersistAndLoadCommunication() { 
-    
+	  
+// MANDATORY CLASS TESTS
+	  
     // create the communication instance        
 	Communication communication = new Communication() ;
     

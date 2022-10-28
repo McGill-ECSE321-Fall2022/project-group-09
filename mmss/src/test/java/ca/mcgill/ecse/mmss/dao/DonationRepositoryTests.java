@@ -48,7 +48,9 @@ public class DonationRepositoryTests {
 
   @Test 
   public void testPersistAndLoadDonation() { 
-    
+	  
+// MANDATORY CLASS TESTS
+	  
 	// create a person for the visitor and set its attributes
     Person person = new Person();
     person.setFirstName("Peter");
