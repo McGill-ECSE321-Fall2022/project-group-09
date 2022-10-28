@@ -39,6 +39,8 @@ public class ShiftRepositoryTests {
 	    // create the weekly schedule for the shift
 	    WeeklySchedule weeklySchedule = new WeeklySchedule(); 
 	    weeklyScheduleRepository.save(weeklySchedule); 
+	    
+	    // retreive Id
 	    int weeklyScheduleId = weeklySchedule.getWeeklyScheduleId();
 	    
 	    // create the shift and populate its fields
@@ -58,12 +60,12 @@ public class ShiftRepositoryTests {
 	    // get the shift from the database using the Id
 	    shift = shiftRepository.findShiftByShiftId(shiftId); 
 	    
-	    // run J-Unit tests
+	    // check objects are not null
 	    assertNotNull(shift);
-	    assertEquals(shiftTime, shift.getShiftTime());
-		assertEquals(shiftId, shift.getShiftId());
-
-		assertNotNull(shift.getWeeklySchedule());
+	    assertNotNull(shift.getWeeklySchedule());
+	    
+	    // check ids and foriegn key constraints
+		assertEquals(shiftId, shift.getShiftId());		
 		assertEquals(weeklyScheduleId, shift.getWeeklySchedule().getWeeklyScheduleId());
 	    
 	  }
