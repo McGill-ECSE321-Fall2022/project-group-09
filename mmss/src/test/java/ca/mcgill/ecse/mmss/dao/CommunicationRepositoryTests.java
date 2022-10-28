@@ -21,7 +21,7 @@ public class CommunicationRepositoryTests {
   @AfterEach
   public void clearDatabase() {
     
-      // clear communication instances
+      // clear communications after each execution
       communicationRepository.deleteAll();
       
   }
@@ -32,20 +32,22 @@ public class CommunicationRepositoryTests {
     // create the communication instance        
 	Communication communication = new Communication() ;
     
-    // save the Communication    
+    // save the communication    
     communicationRepository.save(communication); 
     
-    // get its id  
+    // get its id and save it to a variable 
     int communicationId = communication.getCommunicationId();   
     
-    // set artefact to null    
+    // set communication to null   
     communication = null;
     
-    // get the Communication from the database using the Id
+    // get the communication back from the database using the Id
     communication = communicationRepository.findCommunicationByCommunicationId(communicationId); 
     
-    // run J-Unit tests
+    // make sure the communication is not null
     assertNotNull(communication);
+    
+    // make sure the created communication's Id matches the one in the database
     assertEquals(communicationId, communication.getCommunicationId());
   }
 }

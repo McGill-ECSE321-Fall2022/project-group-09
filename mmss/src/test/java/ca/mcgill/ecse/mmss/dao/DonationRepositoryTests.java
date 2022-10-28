@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
+import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
 @ExtendWith(SpringExtension.class)
@@ -28,6 +29,10 @@ public class DonationRepositoryTests {
   @Autowired  
   private VisitorRepository visitorRepository; 
   
+  // need a person for visitor
+  @Autowired  
+  private PersonRepository personRepository; 
+  
   @AfterEach
   public void clearDatabase() {
     
@@ -36,49 +41,65 @@ public class DonationRepositoryTests {
       
       // then you can delete all the visitors
       visitorRepository.deleteAll(); 
+      
+      // then you can delete all the persons after each execution
+      personRepository.deleteAll(); 
   }
 
   @Test 
   public void testPersistAndLoadDonation() { 
     
-    // create the visitor for the donation
-	String username = "peter.griffin@mmss.qc.ca";
+	// create a person for the visitor and set its attributes
+    Person person = new Person();
+    person.setFirstName("Peter");
+    person.setLastName("Griffin");
+    
+    // save the person
+    personRepository.save(person); 
+	  
+    // create the visitor for the donation and set its attributes
     Visitor visitor = new Visitor();
-    visitor.setUsername(username); 
+    visitor.setUsername("peter.griffin@mmss.qc.ca"); 
     visitor.setPassword("ExtremelySecurePassword");
     visitor.setBalance(1000);
+    
+    // set person to visitor and save visitor
+    visitor.setPerson(person);
     visitorRepository.save(visitor); 
     
-    // create the Donation and populate its fields          
+    // create the Donation and set its attributes   
     Donation donation = new Donation() ;
-    
     donation.setItemName("Mona Lisa"); 
     donation.setDescription("Leonardo DaVinci's most famous artwork!"); 
     donation.setSubmittedDate(Date.valueOf("2022-10-06")); 
     donation.setExchangeStatus(ExchangeStatus.Pending); 
 
+    // set visitor to donation and save donation
     donation.setVisitor(visitor); 
-    
     donationRepository.save(donation); 
 
-    
-    // save the Donation Id
+    // get the exchange Id, the visitor's username, and the person Id then save them to variables
+    String username = visitor.getUsername();
     int exchangeId = donation.getExchangeId();
+    int personId = person.getPersonId();
     
-    
-    // set donation to null    
+    // set used donation, visitor, and person to null    
     donation = null;
     visitor = null;
+    person = null;
     
-    // get the donation from the database using the Id
+    // get the donation back from the database using the Id
     donation = donationRepository.findDonationByExchangeId(exchangeId); 
     
-    // run J-Unit tests
+    // make sure donation, visitor, and person are not null
     assertNotNull(donation);
     assertNotNull(donation.getVisitor());
+    assertNotNull(donation.getVisitor().getPerson());
     
-    assertEquals(username, donation.getVisitor().getUsername());
+    // make sure the created exchangeId, username and personId match those in the database
     assertEquals(exchangeId, donation.getExchangeId());
+    assertEquals(username, donation.getVisitor().getUsername());
+    assertEquals(personId, donation.getVisitor().getPerson().getPersonId());
     
   }
 }
