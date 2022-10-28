@@ -36,6 +36,7 @@ public class PersonRepositoryTests {
 	person.setFirstName(firstName);
 	person.setLastName(lastName);
 	
+	// save person to repository
 	personRepository.save(person);
 	
 	// get person id

@@ -41,6 +41,7 @@ public class ManagerRepositoryTests {
 	person.setFirstName("Big");
 	person.setLastName("Boss");
 	
+	// save the person to repository
 	personRepository.save(person);
 	
 	

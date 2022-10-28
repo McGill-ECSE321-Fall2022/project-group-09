@@ -59,7 +59,7 @@ public class NotificationRepositoryTests {
 	int notiId = noti.getNotificationId();
     
 	noti = null;
-    // get the manager from the database using the username
+    // get the notification from the database using the notification ID
     noti = notificationRepository.findNotificationByNotificationId(notiId); 
     
     // run J-Unit tests

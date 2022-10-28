@@ -37,7 +37,7 @@ public class OpenDayTests {
 	Date date = new Date(System.currentTimeMillis());
 	OpenDay openDay = new OpenDay(date);
 	
-	// save the OpenDay
+	// save the OpenDay to repository
 	openDayRepository.save(openDay);
 
     // get open day date
