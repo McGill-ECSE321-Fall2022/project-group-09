@@ -3,11 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 // line 88 "../../../../../mmss.ump"
 // line 172 "../../../../../mmss.ump"
@@ -23,7 +19,8 @@ public abstract class Booking
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int bookingId;
-  
+
+  @Column(nullable = false)
   private int pricePerPerson;
 
   //Booking Associations

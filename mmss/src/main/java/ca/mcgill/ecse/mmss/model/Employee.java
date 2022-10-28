@@ -21,7 +21,7 @@ public class Employee extends AccountType
   private String phoneNumber;
 
   //Employee Associations
-  @ManyToOne(optional = false)
+  @ManyToOne
   private Shift shift;
 
   //------------------------

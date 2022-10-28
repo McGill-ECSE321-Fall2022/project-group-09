@@ -3,6 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 // line 39 "../../../../../mmss.ump"
@@ -18,6 +19,7 @@ public class Visitor extends AccountType
   //------------------------
 
   //Visitor Attributes
+  @Column(nullable = false)
   private int balance;
 
   //------------------------
