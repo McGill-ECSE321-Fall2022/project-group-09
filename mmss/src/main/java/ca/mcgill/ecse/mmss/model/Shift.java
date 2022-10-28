@@ -3,11 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 // line 75 "../../../../../../model.ump"
 // line 231 "../../../../../../model.ump"
@@ -32,7 +28,8 @@ public class Shift
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)  
   private int shiftId;
-  
+
+  @Column(nullable = false)
   private ShiftTime shiftTime;
 
   //Shift Associations

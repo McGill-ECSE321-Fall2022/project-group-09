@@ -3,10 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 import java.sql.Date;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 // line 56 "../../../../../../model.ump"
 // line 206 "../../../../../../model.ump"
@@ -30,8 +27,10 @@ public abstract class Exchange
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int exchangeId;
-  
+
+  @Column(nullable = false)
   private Date submittedDate;
+  @Column(nullable = false)
   private ExchangeStatus exchangeStatus;
 
   //------------------------

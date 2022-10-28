@@ -3,6 +3,7 @@
 
 package ca.mcgill.ecse.mmss.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -24,11 +25,13 @@ public class Tour extends Booking
   //------------------------
 
   //Tour Attributes
+  @Column(nullable = false)
   private int numberOfParticipants;
+  @Column(nullable = false)
   private ShiftTime tourTime;
 
   //Tour Associations
-  @ManyToOne(optional = false)
+  @ManyToOne
   private Employee tourGuide;
   
   @ManyToOne(optional = false)
