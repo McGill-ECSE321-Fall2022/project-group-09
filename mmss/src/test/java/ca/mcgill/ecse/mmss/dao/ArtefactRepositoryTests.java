@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Artefact;
-import ca.mcgill.ecse.mmss.model.Room;
-import ca.mcgill.ecse.mmss.model.Room.RoomType;
+//import ca.mcgill.ecse.mmss.model.Room;
+//import ca.mcgill.ecse.mmss.model.Room.RoomType;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -21,8 +21,8 @@ public class ArtefactRepositoryTests {
   private ArtefactRepository artefactRepository; 
   
   // also need a room in order to add an artefact
-  @Autowired  
-  private RoomRepository roomRepository; 
+//  @Autowired  
+//  private RoomRepository roomRepository; 
   
   
   @AfterEach
@@ -31,17 +31,17 @@ public class ArtefactRepositoryTests {
       // make sure the artefact is deleted first, because artefacts cannot exist without a room
       artefactRepository.deleteAll();
       
-      // then you can delete all the rooms
-      roomRepository.deleteAll(); 
+//      // then you can delete all the rooms
+//      roomRepository.deleteAll(); 
   }
 
   @Test 
   public void testPersistAndLoadArtefact() { 
     
     // create the room for the artefact
-    Room room = new Room();
-    room.setRoomType(RoomType.Storage); 
-    roomRepository.save(room);
+//    Room room = new Room();
+//    room.setRoomType(RoomType.Storage); 
+//    roomRepository.save(room);
     
     // create the Artefact and populate its feilds          
     Artefact artefact = new Artefact() ;
@@ -55,7 +55,7 @@ public class ArtefactRepositoryTests {
     artefact.setLoanFee(20); 
     // save the Artefact    
     
-    artefact.setRoom(room); 
+    artefact.setRoom(null); 
     
     artefactRepository.save(artefact); 
     
@@ -63,21 +63,21 @@ public class ArtefactRepositoryTests {
     
     // get its id ( that was set automatically by spring )    
     int artefactId = artefact.getArtefactId();   
-    int roomId = room.getRoomId();
+//    int roomId = room.getRoomId();
     
     // set artefact to null    
     artefact = null;
-    room = null;
+//    room = null;
     
     // get the artefact from the database using the Id
     artefact = artefactRepository.findArtefactByArtefactId(artefactId); 
     
     // run J-Unit tests
     assertNotNull(artefact);
-    assertNotNull(artefact.getRoom());
+//    assertNotNull(artefact.getRoom());
     
     assertEquals(artefactId, artefact.getArtefactId());
-    assertEquals(roomId, artefact.getRoom().getRoomId());
+//    assertEquals(roomId, artefact.getRoom().getRoomId());
     
     
     

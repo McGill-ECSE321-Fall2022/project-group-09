@@ -18,7 +18,6 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.model.Artefact;
-import ca.mcgill.ecse.mmss.model.Room;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -62,6 +61,7 @@ public class LoanRepositoryTests {
     
     // create the open day for the loan
     OpenDay openDay = new OpenDay();
+    openDay.setDate(Date.valueOf("2022-10-25"));
     openDayRepository.save(openDay);
     
     // create the visitor for the loan
