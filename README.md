@@ -16,7 +16,7 @@ The domain model for the system and the key design decisions made for it are [he
 ## Deliverable 1 Contribution
 | Name             | Responsibilities                                                  | Hours (incl. meetings) |
 |:----------------:|:----------------------------------------------------------------- |:----------------------:|
-| Athmane Benarous | - Analyzed and wrote elicited requirements for employees <br> - Designed the domain model <br> - xx | xx hours |
+| Athmane Benarous | - Analyzed and wrote elicited requirements for employees <br> - Contributed to designing the domain model <br> - Created a use-case diagram for the artefact donation feature and wrote its specifications <br> - Contributed to keeping track of the meeting minutes <br> - Wrote the test cases for the artefact, communication, donation, employee, and loan classes | 25 hours |
 | Mohamed Elsamadouny | - Analyzed and wrote elicited requirements for the manager <br> - Designed the domain model <br> - xx | xx hours |
 | Sasha Denouvilliez-Pech | - Analyzed and wrote elicited requirements for rooms and artefacts <br> - Designed the domain model <br> - xx | xx hours |
 | Saviru Perera | - Analyzed and wrote elicited requirements for visitors <br> - Designed the domain model <br> - xx | xx hours |
