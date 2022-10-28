@@ -16,13 +16,14 @@ import ca.mcgill.ecse.mmss.model.Room.RoomType;
 @SpringBootTest
 public class ArtefactRepositoryTests {
   
-  // repository we are testing
+  // tested repository
   @Autowired
   private ArtefactRepository artefactRepository; 
   
   // also need a room in order to add an artefact
   @Autowired  
   private RoomRepository roomRepository; 
+  
   
   @AfterEach
   public void clearDatabase() {
@@ -40,10 +41,11 @@ public class ArtefactRepositoryTests {
     // create the room for the artefact
     Room room = new Room();
     room.setRoomType(RoomType.Storage); 
-    roomRepository.save(room); 
+    roomRepository.save(room);
     
     // create the Artefact and populate its feilds          
     Artefact artefact = new Artefact() ;
+    
     String artefactName = "lightSaber"; 
     String description = "Found in the remains of the Death Star";      
     artefact.setArtefactName(artefactName); 
@@ -51,24 +53,31 @@ public class ArtefactRepositoryTests {
     artefact.setCanLoan(false); 
     artefact.setInsuranceFee(200); 
     artefact.setLoanFee(20); 
+    // save the Artefact    
+    
     artefact.setRoom(room); 
     
-    // save the Artefact    
     artefactRepository.save(artefact); 
+    
+    
     
     // get its id ( that was set automatically by spring )    
     int artefactId = artefact.getArtefactId();   
+    int roomId = room.getRoomId();
     
     // set artefact to null    
     artefact = null;
+    room = null;
     
     // get the artefact from the database using the Id
     artefact = artefactRepository.findArtefactByArtefactId(artefactId); 
     
     // run J-Unit tests
     assertNotNull(artefact);
+    assertNotNull(artefact.getRoom());
+    
     assertEquals(artefactId, artefact.getArtefactId());
-    assertEquals(artefactName, artefact.getArtefactName()); 
+    assertEquals(roomId, artefact.getRoom().getRoomId());
     
     
     
