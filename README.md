@@ -24,12 +24,12 @@ The task of writing and analyzing elicited requirements was split as follows:
 * **Loaning + Donating:** Shidan Javaheri
 
 The task of creating use case diagrams and their alternate scenarios was split as follows:
-* **System Login:** Saviru Perera
-* **Artefact Creation:** Mohamed Elsamadouny
-* **Book Ticket:** Sasha Denouvilliez-Pech
-* **Book Tour:** Shyam Desai
-* **Artefact Donation:** Athmane Benarous
-* **Artefact Loan Request:** Shidan Javaheri
+* **Login to System:** Saviru Perera
+* **Create an Artefact:** Mohamed Elsamadouny
+* **Book Tickets:** Sasha Denouvilliez-Pech
+* **Book Tours:** Shyam Desai
+* **Request to Donate an Artefact:** Athmane Benarous
+* **Request to Loan an Artefact:** Shidan Javaheri
 
 _Note: All major decisions were always discussed and made by the entire team during a meeting._
 
