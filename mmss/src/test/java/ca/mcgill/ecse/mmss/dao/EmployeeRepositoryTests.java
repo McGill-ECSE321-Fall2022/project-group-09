@@ -18,7 +18,7 @@ import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 import ca.mcgill.ecse.mmss.model.Schedule;
 
 /**
- * Employee Repository testing class which initiates a employee, person, communication, shift, and weekly schedule repository, executes the tests, then clears each instance from the database.
+ * Employee Repository testing class which initiates an employee, person, communication, shift, and weekly schedule repository, executes the tests, then clears each instance from the database.
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

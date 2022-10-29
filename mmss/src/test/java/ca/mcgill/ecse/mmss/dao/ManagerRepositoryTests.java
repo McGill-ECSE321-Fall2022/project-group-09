@@ -16,7 +16,6 @@ import ca.mcgill.ecse.mmss.model.Person;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-
 public class ManagerRepositoryTests {
   
   // repository we are testing

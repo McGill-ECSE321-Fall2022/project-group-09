@@ -10,6 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Schedule;
 
+/**
+ * Schedule Repository testing class which initiates a schedule repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ScheduleRepositoryTests {
@@ -22,7 +25,12 @@ public class ScheduleRepositoryTests {
 			// delete all entries in database
 			scheduleRepository.deleteAll();
 		}
-		
+
+		  /**
+		 * Schedule testing method which creates, populates the attributes, sets associations, and saves each schedule object and identifier.
+		 * It can then test to make sure each object reached from the schedule found in the repository is not null and that each initially saved Id corresponds to the one
+		 * reached from the repository.
+		 */
 		@Test
 		public void testAndPersistAndLoadSchedule() {
 			Schedule Schedule = new Schedule();

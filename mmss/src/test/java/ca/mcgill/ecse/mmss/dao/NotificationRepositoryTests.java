@@ -15,9 +15,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Notification;
 
+/**
+ * Notification Repository testing class which initiates a notification and a communication repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-
 public class NotificationRepositoryTests {
   
   // repository we are testing
@@ -39,6 +41,11 @@ public class NotificationRepositoryTests {
       
   }
 
+  /**
+ * Notification testing method which creates, populates the attributes, sets associations, and saves each notification and communication object and identifier.
+ * It can then test to make sure each object reached from the notification found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
   @Test 
   public void testPersistAndLoadManager() { 
     

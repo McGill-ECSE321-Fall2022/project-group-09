@@ -12,6 +12,9 @@ import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 import ca.mcgill.ecse.mmss.model.Schedule;
 
+/**
+ * Shift Repository testing class which initiates a shift and a schedule repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ShiftRepositoryTests {
@@ -33,6 +36,11 @@ public class ShiftRepositoryTests {
 	      ScheduleRepository.deleteAll(); 
 	  }
 
+	  /**
+	 * Shift testing method which creates, populates the attributes, sets associations, and saves each shift and schedule object and identifier.
+	 * It can then test to make sure each object reached from the shift found in the repository is not null and that each initially saved Id corresponds to the one
+	 * reached from the repository.
+	 */
 	  @Test 
 	  public void testPersistAndLoadShift() { 
 	    
