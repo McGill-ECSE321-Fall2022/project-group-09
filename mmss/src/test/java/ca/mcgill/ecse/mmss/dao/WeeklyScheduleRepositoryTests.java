@@ -10,6 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.WeeklySchedule;
 
+/**
+ * @author Athmane
+ * Artefact Repository testing class which initiates a room and an artefact repository, executes the tests, then clears these repositories from the database.
+ */
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class WeeklyScheduleRepositoryTests {
@@ -22,7 +27,12 @@ public class WeeklyScheduleRepositoryTests {
 			// delete all entries in database
 			weeklyScheduleRepository.deleteAll();
 		}
-		
+
+		  /**
+		 * Artefact testing method which creates, populates the attributes, sets associations, and saves the artefact and room objects and identifiers.
+		 * It can then test to make sure each object reached from the artefact found in the repository is not null and that each initially saved Id corresponds to the one
+		 * reached from the repository.
+		 */
 		@Test
 		public void testAndPersistAndLoadWeeklySchedule() {
 			WeeklySchedule weeklySchedule = new WeeklySchedule();
