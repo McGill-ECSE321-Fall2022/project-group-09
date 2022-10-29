@@ -16,6 +16,9 @@ import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Ticket;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
+/**
+ * Ticket Repository testing class which initiates a ticket, open day, visitor, and person repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TicketRepositoryTests {
@@ -47,6 +50,11 @@ public class TicketRepositoryTests {
 	      openDayRepository.deleteAll();
 	  }
 
+	  /**
+	 * Ticket testing method which creates, populates the attributes, sets associations, and saves each ticket, open day, visitor, and person object and identifier.
+	 * It can then test to make sure each object reached from the ticket found in the repository is not null and that each initially saved Id corresponds to the one
+	 * reached from the repository.
+	 */
 	  @Test 
 	  public void testPersistAndLoadTicket() { 
 		// Create a person for the visitor, as visitor cannot exist without person.

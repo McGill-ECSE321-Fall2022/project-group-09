@@ -12,6 +12,9 @@ import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
+/**
+ * Visitor Repository testing class which initiates a visitor, person, and communication repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class VisitorRepositoryTests {
@@ -38,6 +41,11 @@ public class VisitorRepositoryTests {
 		  personRepository.deleteAll();      
 	  }
 
+	  /**
+	 * Visitor testing method which creates, populates the attributes, sets associations, and saves each visitor, person, and communication object and identifier.
+	 * It can then test to make sure each object reached from the visitor found in the repository is not null and that each initially saved Id corresponds to the one
+	 * reached from the repository.
+	 */
 	  @Test 
 	  public void testPersistAndLoadVisitor() { 
 		  

@@ -19,6 +19,9 @@ import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.model.Artefact;
 
+/**
+ * Loan Repository testing class which initiates a loan, visitor, person, and artefact repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class LoanRepositoryTests {
@@ -58,6 +61,11 @@ public class LoanRepositoryTests {
       personRepository.deleteAll();   
   }
 
+  /**
+ * Loan testing method which creates, populates the attributes, sets associations, and saves each loan, visitor, person, and artefact object and identifier.
+ * It can then test to make sure each object reached from the loan found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
   @Test 
   public void testPersistAndLoadLoan() { 
     

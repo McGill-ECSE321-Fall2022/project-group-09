@@ -17,6 +17,9 @@ import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Tour;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
+/**
+ * Tour Repository testing class which initiates a tour, open day, visitor, employee, and person repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TourRepositoryTests {
@@ -54,6 +57,11 @@ public class TourRepositoryTests {
       personRepository.deleteAll();
   }
 
+  /**
+ * Tour testing method which creates, populates the attributes, sets associations, and saves each tour, open day, visitor, employee, and person object and identifier.
+ * It can then test to make sure each object reached from the tour found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
   @Test 
   public void testPersistAndLoadTour() { 
     

@@ -11,9 +11,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 
+/**
+ * Room Repository testing class which initiates a room repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-
 public class RoomRepositoryTests {
   
   // repository we are testing
@@ -27,6 +29,11 @@ public class RoomRepositoryTests {
       roomRepository.deleteAll();
   }
 
+  /**
+ * Room testing method which creates, populates the attributes, sets associations, and saves each room object and identifier.
+ * It can then test to make sure each object reached from the room found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
   @Test 
   public void testPersistAndLoadPerson() { 
     

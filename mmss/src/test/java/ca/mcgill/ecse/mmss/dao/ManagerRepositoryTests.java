@@ -11,9 +11,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Manager;
 import ca.mcgill.ecse.mmss.model.Person;
 
+/**
+ * Manager Repository testing class which initiates a manager and a person repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-
 public class ManagerRepositoryTests {
   
   // repository we are testing
@@ -34,6 +36,11 @@ public class ManagerRepositoryTests {
       personRepository.deleteAll();
   }
 
+  /**
+ * Manager testing method which creates, populates the attributes, sets associations, and saves each MAIN and OTHER object and identifier.
+ * It can then test to make sure each object reached from the MAIN found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
   @Test 
   public void testPersistAndLoadManager() { 
     

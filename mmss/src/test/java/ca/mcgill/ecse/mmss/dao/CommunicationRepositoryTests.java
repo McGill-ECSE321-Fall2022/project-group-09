@@ -10,6 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Communication;
 
+/**
+ * Communication Repository testing class which initiates a communication repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class CommunicationRepositoryTests {
@@ -25,6 +28,11 @@ public class CommunicationRepositoryTests {
       communicationRepository.deleteAll();    
   }
 
+  /**
+ * Communication testing method which creates, populates the attributes, sets associations, and saves each communication object and identifier.
+ * It can then test to make sure each object reached from the communication found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
   @Test 
   public void testPersistAndLoadCommunication() { 
 	  

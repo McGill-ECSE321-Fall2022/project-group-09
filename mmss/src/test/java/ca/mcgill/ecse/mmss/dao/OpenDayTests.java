@@ -14,9 +14,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Schedule;
 
+/**
+ * Open Day Repository testing class which initiates an open day and a schedule repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-
 public class OpenDayTests {
   
   // repository we are testing
@@ -36,6 +38,11 @@ public class OpenDayTests {
       weeklyScheduleRepository.deleteAll();
   }
 
+  /**
+ * Open Day testing method which creates, populates the attributes, sets associations, and saves each open day and schedule object and identifier.
+ * It can then test to make sure each object reached from the open day found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
   @Test 
   public void testPersistAndLoadManager() { 
     
