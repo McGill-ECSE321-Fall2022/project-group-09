@@ -36,7 +36,7 @@ _Note: All major decisions were always discussed and made by the entire team dur
 ## Contributions - Deliverable 1
 | Name             | Responsibilities                                                  | Hours (incl. meetings) |
 |:----------------:|:----------------------------------------------------------------- |:----------------------:|
-| Athmane Benarous | - Contributed to designing the domain model <br> - Contributed to keeping track of the meeting minutes <br> - Wrote the test cases for the artefact, communication, donation, employee, and loan classes | 25 hours |
+| Athmane Benarous | - Contributed to designing the domain model <br> - Contributed to keeping track of the meeting minutes <br> - Wrote the test cases for the artefact, communication, donation, employee, and loan classes <br> - Wrote testing documentation | 25 hours |
 | Mohamed Elsamadouny |- Designed the domain model <br> - Wrote the test cases for Manager, Notification, OpenDay, Person and Room classes | 22 hours |
 | Sasha Denouvilliez-Pech | - Designed the domain model <br> - Designed the database <br> - JPA Annotations <br> - Created issues <br> - Reviewed use-case diagrams and scenarios| 40 hours |
 | Saviru Perera | - Designed the domain model <br> -Wrote Tests for Shift, Visitor, Ticket, Tour, and Schedule Classes  | 20 hours |
