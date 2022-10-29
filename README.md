@@ -24,11 +24,11 @@ The task of writing and analyzing elicited requirements was split as follows:
 * **Loaning + Donating:** Shidan Javaheri
 
 The task of creating use case diagrams and their alternate scenarios was split as follows:
-* **Artefact Donation:** Athmane Benarous
 * **System Login:** Saviru Perera
 * **Artefact Creation:** Mohamed Elsamadouny
 * **Book Ticket:** Sasha Denouvilliez-Pech
 * **Book Tour:** Shyam Desai
+* **Artefact Donation:** Athmane Benarous
 * **Artefact Loan Request:** Shidan Javaheri
 
 _Note: All major decisions were always discussed and made by the entire team during a meeting._
@@ -36,9 +36,9 @@ _Note: All major decisions were always discussed and made by the entire team dur
 ## Contributions - Deliverable 1
 | Name             | Responsibilities                                                  | Hours (incl. meetings) |
 |:----------------:|:----------------------------------------------------------------- |:----------------------:|
-| Athmane Benarous | - Analyzed and wrote elicited requirements for employees and other non-functional requirements <br> - Contributed to designing the domain model <br> - Contributed to keeping track of the meeting minutes <br> - Wrote the test cases for the artefact, communication, donation, employee, and loan classes | 25 hours |
-| Mohamed Elsamadouny | - Analyzed and wrote elicited requirements for the manager <br> - Designed the domain model <br> - Wrote the test cases for Manager, Notification, OpenDay, Person and Room classes | 22 hours |
-| Sasha Denouvilliez-Pech | - Analyzed and wrote elicited requirements for rooms and artefacts <br> - Designed the domain model <br> - JPA Annotations <br> - Created issues <br> - Reviewed use-case diagrams and scenarios| 40 hours |
-| Saviru Perera | - Analyzed and wrote elicited requirements for visitors <br> - Designed the domain model <br> -Wrote Tests for Shift, Visitor, Ticket, Tour, and Schedule Classes  | 20 hours |
-| Shidan Javaheri | - Analyzed and wrote elicited requirements for loaning and donating artefacts <br> - Reviewed and finalized requirements <br> - Designed the domain model <br> - Designed the database <br> - JPA Annotations <br> - Set up file structure and project connection to database <br> - Wrote Sample test file for ArtefactRepository <br> - Reviewed and edited all tests <br> - Edited Wiki page <br> - Asked questions on behalf of the group | 55 hours |
-| Shyam Desai | - Analyzed and wrote elicited requirements for the system <br> - Designed the domain model <br> - Reviewed and finalized requirements <br> - Reviewed other teammates' use-case diagrams <br> - Populated and updated the GitHub Wiki page <br> - Wrote test case for the Visitor class | 25 hours |
+| Athmane Benarous | - Contributed to designing the domain model <br> - Contributed to keeping track of the meeting minutes <br> - Wrote the test cases for the artefact, communication, donation, employee, and loan classes | 25 hours |
+| Mohamed Elsamadouny |- Designed the domain model <br> - Wrote the test cases for Manager, Notification, OpenDay, Person and Room classes | 22 hours |
+| Sasha Denouvilliez-Pech | - Designed the domain model <br> - Designed the database <br> - JPA Annotations <br> - Created issues <br> - Reviewed use-case diagrams and scenarios| 40 hours |
+| Saviru Perera | - Designed the domain model <br> -Wrote Tests for Shift, Visitor, Ticket, Tour, and Schedule Classes  | 20 hours |
+| Shidan Javaheri | - Reviewed and finalized requirements <br> - Designed the domain model <br> - Designed the database <br> - JPA Annotations <br> - Set up file structure and project connection to database <br> - Wrote Sample test file for ArtefactRepository <br> - Reviewed and edited all tests <br> - Edited Wiki page <br> - Asked questions on behalf of the group | 55 hours |
+| Shyam Desai | - Designed the domain model <br> - Reviewed and finalized requirements <br> - Reviewed other teammates' use-case diagrams <br> - Populated and updated the GitHub Wiki page <br> - Wrote test case for the Visitor class | 25 hours |
