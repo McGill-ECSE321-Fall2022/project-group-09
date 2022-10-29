@@ -31,6 +31,8 @@ The task of creating use case diagrams and their alternate scenarios was split a
 * **Book Tour:** Shyam Desai
 * **Artefact Loan Request:** Shidan Javaheri
 
+_Note: All major decisions were always discussed and made by the entire team during a meeting._
+
 ## Contributions - Deliverable 1
 | Name             | Responsibilities                                                  | Hours (incl. meetings) |
 |:----------------:|:----------------------------------------------------------------- |:----------------------:|
