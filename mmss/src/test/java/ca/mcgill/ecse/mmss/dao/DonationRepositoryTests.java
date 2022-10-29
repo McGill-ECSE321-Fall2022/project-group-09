@@ -17,6 +17,9 @@ import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
+/**
+ * Donation Repository testing class which initiates a donation, visitor, and person repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class DonationRepositoryTests {
@@ -46,6 +49,11 @@ public class DonationRepositoryTests {
       personRepository.deleteAll(); 
   }
 
+  /**
+ * Donation testing method which creates, populates the attributes, sets associations, and saves each donation, visitor, and person object and identifier.
+ * It can then test to make sure each object reached from the donation found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
   @Test 
   public void testPersistAndLoadDonation() { 
 	  

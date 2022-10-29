@@ -17,6 +17,9 @@ import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 import ca.mcgill.ecse.mmss.model.Schedule;
 
+/**
+ * Employee Repository testing class which initiates a employee, person, communication, shift, and weekly schedule repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class EmployeeRepositoryTests {
@@ -60,6 +63,11 @@ public class EmployeeRepositoryTests {
       ScheduleRepository.deleteAll(); 
   }
 
+  /**
+ * Employee testing method which creates, populates the attributes, sets associations, and saves each employee, person, communication, shift, and weekly schedule object and identifier.
+ * It can then test to make sure each object reached from the employee found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
   @Test 
   public void testPersistAndLoadEmployee() { 
 	  

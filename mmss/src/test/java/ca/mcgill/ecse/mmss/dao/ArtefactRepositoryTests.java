@@ -12,6 +12,9 @@ import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 
+/**
+ * Artefact Repository testing class which initiates an artefact and a room repository, executes the tests, then clears each instance from the database.
+ */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ArtefactRepositoryTests {
@@ -34,7 +37,12 @@ public class ArtefactRepositoryTests {
       roomRepository.deleteAll();
   }
 
-  @Test 
+  /**
+ * Artefact testing method which creates, populates the attributes, sets associations, and saves each artefact and room object and identifier.
+ * It can then test to make sure each object reached from the artefact found in the repository is not null and that each initially saved Id corresponds to the one
+ * reached from the repository.
+ */
+@Test 
   public void testPersistAndLoadArtefact() { 
 	  
 // MANDATORY CLASS TESTS
