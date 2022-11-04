@@ -3,6 +3,7 @@ package ca.mcgill.ecse.mmss.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
@@ -24,14 +25,17 @@ public class LoanService {
         return loanRepository.findById(id); 
     }
 
-//    public Loan createLoan (Loan loan) { 
-//     try { 
-//         Loan createdLoan = loanRepository.save(loan); 
-//         return createdLoan; 
+    // should there be a tag here? 
+   public Loan createLoan (Loan loan) { 
 
-//         // what other kinds of exceptions might I need to catch? 
-//     } catch (DataIntegrityViolationException e) { 
+    // should we be useing try catch statements? 
+    try { 
+        Loan createdLoan = loanRepository.save(loan); 
+        return createdLoan; 
 
-//     }
-//    } 
+        // what other kinds of exceptions might I need to catch? 
+    } catch (DataIntegrityViolationException e) {
+        throw e;
+    }
+   } 
 }
