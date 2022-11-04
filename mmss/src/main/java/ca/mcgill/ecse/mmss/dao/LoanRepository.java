@@ -17,9 +17,4 @@ public interface LoanRepository extends CrudRepository<Loan, Integer> {
 
 
 
-    /*
-     * Deletes a loan by its id
-     */
-    void deleteLoanByExchangeId(int exchangeId); 
-
 }
