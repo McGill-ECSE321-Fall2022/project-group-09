@@ -61,6 +61,5 @@ public class PersonRepositoryTests {
     
     // check an attribute is stored properly
     assertEquals(firstName, person.getFirstName()); 
-   
   }
 }

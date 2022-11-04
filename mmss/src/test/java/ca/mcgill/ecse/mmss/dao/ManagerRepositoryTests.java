@@ -60,14 +60,12 @@ public class ManagerRepositoryTests {
 	manager.setPerson(person); 	
 	manager.setPassword(password); 
 	
-    
     // save the manager  
     managerRepository.save(manager); 
 
     
     // set manager to null
     manager = null;
-
     		
     // get the manager from the database using the username
     manager = managerRepository.findManagerByUsername(username); 
@@ -80,6 +78,5 @@ public class ManagerRepositoryTests {
     // check an attribute is stored properly
     assertEquals(username, manager.getUsername());
     assertEquals(person.getPersonId(), manager.getPerson().getPersonId()); 
-   
   }
 }

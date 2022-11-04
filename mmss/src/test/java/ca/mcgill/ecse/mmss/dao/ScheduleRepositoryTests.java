@@ -17,40 +17,40 @@ import ca.mcgill.ecse.mmss.model.Schedule;
 @SpringBootTest
 public class ScheduleRepositoryTests {
 	//repository we are testing
-		@Autowired
-		private ScheduleRepository scheduleRepository;
-		
-		@AfterEach
-		public void clearDatabase() {
-			// delete all entries in database
-			scheduleRepository.deleteAll();
-		}
+	@Autowired
+	private ScheduleRepository scheduleRepository;
 
-		  /**
-		 * Schedule testing method which creates, populates the attributes, sets associations, and saves each schedule object and identifier.
-		 * It can then test to make sure each object reached from the schedule found in the repository is not null and that each initially saved Id corresponds to the one
-		 * reached from the repository.
-		 */
-		@Test
-		public void testAndPersistAndLoadSchedule() {
-			Schedule Schedule = new Schedule();
-			
-			// save the  schedule
-			scheduleRepository.save(Schedule);
-			
-			// get its id ( that was set automatically by spring )    
-		    int ScheduleId = Schedule.getScheduleId(); 
-		    
-		    // set  schedule to null    
-		    Schedule = null;
-		    
-		    // get Schedule from database using its ID
-		    Schedule = scheduleRepository.findScheduleByScheduleId(ScheduleId); 
-		    
-		    // check primary key and foriegn key constraints
-		    assertNotNull(Schedule);
-	        // check an attribute is stored properly
-		    assertEquals(ScheduleId, Schedule.getScheduleId()); 
+	@AfterEach
+	public void clearDatabase() {
+		// delete all entries in database
+		scheduleRepository.deleteAll();
+	}
+
+		/**
+		* Schedule testing method which creates, populates the attributes, sets associations, and saves each schedule object and identifier.
+		* It can then test to make sure each object reached from the schedule found in the repository is not null and that each initially saved Id corresponds to the one
+		* reached from the repository.
+		*/
+	@Test
+	public void testAndPersistAndLoadSchedule() {
+		Schedule Schedule = new Schedule();
+		
+		// save the  schedule
+		scheduleRepository.save(Schedule);
+		
+		// get its id ( that was set automatically by spring )    
+		int ScheduleId = Schedule.getScheduleId(); 
+		
+		// set  schedule to null    
+		Schedule = null;
+		
+		// get Schedule from database using its ID
+		Schedule = scheduleRepository.findScheduleByScheduleId(ScheduleId); 
+		
+		// check primary key and foriegn key constraints
+		assertNotNull(Schedule);
+		// check an attribute is stored properly
+		assertEquals(ScheduleId, Schedule.getScheduleId()); 
 
 			
 		}

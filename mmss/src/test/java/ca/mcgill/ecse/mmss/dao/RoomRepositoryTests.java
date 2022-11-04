@@ -59,6 +59,5 @@ public class RoomRepositoryTests {
     assertNotNull(room);
     assertEquals(roomId, room.getRoomId());
     assertEquals(artefactCount, room.getArtefactCount()); 
-   
   }
 }

@@ -48,10 +48,10 @@ public class ShiftRepositoryTests {
 	    Schedule Schedule = new Schedule(); 
 	    ScheduleRepository.save(Schedule); 
 	    
-	    // retreive Id
+	    // retrieve Id
 	    int ScheduleId = Schedule.getScheduleId();
 	    
-	    // create the shift and populate itsfields
+	    // create the shift and populate its fields
 	    ShiftTime shiftTime = ShiftTime.Morning;
 	    Shift shift = new Shift() ;     
 	    shift.setShiftTime(shiftTime); 
@@ -72,13 +72,11 @@ public class ShiftRepositoryTests {
 	    assertNotNull(shift);
 	    assertNotNull(shift.getSchedule());
 	    
-	    // check ids and foriegn key constraints
+	    // check ids and foreign key constraints
 		assertEquals(shiftId, shift.getShiftId());		
 		assertEquals(ScheduleId, shift.getSchedule().getScheduleId());
 		
 	    // check an attribute is stored properly
 		assertEquals(shiftTime, shift.getShiftTime()); 
-	    
 	  }
-
 }

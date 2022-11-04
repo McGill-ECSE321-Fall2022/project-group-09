@@ -46,7 +46,6 @@ public class LoanRepositoryTests {
   @Autowired 
   private OpenDayRepository openDayRepository; 
   
-  
   @AfterEach
   public void clearDatabase() {
     
@@ -59,9 +58,7 @@ public class LoanRepositoryTests {
       openDayRepository.deleteAll(); 
       
       // finally delete persons
-      personRepository.deleteAll();
-      
-      
+      personRepository.deleteAll();   
   }
 
   /**
@@ -188,8 +185,6 @@ public class LoanRepositoryTests {
     assertEquals(dueDate, loan2.getDueDate().getDate());
     
     // check an attribute is stored properly
-    assertEquals(submitted, loan2.getSubmittedDate()); 
-    
-    
+    assertEquals(submitted, loan2.getSubmittedDate());  
   }
 }
