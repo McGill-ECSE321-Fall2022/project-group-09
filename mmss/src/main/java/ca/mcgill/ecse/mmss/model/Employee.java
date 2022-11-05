@@ -87,4 +87,12 @@ public class Employee extends AccountType
             "phoneNumber" + ":" + getPhoneNumber()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "shift = "+(getShift()!=null?Integer.toHexString(System.identityHashCode(getShift())):"null");
   }
+
+  public Boolean getAvailableForTour() {
+    return availableForTour;
+  }
+
+  public void setAvailableForTour(Boolean availableForTour) {
+    this.availableForTour = availableForTour;
+  }
 }
