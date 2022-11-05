@@ -49,16 +49,16 @@ public class LoanRepositoryTests {
   @AfterEach
   public void clearDatabase() {
     
-      // // make sure the loan is deleted first, because loans cannot exist without a visitor and an artefact
-      // loanRepository.deleteAll();
+      // make sure the loan is deleted first, because loans cannot exist without a visitor and an artefact
+      loanRepository.deleteAll();
       
-      // // then you can delete all the visitors and artefacts (delete visitor before person)
-      // artefactRepository.deleteAll();
-      // visitorRepository.deleteAll();
-      // openDayRepository.deleteAll(); 
+      // then you can delete all the visitors and artefacts (delete visitor before person)
+      artefactRepository.deleteAll();
+      visitorRepository.deleteAll();
+      openDayRepository.deleteAll(); 
       
-      // // finally delete persons
-      // personRepository.deleteAll();   
+      // finally delete persons
+      personRepository.deleteAll();   
   }
 
   /**

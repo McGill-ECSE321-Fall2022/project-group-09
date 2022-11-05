@@ -16,6 +16,7 @@ public class LoanDto {
  
      
     /**
+     * @author Shidan Javaheri
      * Constructor that takes a loan as input
      * @param loan
      */
@@ -31,7 +32,8 @@ public class LoanDto {
 
     }
     /**
-     * Constructs a loanDto
+     * @author Shidan Javaheri
+     * Constructor that takes in seperate inputs 
      * @param exchangeId
      * @param dueDate
      * @param submittedDate

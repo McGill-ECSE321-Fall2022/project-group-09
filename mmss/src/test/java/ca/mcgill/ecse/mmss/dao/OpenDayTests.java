@@ -65,7 +65,7 @@ public class OpenDayTests {
     // create the weekly schedule to add
     Schedule schedule = new Schedule(); 
     weeklyScheduleRepository.save(schedule); 
-    openDay2.setWeeklySchedule(schedule); 
+    openDay2.setSchedule(schedule); 
     
     // save the OpenDay to repository
     openDayRepository.save(openDay1);

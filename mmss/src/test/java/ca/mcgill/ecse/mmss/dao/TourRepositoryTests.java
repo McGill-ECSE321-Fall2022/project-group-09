@@ -122,7 +122,7 @@ public class TourRepositoryTests {
     // TEST CASE 1: TOUR HAS OPTIONAL ASSOCIATIONS (IE TOUR WITH TOURGUIDE)
     // create the Tour and populate its fields    
     int numParticipants = 15;
-    int bookingPrice = 20;
+    double bookingPrice = 20;
     Tour.ShiftTime shift = Tour.ShiftTime.Morning;
     Tour tour1 = new Tour();
     tour1.setNumberOfParticipants(numParticipants); 
