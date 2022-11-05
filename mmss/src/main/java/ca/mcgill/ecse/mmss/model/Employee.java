@@ -19,6 +19,9 @@ public class Employee extends AccountType
 
   //Employee Attributes
   private String phoneNumber;
+  
+  @Collumn (nullable = false)
+  private Boolean availableForTour = true; 
 
   //Employee Associations
   @ManyToOne
