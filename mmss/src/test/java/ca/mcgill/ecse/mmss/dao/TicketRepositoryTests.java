@@ -88,7 +88,7 @@ public class TicketRepositoryTests {
 	    Date date = openDay.getDate();
 	    		
 	    // create the Ticket and populate its fields    
-	    int bookingPrice = 20;
+	    double bookingPrice = 20;
 	    Ticket ticket = new Ticket();
 	    ticket.setPricePerPerson(bookingPrice);
 	    ticket.setVisitor(visitor);
