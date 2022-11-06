@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
@@ -41,6 +41,11 @@ public class LoanService {
      * @return the optional loanDto
      */
 
+    /**
+     * Finds a loan given its id
+     * @param id
+     * @return a dto of the retrieved loan
+     */
     @Transactional
     public Optional<LoanDto> retrieveLoanById(int id) {
         Loan loan = loanRepository.findLoanByExchangeId(id);
@@ -50,12 +55,25 @@ public class LoanService {
         return Optional.of(loanDto);
     }
 
+    /**
+     * Finds all the loans in the database
+     * @return an arraylist with the dtos of all loans
+     */
     @Transactional
     public ArrayList<LoanDto> getAllLoans() { 
         ArrayList<Loan> allLoans = loanRepository.findAll(); 
-        for ()
-
+        ArrayList<LoanDto> allLoansDto = new ArrayList<>(); 
+        for (Loan loan : allLoans) { 
+            allLoansDto.add(new LoanDto(loan)); 
+        }
+        return allLoansDto; 
     }
+
+    // @Transactional
+    // public ArrayList<LoanDto> getAllLoansByStatus (ExchangeStatus status) { 
+    //     ArrayList<Loan> = loanRepository.findAllByS
+
+    // }
 
     /**
      * This method takes in a visitorId, an artefactId, and creates a loan
@@ -128,7 +146,10 @@ public class LoanService {
         }
 
     }
-
+    /**
+     * Deletes the loan of a given id if the loan exits
+     * @param id
+     */
     @Transactional
     public void deleteLoan(int id) {
         String error = "";
@@ -142,6 +163,13 @@ public class LoanService {
 
     }
 
+    /**
+     * Takes in the id of a loan and a status to modify its status
+     * Declined loans are immediately delted
+     * @param id
+     * @param status
+     * @return
+     */
     @Transactional
     public LoanDto updateStatus(int id, ExchangeStatus status) {
         String error = "";
@@ -153,14 +181,18 @@ public class LoanService {
                  error += "Cannot set the loans status to pending"; 
                 } else if (status == ExchangeStatus.Declined) { 
                     deleteLoan(loan.getExchangeId()); 
-                    //Notification notification = new Notification()
+                    // could add a notification that is sent
+                    // Notification notification = new Notification(); 
+                    // notification.setMessage("Your loan request submitted on date", loan.getSubmittedDate().toString(), "with id: " , loan.getExchangeId().to, "has been denied"); 
+                    
                 } else if (status == ExchangeStatus.Approved) { 
-
-
+                    loan.setExchangeStatus(status); 
+                    loanRepository.save(loan);                     
+                    // could send a notfication that says its approved and asks for payment
                 }
             
-        }
-        return null; 
+        }        
+        throw new IllegalArgumentException(error); 
     }
 }
 
