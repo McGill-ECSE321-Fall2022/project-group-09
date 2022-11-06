@@ -94,6 +94,7 @@ public class LoanRepositoryTests {
     artefact1.setCanLoan(true);
     artefact1.setInsuranceFee(100);
     artefact1.setLoanFee(900);
+    artefact1.setCurrentlyOnLoan(false);
     
     // create artifacts for both loans and set its attributes   
     Artefact artefact2 = new Artefact();
@@ -102,6 +103,7 @@ public class LoanRepositoryTests {
     artefact2.setCanLoan(true);
     artefact2.setInsuranceFee(200);
     artefact2.setLoanFee(1000);
+    artefact2.setCurrentlyOnLoan(false);
     
     // save the artefacts
     artefactRepository.save(artefact1);

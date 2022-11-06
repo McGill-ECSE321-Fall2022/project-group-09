@@ -30,7 +30,7 @@ public class Artefact
   @Column(nullable = false)
   private boolean canLoan;
   @Column(nullable = false)
-  private boolean currentlyOnLoan = false;
+  private boolean currentlyOnLoan;
 
   private double insuranceFee;
   private double loanFee;
@@ -51,6 +51,7 @@ public class Artefact
     artefactName = aArtefactName;
     description = aDescription;
     canLoan = aCanLoan;
+    this.currentlyOnLoan = false;
     insuranceFee = aInsuranceFee;
     loanFee = aLoanFee;
   }

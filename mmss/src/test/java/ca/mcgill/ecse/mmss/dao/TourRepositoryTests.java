@@ -107,6 +107,7 @@ public class TourRepositoryTests {
     employee.setPassword(passwordTwo);
     employee.setPhoneNumber(phoneNumber);
     employee.setPerson(p2);
+    employee.setAvailableForTour(true);
     // save the employee
     employeeRepository.save(employee);
     String employeeUsername = employee.getUsername();

@@ -56,7 +56,7 @@ public class ArtefactRepositoryTests {
 	artefact.setCanLoan(false); 
 	artefact.setInsuranceFee(200); 
 	artefact.setLoanFee(20); 
-
+  artefact.setCurrentlyOnLoan(false);
     // save the artefact
     artefactRepository.save(artefact); 
     

@@ -21,7 +21,7 @@ public class Employee extends AccountType
   private String phoneNumber;
   
   @Collumn (nullable = false)
-  private Boolean availableForTour = true; 
+  private Boolean availableForTour;
 
   //Employee Associations
   @ManyToOne
@@ -35,7 +35,8 @@ public class Employee extends AccountType
   public Employee(String aUsername, String aPassword, Person aPerson, String aPhoneNumber)
   {
     super(aUsername, aPassword, aPerson);
-    phoneNumber = aPhoneNumber;
+    this.availableForTour = true; 
+    this.phoneNumber = aPhoneNumber;
   }
 
   //------------------------
