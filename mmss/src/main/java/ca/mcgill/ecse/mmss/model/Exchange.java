@@ -58,10 +58,10 @@ public abstract class Exchange
     return wasSet;
   }
 
-  public boolean setSubmittedDate(Date aSubmittedDate)
+  public boolean setSubmittedDate(java.util.Date date)
   {
     boolean wasSet = false;
-    submittedDate = aSubmittedDate;
+    submittedDate = date;
     wasSet = true;
     return wasSet;
   }

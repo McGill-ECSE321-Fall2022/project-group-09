@@ -16,10 +16,7 @@ public interface LoanRepository extends CrudRepository<Loan, Integer> {
     ArrayList<Loan> findByDueDate (Date dueDate); 
     ArrayList<Loan> findByVisitor (Visitor visitor); 
     ArrayList<Loan> findBySubmittedDate (Date date); 
-
-
-
-
-
+    ArrayList<Loan> findAll();
+    
 
 }
