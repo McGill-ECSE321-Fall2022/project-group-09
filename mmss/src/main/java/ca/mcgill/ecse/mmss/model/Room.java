@@ -37,7 +37,9 @@ public class Room
   // CONSTRUCTOR
   //------------------------
   
-  public Room () {}
+  public Room () {
+    artefactCount = 0;
+  }
 
   public Room(int aRoomId, RoomType aRoomType)
   {
