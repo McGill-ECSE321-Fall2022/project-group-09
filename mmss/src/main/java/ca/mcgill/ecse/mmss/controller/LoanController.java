@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.mcgill.ecse.mmss.dto.LoanDto;
-import ca.mcgill.ecse.mmss.model.Loan;
+
 import ca.mcgill.ecse.mmss.service.LoanService;
 
 @RestController
@@ -33,29 +31,20 @@ public class LoanController {
     }
 
     @PostMapping
-    public ResponseEntity<LoanDto> createLoan (@RequestParam String body){ 
+    public ResponseEntity<LoanDto> createLoan (@RequestParam String username, @RequestParam int artefactId){ 
 
-    // use the Json parser
-    ObjectMapper mapper = new ObjectMapper();
+    
+        try { 
+        
+            // create hte object with the service
+            LoanDto persistedLoan = loanService.createLoan(artefactId, username); 
 
-    try { 
-        // parse the json body to get the loan obejct
-        Loan loan = mapper.readValue(body, Loan.class); 
-        // save it to database
-        Loan persistedLoan = loanService.createLoan(loan); 
-        LoanDto loanDto = new LoanDto (persistedLoan); 
-        // return it in the response entity
-        return new ResponseEntity<LoanDto>(loanDto, HttpStatus.CREATED); 
-    } catch (JsonProcessingException e) { 
-        e.printStackTrace();
-    } catch (DataIntegrityViolationException e) { 
-        throw e; 
-    }
-    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            // return it in the response entity
+            return new ResponseEntity<LoanDto>(persistedLoan, HttpStatus.CREATED); 
+        } catch (DataIntegrityViolationException e) { 
+            throw e;
+    
+        }
 
     }
-
-
-
-
 }
