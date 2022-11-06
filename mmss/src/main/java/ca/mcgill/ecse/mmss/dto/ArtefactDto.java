@@ -9,6 +9,7 @@ public class ArtefactDto {
     private Boolean canLoan; 
     private double insuranceFee; 
     private double loanFee; 
+    private boolean currentlyOnLoan; 
     private RoomDto room;
     /**
      * @author Shidan Javaheri
@@ -22,6 +23,7 @@ public class ArtefactDto {
         this.canLoan = artefact.getCanLoan();
         this.insuranceFee = artefact.getInsuranceFee();
         this.loanFee = artefact.getLoanFee();
+        this.currentlyOnLoan = artefact.getCurrentlyOnLoan(); 
         this.room = new RoomDto (artefact.getRoom());
     }
     /**
@@ -35,7 +37,7 @@ public class ArtefactDto {
      * @param loanFee
      * @param room
      */ 
-    public ArtefactDto(Integer artefactId, String artefactName, String description, Boolean canLoan, double insuranceFee,double loanFee, RoomDto room) {
+    public ArtefactDto(Integer artefactId, String artefactName, String description, Boolean canLoan, double insuranceFee,double loanFee, boolean currentlyOnLoan, RoomDto room) {
         this.artefactId = artefactId;
         this.artefactName = artefactName;
         this.description = description;
@@ -64,6 +66,9 @@ public class ArtefactDto {
     }
     public RoomDto getRoom() {
         return room;
+    }
+    public boolean isCurrentlyOnLoan() {
+        return currentlyOnLoan;
     } 
     
 }
