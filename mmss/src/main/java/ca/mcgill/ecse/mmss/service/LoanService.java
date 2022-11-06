@@ -40,12 +40,6 @@ public class LoanService {
      * @param id
      * @return the optional loanDto
      */
-
-    /**
-     * Finds a loan given its id
-     * @param id
-     * @return a dto of the retrieved loan
-     */
     @Transactional
     public Optional<LoanDto> retrieveLoanById(int id) {
         Loan loan = loanRepository.findLoanByExchangeId(id);
