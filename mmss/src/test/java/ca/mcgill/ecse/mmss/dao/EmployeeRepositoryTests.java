@@ -87,6 +87,7 @@ public class EmployeeRepositoryTests {
     String employeeName = "joe.swanson@mmss.qc.ca"; 
     employee.setUsername(employeeName); 
     employee.setPassword("VerySecurePassword");
+    employee.setAvailableForTour(true);
     
     // set person to employee then save employee
     employee.setPerson(person);

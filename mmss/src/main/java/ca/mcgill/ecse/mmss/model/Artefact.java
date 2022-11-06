@@ -29,6 +29,9 @@ public class Artefact
   private String description;
   @Column(nullable = false)
   private boolean canLoan;
+  @Column(nullable = false)
+  private boolean currentlyOnLoan;
+
   private double insuranceFee;
   private double loanFee;
 
@@ -48,6 +51,7 @@ public class Artefact
     artefactName = aArtefactName;
     description = aDescription;
     canLoan = aCanLoan;
+    this.currentlyOnLoan = false;
     insuranceFee = aInsuranceFee;
     loanFee = aLoanFee;
   }
@@ -157,6 +161,16 @@ public class Artefact
     wasSet = true;
     return wasSet;
   }
+
+  public boolean getCurrentlyOnLoan() {
+    return currentlyOnLoan;
+  }
+
+  public void setCurrentlyOnLoan(boolean currentlyOnLoan) {
+    this.currentlyOnLoan = currentlyOnLoan;
+  }
+
+
 
   public void delete()
   {

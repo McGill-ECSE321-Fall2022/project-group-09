@@ -7,6 +7,7 @@ public class EmployeeDto {
     private String userName; 
     private String password; 
     private PersonDto person; 
+    private Boolean availableForTour; 
     private CommunicationDto communication;
 
     /**
@@ -19,6 +20,7 @@ public class EmployeeDto {
         this.userName = employee.getUsername();
         this.password = employee.getPassword();
         this.person = new PersonDto(employee.getPerson());
+        this.availableForTour = employee.getAvailableForTour(); 
         this.communication = new CommunicationDto (employee.getCommunication().getCommunicationId());
     }
 
@@ -32,12 +34,12 @@ public class EmployeeDto {
      * @param person
      * @param communication
      */
-    public EmployeeDto(String phoneNumber, String userName, String password, PersonDto person,
-            CommunicationDto communication) {
+    public EmployeeDto(String phoneNumber, String userName, String password, PersonDto person, Boolean availableForTour,CommunicationDto communication) {
         this.phoneNumber = phoneNumber;
         this.userName = userName;
         this.password = password;
         this.person = person;
+        this.availableForTour = availableForTour;
         this.communication = communication;
     }
     public String getPhoneNumber() {
@@ -54,6 +56,11 @@ public class EmployeeDto {
     }
     public CommunicationDto getCommunication() {
         return communication;
+    }
+
+
+    public Boolean getAvailableForTour() {
+        return availableForTour;
     }
     
 }
