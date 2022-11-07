@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import ca.mcgill.ecse.mmss.dto.LoanDto;
 
 import ca.mcgill.ecse.mmss.service.LoanService;
@@ -23,27 +22,25 @@ public class LoanController {
     @Autowired
     LoanService loanService;
 
-
     @GetMapping("/{id}")
-    public ResponseEntity<LoanDto> getLoan (@PathVariable int id) { 
+    public ResponseEntity<LoanDto> getLoan(@PathVariable int id) {
         return loanService.retrieveLoanById(id).map(loan -> new ResponseEntity<LoanDto>(loan, HttpStatus.OK))
-        .orElse(new ResponseEntity<LoanDto>(HttpStatus.NOT_FOUND));
+                .orElse(new ResponseEntity<LoanDto>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public ResponseEntity<LoanDto> createLoan (@RequestParam String username, @RequestParam int artefactId){ 
+    public ResponseEntity<LoanDto> createLoan(@RequestParam String username, @RequestParam int artefactId) {
 
-    
-        try { 
-        
-            // create hte object with the service
-            LoanDto persistedLoan = loanService.createLoan(artefactId, username); 
+        try {
+
+            // create the object with the service
+            LoanDto persistedLoan = loanService.createLoan(artefactId, username);
 
             // return it in the response entity
-            return new ResponseEntity<LoanDto>(persistedLoan, HttpStatus.CREATED); 
-        } catch (DataIntegrityViolationException e) { 
+            return new ResponseEntity<LoanDto>(persistedLoan, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
             throw e;
-    
+
         }
 
     }
