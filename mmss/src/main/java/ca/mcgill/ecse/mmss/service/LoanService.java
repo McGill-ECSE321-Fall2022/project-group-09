@@ -1,11 +1,10 @@
 package ca.mcgill.ecse.mmss.service;
 
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
-import ca.mcgill.ecse.mmss.dto.LoanDto;
+import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Loan;
 import ca.mcgill.ecse.mmss.model.OpenDay;
@@ -49,41 +48,49 @@ public class LoanService {
     public Loan retrieveLoanById(int id) {
         Loan loan = loanRepository.findLoanByExchangeId(id);
         if (loan == null) {
-            throw new IllegalArgumentException("Loan not found.");
-        } else {
-            return loan;
+            throw new MmssException(HttpStatus.NOT_FOUND, "Loan not found");
         }
+        return loan;
     }
 
     /**
      * Finds all the loans in the database
      * 
-     * @return an arraylist with the dtos of all loans
+     * @return an arraylist of loans
      */
     @Transactional
-    public ArrayList<LoanDto> getAllLoans() {
+    public ArrayList<Loan> getAllLoans() {
+
+        // use repository method
         ArrayList<Loan> allLoans = loanRepository.findAll();
-        ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        for (Loan loan : allLoans) {
-            allLoansDto.add(new LoanDto(loan));
-        }
-        return allLoansDto;
+
+        // I have kept the convert to Dto logic to move it to the controller
+        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
+        // for (Loan loan : allLoans) {
+        // allLoansDto.add(new LoanDto(loan));
+        // }
+        return allLoans;
     }
 
     /**
      * Finds all the loans in the database with a given status
      * 
      * @param status
-     * @return an array list of dtos of all the loans
+     * @return an array list of loans
      */
     @Transactional
-    public ArrayList<LoanDto> getAllLoansByStatus(ExchangeStatus status) {
+    public ArrayList<Loan> getAllLoansByStatus(ExchangeStatus status) {
+
+        // use repository method
         ArrayList<Loan> allLoans = loanRepository.findByExchangeStatus(status);
-        ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        for (Loan loan : allLoans) {
-            allLoansDto.add(new LoanDto(loan));
-        }
-        return allLoansDto;
+
+        // I have kept the convert to Dto logic to move it to the controller
+
+        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
+        // for (Loan loan : allLoans) {
+        // allLoansDto.add(new LoanDto(loan));
+        // }
+        return allLoans;
 
     }
 
@@ -91,17 +98,22 @@ public class LoanService {
      * Gets all the loans by their due date
      * 
      * @param dueDate
-     * @return an array list of LoanDtos
+     * @return an array list of Loans
      */
     @Transactional
-    public ArrayList<LoanDto> getAllLoansByDueDate(Date dueDate) {
+    public ArrayList<Loan> getAllLoansByDueDate(Date dueDate) {
+
         OpenDay openDayDue = openDayRepository.findOpenDayByDate(dueDate);
-        ArrayList<Loan> allLoans = loanRepository.findByDueDate(openDayDue);
-        ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        for (Loan loan : allLoans) {
-            allLoansDto.add(new LoanDto(loan));
+        if (openDayDue == null) {
+            throw new MmssException(HttpStatus.NOT_FOUND, "There is no open day with this due date");
         }
-        return allLoansDto;
+        // use the repository
+        ArrayList<Loan> allLoans = loanRepository.findByDueDate(openDayDue);
+        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
+        // for (Loan loan : allLoans) {
+        // allLoansDto.add(new LoanDto(loan));
+        // }
+        return allLoans;
 
     }
 
@@ -112,30 +124,42 @@ public class LoanService {
      * @return an array list of LoanDtos
      */
     @Transactional
-    public ArrayList<LoanDto> getAllLoansBySubmittedDate(Date submittedDate) {
+    public ArrayList<Loan> getAllLoansBySubmittedDate(Date submittedDate) {
+
+        // use the repository
         ArrayList<Loan> allLoans = loanRepository.findBySubmittedDate(submittedDate);
-        ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        for (Loan loan : allLoans) {
-            allLoansDto.add(new LoanDto(loan));
-        }
-        return allLoansDto;
+
+        // I have kept the convert to Dto logic to move it to the controller
+
+        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
+        // for (Loan loan : allLoans) {
+        // allLoansDto.add(new LoanDto(loan));
+        // }
+        return allLoans;
     }
 
     /**
      * Gets all the loans associated with a particular visitor
      * 
      * @param username
-     * @return an array list of LoanDtos
+     * @return an array list of Loans
      */
     @Transactional
-    public ArrayList<LoanDto> getAllLoansByVisitor(String username) {
+    public ArrayList<Loan> getAllLoansByVisitor(String username) {
+
         Visitor visitor = visitorRepository.findVisitorByUsername(username);
-        ArrayList<Loan> allLoans = loanRepository.findByVisitor(visitor);
-        ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        for (Loan loan : allLoans) {
-            allLoansDto.add(new LoanDto(loan));
+        if (visitor == null) {
+            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found");
         }
-        return allLoansDto;
+        // use the repository
+        ArrayList<Loan> allLoans = loanRepository.findByVisitor(visitor);
+
+        // I have kept the convert to Dto logic to move it to the controller
+        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
+        // for (Loan loan : allLoans) {
+        // allLoansDto.add(new LoanDto(loan));
+        // }
+        return allLoans;
     }
 
     /**
@@ -145,20 +169,19 @@ public class LoanService {
      * 
      * @param artefactId
      * @param visitorId
-     * @return a Dto of the created loan
+     * @return the created loan
      */
     @Transactional
-    public LoanDto createLoan(int artefactId, String username) {
-        // process the inputs, make sure they are valid
-        String error = "";
+    public Loan createLoan(int artefactId, String username) {
 
         // tests related to the visitor
         Visitor visitor = visitorRepository.findVisitorByUsername(username);
 
         // check visitor not null
         if (visitor == null) {
-            error += "The visitor cannot be null.";
+            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found");
         } else {
+
             // not null, so get all their loans and their balance for further checks
             ArrayList<Loan> visitorLoans = loanRepository.findByVisitor(visitor);
             int length = visitorLoans.size();
@@ -166,11 +189,11 @@ public class LoanService {
 
             // non zero balance
             if (balance != 0) {
-                error += "You cannot loan an item until your outstanding balances are paid.";
-                // more than 5 loans
+                throw new MmssException(HttpStatus.BAD_REQUEST,
+                        "You cannot loan items when you have an outstanding balance");
             }
             if (visitorLoans.size() > 5) {
-                error += "You cannot loan more than 5 items at a time";
+                throw new MmssException(HttpStatus.BAD_REQUEST, "You cannot loan more than 5 items at a time");
             }
             // outstanding loans
             for (int i = 0; i < length; i++) {
@@ -180,8 +203,9 @@ public class LoanService {
                 if (aLoan.getExchangeStatus() == ExchangeStatus.Approved) {
                     // nested condition because only approved loans have due dates
                     if (aLoan.getDueDate().getDate().compareTo(date) > 0) {
-                        error += "Please return outstanding loaned items before loaning a new one";
-                        break;
+                        throw new MmssException(HttpStatus.BAD_REQUEST,
+                                "Please return outstanding loaned items before loaning a new one");
+
                     }
                 }
             }
@@ -191,31 +215,26 @@ public class LoanService {
         // tests related to the artefact
         Artefact artefact = artefactRepository.findArtefactByArtefactId(artefactId);
         if (artefact == null) {
-            error += "The artefact cannot be null";
+            throw new MmssException(HttpStatus.NOT_FOUND, "The artefact with this Id was not found");
         } else {
             boolean canLoan = artefact.getCanLoan();
             boolean currentlyOnLoan = artefact.getCurrentlyOnLoan();
             if (!canLoan && currentlyOnLoan)
-                error += "This item is unavailable for loan";
+                throw new MmssException(HttpStatus.BAD_REQUEST, "This item is not available to be loaned");
         }
 
-        // if all checks pass, do this. Otherwise it will have returned an exception
-        if (error == "") {
+        // By now, all checks should have passed. Otherwise it will have returned an
+        // exception
+        Loan loan = new Loan();
+        loan.setArtefact(artefact);
+        loan.setVisitor(visitor);
+        loan.setSubmittedDate(new Date(System.currentTimeMillis()));
 
-            Loan loan = new Loan();
-            loan.setArtefact(artefactRepository.findArtefactByArtefactId(artefactId));
-            loan.setVisitor(visitor);
-            loan.setSubmittedDate(new Date(System.currentTimeMillis()));
+        // save the new loan object
+        loanRepository.save(loan);
 
-            // save the new loan object
-            loanRepository.save(loan);
-
-            // return a Dto of the created loan object
-            return (new LoanDto(loan));
-
-        } else {
-            throw new IllegalArgumentException(error);
-        }
+        // return a Dto of the created loan object
+        return (loan);
 
     }
 
@@ -226,15 +245,13 @@ public class LoanService {
      */
     @Transactional
     public void deleteLoan(int id) {
-        String error = "";
+
         Loan loan = loanRepository.findLoanByExchangeId(id);
         if (loan == null)
-            error += "Loan not found";
-        if (error == "") {
-            loanRepository.delete(loan);
-        } else
-            throw new IllegalArgumentException(error);
+            throw new MmssException(HttpStatus.NOT_FOUND, "The loan with this Id was not found");
 
+        // calls the repository to delete the loan
+        loanRepository.delete(loan);
     }
 
     /**
@@ -246,14 +263,14 @@ public class LoanService {
      * @return
      */
     @Transactional
-    public LoanDto updateStatus(int id, ExchangeStatus status) {
-        String error = "";
+    public Loan updateStatus(int id, ExchangeStatus status) {
+
         Loan loan = loanRepository.findLoanByExchangeId(id);
         if (loan == null) {
-            error += "Loan not found";
+            throw new MmssException(HttpStatus.NOT_FOUND, "The loan with this Id was not found");
         } else {
             if (status == ExchangeStatus.Pending) {
-                error += "Cannot set the loans status to pending";
+                throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot set the status of a loan to pending");
             } else if (status == ExchangeStatus.Declined) {
                 deleteLoan(loan.getExchangeId());
                 // could add a notification that is sent
@@ -265,10 +282,11 @@ public class LoanService {
             } else if (status == ExchangeStatus.Approved) {
                 loan.setExchangeStatus(status);
                 loanRepository.save(loan);
+
                 // could send a notfication that says its approved and asks for payment
             }
 
         }
-        throw new IllegalArgumentException(error);
+        return loan; 
     }
 }
