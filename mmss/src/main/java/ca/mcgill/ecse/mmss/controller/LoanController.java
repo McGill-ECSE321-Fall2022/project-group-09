@@ -7,12 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse.mmss.dto.LoanDto;
-
+import ca.mcgill.ecse.mmss.model.Loan;
 import ca.mcgill.ecse.mmss.service.LoanService;
 
 @RestController
@@ -23,13 +24,13 @@ public class LoanController {
     LoanService loanService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<LoanDto> getLoan(@PathVariable int id) {
-        return loanService.retrieveLoanById(id).map(loan -> new ResponseEntity<LoanDto>(loan, HttpStatus.OK))
-                .orElse(new ResponseEntity<LoanDto>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<LoanDto> getLoan(@PathVariable int id) throws IllegalArgumentException{
+        Loan retrievedLoan = loanService.retrieveLoanById(id); 
+        return new ResponseEntity<LoanDto>(new LoanDto(retrievedLoan), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<LoanDto> createLoan(@RequestParam String username, @RequestParam int artefactId) {
+    public ResponseEntity<LoanDto> createLoan(@RequestBody String username, @RequestBody int artefactId) throws IllegalArgumentException {
 
         try {
 

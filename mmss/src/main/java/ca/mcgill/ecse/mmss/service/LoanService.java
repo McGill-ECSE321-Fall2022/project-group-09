@@ -25,7 +25,7 @@ import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 @Service
 public class LoanService {
 
-    // make the loan repository private
+    // autowire necessary repositories
     @Autowired
     private LoanRepository loanRepository;
 
@@ -43,15 +43,16 @@ public class LoanService {
      * 
      * @author Shidan Javaheri
      * @param id
-     * @return the optional loanDto
+     * @return the loan, or throw an exception that the loan was not found
      */
     @Transactional
-    public Optional<LoanDto> retrieveLoanById(int id) {
+    public Loan retrieveLoanById(int id) {
         Loan loan = loanRepository.findLoanByExchangeId(id);
-        LoanDto loanDto = null;
-        if (loan != null)
-            loanDto = new LoanDto(loan);
-        return Optional.of(loanDto);
+        if (loan == null) {
+            throw new IllegalArgumentException("Loan not found.");
+        } else {
+            return loan;
+        }
     }
 
     /**
@@ -121,7 +122,7 @@ public class LoanService {
     }
 
     /**
-     * Gets all the loans associated with a particula visitor
+     * Gets all the loans associated with a particular visitor
      * 
      * @param username
      * @return an array list of LoanDtos
@@ -167,23 +168,24 @@ public class LoanService {
             if (balance != 0) {
                 error += "You cannot loan an item until your outstanding balances are paid.";
                 // more than 5 loans
-            } else if (visitorLoans.size() > 5) {
+            }
+            if (visitorLoans.size() > 5) {
                 error += "You cannot loan more than 5 items at a time";
-                // outstanding loans
-            } else {
-                for (int i = 0; i < length; i++) {
-                    Date date = new Date(System.currentTimeMillis());
-                    Loan aLoan = visitorLoans.get(i);
-                    // if the loan is approved ie. has a due date
-                    if (aLoan.getExchangeStatus() == ExchangeStatus.Approved) {
-                        // nested condition because only approved loans have due dates
-                        if (aLoan.getDueDate().getDate().compareTo(date) > 0) {
-                            error += "Please return outstanding loaned items before loaning a new one";
-                            break;
-                        }
+            }
+            // outstanding loans
+            for (int i = 0; i < length; i++) {
+                Date date = new Date(System.currentTimeMillis());
+                Loan aLoan = visitorLoans.get(i);
+                // if the loan is approved ie. has a due date
+                if (aLoan.getExchangeStatus() == ExchangeStatus.Approved) {
+                    // nested condition because only approved loans have due dates
+                    if (aLoan.getDueDate().getDate().compareTo(date) > 0) {
+                        error += "Please return outstanding loaned items before loaning a new one";
+                        break;
                     }
                 }
             }
+
         }
 
         // tests related to the artefact
