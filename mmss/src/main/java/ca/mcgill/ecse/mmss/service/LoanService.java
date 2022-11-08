@@ -1,6 +1,5 @@
 package ca.mcgill.ecse.mmss.service;
 
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +45,7 @@ public class LoanService {
      */
     @Transactional
     public Loan retrieveLoanById(int id) {
+        // use the repository method
         Loan loan = loanRepository.findLoanByExchangeId(id);
         if (loan == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Loan not found");
@@ -109,6 +109,8 @@ public class LoanService {
         }
         // use the repository
         ArrayList<Loan> allLoans = loanRepository.findByDueDate(openDayDue);
+
+        // move to controller
         // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
         // for (Loan loan : allLoans) {
         // allLoansDto.add(new LoanDto(loan));
@@ -130,7 +132,6 @@ public class LoanService {
         ArrayList<Loan> allLoans = loanRepository.findBySubmittedDate(submittedDate);
 
         // I have kept the convert to Dto logic to move it to the controller
-
         // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
         // for (Loan loan : allLoans) {
         // allLoansDto.add(new LoanDto(loan));
@@ -192,6 +193,7 @@ public class LoanService {
                 throw new MmssException(HttpStatus.BAD_REQUEST,
                         "You cannot loan items when you have an outstanding balance");
             }
+            // more than 5 loan currently
             if (visitorLoans.size() > 5) {
                 throw new MmssException(HttpStatus.BAD_REQUEST, "You cannot loan more than 5 items at a time");
             }
@@ -281,12 +283,15 @@ public class LoanService {
 
             } else if (status == ExchangeStatus.Approved) {
                 loan.setExchangeStatus(status);
+                // Need method from Mohammed
+                // OpenDay dueDate = use open day method to find 7 days from now
+                // loan.setDueDate(openDay);
                 loanRepository.save(loan);
 
                 // could send a notfication that says its approved and asks for payment
             }
 
         }
-        return loan; 
+        return loan;
     }
 }
