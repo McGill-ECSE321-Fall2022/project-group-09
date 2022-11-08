@@ -1,18 +1,17 @@
 package ca.mcgill.ecse.mmss.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse.mmss.dto.LoanDto;
-
+import ca.mcgill.ecse.mmss.model.Loan;
 import ca.mcgill.ecse.mmss.service.LoanService;
 
 @RestController
@@ -24,24 +23,19 @@ public class LoanController {
 
     @GetMapping("/{id}")
     public ResponseEntity<LoanDto> getLoan(@PathVariable int id) {
-        return loanService.retrieveLoanById(id).map(loan -> new ResponseEntity<LoanDto>(loan, HttpStatus.OK))
-                .orElse(new ResponseEntity<LoanDto>(HttpStatus.NOT_FOUND));
+        Loan retrievedLoan = loanService.retrieveLoanById(id);
+        return new ResponseEntity<LoanDto>(new LoanDto(retrievedLoan), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<LoanDto> createLoan(@RequestParam String username, @RequestParam int artefactId) {
+    public ResponseEntity<LoanDto> createLoan(@RequestBody String username, @RequestBody int artefactId) {
 
-        try {
+        // create the object with the service
+        Loan persistedLoan = loanService.createLoan(artefactId, username);
 
-            // create the object with the service
-            LoanDto persistedLoan = loanService.createLoan(artefactId, username);
-
-            // return it in the response entity
-            return new ResponseEntity<LoanDto>(persistedLoan, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            throw e;
-
-        }
+        // return it in the response entity
+        return new ResponseEntity<LoanDto>(new LoanDto(persistedLoan), HttpStatus.CREATED);
 
     }
+
 }

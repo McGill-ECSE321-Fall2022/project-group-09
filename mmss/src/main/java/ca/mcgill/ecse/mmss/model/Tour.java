@@ -30,9 +30,6 @@ public class Tour extends Booking
   @Column(nullable = false)
   private ShiftTime tourTime;
 
-  //Tour Associations
-  @ManyToOne
-  private Employee tourGuide;
   
   @ManyToOne(optional = false)
   private Visitor visitor;
@@ -83,30 +80,15 @@ public class Tour extends Booking
   {
     return tourTime;
   }
-  /* Code from template association_GetOne */
-  public Employee getTourGuide()
-  {
-    return tourGuide;
-  }
 
-  public boolean hasTourGuide()
-  {
-    boolean has = tourGuide != null;
-    return has;
-  }
+
+
   /* Code from template association_GetOne */
   public Visitor getVisitor()
   {
     return visitor;
   }
-  /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setTourGuide(Employee aNewTourGuide)
-  {
-    boolean wasSet = false;
-    tourGuide = aNewTourGuide;
-    wasSet = true;
-    return wasSet;
-  }
+
   /* Code from template association_SetUnidirectionalOne */
   public boolean setVisitor(Visitor aNewVisitor)
   {
@@ -121,7 +103,6 @@ public class Tour extends Booking
 
   public void delete()
   {
-    tourGuide = null;
     visitor = null;
     super.delete();
   }
@@ -132,7 +113,7 @@ public class Tour extends Booking
     return super.toString() + "["+
             "numberOfParticipants" + ":" + getNumberOfParticipants()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "tourTime" + "=" + (getTourTime() != null ? !getTourTime().equals(this)  ? getTourTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "tourGuide = "+(getTourGuide()!=null?Integer.toHexString(System.identityHashCode(getTourGuide())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + System.getProperties().getProperty("line.separator") +
             "  " + "visitor = "+(getVisitor()!=null?Integer.toHexString(System.identityHashCode(getVisitor())):"null");
   }
 }

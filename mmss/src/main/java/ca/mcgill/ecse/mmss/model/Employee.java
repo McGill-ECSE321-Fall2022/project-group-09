@@ -20,8 +20,7 @@ public class Employee extends AccountType
   //Employee Attributes
   private String phoneNumber;
   
-  @Collumn (nullable = false)
-  private Boolean availableForTour;
+
 
   //Employee Associations
   @ManyToOne
@@ -35,7 +34,6 @@ public class Employee extends AccountType
   public Employee(String aUsername, String aPassword, Person aPerson, String aPhoneNumber)
   {
     super(aUsername, aPassword, aPerson);
-    this.availableForTour = true; 
     this.phoneNumber = aPhoneNumber;
   }
 
@@ -89,11 +87,4 @@ public class Employee extends AccountType
             "  " + "shift = "+(getShift()!=null?Integer.toHexString(System.identityHashCode(getShift())):"null");
   }
 
-  public Boolean getAvailableForTour() {
-    return availableForTour;
-  }
-
-  public void setAvailableForTour(Boolean availableForTour) {
-    this.availableForTour = availableForTour;
-  }
 }
