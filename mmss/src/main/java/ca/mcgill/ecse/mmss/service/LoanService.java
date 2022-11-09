@@ -152,6 +152,7 @@ public class LoanService {
         if (visitor == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found");
         }
+
         // use the repository
         ArrayList<Loan> allLoans = loanRepository.findByVisitor(visitor);
 
@@ -165,6 +166,7 @@ public class LoanService {
 
     /**
      * This method takes in a visitorId, an artefactId, and creates a loan
+     * Checks that both the visitor and artefact exist
      * Checks that visitor is able to loan the object
      * Checks that the artefact is available for loan
      * 
@@ -185,7 +187,11 @@ public class LoanService {
 
             // not null, so get all their loans and their balance for further checks
             ArrayList<Loan> visitorLoans = loanRepository.findByVisitor(visitor);
-            int length = visitorLoans.size();
+            int length;
+            if (visitorLoans != null) {
+                length = visitorLoans.size();
+            } else
+                length = 0;
             double balance = visitor.getBalance();
 
             // non zero balance
@@ -194,7 +200,7 @@ public class LoanService {
                         "You cannot loan items when you have an outstanding balance");
             }
             // more than 5 loan currently
-            if (visitorLoans.size() > 5) {
+            if (length > 5) {
                 throw new MmssException(HttpStatus.BAD_REQUEST, "You cannot loan more than 5 items at a time");
             }
             // outstanding loans
@@ -221,7 +227,7 @@ public class LoanService {
         } else {
             boolean canLoan = artefact.getCanLoan();
             boolean currentlyOnLoan = artefact.getCurrentlyOnLoan();
-            if (!canLoan && currentlyOnLoan)
+            if (!canLoan || currentlyOnLoan)
                 throw new MmssException(HttpStatus.BAD_REQUEST, "This item is not available to be loaned");
         }
 
@@ -253,7 +259,7 @@ public class LoanService {
             throw new MmssException(HttpStatus.NOT_FOUND, "The loan with this Id was not found");
 
         // calls the repository to delete the loan
-        loanRepository.delete(loan);
+        loanRepository.deleteById(loan.getExchangeId());
     }
 
     /**
@@ -274,6 +280,7 @@ public class LoanService {
             if (status == ExchangeStatus.Pending) {
                 throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot set the status of a loan to pending");
             } else if (status == ExchangeStatus.Declined) {
+
                 deleteLoan(loan.getExchangeId());
                 // could add a notification that is sent
                 // Notification notification = new Notification();
