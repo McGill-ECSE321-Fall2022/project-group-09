@@ -13,7 +13,10 @@ public class LoanDto {
     private ExchangeStatus exchangeStatus; 
     private String visitorId; 
     private int artefactId; 
- 
+
+    public LoanDto () { 
+        
+    }
      
     /**
      * @author Shidan Javaheri
@@ -68,6 +71,38 @@ public class LoanDto {
     public int getArtefactId() {
         return artefactId;
     }
+
+
+    public void setExchangeId(int exchangeId) {
+        this.exchangeId = exchangeId;
+    }
+
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+
+    public void setSubmittedDate(Date submittedDate) {
+        this.submittedDate = submittedDate;
+    }
+
+
+    public void setExchangeStatus(ExchangeStatus exchangeStatus) {
+        this.exchangeStatus = exchangeStatus;
+    }
+
+
+    public void setVisitorId(String visitorId) {
+        this.visitorId = visitorId;
+    }
+
+
+    public void setArtefactId(int artefactId) {
+        this.artefactId = artefactId;
+    }
+
+
 
 
 } 
