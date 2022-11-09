@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.mmss;
+package ca.mcgill.ecse.mmss.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,7 +30,7 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
-import ca.mcgill.ecse.mmss.service.LoanService;
+
 
 @ExtendWith(MockitoExtension.class)
 public class LoanServiceTests {

@@ -273,12 +273,15 @@ public class LoanService {
     @Transactional
     public Loan updateStatus(int id, ExchangeStatus status) {
 
+        // get the loan if it exists
         Loan loan = loanRepository.findLoanByExchangeId(id);
         if (loan == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "The loan with this Id was not found");
         } else {
+            // can't set status to pending
             if (status == ExchangeStatus.Pending) {
                 throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot set the status of a loan to pending");
+            // declined loans are deleted immediately
             } else if (status == ExchangeStatus.Declined) {
 
                 deleteLoan(loan.getExchangeId());
@@ -288,6 +291,8 @@ public class LoanService {
                 // loan.getSubmittedDate().toString(), "with id: " , loan.getExchangeId().to,
                 // "has been denied");
 
+                
+            // approvedloans also set the due date of the loans to 7 days form now
             } else if (status == ExchangeStatus.Approved) {
                 loan.setExchangeStatus(status);
                 // Need method from Mohammed
