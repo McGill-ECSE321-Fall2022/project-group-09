@@ -7,12 +7,12 @@ import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
 public class LoanDto {
 
-    private Integer exchangeId; 
+    private int exchangeId; 
     private Date dueDate;
     private Date submittedDate; 
     private ExchangeStatus exchangeStatus; 
     private String visitorId; 
-    private Integer artefactId; 
+    private int artefactId; 
  
      
     /**
@@ -41,8 +41,8 @@ public class LoanDto {
      * @param visitorId
      * @param artefactId
      */
-    public LoanDto(Integer exchangeId, Date dueDate, Date submittedDate, ExchangeStatus exchangeStatus,
-            String visitorId, Integer artefactId) {
+    public LoanDto(int exchangeId, Date dueDate, Date submittedDate, ExchangeStatus exchangeStatus,
+            String visitorId, int artefactId) {
         this.exchangeId = exchangeId;
         this.dueDate = dueDate;
         this.submittedDate = submittedDate;
@@ -53,7 +53,7 @@ public class LoanDto {
     public Date getDueDate() {
         return dueDate;
     }
-    public Integer getExchangeId() {
+    public int getExchangeId() {
         return exchangeId;
     }
     public Date getSubmittedDate() {
@@ -65,7 +65,7 @@ public class LoanDto {
     public String getVisitorId() {
         return visitorId;
     }
-    public Integer getArtefactId() {
+    public int getArtefactId() {
         return artefactId;
     }
 

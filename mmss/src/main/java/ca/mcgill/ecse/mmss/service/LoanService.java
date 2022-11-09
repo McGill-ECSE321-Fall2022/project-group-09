@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.sql.Date;
 
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
+import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
+import ca.mcgill.ecse.mmss.dao.NotificationRepository;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
@@ -36,10 +38,15 @@ public class LoanService {
     @Autowired
     OpenDayRepository openDayRepository;
 
+    @Autowired
+    NotificationRepository notificationRepository;
+
+    @Autowired
+    CommunicationRepository communicationRepository;
+
     /**
-     * Finds a loan by its id
-     * 
      * @author Shidan Javaheri
+     * Finds a loan by its id
      * @param id
      * @return the loan, or throw an exception that the loan was not found
      */
@@ -54,7 +61,8 @@ public class LoanService {
     }
 
     /**
-     * Finds all the loans in the database
+     * @author Shidan Javaheri
+     *         Finds all the loans in the database
      * 
      * @return an arraylist of loans
      */
@@ -64,16 +72,12 @@ public class LoanService {
         // use repository method
         ArrayList<Loan> allLoans = loanRepository.findAll();
 
-        // I have kept the convert to Dto logic to move it to the controller
-        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        // for (Loan loan : allLoans) {
-        // allLoansDto.add(new LoanDto(loan));
-        // }
         return allLoans;
     }
 
     /**
-     * Finds all the loans in the database with a given status
+     * @author Shidan Javaheri
+     *         Finds all the loans in the database with a given status
      * 
      * @param status
      * @return an array list of loans
@@ -84,18 +88,13 @@ public class LoanService {
         // use repository method
         ArrayList<Loan> allLoans = loanRepository.findByExchangeStatus(status);
 
-        // I have kept the convert to Dto logic to move it to the controller
-
-        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        // for (Loan loan : allLoans) {
-        // allLoansDto.add(new LoanDto(loan));
-        // }
         return allLoans;
 
     }
 
     /**
-     * Gets all the loans by their due date
+     * @author Shidan Javaheri
+     *         Gets all the loans by their due date
      * 
      * @param dueDate
      * @return an array list of Loans
@@ -110,17 +109,13 @@ public class LoanService {
         // use the repository
         ArrayList<Loan> allLoans = loanRepository.findByDueDate(openDayDue);
 
-        // move to controller
-        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        // for (Loan loan : allLoans) {
-        // allLoansDto.add(new LoanDto(loan));
-        // }
         return allLoans;
 
     }
 
     /**
-     * Gets all the loans based on the day they were submitted
+     * @author Shidan Javaheri
+     *         Gets all the loans based on the day they were submitted
      * 
      * @param submittedDate
      * @return an array list of LoanDtos
@@ -131,11 +126,6 @@ public class LoanService {
         // use the repository
         ArrayList<Loan> allLoans = loanRepository.findBySubmittedDate(submittedDate);
 
-        // I have kept the convert to Dto logic to move it to the controller
-        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        // for (Loan loan : allLoans) {
-        // allLoansDto.add(new LoanDto(loan));
-        // }
         return allLoans;
     }
 
@@ -156,19 +146,15 @@ public class LoanService {
         // use the repository
         ArrayList<Loan> allLoans = loanRepository.findByVisitor(visitor);
 
-        // I have kept the convert to Dto logic to move it to the controller
-        // ArrayList<LoanDto> allLoansDto = new ArrayList<>();
-        // for (Loan loan : allLoans) {
-        // allLoansDto.add(new LoanDto(loan));
-        // }
         return allLoans;
     }
 
     /**
-     * This method takes in a visitorId, an artefactId, and creates a loan
-     * Checks that both the visitor and artefact exist
-     * Checks that visitor is able to loan the object
-     * Checks that the artefact is available for loan
+     * @author Shidan Javaheri
+     *         This method takes in a visitorId, an artefactId, and creates a loan
+     *         Checks that both the visitor and artefact exist
+     *         Checks that visitor is able to loan the object
+     *         Checks that the artefact is available for loan
      * 
      * @param artefactId
      * @param visitorId
@@ -237,6 +223,7 @@ public class LoanService {
         loan.setArtefact(artefact);
         loan.setVisitor(visitor);
         loan.setSubmittedDate(new Date(System.currentTimeMillis()));
+        loan.setExchangeStatus(ExchangeStatus.Pending); 
 
         // save the new loan object
         loanRepository.save(loan);
@@ -258,13 +245,17 @@ public class LoanService {
         if (loan == null)
             throw new MmssException(HttpStatus.NOT_FOUND, "The loan with this Id was not found");
 
+        // set the artefact to currently not on loan
+        loan.getArtefact().setCurrentlyOnLoan(false);
+
         // calls the repository to delete the loan
         loanRepository.deleteById(loan.getExchangeId());
     }
 
     /**
-     * Takes in the id of a loan and a status to modify its status
-     * Declined loans are immediately delted
+     * @author Shidan Javaheri
+     *         Takes in the id of a loan and a status to modify its status
+     *         Declined loans are immediately delted
      * 
      * @param id
      * @param status
@@ -281,26 +272,36 @@ public class LoanService {
             // can't set status to pending
             if (status == ExchangeStatus.Pending) {
                 throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot set the status of a loan to pending");
-            // declined loans are deleted immediately
+                // declined loans are deleted immediately
             } else if (status == ExchangeStatus.Declined) {
 
+                loan.setExchangeStatus(ExchangeStatus.Declined); 
                 deleteLoan(loan.getExchangeId());
-                // could add a notification that is sent
-                // Notification notification = new Notification();
-                // notification.setMessage("Your loan request submitted on date",
-                // loan.getSubmittedDate().toString(), "with id: " , loan.getExchangeId().to,
-                // "has been denied");
 
-                
-            // approvedloans also set the due date of the loans to 7 days form now
+                // create a notification with this message, attached to this visitor
+                String message = "Your loan request submitted on date" + loan.getSubmittedDate().toString()
+                        + "with id: " + String.valueOf(loan.getExchangeId()) + "has been denied";
+
+                // use create notification method from Sasha
+
+                // approvedloans also set the due date of the loans to 7 days form now
             } else if (status == ExchangeStatus.Approved) {
                 loan.setExchangeStatus(status);
+                loan.getArtefact().setCurrentlyOnLoan(true);
+
                 // Need method from Mohammed
                 // OpenDay dueDate = use open day method to find 7 days from now
                 // loan.setDueDate(openDay);
-                loanRepository.save(loan);
 
-                // could send a notfication that says its approved and asks for payment
+                loanRepository.save(loan);
+                artefactRepository.save(loan.getArtefact()); 
+                // create notification message
+                String message = "Your loan request submitted on date" + loan.getSubmittedDate().toString()
+                    + "with id: " + String.valueOf(loan.getExchangeId())
+                        + "has been approved! Please follow this link to process payment, and pass by the Museum to pick it up";
+
+                // use create notification method from Sasha
+
             }
 
         }

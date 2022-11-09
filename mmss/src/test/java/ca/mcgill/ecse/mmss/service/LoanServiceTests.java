@@ -54,6 +54,7 @@ public class LoanServiceTests {
     Loan loan;
 
     /**
+     * @author Shidan Javaheri
      * Creates the obejcts needed by all test cases
      */
     @BeforeEach
@@ -66,9 +67,11 @@ public class LoanServiceTests {
         loan.setArtefact(artefact);
         loan.setVisitor(visitor);
         loan.setExchangeId(0);
+        loan.setSubmittedDate(Date.valueOf("2022-10-10")); 
     }
 
     /**
+     * @author Shidan Javaheri
      * Deletes objects after each test
      */
     @AfterEach
@@ -81,6 +84,7 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Tests retrieving a loan with a valid id
      */
     @Test 
@@ -101,8 +105,10 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Tests getting a loan with an invalid Id
      */
+
     @Test
     public void testGetLoanByInvalidId() {
         final int invalidId = 99;
@@ -119,6 +125,7 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Tests creating a loan successfully
      */
     @Test
@@ -146,6 +153,9 @@ public class LoanServiceTests {
         assertEquals(0,loan.getExchangeId()); 
         assertEquals(artefact,loanCreated.getArtefact());
         assertEquals(visitor,loanCreated.getVisitor()); 
+        // artefact still not on loan until it is approved
+        assertEquals(false, loanCreated.getArtefact().getCurrentlyOnLoan()); 
+        assertEquals(ExchangeStatus.Pending, loanCreated.getExchangeStatus().Pending); 
 
         // check that each repository was called the right number of times, and with right arguments
         verify(loanRepository, times(1)).save(any(Loan.class)); 
@@ -158,6 +168,7 @@ public class LoanServiceTests {
     // VISITOR ERRORS
 
     /**
+     * @author Shidan Javaheri
      * Tests creating a loan with an invalid username
      */
     @Test
@@ -182,6 +193,7 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Test creating a loan for a visitor who has too many loans
      */
     @Test
@@ -237,6 +249,7 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Tests creating a loan when the visitor has a non zero balance
      */
     @Test
@@ -265,6 +278,7 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Tests when the visitor has an outstanding loan
      */
     @Test
@@ -315,6 +329,7 @@ public class LoanServiceTests {
     // ARTEFACT ERRORS
 
     /**
+     * @author Shidan Javaheri
      * Tests create loan when the artefact doesn't exist
      */
     @Test
@@ -354,6 +369,7 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Test creating a loan when the artefact is unavailable for loan
      */
 
@@ -390,7 +406,10 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Test successfully updating the status of a loan to Declined
+     * May need to add tests that the notification respotiory is called
+
      */
 
     @Test
@@ -406,6 +425,7 @@ public class LoanServiceTests {
         // assertions
         assertEquals(updatedLoan.getExchangeId(), 0);
         assertEquals(updatedLoan.getArtefact(), artefact);
+        assertEquals(ExchangeStatus.Declined, updatedLoan.getExchangeStatus()); 
 
         // verify the calls to the repository are with the correct arguments
         // find loan call made by update and delete
@@ -417,7 +437,10 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Test successfully updating the status of a loan to Approved
+     * May need to add tests that the notification respotiory is called
+     * 
      */
     @Test
     public void testUpdateStatusToApproved() {
@@ -430,6 +453,9 @@ public class LoanServiceTests {
         // retrieve the loan
         when(loanRepository.findLoanByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> loan ); 
 
+        // return the artefact when it is saved
+        when(artefactRepository.save((any(Artefact.class)))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0)); 
+
         // call the service layer
         Loan updatedLoan = loanService.updateStatus(0, ExchangeStatus.Approved); 
 
@@ -437,16 +463,19 @@ public class LoanServiceTests {
         assertEquals(updatedLoan.getExchangeId(), 0);
         assertEquals(updatedLoan.getArtefact(), artefact);
         assertEquals(updatedLoan.getExchangeStatus(), ExchangeStatus.Approved);
+        assertEquals(updatedLoan.getArtefact().getCurrentlyOnLoan(), true); 
 
         // add assertion that its due date is set 
 
         // verify the calls to the repository are with the correct arguments
         verify(loanRepository, times(1)).findLoanByExchangeId(0); 
         verify(loanRepository, times(1)).save(any(Loan.class)); 
+        verify(artefactRepository, times(1)).save((any(Artefact.class))); 
 
     }
 
     /**
+     * @author Shidan Javaheri
      * Tests when a loan's status is updated to pending
      */
     @Test
@@ -468,6 +497,7 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Tests update status with an invalid id
      */
     @Test
@@ -490,6 +520,7 @@ public class LoanServiceTests {
     }
 
     /**
+     * @author Shidan Javaheri
      * Tests successfully deleting a loan
      */
 
@@ -500,12 +531,16 @@ public class LoanServiceTests {
 
         loanService.deleteLoan(loan.getExchangeId());
 
+        // assert the artefact is no longer on loan
+        assertEquals(artefact.getCurrentlyOnLoan(), false);
+
         // verify that the delete method was called
         verify(loanRepository, times(1)).deleteById(0);
 
     }
 
     /**
+     * @author Shidan Javaheri
      * Tests deleting a loan with invalid Id
      */
 

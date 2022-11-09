@@ -30,11 +30,11 @@ public class ArtefactRepositoryTests {
   @AfterEach
   public void clearDatabase() {
     
-      // make sure the artefact is deleted first, because artefacts cannot exist without a room
-      artefactRepository.deleteAll();
+      // // make sure the artefact is deleted first, because artefacts cannot exist without a room
+      // artefactRepository.deleteAll();
       
-      // delete the room after each test
-      roomRepository.deleteAll();
+      // // delete the room after each test
+      // roomRepository.deleteAll();
   }
 
   /**
@@ -53,7 +53,7 @@ public class ArtefactRepositoryTests {
 	String description = "Found in the remains of the Death Star";    
 	artefact.setArtefactName(artefactName); 
 	artefact.setDescription(description); 
-	artefact.setCanLoan(false); 
+	artefact.setCanLoan(true); 
 	artefact.setInsuranceFee(200); 
 	artefact.setLoanFee(20); 
   artefact.setCurrentlyOnLoan(false);
