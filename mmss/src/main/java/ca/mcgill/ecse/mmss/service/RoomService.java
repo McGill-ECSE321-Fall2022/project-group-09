@@ -2,6 +2,7 @@ package ca.mcgill.ecse.mmss.service;
 
 import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dto.RoomDto;
+import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,25 @@ public class RoomService {
     }
 
     /**
+     * Get the display capacity
+     *
+     * @return the display capacity
+     */
+    @Transactional
+    public int getDisplayCapacity() {
+        int displayCapacity = 0;
+        // Get current capacity for small rooms
+        for (Room smallRoom : getAllRoomsByRoomType(Room.RoomType.Small)) {
+            displayCapacity += smallRoom.getArtefactCount();
+        }
+        // Get current capacity for large rooms
+        for (Room largeRoom : getAllRoomsByRoomType(Room.RoomType.Large)) {
+            displayCapacity += largeRoom.getArtefactCount();
+        }
+        return displayCapacity;
+    }
+
+    /**
      * Create the necessary rooms for the museum
      * This method should be called only ONCE when booting the app.
      */
@@ -75,5 +95,27 @@ public class RoomService {
         Room storage = new Room();
         storage.setRoomType(Room.RoomType.Storage);
         roomRepository.save(storage);
+    }
+
+    /**
+     * Checks whether the room is full
+     *
+     * @param roomId
+     * @return whether the room is full
+     */
+    @Transactional
+    public boolean isRoomFull(int roomId) {
+        Room room = retrieveRoomById(roomId);
+        if (room == null)
+            throw new MmssException(HttpStatus.NOT_FOUND, "Room not found");
+        Room.RoomType type = room.getRoomType();
+        int artefactCount = room.getArtefactCount();
+        if (type == Room.RoomType.Small)
+            return artefactCount >= 200;
+        else if (type == Room.RoomType.Large)
+            return artefactCount >= 300;
+            // Unlimited capacity for storage
+        else
+            return false;
     }
 }
