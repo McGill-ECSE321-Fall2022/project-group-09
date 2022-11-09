@@ -4,6 +4,7 @@ import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dto.RoomDto;
 import ca.mcgill.ecse.mmss.model.Room;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,35 +18,39 @@ public class RoomService {
     private RoomRepository roomRepository;
 
     /**
-     * @author Sasha Denouvilliez-Pech
      * Get a room by its primary key
-     * @param roomId
-     * @return a RoomDTO
+     *
+     * @author Sasha Denouvilliez-Pech
+     * @param id
+     * @return the room or an exception
      */
     @Transactional
-    public Optional<RoomDto> getRoomById(int roomId) {
-        Room room = roomRepository.findRoomByRoomId(roomId);
+    public Room retrieveRoomById(int id) {
+        Room room = roomRepository.findRoomByRoomId(id);
         if (room == null) {
-            // look for invalid room Id
+            throw new MmssException(HttpStatus.NOT_FOUND, "Room not found");
         }
-        return Optional.of(new RoomDto(room));
+        return room;
+    }
+
+    /**
+     * Get rooms by their room type
+     *
+     * @param type
+     * @return an array list of rooms
+     */
+    @Transactional
+    public ArrayList<Room> getAllRoomsByRoomType(Room.RoomType type) {
+        return roomRepository.findAllByRoomType(type);
     }
 
     /**
      * Get all the rooms
-     * @return a list of RoomDTOs
+     * @return a array list of rooms
      */
     @Transactional
-    public ArrayList<RoomDto> getAllRooms() {
-        ArrayList<Room> rooms = roomRepository.findAll();
-        ArrayList<RoomDto>  roomDtos = new ArrayList<>();
-        for (Room room: rooms) {
-            if (room == null) {
-                // look for invalid room Id
-            }
-            roomDtos.add(new RoomDto(room));
-        }
-        return roomDtos;
+    public ArrayList<Room> getAllRooms() {
+        return roomRepository.findAll();
     }
 
     /**

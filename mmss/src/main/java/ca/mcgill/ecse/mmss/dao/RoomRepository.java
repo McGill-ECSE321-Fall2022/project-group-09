@@ -7,5 +7,6 @@ import java.util.ArrayList;
 
 public interface RoomRepository extends CrudRepository<Room, Integer> {
     Room findRoomByRoomId(int roomId);
+    ArrayList<Room> findAllByRoomType(Room.RoomType type);
     ArrayList<Room> findAll();
 }
