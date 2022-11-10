@@ -17,28 +17,38 @@ import ca.mcgill.ecse.mmss.model.Visitor;
 
 @Service
 public class TourService {
-    
+
 	@Autowired
 	private TourRepository tourRepository;
-	
-    @Autowired
-    private VisitorRepository visitorRepository;
-    
-    @Autowired
-    private OpenDayRepository openDayRepository;
 
+	@Autowired
+	private VisitorRepository visitorRepository;
+
+	@Autowired
+	private OpenDayRepository openDayRepository;
+
+	/**
+	 * Find tour by its Id
+	 * 
+	 * @param id
+	 * @return tour
+	 * @author Shyam Desai
+	 */
 	@Transactional
-	public Tour retrieveTourById (int id) {
+	public Tour retrieveTourById(int id) {
 		Tour tour = tourRepository.findTourByBookingId(id);
+
 		if (tour == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "Tour not found.");
 		}
+
 		return tour;
 	}
-	
+
 	/**
-	 * Find all tours in the DB
-	 * @return ArrayList of tours
+	 * Find all tours
+	 * 
+	 * @return ArrayList of Tours
 	 * @author Shyam Desai
 	 */
 	@Transactional
@@ -46,9 +56,11 @@ public class TourService {
 		ArrayList<Tour> allTours = tourRepository.findAll();
 		return allTours;
 	}
-	
+
 	/**
-	 * Create tours. Check if museum is open on day. Check number of participants is 0 or more than 20. 
+	 * Create tours Check if museum is open on day Check number of participants is 0
+	 * or more than 20
+	 * 
 	 * @param username
 	 * @param date
 	 * @param numberOfParticipants
@@ -57,58 +69,41 @@ public class TourService {
 	 * @author Shyam Desai
 	 */
 	@Transactional
-	public Tour createTour (String username, Date date, int numberOfParticipants, ShiftTime tourTime) {
-	
-		Visitor visitor = visitorRepository.findVisitorByUsername(username); 
-		OpenDay openDay = openDayRepository.findOpenDayByDate(date);
-	    	
-		if(openDay == null) {
-			throw new IllegalArgumentException("Cannot book tours on this day.");
-		}
-	    	
-		if (numberOfParticipants == 0) {
-    		throw new IllegalArgumentException("Cannot book a tour for 0 visitors.");
-    	}    		
-    	
-		if (numberOfParticipants > 20) {
-    		throw new IllegalArgumentException("Cannot book a tour for more than 20 visitors in this time slot.");
-    	}
+	public Tour createTour(String username, Date date, int numberOfParticipants, ShiftTime tourTime) {
 
-    	if (visitor == null) {          
-    		throw new IllegalArgumentException("Name can't be empty.");
-    	}
-	    	 	 
-    	 //if all checks pass, then create tour
-    	 Tour tour = new Tour();
-    	 tour.setVisitor(visitor);
-    	 tour.setDate(openDay);
-    	 tour.setPricePerPerson(25);
-    	 tour.setTourTime(tourTime);
-    	 tour.setNumberOfParticipants(numberOfParticipants);
-   
-    	 //save the ticket object
-    	 tourRepository.save(tour);
-    	 
-    	 //return ticket object
-    	 return tour;
-	}
-	
-	/**
-	 * Deletes the tour of a given Id if it exists
-	 * @param id
-	 * @author Shyam Desai
-	 */
-	@Transactional
-	public void deleteTour (int id) {
-		Tour tour = tourRepository.findTourByBookingId(id);
-		if(tour == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "The tour with this Id was not found.");
+		Visitor visitor = visitorRepository.findVisitorByUsername(username);
+		OpenDay openDay = openDayRepository.findOpenDayByDate(date);
+
+		if (openDay == null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found.");
+		} else {
+			if (numberOfParticipants == 0) {
+				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot book a tour for 0 visitors.");
+			}
+
+			if (numberOfParticipants > 20) {
+				throw new MmssException(HttpStatus.NOT_FOUND,
+						"Cannot book a tour for more than 20 visitors in this time slot.");
+			}
 		}
-		tourRepository.delete(tour);
+
+		Tour tour = new Tour();
+		tour.setVisitor(visitor);
+		tour.setDate(openDay);
+		tour.setPricePerPerson(25);
+		tour.setTourTime(tourTime);
+		tour.setNumberOfParticipants(numberOfParticipants);
+
+		// save the ticket object
+		tourRepository.save(tour);
+
+		// return ticket object
+		return tour;
 	}
-	
+
 	/**
-	 * Takes tour id, date, and number of participants.
+	 * Updates tour booking given id, date, and number of participants
+	 * 
 	 * @param id
 	 * @param date
 	 * @param numberOfParticipants
@@ -116,17 +111,47 @@ public class TourService {
 	 * @author Shyam Desai
 	 */
 	@Transactional
-	public Tour updateTour (int id, Date date, int numberOfParticipants) {
+	public Tour updateTour(int id, Date date, int numberOfParticipants) {
 		Tour tour = tourRepository.findTourByBookingId(id);
 		OpenDay openDay = openDayRepository.findOpenDayByDate(date);
-		
-		if(tour == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "The tour with this Id was not found");
+
+		if (tour == null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "The tour with this Id was not found");
 		} else {
-			if(openDay == null) {
+			if (openDay == null) {
 				throw new IllegalArgumentException("Cannot book tours on this day.");
 			}
+
+			if (numberOfParticipants == 0) {
+				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot book a tour for 0 visitors.");
+			}
+
+			if (numberOfParticipants > 20) {
+				throw new MmssException(HttpStatus.NOT_FOUND,
+						"Cannot book a tour for more than 20 visitors in this time slot.");
+			}
+
+			tour.setDate(openDay);
+			tour.setNumberOfParticipants(numberOfParticipants);
 		}
+
 		return tour;
+	}
+
+	/**
+	 * Deletes tour given an Id
+	 * 
+	 * @param id
+	 * @author Shyam Desai
+	 */
+	@Transactional
+	public void deleteTour(int id) {
+		Tour tour = tourRepository.findTourByBookingId(id);
+
+		if (tour == null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "The tour with this Id was not found.");
+		}
+
+		tourRepository.delete(tour);
 	}
 }

@@ -1,46 +1,69 @@
 package ca.mcgill.ecse.mmss.dto;
 
+import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Ticket;
 
 public class TicketDto {
-    private int bookingId; 
-    private double pricePerPerson; 
-    private VisitorDto visitorDto;
-    
-    /**
-     * @author Shidan Javaheri
-     * Constructor that takes in a ticket as an argument
-     * @param ticket
-     */
-    public TicketDto (Ticket ticket) { 
-        this.bookingId = ticket.getBookingId();
-        this.pricePerPerson = ticket.getPricePerPerson();
-        this.visitorDto = new VisitorDto(ticket.getVisitor());
-    }
+	private int bookingId;
+	private double pricePerPerson;
+	private String visitorUsername;
+	private OpenDay date;
+	private int numberOfParticipants;
 
-    /**
-     * @author Shidan Javaheri
-     * Constructor that takes in seperate arguments
-     * @param bookingId
-     * @param pricePerPerson
-     * @param visitorDto
-     */
-    public TicketDto(int bookingId, double pricePerPerson, VisitorDto visitorDto) {
-        this.bookingId = bookingId;
-        this.pricePerPerson = pricePerPerson;
-        this.visitorDto = visitorDto;
-    }
-    public int getBookingId() {
-        return bookingId;
-    }
-    public double getPricePerPerson() {
-        return pricePerPerson;
-    }
-    public VisitorDto getVisitorDto() {
-        return visitorDto;
-    } 
+	/**
+	 * Null constructor
+	 * @author Shyam Desai
+	 */
+	public TicketDto() {}
+	
+	/**
+	 * Constructor that takes in a ticket as an argument
+	 * 
+	 * @author Shidan Javaheri, Shyam Desai
+	 * @param ticket
+	 */
+	public TicketDto(Ticket ticket) {
+		this.bookingId = ticket.getBookingId();
+		this.pricePerPerson = ticket.getPricePerPerson();
+		this.visitorUsername = ticket.getVisitor().getUsername();
+		this.date = ticket.getDate();		
+	}
 
-    
+	/**
+	 * Constructor that takes in separate arguments
+	 * 
+	 * @author Shidan Javaheri, Shyam Desai
+	 * @param bookingId
+	 * @param pricePerPerson
+	 * @param visitorUsername
+	 */
+	public TicketDto(int bookingId, double pricePerPerson, String visitorUsername) {
+		this.bookingId = bookingId;
+		this.pricePerPerson = pricePerPerson;
+		this.visitorUsername = visitorUsername;
+	}
 
-    
+	public int getBookingId() {
+		return bookingId;
+	}
+
+	public double getPricePerPerson() {
+		return pricePerPerson;
+	}
+
+	public String getVisitorUsername() {
+		return visitorUsername;
+	}
+
+	public void setVisitorUsername(String visitorUsername) {
+		this.visitorUsername = visitorUsername;
+	}
+
+	public void setBookingId(int bookingId) {
+		this.bookingId = bookingId;
+	}
+
+	public void setPricePerPerson(double pricePerPerson) {
+		this.pricePerPerson = pricePerPerson;
+	}
 }
