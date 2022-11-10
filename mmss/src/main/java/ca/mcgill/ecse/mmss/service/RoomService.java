@@ -1,7 +1,6 @@
 package ca.mcgill.ecse.mmss.service;
 
 import ca.mcgill.ecse.mmss.dao.RoomRepository;
-import ca.mcgill.ecse.mmss.dto.RoomDto;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Room;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class RoomService {
@@ -115,7 +113,6 @@ public class RoomService {
         else if (type == Room.RoomType.Large)
             return artefactCount >= 300;
             // Unlimited capacity for storage
-        else
-            return false;
+        else return false;
     }
 }

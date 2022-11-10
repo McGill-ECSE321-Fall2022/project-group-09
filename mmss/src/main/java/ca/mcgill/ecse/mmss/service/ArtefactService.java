@@ -71,10 +71,7 @@ public class ArtefactService {
      */
     @Transactional
     public ArrayList<Artefact> getAllArtefactsByRoom(int roomId) {
-        Room room = roomRepository.findRoomByRoomId(roomId);
-        if (room == null)
-            throw new MmssException(HttpStatus.NOT_FOUND, "Room was not found");
-        return artefactRepository.findAllByRoom(room);
+        return artefactRepository.findAllByRoom(roomService.retrieveRoomById(roomId));
     }
 
     /**
@@ -86,9 +83,8 @@ public class ArtefactService {
      */
     @Transactional
     public ArrayList<Artefact> getAllArtefactsByRoomAndByCanLoan(int roomId, boolean canLoan) {
-        Room room = roomRepository.findRoomByRoomId(roomId);
-        if (room == null)
-            throw new MmssException(HttpStatus.NOT_FOUND, "Room was not found");
+        // Valid room
+        Room room = roomService.retrieveRoomById(roomId);
         return artefactRepository.findAllByRoomAndByCanLoan(room, canLoan);
     }
 
@@ -101,15 +97,11 @@ public class ArtefactService {
     public ArrayList<Artefact> getAllArtefactsInDisplay() {
         ArrayList<Artefact> artefactsInDisplay = new ArrayList<>();
         // Get all artefacts from small rooms
-        for (Room smallRoom : roomRepository.findAllByRoomType(Room.RoomType.Small)) {
-            ArrayList<Artefact> artefacts = getAllArtefactsByRoom(smallRoom.getRoomId());
-            artefactsInDisplay.addAll(artefacts);
-        }
+        for (Room smallRoom : roomRepository.findAllByRoomType(Room.RoomType.Small))
+            artefactsInDisplay.addAll(getAllArtefactsByRoom(smallRoom.getRoomId()));
         // Get all artefacts from large rooms
-        for (Room largeRoom : roomRepository.findAllByRoomType(Room.RoomType.Large)) {
-            ArrayList<Artefact> artefacts = getAllArtefactsByRoom(largeRoom.getRoomId());
-            artefactsInDisplay.addAll(artefacts);
-        }
+        for (Room largeRoom : roomRepository.findAllByRoomType(Room.RoomType.Large))
+            artefactsInDisplay.addAll(getAllArtefactsByRoom(largeRoom.getRoomId()));
         return artefactsInDisplay;
     }
 
@@ -123,15 +115,11 @@ public class ArtefactService {
     public ArrayList<Artefact> getAllArtefactsInDisplayByCanLoan(boolean canLoan) {
         ArrayList<Artefact> artefactsInDisplayByCanLoan = new ArrayList<>();
         // Get all artefacts for given canLoan value from small rooms
-        for (Room smallRoom : roomRepository.findAllByRoomType(Room.RoomType.Small)) {
-            ArrayList<Artefact> artefacts = getAllArtefactsByRoomAndByCanLoan(smallRoom.getRoomId(), canLoan);
-            artefactsInDisplayByCanLoan.addAll(artefacts);
-        }
+        for (Room smallRoom : roomRepository.findAllByRoomType(Room.RoomType.Small))
+            artefactsInDisplayByCanLoan.addAll(getAllArtefactsByRoomAndByCanLoan(smallRoom.getRoomId(), canLoan));
         // Get all artefacts for given caLoan value from large rooms
-        for (Room largeRoom : roomRepository.findAllByRoomType(Room.RoomType.Large)) {
-            ArrayList<Artefact> artefacts = getAllArtefactsByRoomAndByCanLoan(largeRoom.getRoomId(), canLoan);
-            artefactsInDisplayByCanLoan.addAll(artefacts);
-        }
+        for (Room largeRoom : roomRepository.findAllByRoomType(Room.RoomType.Large))
+            artefactsInDisplayByCanLoan.addAll(getAllArtefactsByRoomAndByCanLoan(largeRoom.getRoomId(), canLoan));
         return artefactsInDisplayByCanLoan;
     }
 
@@ -147,17 +135,8 @@ public class ArtefactService {
      */
     @Transactional
     public Artefact createArtefact(String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
-        // Check for valid name
-        if ( name.length() > 50 || name.isEmpty())
-            throw new MmssException(HttpStatus.BAD_REQUEST,
-                    "The artefact’s name cannot be empty or longer than 50 characters.");
-        // Check for valid description
-        if (description.length() > 300 || description.isEmpty())
-            throw new MmssException(HttpStatus.BAD_REQUEST,
-                    "The artefact’s description cannot be empty or longer than 300 characters.");
-        // Check for fees
-        if (canLoan & (insuranceFee == 0 || loanFee == 0))
-            throw new MmssException(HttpStatus.BAD_REQUEST, "If the artefact is available for loan, the fees cannot be $0.");
+        // Check valid parameters
+        checkValidArtefactParams(name, description, canLoan, insuranceFee, loanFee);
         // Create artefact
         Artefact artefact = new Artefact();
         artefact.setArtefactName(name);
@@ -184,20 +163,9 @@ public class ArtefactService {
     @Transactional
     public Artefact updateArtefact(int artefactId, String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
         // Check for valid artefact id
-        Artefact artefact = artefactRepository.findArtefactByArtefactId(artefactId);
-        if (artefact == null)
-            throw new MmssException(HttpStatus.NOT_FOUND, "The artefact with this Id was not found.");
-        // Check for valid name
-        if ( name.length() > 50 || name.isEmpty())
-            throw new MmssException(HttpStatus.BAD_REQUEST,
-                    "The artefact’s name cannot be empty or longer than 50 characters.");
-        // Check for valid description
-        if (description.length() > 300 || description.isEmpty())
-            throw new MmssException(HttpStatus.BAD_REQUEST,
-                    "The artefact’s description cannot be empty or longer than 300 characters.");
-        // Check for fees
-        if (canLoan & (insuranceFee == 0 || loanFee == 0))
-            throw new MmssException(HttpStatus.BAD_REQUEST, "If the artefact is available for loan, the fees cannot be $0.");
+        Artefact artefact = getArtefactById(artefactId);
+        // Check valid parameters
+        checkValidArtefactParams(name, description, canLoan, insuranceFee, loanFee);
         // Create artefact
         artefact.setArtefactName(name);
         artefact.setDescription(description);
@@ -210,6 +178,57 @@ public class ArtefactService {
     }
 
     /**
+     * Remove an artefact from its assigned room
+     * Works also if the room has no room.
+     *
+     * @param artefactId
+     */
+    @Transactional
+    public void removeArtefactFromItsRoom(int artefactId) {
+        // Valid artefact id
+        Artefact artefact = getArtefactById(artefactId);
+        // Decrement room's artefact count
+        Room room = artefact.getRoom();
+        if (room != null) {
+            room.setArtefactCount(room.getArtefactCount() - 1);
+            roomRepository.save(room);
+        }
+        // Remove room association
+        artefact.setRoom(null);
+        // Persist in DB
+        artefactRepository.save(artefact);
+    }
+
+    /**
+     * Add an artefact to a valid room
+     * Assume the artefact did not have a room previously
+     *
+     * @param artefactId
+     * @param roomId
+     */
+    @Transactional
+    public void addArtefactToRoom(int artefactId, int roomId) {
+        // ASSUMPTION: the artefact has no room associated with it
+        // Valid artefact id
+        Artefact artefact = getArtefactById(artefactId);
+        // Valid room id
+        Room room = roomService.retrieveRoomById(roomId);
+        // Destination room full
+        if (roomService.isRoomFull(roomId))
+            throw new MmssException(HttpStatus.BAD_REQUEST, "The destination room is already full.");
+        // Display full
+        if (!(room.getRoomType() == Room.RoomType.Storage) && roomService.getDisplayCapacity() >= 1000)
+            throw new MmssException(HttpStatus.BAD_REQUEST, "The display is already full.");
+        // Increment room's artefact count
+        room.setArtefactCount(room.getArtefactCount() + 1);
+        // Add room association
+        artefact.setRoom(room);
+        // Persist in DB
+        roomRepository.save(room);
+        artefactRepository.save(artefact);
+    }
+
+    /**
      * Move an artefact to a room
      *
      * @param artefactId
@@ -218,93 +237,56 @@ public class ArtefactService {
     @Transactional
     public void moveArtefactToRoom(int artefactId, int roomId) {
         // Valid artefact id
-        Artefact artefact = artefactRepository.findArtefactByArtefactId(artefactId);
-        if (artefact == null)
-            throw new MmssException(HttpStatus.NOT_FOUND, "The artefact with this Id was not found.");
+        Artefact artefact = getArtefactById(artefactId);
         // Valid room id
-        Room room = roomRepository.findRoomByRoomId(roomId);
-        if (room == null)
-            throw new MmssException(HttpStatus.NOT_FOUND, "The room with this Id was not found.");
+        Room room = roomService.retrieveRoomById(roomId);
         // Destination and current rooms are the same
         if (artefact.getRoom().getRoomId() == roomId)
             throw new MmssException(HttpStatus.BAD_REQUEST, "The destination and current rooms cannot be the same.");
-        // Destination room full
-        if (roomService.isRoomFull(roomId))
-            throw new MmssException(HttpStatus.BAD_REQUEST, "The destination room is already full.");
         // Not previously in a room
-        Room.RoomType destinationRoomType = room.getRoomType();
-        if (!artefact.hasRoom()) {
-            // Going to the display
-            if (!(destinationRoomType == Room.RoomType.Storage)) {
-                // Display already full
-                if (roomService.getDisplayCapacity() == 1000) {
-                    throw new MmssException(HttpStatus.BAD_REQUEST, "The display is already full.");
-                }
-                // Go to display
-                else {
-                    artefact.setRoom(room);
-                    room.setArtefactCount(room.getArtefactCount() + 1);
-                }
-            }
-            // Going to the storage
-            else {
-                artefact.setRoom(room);
-                room.setArtefactCount(room.getArtefactCount() + 1);
-            }
-        }
+        if (!artefact.hasRoom())
+            addArtefactToRoom(artefactId, roomId);
         // Previously in a room
         else {
-            Room currentRoom = artefact.getRoom();
-            Room.RoomType currentRoomType = currentRoom.getRoomType();
-            // Storage to display
-            if (currentRoomType == Room.RoomType.Storage) {
-                // Display already full
-                if (roomService.getDisplayCapacity() == 1000) {
-                    throw new MmssException(HttpStatus.BAD_REQUEST, "The display is already full.");
-                }
-                // Go to display
-                else {
-                    artefact.setRoom(room);
-                    currentRoom.setArtefactCount(currentRoom.getArtefactCount() - 1);
-                    room.setArtefactCount(room.getArtefactCount() + 1);
-                }
-            }
-            else {
-                // Display to storage
-                if (destinationRoomType == Room.RoomType.Storage) {
-                    artefact.setRoom(room);
-                    currentRoom.setArtefactCount(currentRoom.getArtefactCount() - 1);
-                    room.setArtefactCount(room.getArtefactCount() + 1);
-                }
-                // Display to display
-                else {
-                    artefact.setRoom(room);
-                    currentRoom.setArtefactCount(currentRoom.getArtefactCount() - 1);
-                    room.setArtefactCount(room.getArtefactCount() + 1);
-                }
-            }
+            removeArtefactFromItsRoom(artefactId);
+            addArtefactToRoom(artefactId, roomId);
         }
-        // Persist DB
-        roomRepository.save(room);
-        artefactRepository.save(artefact);
     }
 
     @Transactional
     public void deleteArtefact(int artefactId) {
-        // Check for valid artefact id
-        Artefact artefact = artefactRepository.findArtefactByArtefactId(artefactId);
-        if (artefact == null)
-            throw new MmssException(HttpStatus.NOT_FOUND, "The artefact with this Id was not found.");
+        // Valid artefact id
+        Artefact artefact = getArtefactById(artefactId);
         // Check if loan are associated with it
         ArrayList<Loan> loans = loanRepository.findAllByArtefact(artefact);
         if (loans != null)
             throw new MmssException(HttpStatus.NOT_FOUND, "The artefact is loaned or a loan request for this artefact is pending.");
         // Update the artefact count for a room
-        if (artefact.hasRoom()) {
-            Room room = artefact.getRoom();
-            room.setArtefactCount(room.getArtefactCount() - 1);
-        }
+        removeArtefactFromItsRoom(artefactId);
         // Delete from DB
         artefactRepository.delete(artefact);
+    }
+
+    /**
+     * Check for valid artefact parameters
+     *
+     * @param name
+     * @param description
+     * @param canLoan
+     * @param insuranceFee
+     * @param loanFee
+     */
+    private void checkValidArtefactParams(String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
+        // Check for valid name
+        if ( name.length() > 50 || name.isEmpty())
+            throw new MmssException(HttpStatus.BAD_REQUEST,
+                    "The artefact’s name cannot be empty or longer than 50 characters.");
+        // Check for valid description
+        if (description.length() > 300 || description.isEmpty())
+            throw new MmssException(HttpStatus.BAD_REQUEST,
+                    "The artefact’s description cannot be empty or longer than 300 characters.");
+        // Check for fees
+        if (canLoan & (insuranceFee == 0 || loanFee == 0))
+            throw new MmssException(HttpStatus.BAD_REQUEST, "If the artefact is available for loan, the fees cannot be $0.");
     }
 }
