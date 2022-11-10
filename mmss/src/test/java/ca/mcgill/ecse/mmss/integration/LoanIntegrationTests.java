@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.sql.Date;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +95,7 @@ public class LoanIntegrationTests {
 
         // the loan
         loan = new Loan();
-        loan.setArtefact(artefact);
+        loan.setArtefact(artefactWithLoan);
         loan.setVisitor(visitor);
         loan.setExchangeId(0);
         loan.setSubmittedDate(Date.valueOf("2022-10-10"));
@@ -133,7 +132,7 @@ public class LoanIntegrationTests {
         LoanDto request = new LoanDto(); 
         request.setVisitorId("mo.salah@gmail.com");
         request.setArtefactId(artefact.getArtefactId());
-        
+
         // make the post
         ResponseEntity<LoanDto> response = client.postForEntity("/loan",request, LoanDto.class); 
 
@@ -148,7 +147,7 @@ public class LoanIntegrationTests {
 
     public void testGetLoan(int id) { 
         // try the get
-        ResponseEntity<LoanDto> response = client.getForEntity("/loan" + id, LoanDto.class); 
+        ResponseEntity<LoanDto> response = client.getForEntity("/loan/" + id, LoanDto.class); 
 
         // make assertions on the get
 

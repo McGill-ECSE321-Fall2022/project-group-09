@@ -46,7 +46,7 @@ public class LoanService {
 
     /**
      * @author Shidan Javaheri
-     * Finds a loan by its id
+     *         Finds a loan by its id
      * @param id
      * @return the loan, or throw an exception that the loan was not found
      */
@@ -61,9 +61,10 @@ public class LoanService {
     }
 
     /**
-     * @author Shidan Javaheri
-     *         Finds all the loans in the database
      * 
+     * Finds all the loans in the database
+     * 
+     * @author Shidan Javaheri
      * @return an arraylist of loans
      */
     @Transactional
@@ -76,9 +77,9 @@ public class LoanService {
     }
 
     /**
-     * @author Shidan Javaheri
-     *         Finds all the loans in the database with a given status
+     * Finds all the loans in the database with a given status
      * 
+     * @author Shidan Javaheri
      * @param status
      * @return an array list of loans
      */
@@ -93,8 +94,9 @@ public class LoanService {
     }
 
     /**
+     * Gets all the loans by their due date
+     * 
      * @author Shidan Javaheri
-     *         Gets all the loans by their due date
      * 
      * @param dueDate
      * @return an array list of Loans
@@ -114,9 +116,9 @@ public class LoanService {
     }
 
     /**
-     * @author Shidan Javaheri
-     *         Gets all the loans based on the day they were submitted
+     * Gets all the loans based on the day they were submitted
      * 
+     * @author Shidan Javaheri
      * @param submittedDate
      * @return an array list of LoanDtos
      */
@@ -132,6 +134,7 @@ public class LoanService {
     /**
      * Gets all the loans associated with a particular visitor
      * 
+     * @author Shidan Javaheri
      * @param username
      * @return an array list of Loans
      */
@@ -150,12 +153,12 @@ public class LoanService {
     }
 
     /**
-     * @author Shidan Javaheri
-     *         This method takes in a visitorId, an artefactId, and creates a loan
-     *         Checks that both the visitor and artefact exist
-     *         Checks that visitor is able to loan the object
-     *         Checks that the artefact is available for loan
+     * This method takes in a visitorId, an artefactId, and creates a loan
+     * Checks that both the visitor and artefact exist
+     * Checks that visitor is able to loan the object
+     * Checks that the artefact is available for loan
      * 
+     * @author Shidan Javaheri
      * @param artefactId
      * @param visitorId
      * @return the created loan
@@ -223,10 +226,14 @@ public class LoanService {
         loan.setArtefact(artefact);
         loan.setVisitor(visitor);
         loan.setSubmittedDate(new Date(System.currentTimeMillis()));
-        loan.setExchangeStatus(ExchangeStatus.Pending); 
+        loan.setExchangeStatus(ExchangeStatus.Pending);
 
         // save the new loan object
         loanRepository.save(loan);
+
+        // save the artefact with new loan status
+        artefact.setCurrentlyOnLoan(true);
+        artefactRepository.save(artefact); 
 
         // return a Dto of the created loan object
         return (loan);
@@ -236,6 +243,7 @@ public class LoanService {
     /**
      * Deletes the loan of a given id if the loan exits
      * 
+     * @author Shidan Javaheri
      * @param id
      */
     @Transactional
@@ -253,10 +261,10 @@ public class LoanService {
     }
 
     /**
-     * @author Shidan Javaheri
-     *         Takes in the id of a loan and a status to modify its status
-     *         Declined loans are immediately delted
+     * Takes in the id of a loan and a status to modify its status
+     * Declined loans are immediately delted
      * 
+     * @author Shidan Javaheri
      * @param id
      * @param status
      * @return
@@ -275,7 +283,7 @@ public class LoanService {
                 // declined loans are deleted immediately
             } else if (status == ExchangeStatus.Declined) {
 
-                loan.setExchangeStatus(ExchangeStatus.Declined); 
+                loan.setExchangeStatus(ExchangeStatus.Declined);
                 deleteLoan(loan.getExchangeId());
 
                 // create a notification with this message, attached to this visitor
@@ -287,17 +295,16 @@ public class LoanService {
                 // approvedloans also set the due date of the loans to 7 days form now
             } else if (status == ExchangeStatus.Approved) {
                 loan.setExchangeStatus(status);
-                loan.getArtefact().setCurrentlyOnLoan(true);
 
                 // Need method from Mohammed
                 // OpenDay dueDate = use open day method to find 7 days from now
                 // loan.setDueDate(openDay);
 
                 loanRepository.save(loan);
-                artefactRepository.save(loan.getArtefact()); 
+                artefactRepository.save(loan.getArtefact());
                 // create notification message
                 String message = "Your loan request submitted on date" + loan.getSubmittedDate().toString()
-                    + "with id: " + String.valueOf(loan.getExchangeId())
+                        + "with id: " + String.valueOf(loan.getExchangeId())
                         + "has been approved! Please follow this link to process payment, and pass by the Museum to pick it up";
 
                 // use create notification method from Sasha

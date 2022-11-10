@@ -68,6 +68,7 @@ public class LoanServiceTests {
         loan.setVisitor(visitor);
         loan.setExchangeId(0);
         loan.setSubmittedDate(Date.valueOf("2022-10-10")); 
+        
     }
 
     /**
@@ -153,8 +154,8 @@ public class LoanServiceTests {
         assertEquals(0,loan.getExchangeId()); 
         assertEquals(artefact,loanCreated.getArtefact());
         assertEquals(visitor,loanCreated.getVisitor()); 
-        // artefact still not on loan until it is approved
-        assertEquals(false, loanCreated.getArtefact().getCurrentlyOnLoan()); 
+        // artefact that has been requested to be loaned can't be loaned further
+        assertEquals(true, loanCreated.getArtefact().getCurrentlyOnLoan()); 
         assertEquals(ExchangeStatus.Pending, loanCreated.getExchangeStatus().Pending); 
 
         // check that each repository was called the right number of times, and with right arguments
@@ -463,7 +464,7 @@ public class LoanServiceTests {
         assertEquals(updatedLoan.getExchangeId(), 0);
         assertEquals(updatedLoan.getArtefact(), artefact);
         assertEquals(updatedLoan.getExchangeStatus(), ExchangeStatus.Approved);
-        assertEquals(updatedLoan.getArtefact().getCurrentlyOnLoan(), true); 
+    
 
         // add assertion that its due date is set 
 

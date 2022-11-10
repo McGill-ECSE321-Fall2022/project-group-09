@@ -33,12 +33,12 @@ public class VisitorRepositoryTests {
 	  @AfterEach
 	  public void clearDatabase() {
 		  
-		  // Delete all the visitors first
-	      visitorRepository.deleteAll(); 
+		//   // Delete all the visitors first
+	    //   visitorRepository.deleteAll(); 
 	     
-	      // delete communication and person repositories
-		  communicationRepository.deleteAll();
-		  personRepository.deleteAll();      
+	    //   // delete communication and person repositories
+		//   communicationRepository.deleteAll();
+		//   personRepository.deleteAll();      
 	  }
 
 	  /**
