@@ -15,10 +15,12 @@ public class LoanDto {
 
 	/**
 	 * Null constructor
+	 * 
 	 * @author Shyam Desai
 	 */
-	public LoanDto() {}
-	
+	public LoanDto() {
+	}
+
 	/**
 	 * Constructor that takes a loan as input
 	 * 
@@ -102,4 +104,8 @@ public class LoanDto {
 		this.visitorId = visitorId;
 	}
 
-} 
+	public void setArtefactId(int artefactId) {
+		this.artefactId = artefactId;
+	}
+
+}

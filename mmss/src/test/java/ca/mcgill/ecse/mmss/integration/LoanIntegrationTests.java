@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -208,20 +210,29 @@ public class LoanIntegrationTests {
         
     }
 
-    // @Test
-    // public void testDeleteLoan() { 
-    //     // make Dto for request
-    //     LoanDto request = new LoanDto(loan);
-    //     client.delete("/loan",request);;
+    @Test
+    public void testDeleteLoan() { 
+        // make Dto for request
+        LoanDto request = new LoanDto(loan);
+        int id = request.getExchangeId(); 
+
+        // Make an Http entity to send the request
+        HttpEntity<LoanDto> entity = new HttpEntity<LoanDto>(request); 
+
+        // Send the request
+        ResponseEntity<String> response = client.exchange("/loan", HttpMethod.DELETE, entity, String.class);
+
+        //get the updated Loan from the database
+        Loan updatedLoan = loanRepository.findLoanByExchangeId(id); 
 
 
-    //     //get the updated Loan from the database
-    //     Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId()); 
+        // verify the loan has been deleted 
+        assertNull(updatedLoan, "Loan was delted");
 
+        // verify the message of success
+        assertEquals(response.getBody(), "Loan succesfully deleted");
 
-    //     //verify the update
-    //     assertNull(updatedLoan, "Loan was delted");
-    // }
+    }
 
 
 
