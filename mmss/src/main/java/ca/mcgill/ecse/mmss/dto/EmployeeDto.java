@@ -3,51 +3,76 @@ package ca.mcgill.ecse.mmss.dto;
 import ca.mcgill.ecse.mmss.model.Employee;
 
 public class EmployeeDto {
-    private String phoneNumber; 
-    private String userName; 
-    private PersonDto person; 
-    private CommunicationDto communication;
+	private String phoneNumber;
+	private String userName;
+	private int personId;
+	private int communicationId;
 
-    /**
-     * @author Shidan Javaheri
-     * Constructor that takes in an employee as the argument
-     * @param employee
-     */
-    public void EmpoloyeeDto (Employee employee) { 
-        this.phoneNumber = employee.getPhoneNumber();
-        this.userName = employee.getUsername();
-        this.person = new PersonDto(employee.getPerson());
-        this.communication = new CommunicationDto (employee.getCommunication().getCommunicationId());
-    }
+	/**
+	 * Null constructor
+	 * @author Shyam Desai
+	 */
+	public EmployeeDto() {}
+	
+	/**
+	 * Constructor that takes in an employee as the argument
+	 * 
+	 * @author Shidan Javaheri, Shyam Desai
+	 * @param employee
+	 */
+	public void EmpoloyeeDto(Employee employee) {
+		this.phoneNumber = employee.getPhoneNumber();
+		this.userName = employee.getUsername();
+		this.personId = employee.getPerson().getPersonId();
+		this.communicationId = employee.getCommunication().getCommunicationId();
+	}
 
+	/**
+	 * Constructor that takes in separate arguments
+	 * 
+	 * @author Shidan Javaheri, Shyam Desai
+	 * @param phoneNumber
+	 * @param userName
+	 * @param password
+	 * @param person
+	 * @param communication
+	 */
+	public EmployeeDto(String phoneNumber, String userName, int personId, int communicationId) {
+		this.phoneNumber = phoneNumber;
+		this.userName = userName;
+		this.personId = personId;
+		this.communicationId = communicationId;
+	}
 
-    /**
-     * @author Shidan Javaheri
-     * Constructor that takes in seperate arguments
-     * @param phoneNumber
-     * @param userName
-     * @param password
-     * @param person
-     * @param communication
-     */
-    public EmployeeDto(String phoneNumber, String userName,  PersonDto person,CommunicationDto communication) {
-        this.phoneNumber = phoneNumber;
-        this.userName = userName;
-        this.person = person;
-        this.communication = communication;
-    }
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    public String getUserName() {
-        return userName;
-    }
-    public PersonDto getPerson() {
-        return person;
-    }
-    public CommunicationDto getCommunication() {
-        return communication;
-    }
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
 
-    
+	public String getUserName() {
+		return userName;
+	}
+
+	public int getPersonId() {
+		return personId;
+	}
+
+	public int getCommunicationId() {
+		return communicationId;
+	}
+
+	public void setPersonId(int personId) {
+		this.personId = personId;
+	}
+
+	public void setCommunicationId(int communicationId) {
+		this.communicationId = communicationId;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 }
