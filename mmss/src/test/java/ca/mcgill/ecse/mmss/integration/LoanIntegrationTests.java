@@ -2,6 +2,7 @@ package ca.mcgill.ecse.mmss.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
@@ -122,12 +123,19 @@ public class LoanIntegrationTests {
 
     }
 
+    /**
+     * Tests creating and retrieving a loan
+     */
     @Test
     public void testCreateAndGetLoan() {
         int loanId = testCreateLoan();
         testGetLoan(loanId); 
     }
 
+    /**
+     * Tests creating a loan, and returns its id
+     * @return the id of the loan
+     */
     public int testCreateLoan() { 
         LoanDto request = new LoanDto(); 
         request.setVisitorId("mo.salah@gmail.com");
@@ -145,6 +153,7 @@ public class LoanIntegrationTests {
         
     }
 
+    // retrieves the loan that was created by its id
     public void testGetLoan(int id) { 
         // try the get
         ResponseEntity<LoanDto> response = client.getForEntity("/loan/" + id, LoanDto.class); 
@@ -157,5 +166,63 @@ public class LoanIntegrationTests {
         assertEquals(response.getBody().getExchangeId(), id, "Response has correct id"); 
 
     } 
+
+    /**
+     * Tests updating a loan status to approved
+     */
+    @Test
+    public void testUpdateLoantoApproved() { 
+        // make Dto for request
+        LoanDto request = new LoanDto(loan);
+        request.setExchangeStatus(ExchangeStatus.Approved); 
+
+        // send the request
+        client.put("/loan", request,LoanDto.class); 
+
+        //get the updated Loan from the database
+        Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId()); 
+
+        //verify the update
+        assertEquals(updatedLoan.getExchangeStatus(), ExchangeStatus.Approved);
+        
+    } 
+    
+    /**
+     * Tests declining a loan status
+     * This automatically tests the delete service
+     */
+    @Test
+    public void testUpdateLoantoDeclined() { 
+        // make Dto for request
+        LoanDto request = new LoanDto(loan);
+        request.setExchangeStatus(ExchangeStatus.Declined); 
+
+        // send the request
+        client.put("/loan", request,LoanDto.class); 
+
+        //get the updated Loan from the database
+        Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId()); 
+
+        //verify the update
+        assertNull(updatedLoan, "Loan was delted");
+        
+    }
+
+    // @Test
+    // public void testDeleteLoan() { 
+    //     // make Dto for request
+    //     LoanDto request = new LoanDto(loan);
+    //     client.delete("/loan",request);;
+
+
+    //     //get the updated Loan from the database
+    //     Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId()); 
+
+
+    //     //verify the update
+    //     assertNull(updatedLoan, "Loan was delted");
+    // }
+
+
 
 }

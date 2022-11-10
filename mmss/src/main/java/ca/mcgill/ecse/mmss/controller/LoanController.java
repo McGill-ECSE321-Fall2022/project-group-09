@@ -75,14 +75,14 @@ public class LoanController {
         Loan updatedLoan = loanService.updateStatus(loanId, status);
 
         // return updated Loan as Dto
-        return new ResponseEntity<LoanDto>(new LoanDto(updatedLoan), HttpStatus.CREATED);
+        return new ResponseEntity<LoanDto>(new LoanDto(updatedLoan), HttpStatus.OK);
 
     }
 
     /**
      * Delete a loan given its id
      * 
-     * @param request the loan's id
+     * @param request 
      * @return A message saying the loan was deleted
      */
     @DeleteMapping
@@ -95,7 +95,7 @@ public class LoanController {
         loanService.deleteLoan(loanId);
 
         // return updated Loan as Dto
-        return new ResponseEntity<String>("Loan succesfully deleted", HttpStatus.CREATED);
+        return new ResponseEntity<String>("Loan succesfully deleted", HttpStatus.OK);
     }
 
     // MAPPING OF OTHER GET METHODS
