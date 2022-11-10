@@ -4,43 +4,63 @@ import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 
 public class ShiftDto {
-    private int shiftId; 
-    private ShiftTime shiftTime; 
-    private ScheduleDto scheduleDto;
+	private int shiftId;
+	private ShiftTime shiftTime;
+	private int scheduleId;
 
-    /**
-     * @author Shidan Javaheri
-     * Constructor that takes a shift as the argument
-     * @param shift
-     */
-    public ShiftDto ( Shift shift) { 
-        this.shiftId = shift.getShiftId();
-        this.shiftTime = shift.getShiftTime();
-        this.scheduleDto = new ScheduleDto(shift.getSchedule().getScheduleId());       
-    }
-    
-    /**
-     * @author Shidan Javaheri
-     * Constructor that takes in seperate arguments
-     * @param shiftId
-     * @param shiftTime
-     * @param scheduleDto
-     */
-    public ShiftDto(int shiftId, ShiftTime shiftTime, ScheduleDto scheduleDto) {
-        this.shiftId = shiftId;
-        this.shiftTime = shiftTime;
-        this.scheduleDto = scheduleDto;
-    }
-    public int getShiftId() {
-        return shiftId;
-    }
-    public ShiftTime getShiftTime() {
-        return shiftTime;
-    }
-    public ScheduleDto getScheduleDto() {
-        return scheduleDto;
-    } 
+	/**
+	 * Null constructor
+	 * @author Shyam Desai
+	 */
+	public ShiftDto() {}
+	
+	/**
+	 * Constructor that takes a shift as the argument
+	 * 
+	 * @author Shidan Javaheri, Shyam Desai
+	 * @param shift
+	 */
+	public ShiftDto(Shift shift) {
+		this.shiftId = shift.getShiftId();
+		this.shiftTime = shift.getShiftTime();
+		this.scheduleId = shift.getSchedule().getScheduleId();
+	}
 
-    
-    
+	/**
+	 * Constructor that takes in separate arguments
+	 * 
+	 * @author Shidan Javaheri, Shyam Desai
+	 * @param shiftId
+	 * @param shiftTime
+	 * @param scheduleId
+	 */
+	public ShiftDto(int shiftId, ShiftTime shiftTime, int scheduleId) {
+		this.shiftId = shiftId;
+		this.shiftTime = shiftTime;
+		this.scheduleId = scheduleId;
+	}
+
+	public int getShiftId() {
+		return shiftId;
+	}
+
+	public ShiftTime getShiftTime() {
+		return shiftTime;
+	}
+
+	public int getScheduleId() {
+		return scheduleId;
+	}
+
+	public void setScheduleId(int scheduleId) {
+		this.scheduleId = scheduleId;
+	}
+
+	public void setShiftId(int shiftId) {
+		this.shiftId = shiftId;
+	}
+
+	public void setShiftTime(ShiftTime shiftTime) {
+		this.shiftTime = shiftTime;
+	}
 }
