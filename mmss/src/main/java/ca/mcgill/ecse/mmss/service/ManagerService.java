@@ -30,7 +30,7 @@ public class ManagerService {
      * Run once when the system starts to create the manager
      * 
      * @author Shidan Javaheri
-     * @return
+     * @return the manager
      */
     @Transactional
     public Manager createManager() {
@@ -53,6 +53,7 @@ public class ManagerService {
      * @author Shidan Javaheri
      * @param currentPassword
      * @param newPassword
+     * @return the manager
      */
     @Transactional
     public Manager updateMangagerPassword(String currentPassword, String newPassword) {
@@ -60,6 +61,8 @@ public class ManagerService {
         String username = "marwan.kanan@mcgill.ca";
         Manager manager = managerRepository.findManagerByUsername(username);
         String password = manager.getPassword();
+        
+        // if the passwords don't match
         if (currentPassword.compareTo(password) != 0) {
             throw new MmssException(HttpStatus.BAD_REQUEST, "Incorrect password");
 

@@ -68,7 +68,10 @@ public class ManagerServiceTests {
         person.delete();
     }
 
-
+    /**
+     * Tests getting the manager
+     * @author Shidan Javaheri
+     */
     @Test
     public void testGetManager() { 
         // set up mocks
@@ -86,8 +89,6 @@ public class ManagerServiceTests {
 
 
     }
-
-
 
     /**
      * Tests creating a manager. Can never fail, can never be called 
@@ -140,25 +141,24 @@ public class ManagerServiceTests {
     /**
      * Tests updating the managers password with incorrect current password
      */
-    @Test 
-    public void testUpdatePasswordWithWrongPassword() { 
-        final String incorrectPassword = "noGoodPassword"; 
+    @Test
+    public void testUpdatePasswordWithWrongPassword() {
+        final String incorrectPassword = "noGoodPassword";
 
         // set up mocks
-        when(managerRepository.findManagerByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> manager); 
+        when(managerRepository.findManagerByUsername(any(String.class)))
+                .thenAnswer((InvocationOnMock invocation) -> manager);
 
-        // call which catches the exception 
-        MmssException ex = assertThrows(MmssException.class, () -> managerService.updateMangagerPassword(incorrectPassword, "attemptedNewPassword")); 
+        // call which catches the exception
+        MmssException ex = assertThrows(MmssException.class,
+                () -> managerService.updateMangagerPassword(incorrectPassword, "attemptedNewPassword"));
 
-        // assertions 
+        // assertions
         assertEquals(ex.getStatus(), HttpStatus.BAD_REQUEST);
         assertEquals(ex.getMessage(), "Incorrect password");
 
         // verifications
-        verify(managerRepository, times(1)).findManagerByUsername("marwan.kanan@mcgill.ca"); 
-        
+        verify(managerRepository, times(1)).findManagerByUsername("marwan.kanan@mcgill.ca");
     }
-
-
 
 }

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -30,14 +29,8 @@ public class ManagerIntegrationTests {
     @Autowired
     private ManagerRepository managerRepository; 
 
-    @Autowired
-    private PersonRepository personRepository; 
 
     @Autowired ManagerService managerService; 
-
-    // two objects will be needed in our tests
-    private Person person; 
-    private Manager manager; 
 
    /**
      * Create objects needed for tests
@@ -65,6 +58,7 @@ public class ManagerIntegrationTests {
 
     /**
      * Tests getting the manager from the database
+     * @author Shidan Javaheri
      */
     @Test
     public void testGetManager() { 
@@ -83,6 +77,7 @@ public class ManagerIntegrationTests {
 
     /**
      * Tests updating the manager's password
+     * @author Shidan Javaheri
      */
 
     @Test    
