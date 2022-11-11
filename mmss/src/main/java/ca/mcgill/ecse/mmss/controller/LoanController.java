@@ -32,6 +32,7 @@ public class LoanController {
 
     /**
      * Get a loan by its Id
+     * @author Shidan Javaheri
      * 
      * @param id
      * @return a response entity with the loan and ok status
@@ -44,6 +45,7 @@ public class LoanController {
 
     /**
      * Create a new loan based on an input request
+     * @author Shidan Javaheri
      * 
      * @param request a LoanDto
      * @return the created Loan as a Dto, in a response entity, status ok
@@ -64,6 +66,7 @@ public class LoanController {
 
     /**
      * Update a loan's status
+     * @author Shidan Javaheri
      * 
      * @param request containing the loan id and status
      * @return the updated loan as a Dto, in a response entity, status ok
@@ -84,6 +87,7 @@ public class LoanController {
 
     /**
      * Delete a loan given its id
+     * @author Shidan Javaheri
      * 
      * @param request 
      * @return A message saying the loan was deleted
@@ -101,6 +105,7 @@ public class LoanController {
 
     /**
      * Gets all the loans in the system
+     * @author Shidan Javaheri
      * 
      * @return an array list with a list of all loans as Dtos
      */
@@ -122,6 +127,7 @@ public class LoanController {
 
     /**
      * Gts all the loans in the system with a given status
+     * @author Shidan Javaheri
      * 
      * @param status the status
      * @return an array list with all the loans as Dtos
@@ -144,6 +150,7 @@ public class LoanController {
 
     /**
      * Gets all loans due on a certain day
+     * @author Shidan Javaheri
      * 
      * @param date
      * @return an array list with all the loans as Dtos
@@ -166,6 +173,7 @@ public class LoanController {
 
     /**
      * Gets all the loans submitted on a certain day
+     * @author Shidan Javaheri
      * 
      * @param date
      * @return an array list with all the loans as Dtos
@@ -188,6 +196,7 @@ public class LoanController {
 
     /**
      * Gets all the loans belonging to a visitor
+     * @author Shidan Javaheri
      * @param username
      * @return an array list with all the loans as Dtos
      */

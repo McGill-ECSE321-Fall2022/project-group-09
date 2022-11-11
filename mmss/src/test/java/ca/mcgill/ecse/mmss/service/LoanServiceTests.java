@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
+import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Artefact;
@@ -30,7 +31,6 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
-
 
 @ExtendWith(MockitoExtension.class)
 public class LoanServiceTests {
@@ -45,7 +45,11 @@ public class LoanServiceTests {
     @Mock
     private ArtefactRepository artefactRepository;
 
-    // We inject the mocks in the loan service - the thing that calls on the repositories
+    @Mock
+    private OpenDayRepository openDayRepository;
+
+    // We inject the mocks in the loan service - the thing that calls on the
+    // repositories
     @InjectMocks
     private LoanService loanService;
 
@@ -56,11 +60,13 @@ public class LoanServiceTests {
     private Loan loan;
 
     /**
-     * @author Shidan Javaheri
      * Creates the obejcts needed by all test cases
+     * 
+     * @author Shidan Javaheri
      */
     @BeforeEach
     public void createObjects() {
+
         // create necessary objects for test
         // This will Mock the content of your database
         // Basically a fake database system
@@ -71,13 +77,14 @@ public class LoanServiceTests {
         loan.setArtefact(artefact);
         loan.setVisitor(visitor);
         loan.setExchangeId(0);
-        loan.setSubmittedDate(Date.valueOf("2022-10-10")); 
-        
+        loan.setSubmittedDate(Date.valueOf("2022-10-10"));
+
     }
 
     /**
-     * @author Shidan Javaheri
      * Deletes objects after each test
+     * 
+     * @author Shidan Javaheri
      */
     @AfterEach
     public void deleteObjects() {
@@ -89,8 +96,8 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Tests retrieving a loan with a valid id
+     * @author Shidan Javaheri
      */
     @Test 
     public void testRetrieveLoanById () { 
@@ -111,8 +118,9 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Tests getting a loan with an invalid Id
+     * 
+     * @author Shidan Javaheri
      */
 
     @Test
@@ -129,13 +137,13 @@ public class LoanServiceTests {
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
 
         // verify calls to repositories
-        verify(loanRepository, times (1)).findLoanByExchangeId(invalidId); 
+        verify(loanRepository, times(1)).findLoanByExchangeId(invalidId);
 
     }
 
     /**
-     * @author Shidan Javaheri
      * Tests creating a loan successfully
+     * @author Shidan Javaheri
      */
     @Test
     public void testCreateLoan() { 
@@ -176,8 +184,8 @@ public class LoanServiceTests {
     // VISITOR ERRORS
 
     /**
-     * @author Shidan Javaheri
      * Tests creating a loan with an invalid username
+     * @author Shidan Javaheri
      */
     @Test
     public void testCreateLoanInvalidUsername () { 
@@ -191,7 +199,7 @@ public class LoanServiceTests {
 
         // assert the exception is thrown with the right message and status
 
-        assertEquals("The visitor with this Id was not found", ex.getMessage()); 
+        assertEquals("The visitor with this username was not found", ex.getMessage()); 
         assertEquals (HttpStatus.NOT_FOUND, ex.getStatus()); 
 
         // verify the repository calls
@@ -201,36 +209,15 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Test creating a loan for a visitor who has too many loans
+     * 
+     * @author Shidan Javaheri
      */
     @Test
     public void testCreateLoanTooManyLoans() {
 
         // make the artefacts
-        Artefact artefact1 = new Artefact(1, "MonaLisa1", "Super cool", true, 0, 0);
-        Artefact artefact2 = new Artefact(2, "MonaLisa2", "Super cool", true, 0, 0);
-        Artefact artefact3 = new Artefact(3, "MonaLisa3", "Super cool", true, 0, 0);
-        Artefact artefact4 = new Artefact(4, "MonaLisa4", "Super cool", true, 0, 0);
-        Artefact artefact5 = new Artefact(5, "MonaLisa5", "Super cool", true, 0, 0);
-        Artefact artefact6 = new Artefact(6, "MonaLisa6", "Super cool", true, 0, 0);
-
-        // make the loans
-        Loan loan1 = new Loan(1, Date.valueOf("2022-03-02"), artefact1, visitor);
-        Loan loan2 = new Loan(2, Date.valueOf("2022-03-02"), artefact2, visitor);
-        Loan loan3 = new Loan(3, Date.valueOf("2022-03-02"), artefact3, visitor);
-        Loan loan4 = new Loan(4, Date.valueOf("2022-03-02"), artefact4, visitor);
-        Loan loan5 = new Loan(5, Date.valueOf("2022-03-02"), artefact5, visitor);
-        Loan loan6 = new Loan(6, Date.valueOf("2022-03-02"), artefact6, visitor);
-
-        // make the list of loans
-        ArrayList<Loan> loans = new ArrayList<Loan>(10);
-        loans.add(loan1);
-        loans.add(loan2);
-        loans.add(loan3);
-        loans.add(loan4);
-        loans.add(loan5);
-        loans.add(loan6);
+        ArrayList<Loan> loans = makeListOfLoans();
 
         // set up mocks
 
@@ -257,8 +244,9 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Tests creating a loan when the visitor has a non zero balance
+     * 
+     * @author Shidan Javaheri
      */
     @Test
     public void testCreateLoanVisitorHasBalance() {
@@ -286,8 +274,9 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Tests when the visitor has an outstanding loan
+     * 
+     * @author Shidan Javaheri
      */
     @Test
     public void testCreateLoanVisitorHasOutstandingLoans() {
@@ -337,8 +326,9 @@ public class LoanServiceTests {
     // ARTEFACT ERRORS
 
     /**
-     * @author Shidan Javaheri
      * Tests create loan when the artefact doesn't exist
+     * 
+     * @author Shidan Javaheri
      */
     @Test
     public void testCreateLoanInvalidArtefactId() {
@@ -377,8 +367,8 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Test creating a loan when the artefact is unavailable for loan
+     * @author Shidan Javaheri
      */
 
     @Test
@@ -414,9 +404,9 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Test successfully updating the status of a loan to Declined
      * May need to add tests that the notification respotiory is called
+     * @author Shidan Javaheri
 
      */
 
@@ -445,10 +435,10 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Test successfully updating the status of a loan to Approved
      * May need to add tests that the notification respotiory is called
      * 
+     * @author Shidan Javaheri
      */
     @Test
     public void testUpdateStatusToApproved() {
@@ -483,8 +473,8 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Tests when a loan's status is updated to pending
+     * @author Shidan Javaheri
      */
     @Test
     public void testUpdateStatusToPending() { 
@@ -505,8 +495,9 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Tests update status with an invalid id
+     * 
+     * @author Shidan Javaheri
      */
     @Test
     public void testUpdateStatusWithInvalidId() {
@@ -528,8 +519,8 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Tests successfully deleting a loan
+     * @author Shidan Javaheri
      */
 
     @Test
@@ -548,8 +539,8 @@ public class LoanServiceTests {
     }
 
     /**
-     * @author Shidan Javaheri
      * Tests deleting a loan with invalid Id
+     * @author Shidan Javaheri
      */
 
     @Test
@@ -567,9 +558,96 @@ public class LoanServiceTests {
 
     }
 
+    // TESTS FOR GET ALL METHODS ARE PERFORMED IN INTEGRATION TESTS. ONLY NEED TO
+    // CHECK INVALID TESTS
 
+    /**
+     * Tests getting all loans with an invalid username
+     * @author Shidan Javaheri
+     */
+    @Test
+    public void testGetAllLoansByVisitorInvalidUsername() {
+        final String invalidUsername = "badUsername";
 
-} 
+        // setup mocks
+        when(visitorRepository.findVisitorByUsername(any(String.class)))
+                .thenAnswer((InvocationOnMock invocation) -> null);
 
+        // call service
+        MmssException ex = assertThrows(MmssException.class, () -> loanService.getAllLoansByVisitor(invalidUsername));
 
+        // assertions on error
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+        assertEquals("The visitor with this username was not found", ex.getMessage());
 
+        // verfications
+        verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
+
+    }
+
+    /**
+     * Tests getting all loans with invalid open day
+     * @author Shidan Javaheri
+     */
+    @Test
+    public void testGetAllLoansByDueDateInvalidOpenDay() {
+        final Date invalidDate = Date.valueOf("2022-01-01");
+
+        // setup mocks
+        when(openDayRepository.findOpenDayByDate(any(Date.class))).thenAnswer((InvocationOnMock invocation) -> null);
+
+        // call service
+        MmssException ex = assertThrows(MmssException.class, () -> loanService.getAllLoansByDueDate(invalidDate));
+
+        // assertions on error
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+        assertEquals("There is no open day with this date", ex.getMessage());
+
+        // verfications
+        verify(openDayRepository, times(1)).findOpenDayByDate(invalidDate);
+
+    }
+
+    // Helper Methods
+
+    /**
+     * Makes a list of loans useful for tests
+     * @return an ArrayList<Loan> of loans
+     * 
+     * @author Shidan Javaheri
+     */
+    public ArrayList<Loan> makeListOfLoans() {
+        // make the artefacts
+        Artefact artefact1 = new Artefact(1, "MonaLisa1", "Super cool", true, 0, 0);
+        Artefact artefact2 = new Artefact(2, "MonaLisa2", "Super cool", true, 0, 0);
+        Artefact artefact3 = new Artefact(3, "MonaLisa3", "Super cool", true, 0, 0);
+        Artefact artefact4 = new Artefact(4, "MonaLisa4", "Super cool", true, 0, 0);
+        Artefact artefact5 = new Artefact(5, "MonaLisa5", "Super cool", true, 0, 0);
+        Artefact artefact6 = new Artefact(6, "MonaLisa6", "Super cool", true, 0, 0);
+
+        // make the loans
+        Loan loan1 = new Loan(1, Date.valueOf("2022-03-02"), artefact1, visitor);
+        Loan loan2 = new Loan(2, Date.valueOf("2022-03-02"), artefact2, visitor);
+        Loan loan3 = new Loan(3, Date.valueOf("2022-03-02"), artefact3, visitor);
+        Loan loan4 = new Loan(4, Date.valueOf("2022-03-02"), artefact4, visitor);
+        Loan loan5 = new Loan(5, Date.valueOf("2022-03-02"), artefact5, visitor);
+        Loan loan6 = new Loan(6, Date.valueOf("2022-03-02"), artefact6, visitor);
+
+        OpenDay dueDate = new OpenDay(Date.valueOf("2022-03-09"));
+
+        loan1.setExchangeStatus(ExchangeStatus.Approved);
+        loan2.setDueDate(dueDate);
+
+        // make the list of loans
+        ArrayList<Loan> loans = new ArrayList<Loan>(10);
+        loans.add(loan1);
+        loans.add(loan2);
+        loans.add(loan3);
+        loans.add(loan4);
+        loans.add(loan5);
+        loans.add(loan6);
+
+        return loans;
+    }
+
+}
