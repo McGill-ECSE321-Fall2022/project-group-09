@@ -45,8 +45,9 @@ public class LoanService {
     CommunicationRepository communicationRepository;
 
     /**
+     * Finds a loan by its id
+     * 
      * @author Shidan Javaheri
-     *         Finds a loan by its id
      * @param id
      * @return the loan, or throw an exception that the loan was not found
      */
@@ -233,7 +234,7 @@ public class LoanService {
 
         // save the artefact with new loan status
         artefact.setCurrentlyOnLoan(true);
-        artefactRepository.save(artefact); 
+        artefactRepository.save(artefact);
 
         // return a Dto of the created loan object
         return (loan);
