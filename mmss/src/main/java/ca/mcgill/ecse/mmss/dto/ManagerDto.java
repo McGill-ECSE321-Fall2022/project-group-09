@@ -4,49 +4,64 @@ import ca.mcgill.ecse.mmss.model.Manager;
 
 public class ManagerDto {
 
-    private String userName; 
-    private PersonDto person; 
-    private CommunicationDto communication;
+	private String userName;
+	private int personId;
+	private int communicationId;
 
-    /**
-     * @author Shidan Javaheri
-     * Constructor that takes in the manager as the argument
-     * @param manager
-     */
-    public ManagerDto (Manager manager) { 
-        this.userName = manager.getUsername();
-        this.person = new PersonDto(manager.getPerson());
-        this.communication = new CommunicationDto(manager.getCommunication().getCommunicationId());
-    }
+	/**
+	 * Null constructor
+	 * @author Shyam Desai
+	 */
+	public ManagerDto() {}
 
-    
-    /**
-     * @author Shidan Javaheri
-     * Constructor that takes in seperate arguments
-     * @param userName
-     * @param password
-     * @param person
-     * @param communication
-     */
-    public ManagerDto(String userName, PersonDto person,
-            CommunicationDto communication) {
-        this.userName = userName;
-        this.person = person;
-        this.communication = communication;
-    }
+	/**
+	 * Constructor that takes in the manager as the argument
+	 * 
+	 * @author Shidan Javaheri, Shyam Desai
+	 * @param manager
+	 */
+	public ManagerDto(Manager manager) {
+		this.userName = manager.getUsername();
+		this.personId = manager.getPerson().getPersonId();
+		this.communicationId = manager.getCommunication().getCommunicationId();
+	}
 
+	/**
+	 * Constructor that takes in separate arguments
+	 * 
+	 * @author Shidan Javaheri, Shyam Desai
+	 * @param userName
+	 * @param password
+	 * @param personId
+	 * @param communicationId
+	 */
+	public ManagerDto(String userName, int personId, int communicationId) {
+		this.userName = userName;
+		this.personId = personId;
+		this.communicationId = communicationId;
+	}
 
-    public String getUserName() {
-        return userName;
-    }
-    public PersonDto getPerson() {
-        return person;
-    }
-    public CommunicationDto getCommunication() {
-        return communication;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
+	public int getPersonId() {
+		return personId;
+	}
 
-    
-    
+	public void setPersonId(int personId) {
+		this.personId = personId;
+	}
+
+	public int getCommunicationId() {
+		return communicationId;
+	}
+
+	public void setCommunicationId(int communicationId) {
+		this.communicationId = communicationId;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 }

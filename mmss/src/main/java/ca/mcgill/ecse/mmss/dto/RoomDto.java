@@ -8,6 +8,12 @@ public class RoomDto {
     private int artefactCount; 
     private RoomType roomtype;
 
+	/**
+	 * Null constructor
+	 * @author Shyam Desai
+	 */
+	public RoomDto() {}
+    
     /**
      * @author Shidan Javaheri
      * Constructor that takes in a room as an arugment
