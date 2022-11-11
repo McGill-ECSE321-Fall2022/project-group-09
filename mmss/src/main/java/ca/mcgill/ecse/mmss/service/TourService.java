@@ -94,10 +94,8 @@ public class TourService {
 		tour.setTourTime(tourTime);
 		tour.setNumberOfParticipants(numberOfParticipants);
 
-		// save the ticket object
 		tourRepository.save(tour);
 
-		// return ticket object
 		return tour;
 	}
 

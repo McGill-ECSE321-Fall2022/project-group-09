@@ -1,46 +1,48 @@
 package ca.mcgill.ecse.mmss.dto;
 
-import ca.mcgill.ecse.mmss.model.OpenDay;
+import java.sql.Date;
 import ca.mcgill.ecse.mmss.model.Ticket;
 
 public class TicketDto {
 	private int bookingId;
 	private double pricePerPerson;
 	private String visitorUsername;
-	private OpenDay date;
-	private int numberOfParticipants;
+	private Date date;
 
 	/**
 	 * Null constructor
+	 * 
 	 * @author Shyam Desai
 	 */
-	public TicketDto() {}
-	
+	public TicketDto() {
+	}
+
 	/**
 	 * Constructor that takes in a ticket as an argument
 	 * 
-	 * @author Shidan Javaheri, Shyam Desai
+	 * @author Shyam Desai, Shidan Javaheri
 	 * @param ticket
 	 */
 	public TicketDto(Ticket ticket) {
 		this.bookingId = ticket.getBookingId();
 		this.pricePerPerson = ticket.getPricePerPerson();
 		this.visitorUsername = ticket.getVisitor().getUsername();
-		this.date = ticket.getDate();		
+		this.date = ticket.getDate().getDate();
 	}
 
 	/**
 	 * Constructor that takes in separate arguments
 	 * 
-	 * @author Shidan Javaheri, Shyam Desai
+	 * @author Shyam Desai, Shidan Javaheri
 	 * @param bookingId
 	 * @param pricePerPerson
 	 * @param visitorUsername
 	 */
-	public TicketDto(int bookingId, double pricePerPerson, String visitorUsername) {
+	public TicketDto(int bookingId, double pricePerPerson, String visitorUsername, Date date) {
 		this.bookingId = bookingId;
 		this.pricePerPerson = pricePerPerson;
 		this.visitorUsername = visitorUsername;
+		this.date = date;
 	}
 
 	public int getBookingId() {
@@ -53,6 +55,14 @@ public class TicketDto {
 
 	public String getVisitorUsername() {
 		return visitorUsername;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public void setVisitorUsername(String visitorUsername) {

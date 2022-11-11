@@ -59,37 +59,29 @@ public class TicketService {
 	 * 
 	 * @param username
 	 * @param date
-	 * @param numberOfTickets
 	 * @return ticket
 	 * @author Shyam Desai
 	 */
 	@Transactional
-	public Ticket createTicket(String username, Date date, int numberOfTickets) {
+	public Ticket createTicket(String username, Date date) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
-		OpenDay openDay = openDayRepository.findOpenDayByDate(date);
+		 OpenDay openDay = openDayRepository.findOpenDayByDate(date);
 
 		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found.");
-		} else  {
+		} else {
 			if (openDay == null) {
 				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot book tickets on this day.");
 			}
-
-			if (numberOfTickets == 0) {
-				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot book 0 tickets.");
-			}
 		}
 
-		// if all checks pass, then create ticket
 		Ticket ticket = new Ticket();
 		ticket.setVisitor(visitor);
 		ticket.setDate(openDay);
 		ticket.setPricePerPerson(20);
 
-		// save the ticket object
 		ticketRepository.save(ticket);
-		
-		// return ticket
+
 		return ticket;
 	}
 

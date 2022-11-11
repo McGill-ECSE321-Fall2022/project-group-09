@@ -1,7 +1,7 @@
 package ca.mcgill.ecse.mmss.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,15 +47,12 @@ public class TourController {
 	 */
 	@PostMapping
 	public ResponseEntity<TourDto> createTour(@RequestBody TourDto request) {
-		// @RequestBody String username, @RequestBody Date date, @RequestBody int
-		// numberOfParticipants, @RequestBody ShiftTime tourTime
-
 		String visitorUsername = request.getVisitorUsername();
-//		OpenDay date = request.getDate();
+		Date date = request.getDate();
 		int numberOfParticipants = request.getNumberOfParticipants();
 		ShiftTime shiftTime = request.getShiftTime();
 
-		Tour persistedTour = tourService.createTour(visitorUsername, null, numberOfParticipants, shiftTime);
+		Tour persistedTour = tourService.createTour(visitorUsername, date, numberOfParticipants, shiftTime);
 		return new ResponseEntity<TourDto>(new TourDto(persistedTour), HttpStatus.CREATED);
 	}
 
@@ -69,10 +66,10 @@ public class TourController {
 	@PutMapping
 	public ResponseEntity<TourDto> updateTourStatus(@RequestBody TourDto request) {
 		int tourId = request.getBookingId();
-//		Date date = request.getDate();
+		Date date = request.getDate();
 		int numberOfParticipants = request.getNumberOfParticipants();
 
-		Tour updatedTour = tourService.updateTour(tourId, null, numberOfParticipants);
+		Tour updatedTour = tourService.updateTour(tourId, date, numberOfParticipants);
 
 		return new ResponseEntity<TourDto>(new TourDto(updatedTour), HttpStatus.OK);
 	}
@@ -85,12 +82,10 @@ public class TourController {
 	 * @author Shyam Desai
 	 */
 	@DeleteMapping
-	public ResponseEntity<String> deleteTour(@RequestBody TourDto request) {
-		int tourId = request.getBookingId();
+	public ResponseEntity<String> deleteTour(@PathVariable int id) {
+		tourService.deleteTour(id);
 
-		tourService.deleteTour(tourId);
-
-		return new ResponseEntity<String>("Tour succesfully deleted", HttpStatus.OK);
+		return new ResponseEntity<String>("Tour succesfully deleted.", HttpStatus.OK);
 	}
 
 	// MAPPING OF OTHER GET METHODS

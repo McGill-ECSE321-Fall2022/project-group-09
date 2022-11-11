@@ -1,6 +1,6 @@
 package ca.mcgill.ecse.mmss.dto;
 
-import ca.mcgill.ecse.mmss.model.OpenDay;
+import java.sql.Date;
 import ca.mcgill.ecse.mmss.model.Tour;
 import ca.mcgill.ecse.mmss.model.Tour.ShiftTime;
 
@@ -10,18 +10,20 @@ public class TourDto {
 	private int numberOfParticipants;
 	private ShiftTime shiftTime;
 	private String visitorUsername;
-	private OpenDay date;
+	private Date date;
 
 	/**
 	 * Null constructor
+	 * 
 	 * @author Shyam Desai
 	 */
-	public TourDto() {}
-	
+	public TourDto() {
+	}
+
 	/**
 	 * Constructor that takes in a tour as an argument
 	 * 
-	 * @author Shidan Javaheri, Shyam Desai
+	 * @author Shyam Desai, Shidan Javaheri
 	 * @param tour
 	 */
 	public TourDto(Tour tour) {
@@ -30,13 +32,13 @@ public class TourDto {
 		this.numberOfParticipants = tour.getNumberOfParticipants();
 		this.shiftTime = tour.getTourTime();
 		this.visitorUsername = tour.getVisitor().getUsername();
-		this.date = tour.getDate();
+		this.date = tour.getDate().getDate();
 	}
 
 	/**
 	 * Constructor that takes in separate arguments
 	 * 
-	 * @author Shidan Javaheri, Shyam Desai
+	 * @author Shyam Desai, Shidan Javaheri
 	 * @param bookingId
 	 * @param pricePerPerson
 	 * @param numberOfParticipants
@@ -45,7 +47,7 @@ public class TourDto {
 	 * @param date
 	 */
 	public TourDto(int bookingId, double pricePerPerson, int numberOfParticipants, ShiftTime shiftTime,
-			String visitorUsername, OpenDay date) {
+			String visitorUsername, Date date) {
 		this.bookingId = bookingId;
 		this.pricePerPerson = pricePerPerson;
 		this.numberOfParticipants = numberOfParticipants;
@@ -74,11 +76,11 @@ public class TourDto {
 		return visitorUsername;
 	}
 
-	public OpenDay getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(OpenDay date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

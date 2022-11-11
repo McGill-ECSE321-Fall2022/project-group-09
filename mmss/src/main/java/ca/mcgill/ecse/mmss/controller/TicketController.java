@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.mmss.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,10 +47,9 @@ public class TicketController {
 	@PostMapping
 	public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto request) {
 		String visitorUsername = request.getVisitorUsername();
-//		Date date = request.get
-		int numberOfTickets = request.get
+		Date date = request.getDate();
 
-		Ticket persistedTicket = ticketService.createTicket(visitorUsername, null, 0);
+		Ticket persistedTicket = ticketService.createTicket(visitorUsername, date);
 
 		return new ResponseEntity<TicketDto>(new TicketDto(persistedTicket), HttpStatus.CREATED);
 	}
@@ -64,8 +64,9 @@ public class TicketController {
 	@PutMapping
 	public ResponseEntity<TicketDto> updateTicketStatus(@RequestBody TicketDto request) {
 		int ticketId = request.getBookingId();
+		Date date = request.getDate();
 
-		Ticket updatedTicket = ticketService.updateTicket(ticketId, null);
+		Ticket updatedTicket = ticketService.updateTicket(ticketId, date);
 
 		return new ResponseEntity<TicketDto>(new TicketDto(updatedTicket), HttpStatus.OK);
 	}
@@ -77,17 +78,16 @@ public class TicketController {
 	 * @return message indicated ticket deleted
 	 * @author Shyam Desai
 	 */
-	@DeleteMapping
-	public ResponseEntity<String> deleteTicket(@RequestBody TicketDto request) {
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteTicket(@PathVariable int id) {
 
-		int ticketId = request.getBookingId();
+		ticketService.deleteTicket(id);
 
-		ticketService.deleteTicket(ticketId);
-
-		return new ResponseEntity<String>("Ticket succesfully deleted", HttpStatus.OK);
+		return new ResponseEntity<String>("Ticket succesfully deleted.", HttpStatus.OK);
 	}
 
-	// MAPPING OF OTHER GET METHODS
+	// MAPPING OF OTHER GET METHODS.
+	
 
 	/**
 	 * Get all tickets
