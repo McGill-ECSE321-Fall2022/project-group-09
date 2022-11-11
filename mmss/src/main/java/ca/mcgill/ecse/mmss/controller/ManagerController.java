@@ -30,8 +30,6 @@ public class ManagerController {
     public ResponseEntity<ManagerDto> getMangaer() { 
         Manager manager = managerService.getManager();
         ManagerDto response = new ManagerDto(manager); 
-        Manager person = new Manager(); 
-        if (person.getUsername() == null) System.out.println("uhoh"); 
         return new ResponseEntity<ManagerDto>(response, HttpStatus.OK); 
     }
 
