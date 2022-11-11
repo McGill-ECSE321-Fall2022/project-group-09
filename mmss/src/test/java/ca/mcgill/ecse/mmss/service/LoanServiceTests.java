@@ -94,6 +94,7 @@ public class LoanServiceTests {
      */
     @Test 
     public void testRetrieveLoanById () { 
+
         // setup mocks
         when(loanRepository.findLoanByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> loan ); 
 
@@ -565,4 +566,8 @@ public class LoanServiceTests {
         assertEquals (HttpStatus.NOT_FOUND, ex.getStatus());
 
     }
-}
+
+} 
+
+
+
