@@ -32,7 +32,7 @@ public class TourController {
 	 * @return response entity with tour and ok status
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/{tour}")
+	 @GetMapping("/{id}")
 	public ResponseEntity<TourDto> getTour(@PathVariable int id) {
 		Tour retrievedTour = tourService.retrieveTourById(id);
 		return new ResponseEntity<TourDto>(new TourDto(retrievedTour), HttpStatus.OK);
@@ -96,7 +96,7 @@ public class TourController {
 	 * @return ArrayList of tours
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/getall")
+	@GetMapping
 	public ResponseEntity<ArrayList<TourDto>> getAllTours() {
 		ArrayList<Tour> retrievedTours = tourService.getAllTours();
 

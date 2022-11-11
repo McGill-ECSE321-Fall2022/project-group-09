@@ -31,7 +31,7 @@ public class TicketController {
 	 * @return response entity with the ticket and ok status
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/{ticket}")
+	 @GetMapping("/{id}")
 	public ResponseEntity<TicketDto> getTicket(@PathVariable int id) {
 		Ticket retrievedTicket = ticketService.retrieveTicketById(id);
 		return new ResponseEntity<TicketDto>(new TicketDto(retrievedTicket), HttpStatus.OK);
@@ -95,7 +95,7 @@ public class TicketController {
 	 * @return ArrayList of all tickets as Dto
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/getall")
+	@GetMapping
 	public ResponseEntity<ArrayList<TicketDto>> getAllTickets() {
 
 		ArrayList<Ticket> retrievedTickets = ticketService.getAllTickets();

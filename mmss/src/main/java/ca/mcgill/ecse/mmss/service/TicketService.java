@@ -65,13 +65,13 @@ public class TicketService {
 	@Transactional
 	public Ticket createTicket(String username, Date date) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
-		 OpenDay openDay = openDayRepository.findOpenDayByDate(date);
+		OpenDay openDay = openDayRepository.findOpenDayByDate(date);
 
 		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found.");
 		} else {
 			if (openDay == null) {
-				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot book tickets on this day.");
+				throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot book tickets on this day.");
 			}
 		}
 
@@ -103,7 +103,7 @@ public class TicketService {
 			throw new MmssException(HttpStatus.NOT_FOUND, "The ticket with this Id was not found.");
 		} else {
 			if (openDay == null) {
-				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot update tickets to this day.");
+				throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot update tickets to this day.");
 			} else {
 				ticket.setDate(openDay);
 

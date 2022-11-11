@@ -74,16 +74,21 @@ public class TourService {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
 		OpenDay openDay = openDayRepository.findOpenDayByDate(date);
 
-		if (openDay == null) {
+		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found.");
 		} else {
-			if (numberOfParticipants == 0) {
-				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot book a tour for 0 visitors.");
-			}
 
-			if (numberOfParticipants > 20) {
-				throw new MmssException(HttpStatus.NOT_FOUND,
-						"Cannot book a tour for more than 20 visitors in this time slot.");
+			if (openDay == null) {
+				throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found.");
+			} else {
+				if (numberOfParticipants == 0) {
+					throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot book a tour for 0 visitors.");
+				}
+
+				if (numberOfParticipants > 20) {
+					throw new MmssException(HttpStatus.BAD_REQUEST,
+							"Cannot book a tour for more than 20 visitors in this time slot.");
+				}
 			}
 		}
 
