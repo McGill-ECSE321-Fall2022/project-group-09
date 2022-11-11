@@ -94,7 +94,7 @@ public class LoanController {
         loanService.deleteLoan(id);
 
         // return updated Loan as Dto
-        return new ResponseEntity<String>("Loan succesfully deleted", HttpStatus.OK);
+        return new ResponseEntity<String>("Loan successfully deleted", HttpStatus.OK);
     }
 
     // MAPPING OF OTHER GET METHODS
@@ -104,7 +104,7 @@ public class LoanController {
      * 
      * @return an array list with a list of all loans as Dtos
      */
-    @GetMapping("/getall")
+    @GetMapping
     public ResponseEntity<ArrayList<LoanDto>> getAllLoans() {
 
         // get all loans
@@ -126,7 +126,7 @@ public class LoanController {
      * @param status the status
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/status")
+    @GetMapping("/status")
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@RequestParam ExchangeStatus status) {
 
         // get all loans
@@ -148,7 +148,7 @@ public class LoanController {
      * @param date
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/dueDate")
+    @GetMapping("/dueDate")
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithDueDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
 
         // get all loans
@@ -170,7 +170,7 @@ public class LoanController {
      * @param date
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/submittedDate")
+    @GetMapping("/submittedDate")
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithSubmittedDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         // get all loans
@@ -191,7 +191,7 @@ public class LoanController {
      * @param username
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/visitor")
+    @GetMapping("/visitor")
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@RequestParam String username) {
 
         // get all loans
