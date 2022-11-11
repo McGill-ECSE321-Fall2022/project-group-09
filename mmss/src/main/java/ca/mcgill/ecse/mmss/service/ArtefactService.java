@@ -85,7 +85,7 @@ public class ArtefactService {
     public ArrayList<Artefact> getAllArtefactsByRoomAndByCanLoan(int roomId, boolean canLoan) {
         // Valid room
         Room room = roomService.retrieveRoomById(roomId);
-        return artefactRepository.findAllByRoomAndByCanLoan(room, canLoan);
+        return artefactRepository.findAllByRoomAndCanLoan(room, canLoan);
     }
 
     /**

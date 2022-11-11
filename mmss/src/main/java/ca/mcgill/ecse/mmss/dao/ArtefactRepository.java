@@ -11,5 +11,5 @@ public interface ArtefactRepository extends CrudRepository<Artefact, Integer> {
     ArrayList<Artefact> findAll();
     ArrayList<Artefact> findAllByCanLoan(boolean canLoan);
     ArrayList<Artefact> findAllByRoom(Room room);
-    ArrayList<Artefact> findAllByRoomAndByCanLoan(Room room, boolean canLoan);
+    ArrayList<Artefact> findAllByRoomAndCanLoan(Room room, boolean canLoan);
 }

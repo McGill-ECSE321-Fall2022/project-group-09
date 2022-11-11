@@ -76,23 +76,28 @@ public class RoomService {
      * This method should be called only ONCE when booting the app.
      */
     @Transactional
-    public void createRooms() {
+    public ArrayList<Room> createRooms() {
+        ArrayList<Room> museumRooms = new ArrayList<>();
         // Create small rooms
         for (int i = 0; i < 5; i++) {
             Room smallRoom = new Room();
             smallRoom.setRoomType(Room.RoomType.Small);
+            museumRooms.add(smallRoom);
             roomRepository.save(smallRoom);
         }
         // Create large rooms
         for (int i = 0; i < 5; i++) {
             Room largeRoom = new Room();
             largeRoom.setRoomType(Room.RoomType.Large);
+            museumRooms.add(largeRoom);
             roomRepository.save(largeRoom);
         }
         // Create storage room
         Room storage = new Room();
         storage.setRoomType(Room.RoomType.Storage);
+        museumRooms.add(storage);
         roomRepository.save(storage);
+        return museumRooms;
     }
 
     /**
@@ -104,8 +109,6 @@ public class RoomService {
     @Transactional
     public boolean isRoomFull(int roomId) {
         Room room = retrieveRoomById(roomId);
-        if (room == null)
-            throw new MmssException(HttpStatus.NOT_FOUND, "Room not found");
         Room.RoomType type = room.getRoomType();
         int artefactCount = room.getArtefactCount();
         if (type == Room.RoomType.Small)
