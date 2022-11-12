@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,15 +22,16 @@ import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
+import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.dto.LoanDto;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Loan;
+import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
-import ca.mcgill.ecse.mmss.service.LoanService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class LoanIntegrationTests {
@@ -50,7 +52,8 @@ public class LoanIntegrationTests {
     private LoanRepository loanRepository;
 
     @Autowired
-    private LoanService loanService;
+    private OpenDayRepository openDayRepository; 
+
 
     // Four objects we will need in all our tests
     private Person person;
@@ -60,9 +63,11 @@ public class LoanIntegrationTests {
     private Loan loan;
 
     /**
-     * @author Shidan Javaheri
      * Creates the obejcts needed by all test cases
-     * BeforeAll because these objects are only modified in the database, not themselves
+     * BeforeAll because these objects are only modified in the database,
+     * not themselves
+     * 
+     * @author Shidan Javaheri
      */
     @BeforeEach
     public void createObjects() {
@@ -102,13 +107,14 @@ public class LoanIntegrationTests {
         loan.setVisitor(visitor);
         loan.setExchangeId(0);
         loan.setSubmittedDate(Date.valueOf("2022-10-10"));
-        loan.setExchangeStatus(ExchangeStatus.Pending); 
+        loan.setExchangeStatus(ExchangeStatus.Pending);
         loanRepository.save(loan);
     }
 
     /**
-     * @author Shidan Javaheri
      * Deletes objects after each test
+     * 
+     * @author Shidan Javaheri
      */
     @AfterEach
     public void deleteObjects() {
@@ -119,121 +125,265 @@ public class LoanIntegrationTests {
         this.artefact.delete();
         this.loan.delete();
         loanRepository.deleteAll();
-        visitorRepository.deleteAll(); 
+        visitorRepository.deleteAll();
         artefactRepository.deleteAll();
-        personRepository.deleteAll(); 
+        personRepository.deleteAll();
 
     }
 
     /**
      * Tests creating and retrieving a loan
+     *
+     * @author Shidan Javaheri
      */
     @Test
     public void testCreateAndGetLoan() {
         int loanId = testCreateLoan();
-        testGetLoan(loanId); 
+        testGetLoan(loanId);
     }
 
     /**
      * Tests creating a loan, and returns its id
+     * 
+     * @author Shidan Javaheri
      * @return the id of the loan
      */
-    public int testCreateLoan() { 
-        LoanDto request = new LoanDto(); 
+    public int testCreateLoan() {
+        LoanDto request = new LoanDto();
         request.setVisitorId("mo.salah@gmail.com");
         request.setArtefactId(artefact.getArtefactId());
 
         // make the post
-        ResponseEntity<LoanDto> response = client.postForEntity("/loan",request, LoanDto.class); 
+        ResponseEntity<LoanDto> response = client.postForEntity("/loan", request, LoanDto.class);
 
         // make assertions on the post
         assertNotNull(response);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertTrue(response.getBody().getExchangeId() > 0, "Response has a valid id"); 
+        assertTrue(response.getBody().getExchangeId() > 0, "Response has a valid id");
         return response.getBody().getExchangeId();
-        
+
     }
 
-    // retrieves the loan that was created by its id
-    public void testGetLoan(int id) { 
+    /**
+     * Retrieves the loan that was created by its id
+     * 
+     * @author Shidan Javaheri
+     */
+
+    public void testGetLoan(int id) {
         // try the get
-        ResponseEntity<LoanDto> response = client.getForEntity("/loan/" + id, LoanDto.class); 
+        ResponseEntity<LoanDto> response = client.getForEntity("/loan/" + id, LoanDto.class);
 
         // make assertions on the get
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertEquals(response.getBody().getExchangeId(), id, "Response has correct id"); 
+        assertEquals(response.getBody().getExchangeId(), id, "Response has correct id");
 
-    } 
+    }
 
     /**
      * Tests updating a loan status to approved
+     * 
+     * @author Shidan Javaheri
      */
     @Test
-    public void testUpdateLoantoApproved() { 
+    public void testUpdateLoantoApproved() {
         // make Dto for request
-        LoanDto request = new LoanDto(loan);
-        request.setExchangeStatus(ExchangeStatus.Approved); 
+        LoanDto loanDto = new LoanDto(loan);
+        loanDto.setExchangeStatus(ExchangeStatus.Approved);
+
+        // make an entity to send the request with 
+        HttpEntity<LoanDto> request= new HttpEntity<>(loanDto); 
 
         // send the request
-        client.put("/loan", request,LoanDto.class); 
+        ResponseEntity<LoanDto> response = client.exchange("/loan", HttpMethod.PUT ,request, LoanDto.class);
 
-        //get the updated Loan from the database
-        Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId()); 
+        // assertions on response
+        assertNotNull(response); 
+        assertNotNull(response.getBody()); 
+        assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Approved); 
 
-        //verify the update
+        // get the updated Loan from the database
+        Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId());
+
+        // verify the update
         assertEquals(updatedLoan.getExchangeStatus(), ExchangeStatus.Approved);
-        
-    } 
-    
+
+    }
+
     /**
      * Tests declining a loan status
      * This automatically tests the delete service
+     * 
+     * @author Shidan Javaheri
      */
     @Test
-    public void testUpdateLoantoDeclined() { 
+    public void testUpdateLoantoDeclined() {
         // make Dto for request
-        LoanDto request = new LoanDto(loan);
-        request.setExchangeStatus(ExchangeStatus.Declined); 
+        LoanDto loanDto = new LoanDto(loan);
+        loanDto.setExchangeStatus(ExchangeStatus.Declined);
+
+        // make an entity to send the request with 
+        HttpEntity<LoanDto> request= new HttpEntity<>(loanDto); 
 
         // send the request
-        client.put("/loan", request,LoanDto.class); 
+        ResponseEntity<LoanDto> response = client.exchange("/loan", HttpMethod.PUT ,request, LoanDto.class);
 
-        //get the updated Loan from the database
-        Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId()); 
+        // assertions on response
+        assertNotNull(response); 
+        assertNotNull(response.getBody()); 
+        assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Declined); 
 
-        //verify the update
-        assertNull(updatedLoan, "Loan was delted");
-        
+        // get the updated Loan from the database
+        Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId());
+
+        // verify the loan doesn't exist anymore
+        assertNull(updatedLoan); 
+
     }
+
+    /**
+     * Tests deleting a loan
+     * 
+     * @author Shidan Javaheri
+     */
 
     @Test
-    public void testDeleteLoan() { 
+    public void testDeleteLoan() {
+
         // make Dto for request
         LoanDto request = new LoanDto(loan);
-        int id = request.getExchangeId(); 
+        int id = request.getExchangeId();
 
-        // Make an Http entity to send the request
-        HttpEntity<LoanDto> entity = new HttpEntity<LoanDto>(request); 
+        
+        ResponseEntity<String> response = client.exchange("/loan/" + id, HttpMethod.DELETE,null, String.class);
 
-        // Send the request
-        ResponseEntity<String> response = client.exchange("/loan", HttpMethod.DELETE, entity, String.class);
+        // assert on the response
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals("Loan successfully deleted", response.getBody());
 
-        //get the updated Loan from the database
-        Loan updatedLoan = loanRepository.findLoanByExchangeId(id); 
+        // get the updated Loan from the database
+        Loan updatedLoan = loanRepository.findLoanByExchangeId(id);
 
-
-        // verify the loan has been deleted 
-        assertNull(updatedLoan, "Loan was delted");
-
-        // verify the message of success
-        assertEquals(response.getBody(), "Loan succesfully deleted");
+        // verify the loan has been deleted
+        assertNull(updatedLoan, "Loan successfully delted");
 
     }
 
+    /**
+     * Tests getting all loans
+     * 
+     * @author Shidan Javaheri
+     */
+
+    @Test
+    public void testGetAllLoans() {
+
+        // make request
+        var request = client.getForEntity("/loan", ArrayList.class);
+
+        // get array list of loans
+        ArrayList<LoanDto> extractedLoans = request.getBody();
+
+        // assertions
+        assertNotNull(extractedLoans);
+        assertEquals(1, extractedLoans.size());
+
+    };
+
+    /**
+     * Tests getting all loans by their status
+     * 
+     * @author Shidan Javaheri
+     */
+
+    @Test
+    public void testGetAllLoansByStatus() {
+        // make request
+        var request = client.getForEntity("/loan/status?status=Pending", ArrayList.class);
+        var requestEmpty = client.getForEntity("/loan/status?status=Declined", ArrayList.class);
+
+        // get array list of loans
+        ArrayList<LoanDto> extractedLoans = request.getBody();
+        ArrayList<LoanDto> empty = requestEmpty.getBody();
+
+        // assertions
+        assertNotNull(extractedLoans);
+        assertEquals(0, empty.size());
+        assertEquals(1, extractedLoans.size());
+    }
+
+    /**
+     * Tests getting all loans by their Submitted date 
+     * 
+     * @author Shidan Javaheri
+     */
+
+    @Test
+    public void testGetAllLoansBySubmittedDate() {
+        // make request
+        var request = client.getForEntity("/loan/submittedDate?date=2022-10-10", ArrayList.class);
+        var requestEmpty = client.getForEntity("/loan/submittedDate?date=2022-09-09", ArrayList.class);
+
+        // get array list of loans
+        ArrayList<LoanDto> extractedLoans = request.getBody();
+        ArrayList<LoanDto> empty = requestEmpty.getBody();
+
+        // assertions
+        assertNotNull(extractedLoans);
+        assertEquals(0, empty.size());
+        assertEquals(1, extractedLoans.size());
+    }
+
+    /**
+     * Tests getting all loans by their due date 
+     * 
+     * @author Shidan Javaheri
+     */
+
+    @Test
+    public void testGetAllLoansByDueDate() {
+
+        // make the loan have a due date
+        OpenDay dueDate = new OpenDay(Date.valueOf("2022-10-17")); 
+        openDayRepository.save(dueDate); 
+
+        loan.setDueDate(dueDate); 
+        loanRepository.save(loan); 
+
+        // make request
+        var request = client.getForEntity("/loan/dueDate?date=2022-10-17", ArrayList.class);
+
+        // get array list of loans
+        ArrayList<LoanDto> extractedLoans = request.getBody();
+
+        // assertions
+        assertNotNull(extractedLoans);
+        assertEquals(1, extractedLoans.size());
+    }
+
+    /**
+     * Tests getting all loans by a visitor
+     * 
+     * @author Shidan Javaheri
+     */
+
+    @Test
+    public void testGetAllLoansByVisitor() {
+        // make request
+        var request = client.getForEntity("/loan/visitor?username=mo.salah@gmail.com", ArrayList.class);
+
+        // get array list of loans
+        ArrayList<LoanDto> extractedLoans = request.getBody();
+
+        // assertions
+        assertNotNull(extractedLoans);
+        assertEquals(1, extractedLoans.size());
+    }
 
 
 }

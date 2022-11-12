@@ -36,22 +36,24 @@ public class LoanService {
     private ArtefactRepository artefactRepository;
 
     @Autowired
-    OpenDayRepository openDayRepository;
+    private OpenDayRepository openDayRepository;
 
     @Autowired
-    NotificationRepository notificationRepository;
+    private NotificationRepository notificationRepository;
 
     @Autowired
-    CommunicationRepository communicationRepository;
+    private CommunicationRepository communicationRepository;
 
     /**
+     * Finds a loan by its id
+     * 
      * @author Shidan Javaheri
-     *         Finds a loan by its id
      * @param id
      * @return the loan, or throw an exception that the loan was not found
      */
     @Transactional
     public Loan retrieveLoanById(int id) {
+
         // use the repository method
         Loan loan = loanRepository.findLoanByExchangeId(id);
         if (loan == null) {
@@ -106,7 +108,7 @@ public class LoanService {
 
         OpenDay openDayDue = openDayRepository.findOpenDayByDate(dueDate);
         if (openDayDue == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "There is no open day with this due date");
+            throw new MmssException(HttpStatus.NOT_FOUND, "There is no open day with this date");
         }
         // use the repository
         ArrayList<Loan> allLoans = loanRepository.findByDueDate(openDayDue);
@@ -143,7 +145,7 @@ public class LoanService {
 
         Visitor visitor = visitorRepository.findVisitorByUsername(username);
         if (visitor == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found");
+            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this username was not found");
         }
 
         // use the repository
@@ -171,7 +173,7 @@ public class LoanService {
 
         // check visitor not null
         if (visitor == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found");
+            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this username was not found");
         } else {
 
             // not null, so get all their loans and their balance for further checks
@@ -233,7 +235,7 @@ public class LoanService {
 
         // save the artefact with new loan status
         artefact.setCurrentlyOnLoan(true);
-        artefactRepository.save(artefact); 
+        artefactRepository.save(artefact);
 
         // return a Dto of the created loan object
         return (loan);
