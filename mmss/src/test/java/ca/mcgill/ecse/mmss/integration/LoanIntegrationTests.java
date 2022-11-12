@@ -69,6 +69,7 @@ public class LoanIntegrationTests {
      * 
      * @author Shidan Javaheri
      */
+
     @BeforeEach
     public void createObjects() {
         // create necessary objects for test, and save them to the database
@@ -157,7 +158,7 @@ public class LoanIntegrationTests {
         ResponseEntity<LoanDto> response = client.postForEntity("/loan", request, LoanDto.class);
 
         // make assertions on the post
-        assertNotNull(response);
+        assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
         assertTrue(response.getBody().getExchangeId() > 0, "Response has a valid id");
@@ -203,6 +204,7 @@ public class LoanIntegrationTests {
 
         // assertions on response
         assertNotNull(response); 
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody()); 
         assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Approved); 
 
@@ -234,6 +236,7 @@ public class LoanIntegrationTests {
 
         // assertions on response
         assertNotNull(response); 
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody()); 
         assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Declined); 
 
@@ -263,6 +266,7 @@ public class LoanIntegrationTests {
 
         // assert on the response
         assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("Loan successfully deleted", response.getBody());
 
@@ -284,10 +288,14 @@ public class LoanIntegrationTests {
     public void testGetAllLoans() {
 
         // make request
-        var request = client.getForEntity("/loan", ArrayList.class);
+        var response = client.getForEntity("/loan", ArrayList.class);
 
+        // assertions on the response
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody()); 
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
 
         // assertions
         assertNotNull(extractedLoans);
@@ -304,12 +312,21 @@ public class LoanIntegrationTests {
     @Test
     public void testGetAllLoansByStatus() {
         // make request
-        var request = client.getForEntity("/loan/status?status=Pending", ArrayList.class);
-        var requestEmpty = client.getForEntity("/loan/status?status=Declined", ArrayList.class);
+        var response = client.getForEntity("/loan/status?status=Pending", ArrayList.class);
+        var responseEmpty = client.getForEntity("/loan/status?status=Declined", ArrayList.class);
+
+        // assertions on the responses
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody()); 
+
+        assertNotNull(responseEmpty);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(responseEmpty.getBody()); 
 
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
-        ArrayList<LoanDto> empty = requestEmpty.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
+        ArrayList<LoanDto> empty = responseEmpty.getBody();
 
         // assertions
         assertNotNull(extractedLoans);
@@ -326,12 +343,21 @@ public class LoanIntegrationTests {
     @Test
     public void testGetAllLoansBySubmittedDate() {
         // make request
-        var request = client.getForEntity("/loan/submittedDate?date=2022-10-10", ArrayList.class);
-        var requestEmpty = client.getForEntity("/loan/submittedDate?date=2022-09-09", ArrayList.class);
+        var response = client.getForEntity("/loan/submittedDate?date=2022-10-10", ArrayList.class);
+        var responseEmpty = client.getForEntity("/loan/submittedDate?date=2022-09-09", ArrayList.class);
+
+        // assertions on the responses
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody()); 
+
+        assertNotNull(responseEmpty);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(responseEmpty.getBody()); 
 
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
-        ArrayList<LoanDto> empty = requestEmpty.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
+        ArrayList<LoanDto> empty = responseEmpty.getBody();
 
         // assertions
         assertNotNull(extractedLoans);
@@ -356,10 +382,15 @@ public class LoanIntegrationTests {
         loanRepository.save(loan); 
 
         // make request
-        var request = client.getForEntity("/loan/dueDate?date=2022-10-17", ArrayList.class);
+        var response = client.getForEntity("/loan/dueDate?date=2022-10-17", ArrayList.class);
+
+        // assertions on the response
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody()); 
 
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
 
         // assertions
         assertNotNull(extractedLoans);
@@ -375,10 +406,15 @@ public class LoanIntegrationTests {
     @Test
     public void testGetAllLoansByVisitor() {
         // make request
-        var request = client.getForEntity("/loan/visitor?username=mo.salah@gmail.com", ArrayList.class);
+        var response = client.getForEntity("/loan/visitor?username=mo.salah@gmail.com", ArrayList.class);
+
+        // assertions on the response
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody()); 
 
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
 
         // assertions
         assertNotNull(extractedLoans);

@@ -24,7 +24,7 @@ import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.service.LoanService;
 
 @RestController
-@RequestMapping("/loan")
+@RequestMapping({"/loan","/loan/"})
 public class LoanController {
 
     @Autowired
@@ -37,9 +37,11 @@ public class LoanController {
      * @param id
      * @return a response entity with the loan and ok status
      */
-    @GetMapping("/{id}")
+    @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<LoanDto> getLoan(@PathVariable int id) {
+        // call service
         Loan retrievedLoan = loanService.retrieveLoanById(id);
+        // return response entity with Dto
         return new ResponseEntity<LoanDto>(new LoanDto(retrievedLoan), HttpStatus.OK);
     }
 
@@ -92,7 +94,7 @@ public class LoanController {
      * @param request 
      * @return A message saying the loan was deleted
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping({"/{id}", "/{id}/"})
     public ResponseEntity<String> deleteLoan(@PathVariable int id) {
         // call service layer
         loanService.deleteLoan(id);
@@ -132,7 +134,7 @@ public class LoanController {
      * @param status the status
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/status")
+    @GetMapping({"/status", "/status/"})
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@RequestParam ExchangeStatus status) {
 
         // get all loans
@@ -155,7 +157,7 @@ public class LoanController {
      * @param date
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/dueDate")
+    @GetMapping({"/dueDate", "/dueDate/"})
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithDueDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
 
         // get all loans
@@ -178,7 +180,7 @@ public class LoanController {
      * @param date
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/submittedDate")
+    @GetMapping({"/submittedDate", "/submittedDate/"})
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithSubmittedDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         // get all loans
@@ -200,8 +202,8 @@ public class LoanController {
      * @param username
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/visitor")
-    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@RequestParam String username) {
+    @GetMapping({"/visitor","/visitor/"})
+    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithVisitor(@RequestParam String username) {
 
         // get all loans
         ArrayList<Loan> retrievedLoans = loanService.getAllLoansByVisitor(username);
