@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import org.hibernate.engine.jdbc.env.spi.ExtractedDatabaseMetaData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,6 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
-import ca.mcgill.ecse.mmss.service.LoanService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class LoanIntegrationTests {
@@ -56,8 +54,6 @@ public class LoanIntegrationTests {
     @Autowired
     private OpenDayRepository openDayRepository; 
 
-    @Autowired
-    private LoanService loanService;
 
     // Four objects we will need in all our tests
     private Person person;
@@ -196,11 +192,19 @@ public class LoanIntegrationTests {
     @Test
     public void testUpdateLoantoApproved() {
         // make Dto for request
-        LoanDto request = new LoanDto(loan);
-        request.setExchangeStatus(ExchangeStatus.Approved);
+        LoanDto loanDto = new LoanDto(loan);
+        loanDto.setExchangeStatus(ExchangeStatus.Approved);
+
+        // make an entity to send the request with 
+        HttpEntity<LoanDto> request= new HttpEntity<>(loanDto); 
 
         // send the request
-        client.put("/loan", request, LoanDto.class);
+        ResponseEntity<LoanDto> response = client.exchange("/loan", HttpMethod.PUT ,request, LoanDto.class);
+
+        // assertions on response
+        assertNotNull(response); 
+        assertNotNull(response.getBody()); 
+        assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Approved); 
 
         // get the updated Loan from the database
         Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId());
@@ -219,17 +223,25 @@ public class LoanIntegrationTests {
     @Test
     public void testUpdateLoantoDeclined() {
         // make Dto for request
-        LoanDto request = new LoanDto(loan);
-        request.setExchangeStatus(ExchangeStatus.Declined);
+        LoanDto loanDto = new LoanDto(loan);
+        loanDto.setExchangeStatus(ExchangeStatus.Declined);
+
+        // make an entity to send the request with 
+        HttpEntity<LoanDto> request= new HttpEntity<>(loanDto); 
 
         // send the request
-        client.put("/loan", request, LoanDto.class);
+        ResponseEntity<LoanDto> response = client.exchange("/loan", HttpMethod.PUT ,request, LoanDto.class);
+
+        // assertions on response
+        assertNotNull(response); 
+        assertNotNull(response.getBody()); 
+        assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Declined); 
 
         // get the updated Loan from the database
         Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId());
 
-        // verify the update
-        assertNull(updatedLoan, "Loan was delted");
+        // verify the loan doesn't exist anymore
+        assertNull(updatedLoan); 
 
     }
 
@@ -246,13 +258,19 @@ public class LoanIntegrationTests {
         LoanDto request = new LoanDto(loan);
         int id = request.getExchangeId();
 
-        client.delete("/loan/" + id);
+        
+        ResponseEntity<String> response = client.exchange("/loan/" + id, HttpMethod.DELETE,null, String.class);
+
+        // assert on the response
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals("Loan successfully deleted", response.getBody());
 
         // get the updated Loan from the database
         Loan updatedLoan = loanRepository.findLoanByExchangeId(id);
 
         // verify the loan has been deleted
-        assertNull(updatedLoan, "Loan was delted");
+        assertNull(updatedLoan, "Loan successfully delted");
 
     }
 
@@ -266,7 +284,7 @@ public class LoanIntegrationTests {
     public void testGetAllLoans() {
 
         // make request
-        var request = client.getForEntity("/loan/getall", ArrayList.class);
+        var request = client.getForEntity("/loan", ArrayList.class);
 
         // get array list of loans
         ArrayList<LoanDto> extractedLoans = request.getBody();
@@ -286,8 +304,8 @@ public class LoanIntegrationTests {
     @Test
     public void testGetAllLoansByStatus() {
         // make request
-        var request = client.getForEntity("/loan/getall/status?status=Pending", ArrayList.class);
-        var requestEmpty = client.getForEntity("/loan/getall/status?status=Declined", ArrayList.class);
+        var request = client.getForEntity("/loan/status?status=Pending", ArrayList.class);
+        var requestEmpty = client.getForEntity("/loan/status?status=Declined", ArrayList.class);
 
         // get array list of loans
         ArrayList<LoanDto> extractedLoans = request.getBody();
@@ -308,8 +326,8 @@ public class LoanIntegrationTests {
     @Test
     public void testGetAllLoansBySubmittedDate() {
         // make request
-        var request = client.getForEntity("/loan/getall/submittedDate?date=2022-10-10", ArrayList.class);
-        var requestEmpty = client.getForEntity("/loan/getall/submittedDate?date=2022-09-09", ArrayList.class);
+        var request = client.getForEntity("/loan/submittedDate?date=2022-10-10", ArrayList.class);
+        var requestEmpty = client.getForEntity("/loan/submittedDate?date=2022-09-09", ArrayList.class);
 
         // get array list of loans
         ArrayList<LoanDto> extractedLoans = request.getBody();
@@ -338,7 +356,7 @@ public class LoanIntegrationTests {
         loanRepository.save(loan); 
 
         // make request
-        var request = client.getForEntity("/loan/getall/dueDate?date=2022-10-17", ArrayList.class);
+        var request = client.getForEntity("/loan/dueDate?date=2022-10-17", ArrayList.class);
 
         // get array list of loans
         ArrayList<LoanDto> extractedLoans = request.getBody();
@@ -357,7 +375,7 @@ public class LoanIntegrationTests {
     @Test
     public void testGetAllLoansByVisitor() {
         // make request
-        var request = client.getForEntity("/loan/getall/visitor?username=mo.salah@gmail.com", ArrayList.class);
+        var request = client.getForEntity("/loan/visitor?username=mo.salah@gmail.com", ArrayList.class);
 
         // get array list of loans
         ArrayList<LoanDto> extractedLoans = request.getBody();
@@ -366,10 +384,6 @@ public class LoanIntegrationTests {
         assertNotNull(extractedLoans);
         assertEquals(1, extractedLoans.size());
     }
-
-
-
-
 
 
 }

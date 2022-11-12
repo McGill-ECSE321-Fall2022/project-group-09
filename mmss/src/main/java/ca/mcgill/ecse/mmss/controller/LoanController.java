@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +32,7 @@ public class LoanController {
 
     /**
      * Get a loan by its Id
+     * @author Shidan Javaheri
      * 
      * @param id
      * @return a response entity with the loan and ok status
@@ -45,6 +45,7 @@ public class LoanController {
 
     /**
      * Create a new loan based on an input request
+     * @author Shidan Javaheri
      * 
      * @param request a LoanDto
      * @return the created Loan as a Dto, in a response entity, status ok
@@ -65,6 +66,7 @@ public class LoanController {
 
     /**
      * Update a loan's status
+     * @author Shidan Javaheri
      * 
      * @param request containing the loan id and status
      * @return the updated loan as a Dto, in a response entity, status ok
@@ -85,6 +87,7 @@ public class LoanController {
 
     /**
      * Delete a loan given its id
+     * @author Shidan Javaheri
      * 
      * @param request 
      * @return A message saying the loan was deleted
@@ -95,17 +98,18 @@ public class LoanController {
         loanService.deleteLoan(id);
 
         // return updated Loan as Dto
-        return new ResponseEntity<String>("Loan succesfully deleted", HttpStatus.OK);
+        return new ResponseEntity<String>("Loan successfully deleted", HttpStatus.OK);
     }
 
     // MAPPING OF OTHER GET METHODS
 
     /**
      * Gets all the loans in the system
+     * @author Shidan Javaheri
      * 
      * @return an array list with a list of all loans as Dtos
      */
-    @GetMapping("/getall")
+    @GetMapping
     public ResponseEntity<ArrayList<LoanDto>> getAllLoans() {
 
         // get all loans
@@ -123,11 +127,12 @@ public class LoanController {
 
     /**
      * Gts all the loans in the system with a given status
+     * @author Shidan Javaheri
      * 
      * @param status the status
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/status")
+    @GetMapping("/status")
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@RequestParam ExchangeStatus status) {
 
         // get all loans
@@ -145,11 +150,12 @@ public class LoanController {
 
     /**
      * Gets all loans due on a certain day
+     * @author Shidan Javaheri
      * 
      * @param date
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/dueDate")
+    @GetMapping("/dueDate")
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithDueDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
 
         // get all loans
@@ -167,11 +173,12 @@ public class LoanController {
 
     /**
      * Gets all the loans submitted on a certain day
+     * @author Shidan Javaheri
      * 
      * @param date
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/submittedDate")
+    @GetMapping("/submittedDate")
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithSubmittedDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         // get all loans
@@ -189,10 +196,11 @@ public class LoanController {
 
     /**
      * Gets all the loans belonging to a visitor
+     * @author Shidan Javaheri
      * @param username
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/visitor")
+    @GetMapping("/visitor")
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@RequestParam String username) {
 
         // get all loans
