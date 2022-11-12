@@ -3,6 +3,7 @@ package ca.mcgill.ecse.mmss.controller;
 import java.sql.Date;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse.mmss.dto.TicketDto;
 import ca.mcgill.ecse.mmss.model.Ticket;
@@ -31,7 +33,7 @@ public class TicketController {
 	 * @return response entity with the ticket and ok status
 	 * @author Shyam Desai
 	 */
-	 @GetMapping("/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<TicketDto> getTicket(@PathVariable int id) {
 		Ticket retrievedTicket = ticketService.retrieveTicketById(id);
 		return new ResponseEntity<TicketDto>(new TicketDto(retrievedTicket), HttpStatus.OK);
@@ -41,7 +43,7 @@ public class TicketController {
 	 * Create ticket based on input request
 	 * 
 	 * @param request
-	 * @return created Ticket as Dto in response entity with ok status
+	 * @return created Ticket as Dto in response entity with created status
 	 * @author Shyam Desai
 	 */
 	@PostMapping
@@ -87,7 +89,6 @@ public class TicketController {
 	}
 
 	// MAPPING OF OTHER GET METHODS.
-	
 
 	/**
 	 * Get all tickets
@@ -99,6 +100,45 @@ public class TicketController {
 	public ResponseEntity<ArrayList<TicketDto>> getAllTickets() {
 
 		ArrayList<Ticket> retrievedTickets = ticketService.getAllTickets();
+
+		ArrayList<TicketDto> allTicketsDto = new ArrayList<>();
+		for (Ticket ticket : retrievedTickets) {
+			allTicketsDto.add(new TicketDto(ticket));
+		}
+
+		return new ResponseEntity<ArrayList<TicketDto>>(allTicketsDto, HttpStatus.OK);
+	}
+
+	/**
+	 * Get all tickets given a date
+	 * 
+	 * @param date
+	 * @return ArrayList of all tickets as DTOs
+	 * @author Shyam Desai
+	 */
+	@GetMapping("/date")
+	public ResponseEntity<ArrayList<TicketDto>> getAllTicketsWithDate(
+			@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+		ArrayList<Ticket> retrievedTickets = ticketService.getAllTicketsByDate(date);
+
+		ArrayList<TicketDto> allTicketsDto = new ArrayList<>();
+		for (Ticket ticket : retrievedTickets) {
+			allTicketsDto.add(new TicketDto(ticket));
+		}
+
+		return new ResponseEntity<ArrayList<TicketDto>>(allTicketsDto, HttpStatus.OK);
+	}
+
+	/**
+	 * Get all tickets given a visitor
+	 * 
+	 * @param username
+	 * @return ArrayList of all tickets as DTOs
+	 * @author Shyam Desai
+	 */
+	@GetMapping("/visitor")
+	public ResponseEntity<ArrayList<TicketDto>> getAllTicketsWithUsername(@RequestParam String username) {
+		ArrayList<Ticket> retrievedTickets = ticketService.getAllTicketsByVisitor(username);
 
 		ArrayList<TicketDto> allTicketsDto = new ArrayList<>();
 		for (Ticket ticket : retrievedTickets) {

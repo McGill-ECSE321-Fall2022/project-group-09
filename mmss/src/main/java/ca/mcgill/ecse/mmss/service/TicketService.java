@@ -48,8 +48,49 @@ public class TicketService {
 	 * @return ArrayList of Tickets
 	 * @author Shyam Desai
 	 */
+	@Transactional
 	public ArrayList<Ticket> getAllTickets() {
 		ArrayList<Ticket> allTickets = ticketRepository.findAll();
+		return allTickets;
+	}
+
+	/**
+	 * Find all tickets given a date
+	 * 
+	 * @param date
+	 * @return ArrayList of all tickets
+	 * @author Shyam Desai
+	 */
+	@Transactional
+	public ArrayList<Ticket> getAllTicketsByDate(Date date) {
+		OpenDay openDateToFind = openDayRepository.findOpenDayByDate(date);
+
+		if (openDateToFind == null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "There is no open day with this date.");
+		}
+
+		ArrayList<Ticket> allTickets = ticketRepository.findByDate(openDateToFind);
+
+		return allTickets;
+	}
+
+	/**
+	 * Get all tickets given a visitor
+	 * 
+	 * @param username
+	 * @return ArrayList of all tickets
+	 * @author Shyam Desai
+	 */
+	@Transactional
+	public ArrayList<Ticket> getAllTicketsByVisitor(String username) {
+		Visitor visitor = visitorRepository.findVisitorByUsername(username);
+
+		if (visitor == null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this username was not found.");
+		}
+
+		ArrayList<Ticket> allTickets = ticketRepository.findByVisitor(visitor);
+
 		return allTickets;
 	}
 

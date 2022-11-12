@@ -58,6 +58,70 @@ public class TourService {
 	}
 
 	/**
+	 * Get all tours given date
+	 * 
+	 * @param date
+	 * @return ArrayList of all tours
+	 * @author Shyam Desai
+	 */
+	@Transactional
+	public ArrayList<Tour> getAllToursByDate(Date date) {
+		OpenDay openDateToFind = openDayRepository.findOpenDayByDate(date);
+
+		if (openDateToFind == null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "There is no open day with this date.");
+		}
+
+		ArrayList<Tour> allTours = tourRepository.findByDate(openDateToFind);
+
+		return allTours;
+	}
+
+	/**
+	 * Get all tours given a visitor
+	 * 
+	 * @param username
+	 * @return ArrayList of all tours
+	 * @author Shyam Desai
+	 */
+	@Transactional
+	public ArrayList<Tour> getAllToursByVisitor(String username) {
+		Visitor visitor = visitorRepository.findVisitorByUsername(username);
+
+		if (visitor == null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this username was not found.");
+		}
+
+		ArrayList<Tour> allTours = tourRepository.findByVisitor(visitor);
+
+		return allTours;
+	}
+
+	/**
+	 * Get all tours given a number of participants
+	 * 
+	 * @param numberOfParticipants
+	 * @return ArrayList of all tours
+	 * @author Shyam Desai
+	 */
+	@Transactional
+	public ArrayList<Tour> getAllToursByNumberOfParticipants(int numberOfParticipants) {
+		return tourRepository.findByNumberOfParticipants(numberOfParticipants);
+	}
+
+	/**
+	 * Get all tours given a shift time
+	 * 
+	 * @param tourTime
+	 * @return ArrayList of all tours
+	 * @author Shyam Desai
+	 */
+	@Transactional
+	public ArrayList<Tour> getAllToursByShiftTime(ShiftTime tourTime) {
+		return tourRepository.findByShiftTime(tourTime);
+	}
+
+	/**
 	 * Create tours Check if museum is open on day Check number of participants is 0
 	 * or more than 20
 	 * 

@@ -3,6 +3,7 @@ package ca.mcgill.ecse.mmss.controller;
 import java.sql.Date;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse.mmss.dto.TourDto;
 import ca.mcgill.ecse.mmss.model.Tour;
@@ -32,7 +34,7 @@ public class TourController {
 	 * @return response entity with tour and ok status
 	 * @author Shyam Desai
 	 */
-	 @GetMapping("/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<TourDto> getTour(@PathVariable int id) {
 		Tour retrievedTour = tourService.retrieveTourById(id);
 		return new ResponseEntity<TourDto>(new TourDto(retrievedTour), HttpStatus.OK);
@@ -42,7 +44,7 @@ public class TourController {
 	 * Create tour
 	 * 
 	 * @param request
-	 * @return tour as Dto in response entity with ok status
+	 * @return tour as Dto in response entity with created status
 	 * @author Shyam Desai
 	 */
 	@PostMapping
@@ -102,6 +104,84 @@ public class TourController {
 
 		ArrayList<TourDto> allToursDto = new ArrayList<>();
 		for (Tour tour : retrievedTours) {
+			allToursDto.add(new TourDto(tour));
+		}
+
+		return new ResponseEntity<ArrayList<TourDto>>(allToursDto, HttpStatus.OK);
+	}
+
+	/**
+	 * Get all tours given a date
+	 * 
+	 * @param date
+	 * @return ArrayList of all tours as DTOs
+	 * @author Shyam Desai
+	 */
+	@GetMapping("/date")
+	public ResponseEntity<ArrayList<TourDto>> getAllToursWithDate(
+			@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+		ArrayList<Tour> retrievedTours = tourService.getAllToursByDate(date);
+
+		ArrayList<TourDto> allToursDto = new ArrayList<>();
+		for (Tour tour : retrievedTours) {
+			allToursDto.add(new TourDto(tour));
+		}
+
+		return new ResponseEntity<ArrayList<TourDto>>(allToursDto, HttpStatus.OK);
+	}
+
+	/**
+	 * Get all tours given a visitor
+	 * 
+	 * @param username
+	 * @return ArrayList of all tours as DTOs
+	 * @author Shyam Desai
+	 */
+	@GetMapping("/visitor")
+	public ResponseEntity<ArrayList<TourDto>> getAllToursWithUsername(@RequestParam String username) {
+		ArrayList<Tour> retrievedTours = tourService.getAllToursByVisitor(username);
+
+		ArrayList<TourDto> allToursDto = new ArrayList<>();
+		for (Tour tour : retrievedTours) {
+			allToursDto.add(new TourDto(tour));
+		}
+
+		return new ResponseEntity<ArrayList<TourDto>>(allToursDto, HttpStatus.OK);
+	}
+
+	/**
+	 * Get all tours given number of participants
+	 * 
+	 * @param numberOfParticipants
+	 * @return ArrayList of all tours as DTOs
+	 * @author Shyam Desai
+	 */
+	@GetMapping("/participants")
+	public ResponseEntity<ArrayList<TourDto>> getAllToursWithParticipants(@RequestParam int numberOfParticipants) {
+		ArrayList<Tour> retrievedNumberOfParticipants = tourService
+				.getAllToursByNumberOfParticipants(numberOfParticipants);
+
+		ArrayList<TourDto> allToursDto = new ArrayList<>();
+		for (Tour tour : retrievedNumberOfParticipants) {
+			allToursDto.add(new TourDto(tour));
+		}
+
+		return new ResponseEntity<ArrayList<TourDto>>(allToursDto, HttpStatus.OK);
+	}
+
+	/**
+	 * Get all tours given shift time
+	 * 
+	 * @param tourTime
+	 * @return ArrayList of all tours as DTOs
+	 * @author Shyam Desai
+	 */
+	@GetMapping("/shift")
+	public ResponseEntity<ArrayList<TourDto>> getAllToursWithShiftTime(@RequestParam ShiftTime tourTime) {
+		ArrayList<Tour> retrievedShiftTime = tourService.getAllToursByShiftTime(tourTime);
+
+		ArrayList<TourDto> allToursDto = new ArrayList<>();
+		for (Tour tour : retrievedShiftTime) {
 			allToursDto.add(new TourDto(tour));
 		}
 
