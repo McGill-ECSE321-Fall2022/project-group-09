@@ -241,7 +241,7 @@ public class ArtefactService {
         // Valid room id
         Room room = roomService.retrieveRoomById(roomId);
         // Destination and current rooms are the same
-        if (artefact.getRoom().getRoomId() == roomId)
+        if (artefact.hasRoom() && artefact.getRoom().getRoomId() == roomId)
             throw new MmssException(HttpStatus.BAD_REQUEST, "The destination and current rooms cannot be the same.");
         // Not previously in a room
         if (!artefact.hasRoom())
@@ -259,7 +259,7 @@ public class ArtefactService {
         Artefact artefact = getArtefactById(artefactId);
         // Check if loan are associated with it
         ArrayList<Loan> loans = loanRepository.findAllByArtefact(artefact);
-        if (loans != null)
+        if (!loans.isEmpty())
             throw new MmssException(HttpStatus.NOT_FOUND, "The artefact is loaned or a loan request for this artefact is pending.");
         // Update the artefact count for a room
         removeArtefactFromItsRoom(artefactId);
@@ -276,13 +276,13 @@ public class ArtefactService {
      * @param insuranceFee
      * @param loanFee
      */
-    private void checkValidArtefactParams(String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
+    public void checkValidArtefactParams(String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
         // Check for valid name
-        if ( name.length() > 50 || name.isEmpty())
+        if ( name.length() > 50 || name.isBlank())
             throw new MmssException(HttpStatus.BAD_REQUEST,
                     "The artefact’s name cannot be empty or longer than 50 characters.");
         // Check for valid description
-        if (description.length() > 300 || description.isEmpty())
+        if (description.length() > 300 || description.isBlank())
             throw new MmssException(HttpStatus.BAD_REQUEST,
                     "The artefact’s description cannot be empty or longer than 300 characters.");
         // Check for fees
