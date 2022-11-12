@@ -1,9 +1,12 @@
 package ca.mcgill.ecse.mmss.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse.mmss.dto.LoanDto;
@@ -85,14 +89,10 @@ public class LoanController {
      * @param request 
      * @return A message saying the loan was deleted
      */
-    @DeleteMapping
-    public ResponseEntity<String> deleteLoan(@RequestBody LoanDto request) {
-
-        // get required feilds
-        int loanId = request.getExchangeId();
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteLoan(@PathVariable int id) {
         // call service layer
-        loanService.deleteLoan(loanId);
+        loanService.deleteLoan(id);
 
         // return updated Loan as Dto
         return new ResponseEntity<String>("Loan succesfully deleted", HttpStatus.OK);
@@ -127,8 +127,8 @@ public class LoanController {
      * @param status the status
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/status/{status}")
-    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@PathVariable ExchangeStatus status) {
+    @GetMapping("/getall/status")
+    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@RequestParam ExchangeStatus status) {
 
         // get all loans
         ArrayList<Loan> retrievedLoans = loanService.getAllLoansByStatus(status);
@@ -149,11 +149,11 @@ public class LoanController {
      * @param date
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/dueDate/{date}")
-    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithDueDate(@PathVariable Date date) {
+    @GetMapping("/getall/dueDate")
+    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithDueDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
 
         // get all loans
-        ArrayList<Loan> retrievedLoans = loanService.getAllLoansByDueDate(date);
+        ArrayList<Loan> retrievedLoans = loanService.getAllLoansByDueDate(Date.valueOf(date));
 
         // make Dtos
         ArrayList<LoanDto> allLoansDto = new ArrayList<>();
@@ -171,11 +171,11 @@ public class LoanController {
      * @param date
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/sumbittedDate/{date}")
-    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithSubmittedDate(@PathVariable Date date) {
+    @GetMapping("/getall/submittedDate")
+    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithSubmittedDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         // get all loans
-        ArrayList<Loan> retrievedLoans = loanService.getAllLoansBySubmittedDate(date);
+        ArrayList<Loan> retrievedLoans = loanService.getAllLoansBySubmittedDate(Date.valueOf(date));
 
         // make Dtos
         ArrayList<LoanDto> allLoansDto = new ArrayList<>();
@@ -192,8 +192,8 @@ public class LoanController {
      * @param username
      * @return an array list with all the loans as Dtos
      */
-    @GetMapping("/getall/visitor/{username}")
-    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@PathVariable String username) {
+    @GetMapping("/getall/visitor")
+    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@RequestParam String username) {
 
         // get all loans
         ArrayList<Loan> retrievedLoans = loanService.getAllLoansByVisitor(username);

@@ -35,6 +35,7 @@ import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 @ExtendWith(MockitoExtension.class)
 public class LoanServiceTests {
 
+    // We mock repositories - the entities that access things from the database
     @Mock
     private LoanRepository loanRepository;
 
@@ -44,14 +45,15 @@ public class LoanServiceTests {
     @Mock
     private ArtefactRepository artefactRepository;
 
+    // We inject the mocks in the loan service - the thing that calls on the repositories
     @InjectMocks
     private LoanService loanService;
 
     // Four objects we will need in all our tests
-    Person person;
-    Visitor visitor;
-    Artefact artefact;
-    Loan loan;
+    private Person person;
+    private Visitor visitor;
+    private Artefact artefact;
+    private Loan loan;
 
     /**
      * @author Shidan Javaheri
@@ -60,6 +62,8 @@ public class LoanServiceTests {
     @BeforeEach
     public void createObjects() {
         // create necessary objects for test
+        // This will Mock the content of your database
+        // Basically a fake database system
         this.person = new Person(0, "Henry", "Doppleganger");
         this.artefact = new Artefact(2, "Lightsaber", "From the death star", true, 0, 0);
         this.visitor = new Visitor("henry@doppleganger", "ILikeCheese", person);
@@ -90,6 +94,7 @@ public class LoanServiceTests {
      */
     @Test 
     public void testRetrieveLoanById () { 
+
         // setup mocks
         when(loanRepository.findLoanByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> loan ); 
 
@@ -123,6 +128,9 @@ public class LoanServiceTests {
         assertEquals("Loan not found", ex.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
 
+        // verify calls to repositories
+        verify(loanRepository, times (1)).findLoanByExchangeId(invalidId); 
+
     }
 
     /**
@@ -146,9 +154,8 @@ public class LoanServiceTests {
         // when a visitors loans are requested, return an empty list, since they have no loans
         when(loanRepository.findByVisitor(visitor)).thenAnswer((InvocationOnMock invocation) -> null); 
 
-        // need to change the loan service class to have this as its signature
+        // call the service to create a loan
         Loan loanCreated = loanService.createLoan(2, "henry@doppleganger"); 
-
 
         // assertions 
         assertEquals(0,loan.getExchangeId()); 
@@ -559,4 +566,8 @@ public class LoanServiceTests {
         assertEquals (HttpStatus.NOT_FOUND, ex.getStatus());
 
     }
-}
+
+} 
+
+
+
