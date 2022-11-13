@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse.mmss.dto.ManagerDto;
 import ca.mcgill.ecse.mmss.model.Manager;
-import ca.mcgill.ecse.mmss.service.LoanService;
 import ca.mcgill.ecse.mmss.service.ManagerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping("manager")
+@RequestMapping({ "/manager", "/manager/" })
 public class ManagerController {
 
     @Autowired
@@ -24,21 +23,25 @@ public class ManagerController {
 
     /**
      * Get the manager
-     * @return
+     * 
+     * @author Shidan Javaheri
+     * @return a respnose entity with the manager
      */
     @GetMapping
-    public ResponseEntity<ManagerDto> getMangaer() { 
+    public ResponseEntity<ManagerDto> getMangaer() {
         Manager manager = managerService.getManager();
-        ManagerDto response = new ManagerDto(manager); 
-        return new ResponseEntity<ManagerDto>(response, HttpStatus.OK); 
+        ManagerDto response = new ManagerDto(manager);
+        return new ResponseEntity<ManagerDto>(response, HttpStatus.OK);
     }
 
     /**
      * Update the password of the manager
      * 
+     * @author Shidan Javaheri
      * @param oldPassword
      * @param newPassword
-     * @return
+     * @return the updated manager in a response entity (password not included in
+     *         Dto)
      */
     @PutMapping
     public ResponseEntity<ManagerDto> updatePassword(@RequestParam String oldPassword,

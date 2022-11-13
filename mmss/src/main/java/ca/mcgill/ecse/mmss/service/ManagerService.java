@@ -1,14 +1,15 @@
 package ca.mcgill.ecse.mmss.service;
 
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.ManagerRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
+import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Manager;
 import ca.mcgill.ecse.mmss.model.Person;
 
@@ -20,10 +21,13 @@ public class ManagerService {
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    CommunicationRepository communicationRepository; 
+
 
     @Transactional
     public Manager getManager() { 
-        Manager manager = managerRepository.findManagerByUsername("marwan.kanan@mcgill.ca"); 
+        Manager manager = managerRepository.findManagerByUsername("marwan.kanaan@mcgill.ca"); 
         return manager; 
     }
     /**
@@ -37,10 +41,16 @@ public class ManagerService {
         // create person
         Person marwan = new Person();
         marwan.setFirstName("Marwan");
-        marwan.setLastName("Kanan");
+        marwan.setLastName("kanaan");
         personRepository.save(marwan);
-        // create manager
-        Manager manager = new Manager("marwan.kanan@mcgill.ca", "aVerySecurePassword", marwan);
+
+        // a visitor is always created with a communication
+        Communication communication = new Communication(); 
+        communicationRepository.save(communication); 
+        // create manager with a communication
+        Manager manager = new Manager("marwan.kanaan@mcgill.ca", "aVerySecurePassword", marwan);
+        
+        manager.setCommunication(communication); 
         managerRepository.save(manager);
 
         return manager;
@@ -58,7 +68,7 @@ public class ManagerService {
     @Transactional
     public Manager updateMangagerPassword(String currentPassword, String newPassword) {
         // check if current password matches
-        String username = "marwan.kanan@mcgill.ca";
+        String username = "marwan.kanaan@mcgill.ca";
         Manager manager = managerRepository.findManagerByUsername(username);
         String password = manager.getPassword();
         

@@ -70,7 +70,7 @@ public class ManagerIntegrationTests {
         // assertions 
         assertNotNull(response); 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(response.getBody().getUserName(), "marwan.kanan@mcgill.ca"); 
+        assertEquals(response.getBody().getUserName(), "marwan.kanaan@mcgill.ca"); 
          
 
     }
@@ -87,10 +87,10 @@ public class ManagerIntegrationTests {
         client.put("/manager?oldPassword=aVerySecurePassword&newPassword=aNewVerySecurePassword", ManagerDto.class);
 
         // find out if the manager is updated
-        Manager manager = managerRepository.findManagerByUsername("marwan.kanan@mcgill.ca"); 
+        Manager manager = managerRepository.findManagerByUsername("marwan.kanaan@mcgill.ca"); 
 
         // assertions that the update worked
-        assertEquals(manager.getUsername(), "marwan.kanan@mcgill.ca"); 
+        assertEquals(manager.getUsername(), "marwan.kanaan@mcgill.ca"); 
         assertEquals(manager.getPassword(), "aNewVerySecurePassword");
                     
     }

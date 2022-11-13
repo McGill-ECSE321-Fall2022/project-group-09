@@ -1,15 +1,21 @@
 package ca.mcgill.ecse.mmss.service;
 
+import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.ManagerRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
+import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Manager;
 import ca.mcgill.ecse.mmss.model.Person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
+import org.aopalliance.intercept.Invocation;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -32,6 +38,9 @@ public class ManagerServiceTests {
     @Mock
     private PersonRepository personRepository;
 
+    @Mock 
+    private CommunicationRepository communicationRepository; 
+
     @InjectMocks
     private ManagerService managerService;
 
@@ -50,9 +59,9 @@ public class ManagerServiceTests {
         // create person
         person = new Person();
         person.setFirstName("Marwan");
-        person.setLastName("Kanan");
+        person.setLastName("kanaan");
         // create manager
-        manager = new Manager("marwan.kanan@mcgill.ca", "aVerySecurePassword", person);
+        manager = new Manager("marwan.kanaan@mcgill.ca", "aVerySecurePassword", person);
 
     }
 
@@ -85,7 +94,7 @@ public class ManagerServiceTests {
         assertEquals(manager.getUsername(), retrievedManager.getUsername());
 
         // verifications
-        verify(managerRepository, times(1)).findManagerByUsername("marwan.kanan@mcgill.ca"); 
+        verify(managerRepository, times(1)).findManagerByUsername("marwan.kanaan@mcgill.ca"); 
 
 
     }
@@ -101,16 +110,21 @@ public class ManagerServiceTests {
 
         when(personRepository.save(any(Person.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0)); 
 
+        when(communicationRepository.save(any(Communication.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0)); 
+
+
         // call to service layer
         Manager manager = managerService.createManager();
 
         // assertions
-        assertEquals(manager.getUsername(), "marwan.kanan@mcgill.ca");
+        assertEquals(manager.getUsername(), "marwan.kanaan@mcgill.ca");
         assertEquals(manager.getPerson().getFirstName(), person.getFirstName()); 
+        assertNotNull(manager.getCommunication(), "The communication is not null"); 
 
         // verifications
         verify(managerRepository, times(1)).save(any(Manager.class)); 
         verify(personRepository, times(1)).save(any(Person.class)); 
+        verify(communicationRepository, times(1)).save((any(Communication.class))); 
 
            
     }
@@ -134,7 +148,7 @@ public class ManagerServiceTests {
         assertEquals(updatedManager.getPassword(), "aNewVerySecurePassword"); 
 
         // verifications
-        verify(managerRepository, times(1)).findManagerByUsername("marwan.kanan@mcgill.ca"); 
+        verify(managerRepository, times(1)).findManagerByUsername("marwan.kanaan@mcgill.ca"); 
         verify(managerRepository, times (1)).save(any(Manager.class)); 
     }
 
@@ -158,7 +172,7 @@ public class ManagerServiceTests {
         assertEquals(ex.getMessage(), "Incorrect password");
 
         // verifications
-        verify(managerRepository, times(1)).findManagerByUsername("marwan.kanan@mcgill.ca");
+        verify(managerRepository, times(1)).findManagerByUsername("marwan.kanaan@mcgill.ca");
     }
 
 }
