@@ -64,7 +64,7 @@ public class ArtefactService {
     }
 
     /**
-     * Gets all the loans associated with a given room
+     * Get all the artefacts associated with a given room
      *
      * @param roomId, the primary key of a room
      * @return an array list of artefacts for a given room
@@ -75,7 +75,7 @@ public class ArtefactService {
     }
 
     /**
-     * Gets all the loans associated with a given room and a given canLoan value
+     * Get all the artefacts associated with a given room and a given canLoan value
      *
      * @param roomId
      * @param canLoan

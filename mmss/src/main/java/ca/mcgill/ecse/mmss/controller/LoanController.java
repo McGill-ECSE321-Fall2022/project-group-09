@@ -48,7 +48,7 @@ public class LoanController {
      * @author Shidan Javaheri
      * 
      * @param request a LoanDto
-     * @return the created Loan as a Dto, in a response entity, status ok
+     * @return the created Loan as a Dto, in a response entity, CREATED status
      */
     @PostMapping
     public ResponseEntity<LoanDto> createLoan(@RequestBody LoanDto request) {
@@ -89,7 +89,7 @@ public class LoanController {
      * Delete a loan given its id
      * @author Shidan Javaheri
      * 
-     * @param request 
+     * @param id
      * @return A message saying the loan was deleted
      */
     @DeleteMapping("/{id}")
