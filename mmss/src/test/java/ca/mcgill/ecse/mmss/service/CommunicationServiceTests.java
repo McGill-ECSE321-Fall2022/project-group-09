@@ -5,10 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.sql.Date;
-import java.util.ArrayList;
-
 import ca.mcgill.ecse.mmss.dao.*;
 import ca.mcgill.ecse.mmss.model.*;
 import org.junit.jupiter.api.AfterEach;

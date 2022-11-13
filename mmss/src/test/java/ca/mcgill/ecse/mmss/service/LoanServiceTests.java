@@ -48,6 +48,9 @@ public class LoanServiceTests {
     @Mock
     private OpenDayRepository openDayRepository;
 
+    @Mock
+    private NotificationService notificationService; 
+
     // We inject the mocks in the loan service - the thing that calls on the
     // repositories
     @InjectMocks
@@ -432,6 +435,12 @@ public class LoanServiceTests {
         // verify that the delete method was called
         verify(loanRepository, times(1)).deleteById(0);
 
+        String message = "Your loan request submitted on date" + updatedLoan.getSubmittedDate().toString()
+                        + "with id: " + String.valueOf(updatedLoan.getExchangeId()) + "has been denied";
+
+        // verify that a notification was created
+        verify (notificationService, times(1)).createNotificationByUsername(updatedLoan.getVisitor().getUsername(),(message)); 
+
     }
 
     /**
@@ -469,6 +478,13 @@ public class LoanServiceTests {
         verify(loanRepository, times(1)).findLoanByExchangeId(0); 
         verify(loanRepository, times(1)).save(any(Loan.class)); 
         verify(artefactRepository, times(1)).save((any(Artefact.class))); 
+
+
+        String message ="Your loan request submitted on date" + updatedLoan.getSubmittedDate().toString()
+                        + "with id: " + String.valueOf(updatedLoan.getExchangeId())
+                        + "has been approved! Please follow this link to process payment, and pass by the Museum to pick it up. http://payhere.com"; 
+
+        verify(notificationService,times(1)).createNotificationByUsername(updatedLoan.getVisitor().getUsername(), message); 
 
     }
 

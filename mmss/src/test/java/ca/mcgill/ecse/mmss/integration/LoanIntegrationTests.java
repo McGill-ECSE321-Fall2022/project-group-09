@@ -21,12 +21,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
+import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.dto.LoanDto;
 import ca.mcgill.ecse.mmss.model.Artefact;
+import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Loan;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
@@ -53,6 +55,8 @@ public class LoanIntegrationTests {
 
     @Autowired
     private OpenDayRepository openDayRepository; 
+
+    @Autowired CommunicationRepository communicationRepository; 
 
 
     // Four objects we will need in all our tests
@@ -100,6 +104,11 @@ public class LoanIntegrationTests {
 
         // the visitor
         this.visitor = new Visitor("mo.salah@gmail.com", "IScoreGoalz", person);
+        
+        // a visitor is always created with a communication
+        Communication communication = new Communication(); 
+        communicationRepository.save(communication); 
+        visitor.setCommunication(communication); 
         visitorRepository.save(visitor);
 
         // the loan

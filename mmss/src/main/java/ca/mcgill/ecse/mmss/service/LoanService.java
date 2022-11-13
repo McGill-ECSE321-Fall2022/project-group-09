@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.sql.Date;
 
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
-import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
-import ca.mcgill.ecse.mmss.dao.NotificationRepository;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
@@ -38,11 +36,10 @@ public class LoanService {
     @Autowired
     private OpenDayRepository openDayRepository;
 
-    @Autowired
-    private NotificationRepository notificationRepository;
 
-    @Autowired
-    private CommunicationRepository communicationRepository;
+    @Autowired 
+    private NotificationService notificationService; 
+
 
     /**
      * Finds a loan by its id
@@ -293,6 +290,7 @@ public class LoanService {
                         + "with id: " + String.valueOf(loan.getExchangeId()) + "has been denied";
 
                 // use create notification method from Sasha
+                notificationService.createNotificationByUsername(loan.getVisitor().getUsername(), message); 
 
                 // approvedloans also set the due date of the loans to 7 days form now
             } else if (status == ExchangeStatus.Approved) {
@@ -307,9 +305,11 @@ public class LoanService {
                 // create notification message
                 String message = "Your loan request submitted on date" + loan.getSubmittedDate().toString()
                         + "with id: " + String.valueOf(loan.getExchangeId())
-                        + "has been approved! Please follow this link to process payment, and pass by the Museum to pick it up";
-
+                        + "has been approved! Please follow this link to process payment, and pass by the Museum to pick it up. http://payhere.com";
                 // use create notification method from Sasha
+                notificationService.createNotificationByUsername(loan.getVisitor().getUsername(), message); 
+
+
 
             }
 
