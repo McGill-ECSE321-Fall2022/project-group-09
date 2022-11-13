@@ -594,5 +594,4 @@ public class ArtefactServiceTests {
         }
         return artefacts1;
     }
-
 }
