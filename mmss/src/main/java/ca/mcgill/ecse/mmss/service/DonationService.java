@@ -9,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.DonationRepository;
+import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
+import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Loan;
+import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
@@ -27,6 +31,13 @@ public class DonationService {
 	@Autowired
 	private VisitorRepository visitorRepository;
 	
+	@Autowired
+    private ArtefactRepository artefactRepository;
+	
+	@Autowired
+	private RoomRepository roomRepository;
+	
+	
 	/**
 	 * @author Mohamed Elsamadouny
 	 * Finds donation by id
@@ -39,7 +50,7 @@ public class DonationService {
 		// use the repository method
 		Donation donation = donationRepository.findDonationByExchangeId(id);
 		if (donation == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "Loan not found");
+			throw new MmssException(HttpStatus.NOT_FOUND, "Donation not found");
 		}
 		return donation;
 	}
@@ -142,17 +153,93 @@ public class DonationService {
         
         // return the created donation
         return donation;
-        
-        
+          
     }
     
+    /**
+	 * @author Mohamed Elsamadouny
+	 * 
+	 * Deletes a donation
+	 * Checks that the visitor exits
+	 *
+	 * @param the donation id
+	 */
     
+    @Transactional
+    public void deleteDonation(int id) {
+
+        Donation donation = donationRepository.findDonationByExchangeId(id);
+        if (donation == null)
+            throw new MmssException(HttpStatus.NOT_FOUND, "The donation with this Id was not found");
+
+        // calls the repository to delete the loan
+        donationRepository.deleteById(donation.getExchangeId());
+    }
     
-	
-	
-	
-	
-	
-	
+    /**
+     * @author Mohamed Elsamadouny
+     * 
+     * Modifies the status of a Donation
+     * Declined Donations are automatically deleted
+     * 
+     * @param id
+     * @param status
+     * @return
+     */
+    
+    @Transactional
+    public Artefact updateStatus(int id, ExchangeStatus status, boolean canLoan, double insuraceFees, double loanFee) {
+    	
+    	// Create an Artifact Object so if the donation was approved
+    	Artefact artefact = null;
+ 
+        // get the donation if it exists
+        Donation donation = donationRepository.findDonationByExchangeId(id);
+        if (donation == null) {
+            throw new MmssException(HttpStatus.NOT_FOUND, "The donation with this Id was not found");
+        } else {
+            // can't set status to pending
+            if (status == ExchangeStatus.Pending) {
+                throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot set the status of a loan to pending");
+                // declined daontions are deleted immediately
+            } else if (status == ExchangeStatus.Declined) {
+            	
+            	// Delete Donation
+                deleteDonation(donation.getExchangeId());
+
+                // create a notification with this message, attached to this visitor
+                String message = "Your Donation request submitted on date" + donation.getSubmittedDate().toString()
+                        + "with name: " + String.valueOf(donation.getItemName()) + "has been denied";
+                
+                // send notification
+                
+            } else if (status == ExchangeStatus.Approved) {
+            	
+            	// Once Donation has been approved, create a new artifact and delete donation from the repository
+                artefact = new Artefact();
+                artefact.setArtefactName(donation.getItemName());
+                artefact.setDescription(donation.getDescription());
+                artefact.setCanLoan(canLoan);
+                artefact.setCurrentlyOnLoan(false);
+                artefact.setInsuranceFee(loanFee);
+                artefact.setLoanFee(loanFee);
+                // TODO: set the room to storage, waiting for room service to be completed
+                // artefact.setRoom(roomRepository.findRoomByRoomId(id));
+                
+                artefactRepository.save(artefact);
+                // create notification message
+                String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
+                        + "with name: " + String.valueOf(donation.getItemName())
+                        + "has been approved! Thank you very much for your donation!";
+
+                // TODO: send notification method from Sasha
+                
+                // delete the donation from 
+                deleteDonation(donation.getExchangeId());
+            }
+        }
+        return artefact;
+        
+    }
 
 }
