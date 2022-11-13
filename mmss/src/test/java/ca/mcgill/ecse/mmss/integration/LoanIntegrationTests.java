@@ -56,7 +56,8 @@ public class LoanIntegrationTests {
     @Autowired
     private OpenDayRepository openDayRepository; 
 
-    @Autowired CommunicationRepository communicationRepository; 
+    @Autowired 
+    private CommunicationRepository communicationRepository; 
 
 
     // Four objects we will need in all our tests
