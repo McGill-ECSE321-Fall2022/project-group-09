@@ -178,7 +178,7 @@ public class DonationService {
         if (donation == null)
             throw new MmssException(HttpStatus.NOT_FOUND, "The donation with this Id was not found");
 
-        // calls the repository to delete the loan
+        // calls the repository to delete the donation
         donationRepository.deleteById(donation.getExchangeId());
     }
     
@@ -207,6 +207,7 @@ public class DonationService {
             // can't set status to pending
             if (status == ExchangeStatus.Pending) {
                 throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot set the status of a loan to pending");
+                
                 // declined daontions are deleted immediately
             } else if (status == ExchangeStatus.Declined) {
             	
@@ -217,7 +218,7 @@ public class DonationService {
                 String message = "Your Donation request submitted on date" + donation.getSubmittedDate().toString()
                         + "with name: " + String.valueOf(donation.getItemName()) + "has been denied";
                 
-                // send notification
+                // TODO: send notification
                 
             } else if (status == ExchangeStatus.Approved) {
             	
