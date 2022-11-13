@@ -41,7 +41,7 @@ public class NotificationService {
     @Transactional
     public ArrayList<Notification> getAllNotificationsByUsername(String username) {
         Communication communication = communicationService.getCommunicationByUsername(username);
-        return notificationRepository.findAllByCommunication(communication);
+        return notificationRepository.findAllBySentNotification(communication);
     }
 
     /**

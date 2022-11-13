@@ -8,5 +8,5 @@ import java.util.ArrayList;
 
 public interface NotificationRepository extends CrudRepository<Notification, Integer> {
     Notification findNotificationByNotificationId(int notificationId);
-    ArrayList<Notification> findAllByCommunication(Communication communication);
+    ArrayList<Notification> findAllBySentNotification(Communication communication);
 }
