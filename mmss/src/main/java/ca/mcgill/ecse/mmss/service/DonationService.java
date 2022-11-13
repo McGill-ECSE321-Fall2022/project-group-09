@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
+import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.DonationRepository;
+import ca.mcgill.ecse.mmss.dao.NotificationRepository;
 import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
@@ -34,6 +36,12 @@ public class DonationService {
 	
 	@Autowired
 	private RoomRepository roomRepository;
+	
+	@Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private CommunicationRepository communicationRepository;
 	
 	
 	/**
