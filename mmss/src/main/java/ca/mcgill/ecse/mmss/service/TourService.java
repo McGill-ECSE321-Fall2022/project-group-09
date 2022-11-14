@@ -110,19 +110,7 @@ public class TourService {
 	}
 
 	/**
-	 * Get all tours given a number of participants less than
-	 * 
-	 * @param numberOfParticipants
-	 * @return ArrayList of all tours
-	 * @author Shyam Desai
-	 */
-	@Transactional
-	public ArrayList<Tour> getAllToursByShiftTimeAndDateAndNumberOfParticipantsLessThan(ShiftTime shift, OpenDay date, int numberOfParticipants) {
-		return tourRepository.findByShiftTimeAndDateAndNumberOfParticipantsLessThan(shift, date, numberOfParticipants);
-	}
-
-	/**
-	 * Get all tours given a shift time
+	 * Get all tours given a date and shift time
 	 * 
 	 * @param tourTime
 	 * @return ArrayList of all tours
@@ -131,6 +119,23 @@ public class TourService {
 	@Transactional
 	public ArrayList<Tour> getAllToursByShiftTime(ShiftTime tourTime) {
 		return tourRepository.findByShiftTime(tourTime);
+	}
+
+	public ArrayList<Tour> getAllToursByDateAndShiftTime(OpenDay date, ShiftTime tourTime) {
+		return tourRepository.findByDateAndShiftTime(date, tourTime);
+	}
+
+	/**
+	 * Get all tours given a number of participants less than
+	 * 
+	 * @param numberOfParticipants
+	 * @return ArrayList of all tours
+	 * @author Shyam Desai
+	 */
+	@Transactional
+	public ArrayList<Tour> getAllToursByShiftTimeAndDateAndNumberOfParticipantsLessThan(ShiftTime shift, OpenDay date,
+			int numberOfParticipants) {
+		return tourRepository.findByShiftTimeAndDateAndNumberOfParticipantsLessThan(shift, date, numberOfParticipants);
 	}
 
 	/**
@@ -168,38 +173,13 @@ public class TourService {
 			}
 		}
 
-		int spaceNeededForParticipants = 20 - numberOfParticipants;
-		ArrayList<Tour> toursWithSpace = getAllToursByShiftTimeAndDateAndNumberOfParticipantsLessThan(tourTime, openDay, numberOfParticipants);
-		
-		Tour tour;
-//		
-//		if (toursWithSpace.size() == 0) {
-//			tour = new Tour();
-//			tour.setVisitor(visitor);
-//			tour.setDate(openDay);
-//			tour.setPricePerPerson(25);
-//			tour.setTourTime(tourTime);
-//			tour.setNumberOfParticipants(numberOfParticipants);
-//
-//			tourRepository.save(tour);
-//		} else {
-//			tour = toursWithSpace.get(0);
-//			tour.setVisitor(visitor);
-//			tour.setDate(openDay);
-//			tour.setPricePerPerson(25);
-//			tour.setTourTime(tourTime);
-//			tour.setNumberOfParticipants(numberOfParticipants);
-//
-//			tourRepository.save(tour);
-//		}
-		
-		tour = new Tour();
+		Tour tour = new Tour();
 		tour.setVisitor(visitor);
 		tour.setDate(openDay);
 		tour.setPricePerPerson(25);
 		tour.setTourTime(tourTime);
 		tour.setNumberOfParticipants(numberOfParticipants);
-		
+
 		return tour;
 	}
 
