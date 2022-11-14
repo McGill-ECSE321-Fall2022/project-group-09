@@ -36,6 +36,9 @@ public class DonationService {
 	@Autowired
 	private RoomRepository roomRepository;
 	
+	@Autowired 
+    private NotificationService notificationService; 
+	
 	
 	/**
 	 * @author Mohamed Elsamadouny
@@ -223,15 +226,17 @@ public class DonationService {
                 artefact.setInsuranceFee(loanFee);
                 artefact.setLoanFee(loanFee);
                 // TODO: set the room to storage, waiting for room service to be completed
-                // artefact.setRoom(roomRepository.findRoomByRoomId(id));
+                artefact.setRoom(roomRepository.findAllByRoomType(RoomType.Storage).get(0));
                 
                 artefactRepository.save(artefact);
+                
                 // create notification message
                 String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
                         + "with name: " + String.valueOf(donation.getItemName())
                         + "has been approved! Thank you very much for your donation!";
 
-                // TODO: send notification method from Sasha
+                // send notification method from Sasha
+                notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message);
                 
                 // delete the donation from 
                 deleteDonation(donation.getExchangeId());
