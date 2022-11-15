@@ -8,18 +8,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
 
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Communication;
-import ca.mcgill.ecse.mmss.model.Employee;
-import ca.mcgill.ecse.mmss.model.AccountType;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
-import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
 @Service
 public class VisitorService {
@@ -32,23 +28,20 @@ public class VisitorService {
 	VisitorRepository visitorRepository;
 
 	@Transactional
-	public Visitor visitor(int personID, int communicationID, int balance) {
-		Person person = personRepository.findPersonByPersonId(personID);
-		if (person == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such person with this ID.");
-		}
-		Communication communication = communicationRepository.findCommunicationByCommunicationId(communicationID);
-		if (communication == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such communication with this ID.");
-		}
-		// all tests have passed
+	public Visitor createVisitor(String firstName, String lastName, String userName, int balance) {
+		Person person = new Person();
+		person.setFirstName(firstName);
+		person.setLastName(lastName);
+		personRepository.save(person);
+		
+		Communication communication = new Communication();
+		communicationRepository.save(communication);
+		
 		Visitor visitor = new Visitor();
 		visitor.setBalance(balance);
-		visitor.setPerson(person);
 		visitor.setCommunication(communication);
-
+		visitor.setPerson(person);
 		visitorRepository.save(visitor);
-
 		return visitor;
 	}
 	
@@ -57,15 +50,6 @@ public class VisitorService {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
 		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
-		}
-		return visitor;
-	}
-	
-	@Transactional
-	public Visitor getVisitorByPassword(String password){
-		Visitor visitor = visitorRepository.findVisitorByPassword(password);
-		if (visitor == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this password.");
 		}
 		return visitor;
 	}
@@ -143,11 +127,8 @@ public class VisitorService {
 	
 	@Transactional
 	public List<Visitor> getAllVisitors(){
-		return toList(visitorRepository.findAll());
-	}
+		ArrayList<Visitor> allVisitors = visitorRepository.findAll();
 
-	private List<Visitor> toList(Iterable<Visitor> findAll) {
-		// TODO Auto-generated method stub
-		return null;
+        return allVisitors;
 	}
 }

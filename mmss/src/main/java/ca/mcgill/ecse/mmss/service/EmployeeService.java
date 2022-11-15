@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
 
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
@@ -16,13 +15,10 @@ import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
 import ca.mcgill.ecse.mmss.dao.ShiftRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Communication;
-import ca.mcgill.ecse.mmss.model.AccountType;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Shift;
-import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
-import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
 @Service
 public class EmployeeService {
@@ -37,33 +33,29 @@ public class EmployeeService {
 	EmployeeRepository employeeRepository;
 	
 	@Transactional
-	public Employee employee(int personID, int communicationID, String phoneNumber, int shiftID) {
-		if (phoneNumber.length()!=12) { //xxx-xxx-xxxx format
-			throw new MmssException(HttpStatus.NOT_FOUND, " Please enter a valid phone number.");
-		} 
-		Person person = personRepository.findPersonByPersonId(personID);
-		if (person == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such person with this ID.");
+	public Employee createEmployee(String firstName, String lastName, String userName, ShiftTime shiftTime, String phoneNumber) {
+		Person person = new Person();
+		person.setFirstName(firstName);
+		person.setLastName(lastName);
+		personRepository.save(person);
+		
+		Communication communication = new Communication();
+		communicationRepository.save(communication);
+		
+		Shift shift = new Shift();
+		shift.setShiftTime(shiftTime);
+		shiftRepository.save(shift);
+		
+		if (phoneNumber.length()!=12) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "Please enter a valid phone number.");
 		}
 		
-		Communication communication = communicationRepository.findCommunicationByCommunicationId(communicationID);
-		if (communication == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such communication with this ID.");
-		}
-		
-		Shift shift = shiftRepository.findShiftByShiftId(shiftID);
-		if (shift == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such shift with this ID.");
-		}
-		
-		// all tests should have passed 
 		Employee employee = new Employee();
 		employee.setPhoneNumber(phoneNumber);
-		employee.setPerson(person);
 		employee.setCommunication(communication);
+		employee.setPerson(person);
 		employee.setShift(shift);
 		employeeRepository.save(employee);
-
 		return employee;
 	}
 	
@@ -72,15 +64,6 @@ public class EmployeeService {
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee with this username.");
-		}
-		return employee;
-	}
-	
-	@Transactional
-	public Employee getEmployeeByPassword(String password){
-		Employee employee = employeeRepository.findEmployeeByPassword(password);
-		if (employee == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee with this password.");
 		}
 		return employee;
 	}
@@ -131,33 +114,6 @@ public class EmployeeService {
         employeeRepository.deleteById(employee.getUsername());
     }
 	
-	@Transactional
-    public ArrayList<Employee> getAllEmployeesByPerson(int personID) {
-
-        Person person = personRepository.findPersonByPersonId(personID);
-        if (person == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "The person with this id was not found");
-        }
-
-        // use the repository
-        ArrayList<Employee> allEmployees = employeeRepository.findByPerson(person);
-
-        return allEmployees;
-    }
-	
-	@Transactional
-    public ArrayList<Employee> getAllEmployeesByCommunication(int communicationID) {
-
-        Communication communication = communicationRepository.findCommunicationByCommunicationId(communicationID);
-        if (communication == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "The communication with this id was not found");
-        }
-
-        // use the repository
-        ArrayList<Employee> allEmployees = employeeRepository.findByCommunication(communication);
-
-        return allEmployees;
-    }
 	
 	@Transactional
     public ArrayList<Employee> getAllEmployeesByShift(int shiftID) {
@@ -175,11 +131,9 @@ public class EmployeeService {
 	
 	@Transactional
 	public List<Employee> getAllEmployees(){
-		return toList(employeeRepository.findAll());
+		ArrayList<Employee> allEmployees = employeeRepository.findAll();
+
+        return allEmployees;
 	}
 
-	private List<Employee> toList(Iterable<Employee> findAll) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

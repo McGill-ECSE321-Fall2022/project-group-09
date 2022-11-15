@@ -17,5 +17,5 @@ public interface VisitorRepository extends CrudRepository<Visitor, String> {
 
 	ArrayList<Visitor> findByCommunication(Communication communication);
     
-    
+	ArrayList<Visitor> findAll();
 }
