@@ -26,6 +26,9 @@ public class TicketService {
 	@Autowired
 	private OpenDayRepository openDayRepository;
 
+	@Autowired
+	private NotificationService notificationService;
+
 	/**
 	 * Find ticket by its Id
 	 * 
@@ -148,11 +151,11 @@ public class TicketService {
 			} else {
 				ticket.setDate(openDay);
 
-//    			String message = "Your ticket date change request originally on " + ticket.getDate().toString()
-//                        + "with id: " + String.valueOf(ticket.getBookingId())
-//                        + "has been approved! The following email from the Museum will have attached your updated tickets.";
+				String message = "Your ticket date change request to " + ticket.getDate().toString() + "with id: "
+						+ String.valueOf(ticket.getBookingId())
+						+ "has been processed! The following email from the Museum will have your updated tickets.";
 
-				// use create notification method from Sasha
+				notificationService.createNotificationByUsername(ticket.getVisitor().getUsername(), message);
 			}
 		}
 

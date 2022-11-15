@@ -157,9 +157,10 @@ public class TourController {
 	 * @author Shyam Desai
 	 */
 	@GetMapping("/participants")
-	public ResponseEntity<ArrayList<TourDto>> getAllToursWithParticipants(@RequestParam int numberOfParticipants) {
+	public ResponseEntity<ArrayList<TourDto>> getAllToursWithParticipantsLessThan(
+			@RequestParam int numberOfParticipants) {
 		ArrayList<Tour> retrievedNumberOfParticipants = tourService
-				.getAllToursByNumberOfParticipants(numberOfParticipants);
+				.getAllToursByNumberOfParticipantsLessThan(numberOfParticipants);
 
 		ArrayList<TourDto> allToursDto = new ArrayList<>();
 		for (Tour tour : retrievedNumberOfParticipants) {

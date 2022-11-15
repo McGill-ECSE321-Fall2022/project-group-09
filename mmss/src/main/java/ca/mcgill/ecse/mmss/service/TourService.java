@@ -27,6 +27,9 @@ public class TourService {
 	@Autowired
 	private OpenDayRepository openDayRepository;
 
+	@Autowired
+	private NotificationService notificationService;
+
 	/**
 	 * Find tour by its Id
 	 * 
@@ -105,8 +108,8 @@ public class TourService {
 	 * @author Shyam Desai
 	 */
 	@Transactional
-	public ArrayList<Tour> getAllToursByNumberOfParticipants(int numberOfParticipants) {
-		return tourRepository.findByNumberOfParticipants(numberOfParticipants);
+	public ArrayList<Tour> getAllToursByNumberOfParticipantsLessThan(int numberOfParticipants) {
+		return tourRepository.findByNumberOfParticipantsLessThan(numberOfParticipants);
 	}
 
 	/**
@@ -215,6 +218,12 @@ public class TourService {
 
 			tour.setDate(openDay);
 			tour.setNumberOfParticipants(numberOfParticipants);
+
+			String message = "Your request for tour booking id: " + String.valueOf(tour.getBookingId())
+					+ " to modify to" + tour.getDate().toString() + "and " + tour.getNumberOfParticipants()
+					+ " participants has been processed! The following email from the Museum will have your updated tickets.";
+
+			notificationService.createNotificationByUsername(tour.getVisitor().getUsername(), message);
 		}
 
 		return tour;
