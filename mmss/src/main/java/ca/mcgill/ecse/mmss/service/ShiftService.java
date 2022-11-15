@@ -83,19 +83,4 @@ public class ShiftService {
     	}
         return getAllShifts();
     }
-
-    /**
-     * Modify shift time of a shift
-     *
-     * @param old shift time, new shift time
-     * @return the modified shift
-     */
-    @Transactional
-    public Shift updateShiftTime(Shift.ShiftTime oldTime, Shift.ShiftTime newTime) {
-        Shift currentShift = getShiftByShiftTime(oldTime);
-        currentShift.setShiftTime(newTime);
-        shiftRepository.save(currentShift);
-        
-        return currentShift;
-    }
 }
