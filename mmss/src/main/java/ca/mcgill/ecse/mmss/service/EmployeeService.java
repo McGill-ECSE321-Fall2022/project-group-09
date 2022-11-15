@@ -51,6 +51,7 @@ public class EmployeeService {
 		}
 		
 		Employee employee = new Employee();
+		employee.setUsername(userName);
 		employee.setPhoneNumber(phoneNumber);
 		employee.setCommunication(communication);
 		employee.setPerson(person);

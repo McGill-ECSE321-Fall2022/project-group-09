@@ -10,11 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
+import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
+import ca.mcgill.ecse.mmss.dao.ShiftRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
+import ca.mcgill.ecse.mmss.model.AccountType;
 import ca.mcgill.ecse.mmss.model.Communication;
+import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Person;
+import ca.mcgill.ecse.mmss.model.Shift;
+import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
 @Service
@@ -25,7 +31,12 @@ public class VisitorService {
 	@Autowired
 	CommunicationRepository communicationRepository;
 	@Autowired
+	ShiftRepository shiftRepository;
+	@Autowired
 	VisitorRepository visitorRepository;
+	@Autowired
+	EmployeeRepository employeeRepository;
+	
 
 	@Transactional
 	public Visitor createVisitor(String firstName, String lastName, String userName, int balance) {
@@ -38,11 +49,58 @@ public class VisitorService {
 		communicationRepository.save(communication);
 		
 		Visitor visitor = new Visitor();
+		visitor.setUsername(userName);
 		visitor.setBalance(balance);
 		visitor.setCommunication(communication);
 		visitor.setPerson(person);
 		visitorRepository.save(visitor);
 		return visitor;
+	}
+	
+	@Transactional
+	public AccountType createAdditionalAccount(String accType, String userName, String newUserName, int balance, String phoneNumber, ShiftTime shiftTime) {
+		Visitor visitor = visitorRepository.findVisitorByUsername(userName);
+		Employee employee = employeeRepository.findEmployeeByUsername(userName);
+		if (visitor == null && employee == null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such account with this username.");
+		}
+		
+		
+		Person person = visitor.getPerson();
+		
+		Communication communication = new Communication();
+		communicationRepository.save(communication);
+		AccountType result;
+		
+		if (accType.equals("Visitor")) {
+			Visitor newVisitor = new Visitor();
+			newVisitor.setUsername(newUserName);
+			newVisitor.setBalance(balance);
+			newVisitor.setCommunication(communication);
+			newVisitor.setPerson(person);
+			visitorRepository.save(newVisitor);
+			result = newVisitor;
+		} else {
+			if (employee == null) {
+				Shift shift = new Shift();
+				shift.setShiftTime(shiftTime);
+				shiftRepository.save(shift);
+				
+				if (phoneNumber.length()!=12) {
+					throw new MmssException(HttpStatus.NOT_FOUND, "Please enter a valid phone number.");
+				}
+				Employee newEmployee = new Employee();
+				newEmployee.setUsername(newUserName);
+				newEmployee.setPhoneNumber(phoneNumber);
+				newEmployee.setCommunication(communication);
+				newEmployee.setPerson(person);
+				employeeRepository.save(newEmployee);
+				result = newEmployee;
+			} else {
+				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot create multiple employee accounts.");
+			}
+		}
+		return result;
 	}
 	
 	@Transactional
