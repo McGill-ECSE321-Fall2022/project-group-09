@@ -235,7 +235,7 @@ public class DonationService {
                         + "with name: " + String.valueOf(donation.getItemName())
                         + "has been approved! Thank you very much for your donation!";
 
-                // send notification method from Sasha
+                // send notification method
                 notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message);
                 
                 // delete the donation from 
