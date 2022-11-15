@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.mmss.service;
 
+
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +25,27 @@ public class ScheduleService {
      * @return the schedule or an exception
      */
     @Transactional
-    public Schedule retrieveScheduleById(int id) {
-        Schedule schedule = scheduleRepository.findScheduleByScheduleId(id);
+    public Schedule getScheduleById(int scheduleId) {
+        Schedule schedule = scheduleRepository.findScheduleByScheduleId(scheduleId);
         if (schedule == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
         return schedule;
     }
-
+    
     /**
-     * Get all the schedules
-     * @return a array list of schedules
+     * Create a schedule for the museum
      */
     @Transactional
-    public ArrayList<Schedule> getAllSchedules() {
-        return scheduleRepository.findAll();
+    public Schedule createSchedule() {
+    	ArrayList<Schedule> existingSchedule = scheduleRepository.findAll();
+    	if (existingSchedule != null) {
+            throw new MmssException(HttpStatus.NOT_FOUND, "A schedule already exists.");
+    	}
+    	Schedule schedule = new Schedule();
+    	scheduleRepository.save(schedule);
+        return schedule;
     }
+    
+    // schedules are never supposed to get deleted, so only the createSchedule and getScheduleById are necessary
 }
