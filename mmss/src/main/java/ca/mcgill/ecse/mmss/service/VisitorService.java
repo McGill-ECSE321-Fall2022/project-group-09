@@ -39,7 +39,7 @@ public class VisitorService {
 	
 
 	@Transactional
-	public Visitor createVisitor(String firstName, String lastName, String userName, int balance) {
+	public Visitor createVisitor(String firstName, String lastName, String userName, String passWord) {
 		Person person = new Person();
 		person.setFirstName(firstName);
 		person.setLastName(lastName);
@@ -48,9 +48,39 @@ public class VisitorService {
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
 		
+		int validUser = 0;
+		for (int i=0; i<userName.length(); i++) {
+			if (userName.charAt(i) == '@') {
+				validUser++;
+			}
+		}
+		if (validUser==0) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is not a valid email address. Please enter another username.");
+		}
+		
+		if (passWord.length()<8) { // check for acceptable password length
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
+		}
+		
+		int validUpper = 0;
+		int validDigit = 0;
+		for (int i=0; i<passWord.length(); i++) {
+			char cur = passWord.charAt(i);
+			if((cur>=65&&cur<=90)) { // check if character is an upperCase letter 
+				validUpper++;
+			}
+			if (cur>=48&&cur<=57) {
+				validDigit++;
+			}
+		}
+		if (validDigit==0 || validUpper==0) { 
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
+		}
+		
+		// all tests should have passed now
 		Visitor visitor = new Visitor();
 		visitor.setUsername(userName);
-		visitor.setBalance(balance);
+		visitor.setPassword(passWord);
 		visitor.setCommunication(communication);
 		visitor.setPerson(person);
 		visitorRepository.save(visitor);
@@ -118,17 +148,50 @@ public class VisitorService {
 		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
 		}
+		
+		int validUser = 0;
+		for (int i=0; i<newUser.length(); i++) {
+			if (newUser.charAt(i) == '@') {
+				validUser++;
+			}
+		}
+		if (validUser==0) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is not a valid email address. Please enter another username.");
+		}
+		// valid username
 		visitor.setUsername(newUser);
 		visitorRepository.save(visitor);
 		return visitor;
 	}
 	
 	@Transactional
-	public Visitor updateVisitorPassword(String username, String newPass) {
+	public Visitor updateVisitorPassword(String username, String oldPass, String newPass) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
 		if (visitor == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this password.");
+			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
 		}
+		if (!oldPass.equals(visitor.getPassword())) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not correct. Please enter correct password.");
+		}
+		if (newPass.length()<8) { // check for acceptable password length
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
+		}
+		
+		int validUpper = 0;
+		int validDigit = 0;
+		for (int i=0; i<newPass.length(); i++) {
+			char cur = newPass.charAt(i);
+			if((cur>=65&&cur<=90)) { // check if character is an upperCase letter 
+				validUpper++;
+			}
+			if (cur>=48&&cur<=57) {
+				validDigit++;
+			}
+		}
+		if (validDigit==0 || validUpper==0) { 
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
+		}
+		
 		visitor.setPassword(newPass);
 		visitorRepository.save(visitor);
 		return visitor;
@@ -138,7 +201,7 @@ public class VisitorService {
 	public Visitor updateVisitorBalance(String username, int newBalance) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
 		if (visitor == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this username.");
+			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
 		}
 		visitor.setBalance(newBalance);
 		visitorRepository.save(visitor);

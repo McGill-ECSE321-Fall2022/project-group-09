@@ -33,7 +33,7 @@ public class EmployeeService {
 	EmployeeRepository employeeRepository;
 	
 	@Transactional
-	public Employee createEmployee(String firstName, String lastName, String userName, ShiftTime shiftTime, String phoneNumber) {
+	public Employee createEmployee(String firstName, String lastName, String userName, String phoneNumber) {
 		Person person = new Person();
 		person.setFirstName(firstName);
 		person.setLastName(lastName);
@@ -42,12 +42,20 @@ public class EmployeeService {
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
 		
-		Shift shift = new Shift();
-		shift.setShiftTime(shiftTime);
-		shiftRepository.save(shift);
-		
+		// check for valid phone number
 		if (phoneNumber.length()!=12) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "Please enter a valid phone number.");
+		}
+		
+		// check for valid username
+		int validUser = 0;
+		for (int i=0; i<userName.length(); i++) {
+			if (userName.charAt(i) == '@') {
+				validUser++;
+			}
+		}
+		if (validUser==0) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is not a valid email address. Please enter another username.");
 		}
 		
 		Employee employee = new Employee();
@@ -55,7 +63,6 @@ public class EmployeeService {
 		employee.setPhoneNumber(phoneNumber);
 		employee.setCommunication(communication);
 		employee.setPerson(person);
-		employee.setShift(shift);
 		employeeRepository.save(employee);
 		return employee;
 	}
@@ -75,16 +82,48 @@ public class EmployeeService {
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this username.");
 		}
+		// check for valid username
+		int validUser = 0;
+		for (int i=0; i<newUser.length(); i++) {
+			if (newUser.charAt(i) == '@') {
+				validUser++;
+			}
+		}
+		
+		if (validUser==0) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is not a valid email address. Please enter another username.");
+		}
 		employee.setUsername(newUser);
 		employeeRepository.save(employee);
 		return employee;
 	}
 	
 	@Transactional
-	public Employee updateEmployeePassword(String username, String newPass) {
+	public Employee updateEmployeePassword(String username, String oldPass, String newPass) {
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this password.");
+		}
+		if (!oldPass.equals(employee.getPassword())) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not correct. Please enter correct password.");
+		}
+		if (newPass.length()<8) { // check for acceptable password length
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
+		}
+		
+		int validUpper = 0;
+		int validDigit = 0;
+		for (int i=0; i<newPass.length(); i++) {
+			char cur = newPass.charAt(i);
+			if((cur>=65&&cur<=90)) { // check if character is an upperCase letter 
+				validUpper++;
+			}
+			if (cur>=48&&cur<=57) {
+				validDigit++;
+			}
+		}
+		if (validDigit==0 || validUpper==0) { 
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
 		}
 		employee.setPassword(newPass);
 		employeeRepository.save(employee);
