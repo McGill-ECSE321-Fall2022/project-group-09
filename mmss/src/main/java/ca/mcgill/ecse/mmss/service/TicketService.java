@@ -42,6 +42,7 @@ public class TicketService {
 		if (ticket == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "Ticket not found.");
 		}
+
 		return ticket;
 	}
 
@@ -98,8 +99,7 @@ public class TicketService {
 	}
 
 	/**
-	 * Creates a ticket. Checks if museum open on the day. Checks if 0 tickets are
-	 * booked.
+	 * Creates a ticket. Checks if museum open on the day. Checks if ticket exists.
 	 * 
 	 * @param username
 	 * @param date
@@ -130,7 +130,7 @@ public class TicketService {
 	}
 
 	/**
-	 * Updates ticket booking Takes id and date of a ticket to modify booking date
+	 * Updates ticket booking. Takes id and date of a ticket to modify booking date
 	 * 
 	 * @param id
 	 * @param date
@@ -148,20 +148,19 @@ public class TicketService {
 		} else {
 			if (openDay == null) {
 				throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot update tickets to this day.");
-			} 
+			}
 		}
 
 		ticket.setDate(openDay);
-		Ticket updatedTicket = ticketRepository.save(ticket);	
-						
+		Ticket updatedTicket = ticketRepository.save(ticket);
+
 		String message = "Your ticket date change request to " + ticket.getDate().toString() + "with id: "
-		+ String.valueOf(ticket.getBookingId())
-		+ "has been processed! The following email from the Museum will have your updated tickets.";
+				+ String.valueOf(ticket.getBookingId())
+				+ "has been processed! The following email from the Museum will have your updated tickets.";
 
-//			notificationService.createNotificationByUsername(ticket.getVisitor().getUsername(), message);
-		
-		return updatedTicket;	
+		notificationService.createNotificationByUsername(ticket.getVisitor().getUsername(), message);
 
+		return updatedTicket;
 	}
 
 	/**

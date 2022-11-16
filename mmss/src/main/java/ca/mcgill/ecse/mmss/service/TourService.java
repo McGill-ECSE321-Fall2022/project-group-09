@@ -216,17 +216,17 @@ public class TourService {
 						"Cannot book a tour for more than 20 visitors in this time slot.");
 			}
 		}
-			tour.setDate(openDay);
-			tour.setNumberOfParticipants(numberOfParticipants);
-			Tour updatedTour = tourRepository.save(tour);
+		tour.setDate(openDay);
+		tour.setNumberOfParticipants(numberOfParticipants);
+		Tour updatedTour = tourRepository.save(tour);
 
-			String message = "Your request for tour booking id: " + String.valueOf(tour.getBookingId())
-					+ " to modify to" + tour.getDate().toString() + "and " + tour.getNumberOfParticipants()
-					+ " participants has been processed! The following email from the Museum will have your updated tickets.";
+		String message = "Your request for tour booking id: " + String.valueOf(tour.getBookingId()) + " to modify to"
+				+ tour.getDate().toString() + "and " + tour.getNumberOfParticipants()
+				+ " participants has been processed! The following email from the Museum will have your updated tickets.";
 
-	//		notificationService.createNotificationByUsername(tour.getVisitor().getUsername(), message);
-				return updatedTour;
-}
+		notificationService.createNotificationByUsername(tour.getVisitor().getUsername(), message);
+		return updatedTour;
+	}
 
 	/**
 	 * Deletes tour given an Id
