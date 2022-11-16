@@ -53,7 +53,7 @@ public class ArtefactRepositoryTests {
 	String description = "Found in the remains of the Death Star";    
 	artefact.setArtefactName(artefactName); 
 	artefact.setDescription(description); 
-	artefact.setCanLoan(false); 
+	artefact.setCanLoan(true); 
 	artefact.setInsuranceFee(200); 
 	artefact.setLoanFee(20); 
   artefact.setCurrentlyOnLoan(false);

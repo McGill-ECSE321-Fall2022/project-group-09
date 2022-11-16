@@ -68,7 +68,7 @@ public class VisitorRepositoryTests {
 	    // CASE 1: create the Visitor with Communication and populate its field 
 		String username = "John";
 	    String password = "password";
-	    double balance = 200; 
+	    double balance = 0; 
 	    Visitor visitor = new Visitor();  
 	    visitor.setPerson(person);
 	    visitor.setCommunication(communication);
@@ -103,7 +103,7 @@ public class VisitorRepositoryTests {
 	    String username2 = "Emily96";
 	    String password2 = "notAPassword";
 	    
-	    double balance2 = 600;
+	    double balance2 = 0;
 	    
 	    Visitor visitor2 = new Visitor();  
 	    visitor2.setPerson(person2);

@@ -2,11 +2,12 @@ plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'ca.mcgill.ecse'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = "16"
+sourceCompatibility = "17"
 
 repositories {
 	mavenCentral()
@@ -26,5 +27,28 @@ tasks.named('test') {
 	testLogging { 
 		exceptionFormat "full" 
 	}
+	// generate the test report
+	finalizedBy 'jacocoTestReport'
+
+} 
+
+tasks.named('jacocoTestReport') { 
+	// the tests must be run before the report is generated
+	dependsOn 'test'
 }
-targetCompatibility = JavaVersion.VERSION_16
+
+
+// enforce our miniumum coverage goal
+jacocoTestCoverageVerification { 
+	violationRules { 
+		rule { 
+			limit { 
+				minimum = 0.8
+			}
+		}
+	}
+}
+
+
+
+targetCompatibility = JavaVersion.VERSION_17
