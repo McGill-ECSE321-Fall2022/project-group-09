@@ -135,7 +135,7 @@ public class ArtefactController {
     }
 
     /**
-     * Create a new artefact based on an input request
+     * Create a new artefact based on an input request and add it to a room
      *
      * @param request
      * @return a response entity with the artefact as DTO and CREATED status
@@ -148,8 +148,11 @@ public class ArtefactController {
         boolean canLoan = request.getCanLoan();
         double insuranceFee = request.getInsuranceFee();
         double loanFee = request.getLoanFee();
+        int roomId = request.getRoomId();
         // create the artefact
         Artefact artefact = artefactService.createArtefact(name, description, canLoan, insuranceFee, loanFee);
+        // add the artefact to a room
+        artefactService.moveArtefactToRoom(artefact.getArtefactId(), roomId);
         // return it in the response entity
         return new ResponseEntity<ArtefactDto>(new ArtefactDto(artefact), HttpStatus.CREATED);
     }
