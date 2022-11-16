@@ -10,17 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
-import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.ShiftRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.AccountType;
 import ca.mcgill.ecse.mmss.model.Communication;
-import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Person;
-import ca.mcgill.ecse.mmss.model.Shift;
-import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
 @Service
@@ -34,12 +30,24 @@ public class VisitorService {
 	ShiftRepository shiftRepository;
 	@Autowired
 	VisitorRepository visitorRepository;
-	@Autowired
-	EmployeeRepository employeeRepository;
 	
-
 	@Transactional
 	public Visitor createVisitor(String firstName, String lastName, String userName, String passWord) {
+		
+		Visitor existUser = visitorRepository.findVisitorByUsername(userName);
+		if (existUser!=null) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is already taken. Please enter another username.");
+		}
+		
+		if (!checkValidUser(userName)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
+		}
+		
+		if(!checkValidPassword(passWord)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
+		}
+		
+		// all tests should have passed now
 		Person person = new Person();
 		person.setFirstName(firstName);
 		person.setLastName(lastName);
@@ -48,36 +56,6 @@ public class VisitorService {
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
 		
-		int validUser = 0;
-		for (int i=0; i<userName.length(); i++) {
-			if (userName.charAt(i) == '@') {
-				validUser++;
-			}
-		}
-		if (validUser==0) {
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is not a valid email address. Please enter another username.");
-		}
-		
-		if (passWord.length()<8) { // check for acceptable password length
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
-		}
-		
-		int validUpper = 0;
-		int validDigit = 0;
-		for (int i=0; i<passWord.length(); i++) {
-			char cur = passWord.charAt(i);
-			if((cur>=65&&cur<=90)) { // check if character is an upperCase letter 
-				validUpper++;
-			}
-			if (cur>=48&&cur<=57) {
-				validDigit++;
-			}
-		}
-		if (validDigit==0 || validUpper==0) { 
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
-		}
-		
-		// all tests should have passed now
 		Visitor visitor = new Visitor();
 		visitor.setUsername(userName);
 		visitor.setPassword(passWord);
@@ -88,49 +66,35 @@ public class VisitorService {
 	}
 	
 	@Transactional
-	public AccountType createAdditionalAccount(String accType, String userName, String newUserName, int balance, String phoneNumber, ShiftTime shiftTime) {
-		Visitor visitor = visitorRepository.findVisitorByUsername(userName);
-		Employee employee = employeeRepository.findEmployeeByUsername(userName);
-		if (visitor == null && employee == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such account with this username.");
+	public AccountType createAdditionalVisitor(String userName, String newUserName, String newPassWord) {
+		
+		Visitor existingVisitor = visitorRepository.findVisitorByUsername(userName);
+		if (existingVisitor==null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "There is no visitor with this username.");
 		}
 		
+		if (!checkValidUser(newUserName)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
+		}
 		
-		Person person = visitor.getPerson();
+		if (!checkValidPassword(newPassWord)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
+		}
 		
+		// all tests should have passed by now
+		Person person = existingVisitor.getPerson();
+		
+		// create a communication
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
-		AccountType result;
 		
-		if (accType.equals("Visitor")) {
-			Visitor newVisitor = new Visitor();
-			newVisitor.setUsername(newUserName);
-			newVisitor.setBalance(balance);
-			newVisitor.setCommunication(communication);
-			newVisitor.setPerson(person);
-			visitorRepository.save(newVisitor);
-			result = newVisitor;
-		} else {
-			if (employee == null) {
-				Shift shift = new Shift();
-				shift.setShiftTime(shiftTime);
-				shiftRepository.save(shift);
-				
-				if (phoneNumber.length()!=12) {
-					throw new MmssException(HttpStatus.NOT_FOUND, "Please enter a valid phone number.");
-				}
-				Employee newEmployee = new Employee();
-				newEmployee.setUsername(newUserName);
-				newEmployee.setPhoneNumber(phoneNumber);
-				newEmployee.setCommunication(communication);
-				newEmployee.setPerson(person);
-				employeeRepository.save(newEmployee);
-				result = newEmployee;
-			} else {
-				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot create multiple employee accounts.");
-			}
-		}
-		return result;
+		Visitor newVisitor = new Visitor();
+		newVisitor.setUsername(newUserName);
+		newVisitor.setPassword(newPassWord);
+		newVisitor.setCommunication(communication);
+		newVisitor.setPerson(person);
+		visitorRepository.save(newVisitor);
+		return newVisitor;
 	}
 	
 	@Transactional
@@ -149,16 +113,16 @@ public class VisitorService {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
 		}
 		
-		int validUser = 0;
-		for (int i=0; i<newUser.length(); i++) {
-			if (newUser.charAt(i) == '@') {
-				validUser++;
-			}
+		Visitor existVisit = visitorRepository.findVisitorByUsername(newUser);
+		if (existVisit!=null) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is already taken. Please enter another username.");
 		}
-		if (validUser==0) {
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is not a valid email address. Please enter another username.");
+		
+		if (!checkValidUser(newUser)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		// valid username
+		
+		// all tests should have passed, so it is a valid username
 		visitor.setUsername(newUser);
 		visitorRepository.save(visitor);
 		return visitor;
@@ -173,23 +137,9 @@ public class VisitorService {
 		if (!oldPass.equals(visitor.getPassword())) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not correct. Please enter correct password.");
 		}
-		if (newPass.length()<8) { // check for acceptable password length
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
-		}
 		
-		int validUpper = 0;
-		int validDigit = 0;
-		for (int i=0; i<newPass.length(); i++) {
-			char cur = newPass.charAt(i);
-			if((cur>=65&&cur<=90)) { // check if character is an upperCase letter 
-				validUpper++;
-			}
-			if (cur>=48&&cur<=57) {
-				validDigit++;
-			}
-		}
-		if (validDigit==0 || validUpper==0) { 
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
+		if (!checkValidPassword(newPass)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
 		
 		visitor.setPassword(newPass);
@@ -251,5 +201,45 @@ public class VisitorService {
 		ArrayList<Visitor> allVisitors = visitorRepository.findAll();
 
         return allVisitors;
+	}
+	
+	// helper method that checks if a username is valid
+	private boolean checkValidUser (String userInputName) {
+		boolean result;
+		int validUser = 0;
+		for (int i=0; i<userInputName.length(); i++) {
+			if (userInputName.charAt(i) == '@') {
+				validUser++;
+			}
+		}
+		if (validUser==0) {
+			result = false;
+		} else {
+			result = true;
+		}
+		return result;
+	}
+	
+	// helper method that checks if a password is valid
+	private boolean checkValidPassword(String inputPassword) {
+		boolean result;
+		int validUpper = 0;
+		int validDigit = 0;
+		for (int i=0; i<inputPassword.length(); i++) {
+			char cur = inputPassword.charAt(i);
+			if((cur>=65&&cur<=90)) { // check if character is an upperCase letter 
+				validUpper++;
+			}
+			if (cur>=48&&cur<=57) {
+				validDigit++;
+			}
+		}
+		
+		if (validDigit==0 || validUpper==0 || inputPassword.length()<8) { 
+			result = false;
+		} else {
+			result = true;
+		}
+		return result;
 	}
 }

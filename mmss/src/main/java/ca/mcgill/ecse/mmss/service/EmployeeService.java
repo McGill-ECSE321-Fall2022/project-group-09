@@ -13,12 +13,13 @@ import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
 import ca.mcgill.ecse.mmss.dao.ShiftRepository;
+import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Employee;
+import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Shift;
-import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 
 @Service
 public class EmployeeService {
@@ -31,9 +32,27 @@ public class EmployeeService {
 	ShiftRepository shiftRepository;
 	@Autowired
 	EmployeeRepository employeeRepository;
+	@Autowired
+	VisitorRepository visitorRepository;
 	
 	@Transactional
 	public Employee createEmployee(String firstName, String lastName, String userName, String phoneNumber) {
+		
+		Employee existEmp = employeeRepository.findEmployeeByUsername(userName);
+		if (existEmp!=null) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is already taken. Please enter another username.");
+		}
+				
+		if(!checkValidUser(userName)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
+		}
+		
+		// check for valid phone number
+		if (phoneNumber.length()!=12) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "Please enter a valid phone number in the format xxx-xxx-xxxx.");
+		}
+
+		// pass all tests before creating account
 		Person person = new Person();
 		person.setFirstName(firstName);
 		person.setLastName(lastName);
@@ -42,22 +61,6 @@ public class EmployeeService {
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
 		
-		// check for valid phone number
-		if (phoneNumber.length()!=12) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "Please enter a valid phone number.");
-		}
-		
-		// check for valid username
-		int validUser = 0;
-		for (int i=0; i<userName.length(); i++) {
-			if (userName.charAt(i) == '@') {
-				validUser++;
-			}
-		}
-		if (validUser==0) {
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is not a valid email address. Please enter another username.");
-		}
-		
 		Employee employee = new Employee();
 		employee.setUsername(userName);
 		employee.setPhoneNumber(phoneNumber);
@@ -65,6 +68,38 @@ public class EmployeeService {
 		employee.setPerson(person);
 		employeeRepository.save(employee);
 		return employee;
+	}
+	
+	@Transactional
+	public Visitor createVisitorForEmployee(String userName, String newUserName, String newPassword) {
+		Employee employee = employeeRepository.findEmployeeByUsername(userName);
+		
+		if (employee == null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "There is no employee account with that username.");
+		}
+		
+		if (!checkValidUser(newUserName)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
+		}
+		
+		if (!checkValidPassword(newPassword)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
+		}
+		
+		// all tests should have passed by now
+		Person person = employee.getPerson();
+		
+		// create a communication
+		Communication communication = new Communication();
+		communicationRepository.save(communication);
+		
+		Visitor newVisitor = new Visitor();
+		newVisitor.setUsername(newUserName);
+		newVisitor.setPassword(newPassword);
+		newVisitor.setCommunication(communication);
+		newVisitor.setPerson(person);
+		visitorRepository.save(newVisitor);
+		return newVisitor;
 	}
 	
 	@Transactional
@@ -78,21 +113,21 @@ public class EmployeeService {
 	
 	@Transactional
 	public Employee updateEmployeeUsername(String username, String newUser) {
+		
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this username.");
 		}
-		// check for valid username
-		int validUser = 0;
-		for (int i=0; i<newUser.length(); i++) {
-			if (newUser.charAt(i) == '@') {
-				validUser++;
-			}
+		
+		Employee currentEmp = employeeRepository.findEmployeeByUsername(newUser);
+		if (currentEmp!=null) {
+			throw new MmssException(HttpStatus.NOT_FOUND, "This username is already taken. Please enter another username.");
 		}
 		
-		if (validUser==0) {
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is not a valid email address. Please enter another username.");
+		if(!checkValidUser(newUser)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
+		
 		employee.setUsername(newUser);
 		employeeRepository.save(employee);
 		return employee;
@@ -100,6 +135,7 @@ public class EmployeeService {
 	
 	@Transactional
 	public Employee updateEmployeePassword(String username, String oldPass, String newPass) {
+		
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this password.");
@@ -107,24 +143,11 @@ public class EmployeeService {
 		if (!oldPass.equals(employee.getPassword())) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not correct. Please enter correct password.");
 		}
-		if (newPass.length()<8) { // check for acceptable password length
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
+		
+		if (!checkValidPassword(newPass)) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
 		
-		int validUpper = 0;
-		int validDigit = 0;
-		for (int i=0; i<newPass.length(); i++) {
-			char cur = newPass.charAt(i);
-			if((cur>=65&&cur<=90)) { // check if character is an upperCase letter 
-				validUpper++;
-			}
-			if (cur>=48&&cur<=57) {
-				validDigit++;
-			}
-		}
-		if (validDigit==0 || validUpper==0) { 
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not a valid password. Please enter another password.");
-		}
 		employee.setPassword(newPass);
 		employeeRepository.save(employee);
 		return employee;
@@ -132,13 +155,16 @@ public class EmployeeService {
 	
 	@Transactional
 	public Employee updateEmployeePhoneNumber(String username, String newPhoneNumber) {
+		
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this username.");
 		}
+		
 		if (newPhoneNumber.length()!=12) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "Enter a valid phone number.");
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "Enter a valid phone number in the format xxx-xxx-xxxx.");
 		}
+		
 		employee.setPhoneNumber(newPhoneNumber);
 		employeeRepository.save(employee);
 		return employee;
@@ -175,5 +201,44 @@ public class EmployeeService {
 
         return allEmployees;
 	}
-
+	
+	// helper method that checks if a username is valid
+	private boolean checkValidUser (String userInputName) {
+		boolean result;
+		int validUser = 0;
+		for (int i=0; i<userInputName.length(); i++) {
+			if (userInputName.charAt(i) == '@') {
+				validUser++;
+			}
+		}
+		if (validUser==0) {
+			result = false;
+		} else {
+			result = true;
+		}
+		return result;
+	}
+		
+	// helper method that checks if a password is valid
+	private boolean checkValidPassword(String inputPassword) {
+		boolean result;
+		int validUpper = 0;
+		int validDigit = 0;
+		for (int i=0; i<inputPassword.length(); i++) {
+			char cur = inputPassword.charAt(i);
+			if((cur>=65&&cur<=90)) { // check if character is an upperCase letter 
+				validUpper++;
+			}
+			if (cur>=48&&cur<=57) {
+				validDigit++;
+			}
+		}
+			
+		if (validDigit==0 || validUpper==0 || inputPassword.length()<8) { 
+			result = false;
+		} else {
+			result = true;
+		}
+		return result;
+	}
 }
