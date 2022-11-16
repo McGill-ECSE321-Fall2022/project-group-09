@@ -31,6 +31,13 @@ public class VisitorService {
 	@Autowired
 	VisitorRepository visitorRepository;
 	
+	/**
+     * create a Visitor Account
+     * 
+     * @author Saviru Perera
+     * @param firstName, lastName, userName, passWord
+     * @return A Visitor Account object, or exceptions indicating invalid input information
+     */
 	@Transactional
 	public Visitor createVisitor(String firstName, String lastName, String userName, String passWord) {
 		
@@ -65,6 +72,13 @@ public class VisitorService {
 		return visitor;
 	}
 	
+	/**
+     * create an additional Visitor Account for a person who already has a visitor account
+     * 
+     * @author Saviru Perera
+     * @param userName, newUserName, newPassWord
+     * @return A new Visitor Account object, or exceptions indicating invalid input information
+     */
 	@Transactional
 	public AccountType createAdditionalVisitor(String userName, String newUserName, String newPassWord) {
 		
@@ -97,6 +111,13 @@ public class VisitorService {
 		return newVisitor;
 	}
 	
+	/**
+     * get a specific visitor account
+     * 
+     * @author Saviru Perera
+     * @param username
+     * @return A Visitor Account object, or exceptions indicating invalid input information
+     */
 	@Transactional
 	public Visitor getVisitorByUsername(String username){
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
@@ -106,6 +127,13 @@ public class VisitorService {
 		return visitor;
 	}
 	
+	/**
+     * update the username for a Visitor Account to a new username
+     * 
+     * @author Saviru Perera
+     * @param username, newUser
+     * @return A modified Visitor Account object, or exceptions indicating invalid input information
+     */
 	@Transactional
 	public Visitor updateVisitorUsername(String username, String newUser) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
@@ -128,6 +156,13 @@ public class VisitorService {
 		return visitor;
 	}
 	
+	/**
+     * update a Visitor Account password to a new one
+     * 
+     * @author Saviru Perera
+     * @param username, oldPass, newPass
+     * @return A modified Visitor Account object, or exceptions indicating invalid input information
+     */
 	@Transactional
 	public Visitor updateVisitorPassword(String username, String oldPass, String newPass) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
@@ -147,6 +182,13 @@ public class VisitorService {
 		return visitor;
 	}
 	
+	/**
+     * update a visitor account balance to a new one
+     * 
+     * @author Saviru Perera
+     * @param username, newBalance
+     * @return A modified Visitor Account object, or exceptions indicating invalid input information
+     */
 	@Transactional
 	public Visitor updateVisitorBalance(String username, int newBalance) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
@@ -158,6 +200,13 @@ public class VisitorService {
 		return visitor;
 	}
 	
+	/**
+     * delete a Visitor Account from the system
+     * 
+     * @author Saviru Perera
+     * @param username
+     * @return void
+     */
 	@Transactional
     public void deleteVisitor(String username) {
 
@@ -168,6 +217,13 @@ public class VisitorService {
         visitorRepository.deleteById(visitor.getUsername());
     }
 	
+	/**
+     * get all visitor Accounts belonging to a Person
+     * 
+     * @author Saviru Perera
+     * @param personID
+     * @return An arraylist of all visitor accounts belonging to a person or exceptions indicating invalid input
+     */
 	@Transactional
     public ArrayList<Visitor> getAllVisitorsByPerson(int personID) {
 
@@ -182,6 +238,13 @@ public class VisitorService {
         return allVisitors;
     }
 	
+	/**
+     * get all visitor accounts belonging to a communication
+     * 
+     * @author Saviru Perera
+     * @param communicationID
+     * @return An arraylist of all visitors belonging to a communication 
+     */
 	@Transactional
     public ArrayList<Visitor> getAllVisitorsByCommunication(int communicationID) {
 
@@ -196,6 +259,13 @@ public class VisitorService {
         return allVisitors;
     }
 	
+	/**
+     * get all visitor accounts in the system
+     * 
+     * @author Saviru Perera
+     * @param 
+     * @return An arraylist of all visitor accounts in the system
+     */
 	@Transactional
 	public List<Visitor> getAllVisitors(){
 		ArrayList<Visitor> allVisitors = visitorRepository.findAll();
@@ -203,7 +273,13 @@ public class VisitorService {
         return allVisitors;
 	}
 	
-	// helper method that checks if a username is valid
+	/**
+     * helper method to check if username is valid
+     * 
+     * @author Saviru Perera
+     * @param userInputName
+     * @return boolean indicating whether or not the entered username is valid
+     */
 	private boolean checkValidUser (String userInputName) {
 		for (int i=0; i<userInputName.length(); i++) {
 			if (userInputName.charAt(i) == '@') {
@@ -213,7 +289,13 @@ public class VisitorService {
 		return false;
 	}
 	
-	// helper method that checks if a password is valid
+	/**
+     * helper method to check if password is valid
+     * 
+     * @author Saviru Perera
+     * @param inputPassword
+     * @return boolean indicating whether or not the entered password is valid
+     */
 	private boolean checkValidPassword(String inputPassword) {
 		boolean result;
 		int validUpper = 0;

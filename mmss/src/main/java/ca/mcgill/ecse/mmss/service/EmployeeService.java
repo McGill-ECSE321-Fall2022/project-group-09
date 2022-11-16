@@ -35,6 +35,13 @@ public class EmployeeService {
 	@Autowired
 	VisitorRepository visitorRepository;
 	
+	/**
+     * Creates an Employee Account
+     * 
+     * @author Saviru Perera
+     * @param firstName, lastname, userName, passWord
+     * @return the employee account object, or throw exceptions for incorrect input information
+     */
 	@Transactional
 	public Employee createEmployee(String firstName, String lastName, String userName, String phoneNumber) {
 		
@@ -70,6 +77,13 @@ public class EmployeeService {
 		return employee;
 	}
 	
+	/**
+     * Creates another visitor account for a person who already has a visitor account
+     * 
+     * @author Saviru Perera
+     * @param userName, newUserName, newPassword
+     * @return the new visitor account object, or throw exceptions for incorrect input information
+     */
 	@Transactional
 	public Visitor createVisitorForEmployee(String userName, String newUserName, String newPassword) {
 		Employee employee = employeeRepository.findEmployeeByUsername(userName);
@@ -102,6 +116,13 @@ public class EmployeeService {
 		return newVisitor;
 	}
 	
+	/**
+     * get a specific employee by their username
+     * 
+     * @author Saviru Perera
+     * @param username
+     * @return the employee object, or throw exceptions for incorrect input information
+     */
 	@Transactional
 	public Employee getEmployeeByUsername(String username){
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
@@ -111,6 +132,13 @@ public class EmployeeService {
 		return employee;
 	}
 	
+	/**
+     * update an employee username from the current one to a new one
+     * 
+     * @author Saviru Perera
+     * @param username, newUser
+     * @return the modified employee object, or throw exceptions for incorrect input information
+     */
 	@Transactional
 	public Employee updateEmployeeUsername(String username, String newUser) {
 		
@@ -133,6 +161,13 @@ public class EmployeeService {
 		return employee;
 	}
 	
+	/**
+     * update an employee password from their current one to a new one
+     * 
+     * @author Saviru Perera
+     * @param username, oldPass, newPass
+     * @return the modified employee object, or throw exceptions for incorrect input information
+     */
 	@Transactional
 	public Employee updateEmployeePassword(String username, String oldPass, String newPass) {
 		
@@ -153,6 +188,13 @@ public class EmployeeService {
 		return employee;
 	}
 	
+	/**
+     * update an employee phoneNumber to a new one
+     * 
+     * @author Saviru Perera
+     * @param username, newPhoneNumber
+     * @return the modified employee object, or throw exceptions for incorrect input information
+     */
 	@Transactional
 	public Employee updateEmployeePhoneNumber(String username, String newPhoneNumber) {
 		
@@ -170,6 +212,13 @@ public class EmployeeService {
 		return employee;
 	}
 	
+	/**
+     * delete an employee account from the system
+     * 
+     * @author Saviru Perera
+     * @param username
+     * @return void
+     */
 	@Transactional
     public void deleteEmployee(String username) {
 
@@ -180,7 +229,13 @@ public class EmployeeService {
         employeeRepository.deleteById(employee.getUsername());
     }
 	
-	
+	/**
+     * get all employees assigned to a specific shift
+     * 
+     * @author Saviru Perera
+     * @param shiftID
+     * @return an arraylist of employees assigned to the shift
+     */
 	@Transactional
     public ArrayList<Employee> getAllEmployeesByShift(int shiftID) {
 
@@ -195,6 +250,13 @@ public class EmployeeService {
         return allEmployees;
     }
 	
+	/**
+     * get all employee accounts in the system
+     * 
+     * @author Saviru Perera
+     * @param 
+     * @return an arraylist of all the employee accounts
+     */
 	@Transactional
 	public List<Employee> getAllEmployees(){
 		ArrayList<Employee> allEmployees = employeeRepository.findAll();
@@ -202,7 +264,13 @@ public class EmployeeService {
         return allEmployees;
 	}
 	
-	// helper method that checks if a username is valid
+	/**
+     * helper method to check if a username is valid
+     * 
+     * @author Saviru Perera
+     * @param userInputName
+     * @return a boolean indicating whether the username is valid or not
+     */
 	private boolean checkValidUser (String userInputName) {
 		for (int i=0; i<userInputName.length(); i++) {
 			if (userInputName.charAt(i) == '@') {
@@ -212,7 +280,13 @@ public class EmployeeService {
 		return false;
 	}
 		
-	// helper method that checks if a password is valid
+	/**
+     * helper method to check if a password is valid
+     * 
+     * @author Saviru Perera
+     * @param inputPassword
+     * @return a boolean indicating whether the password is valid or not
+     */
 	private boolean checkValidPassword(String inputPassword) {
 		boolean result;
 		int validUpper = 0;
