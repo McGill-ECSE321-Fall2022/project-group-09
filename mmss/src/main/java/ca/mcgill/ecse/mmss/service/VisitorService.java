@@ -205,19 +205,12 @@ public class VisitorService {
 	
 	// helper method that checks if a username is valid
 	private boolean checkValidUser (String userInputName) {
-		boolean result;
-		int validUser = 0;
 		for (int i=0; i<userInputName.length(); i++) {
 			if (userInputName.charAt(i) == '@') {
-				validUser++;
+				return true;
 			}
 		}
-		if (validUser==0) {
-			result = false;
-		} else {
-			result = true;
-		}
-		return result;
+		return false;
 	}
 	
 	// helper method that checks if a password is valid
