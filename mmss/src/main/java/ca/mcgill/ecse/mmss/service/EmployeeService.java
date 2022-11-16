@@ -272,10 +272,14 @@ public class EmployeeService {
      * @return a boolean indicating whether the username is valid or not
      */
 	private boolean checkValidUser (String userInputName) {
+		int validUser = 0;
 		for (int i=0; i<userInputName.length(); i++) {
 			if (userInputName.charAt(i) == '@') {
-				return true;
+				validUser++;
 			}
+		}
+		if (validUser == 1) {
+			return true;
 		}
 		return false;
 	}
