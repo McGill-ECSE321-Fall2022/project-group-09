@@ -112,7 +112,7 @@ public class TicketService {
 		OpenDay openDay = openDayRepository.findOpenDayByDate(date);
 
 		if (visitor == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found.");
+			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with that username was not found.");
 		} else {
 			if (openDay == null) {
 				throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot book tickets on this day.");
@@ -148,18 +148,20 @@ public class TicketService {
 		} else {
 			if (openDay == null) {
 				throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot update tickets to this day.");
-			} else {
-				ticket.setDate(openDay);
-
-				String message = "Your ticket date change request to " + ticket.getDate().toString() + "with id: "
-						+ String.valueOf(ticket.getBookingId())
-						+ "has been processed! The following email from the Museum will have your updated tickets.";
-
-				notificationService.createNotificationByUsername(ticket.getVisitor().getUsername(), message);
-			}
+			} 
 		}
 
-		return ticket;
+		ticket.setDate(openDay);
+		Ticket updatedTicket = ticketRepository.save(ticket);	
+						
+		String message = "Your ticket date change request to " + ticket.getDate().toString() + "with id: "
+		+ String.valueOf(ticket.getBookingId())
+		+ "has been processed! The following email from the Museum will have your updated tickets.";
+
+//			notificationService.createNotificationByUsername(ticket.getVisitor().getUsername(), message);
+		
+		return updatedTicket;	
+
 	}
 
 	/**
