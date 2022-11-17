@@ -44,11 +44,6 @@ public class EmployeeService {
      */
 	@Transactional
 	public Employee createEmployee(String firstName, String lastName, String userName, String phoneNumber) {
-		
-		Employee existEmp = employeeRepository.findEmployeeByUsername(userName);
-		if (existEmp!=null) {
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is already taken. Please enter another username.");
-		}
 				
 		if(!checkValidUser(userName)) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
@@ -145,11 +140,6 @@ public class EmployeeService {
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this username.");
-		}
-		
-		Employee currentEmp = employeeRepository.findEmployeeByUsername(newUser);
-		if (currentEmp!=null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "This username is already taken. Please enter another username.");
 		}
 		
 		if(!checkValidUser(newUser)) {
@@ -271,7 +261,12 @@ public class EmployeeService {
      * @param userInputName
      * @return a boolean indicating whether the username is valid or not
      */
+	@Transactional
 	private boolean checkValidUser (String userInputName) {
+		Employee existEmp = employeeRepository.findEmployeeByUsername(userInputName);
+		if (existEmp!=null) {
+			return false;
+		}
 		int validUser = 0;
 		for (int i=0; i<userInputName.length(); i++) {
 			if (userInputName.charAt(i) == '@') {

@@ -11,7 +11,6 @@ import java.util.List;
 
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
-import ca.mcgill.ecse.mmss.dao.ShiftRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.AccountType;
@@ -27,8 +26,6 @@ public class VisitorService {
 	@Autowired
 	CommunicationRepository communicationRepository;
 	@Autowired
-	ShiftRepository shiftRepository;
-	@Autowired
 	VisitorRepository visitorRepository;
 	
 	/**
@@ -40,11 +37,6 @@ public class VisitorService {
      */
 	@Transactional
 	public Visitor createVisitor(String firstName, String lastName, String userName, String passWord) {
-		
-		Visitor existUser = visitorRepository.findVisitorByUsername(userName);
-		if (existUser!=null) {
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is already taken. Please enter another username.");
-		}
 		
 		if (!checkValidUser(userName)) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
@@ -80,7 +72,7 @@ public class VisitorService {
      * @return A new Visitor Account object, or exceptions indicating invalid input information
      */
 	@Transactional
-	public AccountType createAdditionalVisitor(String userName, String newUserName, String newPassWord) {
+	public Visitor createAdditionalVisitor(String userName, String newUserName, String newPassWord) {
 		
 		Visitor existingVisitor = visitorRepository.findVisitorByUsername(userName);
 		if (existingVisitor==null) {
@@ -139,11 +131,6 @@ public class VisitorService {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
 		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
-		}
-		
-		Visitor existVisit = visitorRepository.findVisitorByUsername(newUser);
-		if (existVisit!=null) {
-			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is already taken. Please enter another username.");
 		}
 		
 		if (!checkValidUser(newUser)) {
@@ -280,7 +267,12 @@ public class VisitorService {
      * @param userInputName
      * @return boolean indicating whether or not the entered username is valid
      */
+	@Transactional
 	private boolean checkValidUser (String userInputName) {
+		Visitor existVisit = visitorRepository.findVisitorByUsername(userInputName);
+		if (existVisit!=null) {
+			return false;
+		}
 		int validUser = 0;
 		for (int i=0; i<userInputName.length(); i++) {
 			if (userInputName.charAt(i) == '@') {
