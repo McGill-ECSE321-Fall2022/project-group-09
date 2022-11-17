@@ -48,6 +48,11 @@ public class TicketServiceTests {
 	private OpenDay openDay;
 	private Ticket ticket;
 
+	/**
+	 * Create objects needed for all test cases
+	 * 
+	 * @author Shyam Desai
+	 */
 	@BeforeEach
 	public void createObjects() {
 		this.person = new Person(0, "Jon", "Snow");
@@ -60,6 +65,11 @@ public class TicketServiceTests {
 		ticket.setDate(openDay);
 	}
 
+	/**
+	 * Delete objects after each test
+	 * 
+	 * @author Shyam Desai
+	 */
 	@AfterEach
 	public void deleteObjects() {
 		this.person.delete();
@@ -67,6 +77,11 @@ public class TicketServiceTests {
 		this.ticket.delete();
 	}
 
+	/**
+	 * Test retrieving a ticket with a valid id
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testRetrieveTicketById() {
 
@@ -81,6 +96,11 @@ public class TicketServiceTests {
 		verify(ticketRepository, times(1)).findTicketByBookingId(0);
 	}
 
+	/**
+	 * Test retrieving a ticket with an invalid id
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testGetTicketByInvalidId() {
 		final int invalidId = 99;
@@ -95,6 +115,11 @@ public class TicketServiceTests {
 		verify(ticketRepository, times(1)).findTicketByBookingId(invalidId);
 	}
 
+	/**
+	 * Test creating a ticket with valid parameters
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testCreateTicket() {
 		OpenDay date = new OpenDay(Date.valueOf("2022-11-16"));
@@ -115,6 +140,11 @@ public class TicketServiceTests {
 		verify(openDayRepository, times(1)).findOpenDayByDate(Date.valueOf("2022-11-16"));
 	}
 
+	/**
+	 * Test creating a ticket with an invalid username
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testCreateTicketInvalidUsername() {
 		when(visitorRepository.findVisitorByUsername(any(String.class)))
@@ -129,6 +159,11 @@ public class TicketServiceTests {
 		verify(visitorRepository, times(1)).findVisitorByUsername("badUsername");
 	}
 
+	/**
+	 * Test creating a ticket with an invalid date
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testCreateTicketInvalidOpenDay() {
 		Date invalidDate = Date.valueOf("2022-12-25");
@@ -147,6 +182,11 @@ public class TicketServiceTests {
 		verify(openDayRepository, times(1)).findOpenDayByDate(invalidDate);
 	}
 
+	/**
+	 * Test updating a ticket with a new date, and tests notification feature
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testUpdateTicket() {
 		Date updatedDate = Date.valueOf("2022-11-17");
@@ -181,6 +221,11 @@ public class TicketServiceTests {
 				message);
 	}
 
+	/**
+	 * Tests updating a ticket with an invalid id
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testUpdateTicketInvalidId() {
 		final int invalidId = 99;
@@ -196,6 +241,11 @@ public class TicketServiceTests {
 		verify(ticketRepository, times(1)).findTicketByBookingId(invalidId);
 	}
 
+	/**
+	 * Tests updating a ticket with an invalid date
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testUpdateTicketInvalidOpenDay() {
 		Date validDate = Date.valueOf("2022-12-25");
@@ -216,6 +266,11 @@ public class TicketServiceTests {
 		verify(openDayRepository, times(1)).findOpenDayByDate(invalidDate);
 	}
 
+	/**
+	 * Tests deleting a ticket that exists
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testDeleteTicket() {
 		Date validDate = Date.valueOf("2022-12-25");
@@ -230,6 +285,11 @@ public class TicketServiceTests {
 		verify(ticketRepository, times(1)).findTicketByBookingId(ticketToDelete.getBookingId());
 	}
 
+	/**
+	 * Tests deleting a ticket with an invalid id
+	 * 
+	 * @author Shyam Desai
+	 */
 	@Test
 	public void testDeleteTicketInvalidId() {
 		final int invalidId = 99;

@@ -159,21 +159,15 @@ public class TourService {
 		OpenDay openDay = openDayRepository.findOpenDayByDate(date);
 
 		if (visitor == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found.");
-		} else {
+			throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with that username was not found.");
+		} else if (openDay == null) {
+			throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot book tours on this day.");
+		} else if (numberOfParticipants == 0) {
+			throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot book a tour for 0 visitors.");
+		} else if (numberOfParticipants > 20) {
+			throw new MmssException(HttpStatus.BAD_REQUEST,
+					"Cannot book a tour for more than 20 visitors in this time slot.");
 
-			if (openDay == null) {
-				throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found.");
-			} else {
-				if (numberOfParticipants == 0) {
-					throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot book a tour for 0 visitors.");
-				}
-
-				if (numberOfParticipants > 20) {
-					throw new MmssException(HttpStatus.BAD_REQUEST,
-							"Cannot book a tour for more than 20 visitors in this time slot.");
-				}
-			}
 		}
 
 		Tour tour = new Tour();
@@ -182,6 +176,8 @@ public class TourService {
 		tour.setPricePerPerson(25);
 		tour.setTourTime(tourTime);
 		tour.setNumberOfParticipants(numberOfParticipants);
+
+		tourRepository.save(tour);
 
 		return tour;
 	}
@@ -201,30 +197,26 @@ public class TourService {
 		OpenDay openDay = openDayRepository.findOpenDayByDate(date);
 
 		if (tour == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "The tour with this Id was not found");
-		} else {
-			if (openDay == null) {
-				throw new IllegalArgumentException("Cannot book tours on this day.");
-			}
-
-			if (numberOfParticipants == 0) {
-				throw new MmssException(HttpStatus.NOT_FOUND, "Cannot book a tour for 0 visitors.");
-			}
-
-			if (numberOfParticipants > 20) {
-				throw new MmssException(HttpStatus.NOT_FOUND,
-						"Cannot book a tour for more than 20 visitors in this time slot.");
-			}
+			throw new MmssException(HttpStatus.NOT_FOUND, "The tour with this Id was not found.");
+		} else if (openDay == null) {
+			throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot update tours to this day.");
+		} else if (numberOfParticipants == 0) {
+			throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot book a tour for 0 visitors.");
+		} else if (numberOfParticipants > 20) {
+			throw new MmssException(HttpStatus.BAD_REQUEST,
+					"Cannot book a tour for more than 20 visitors in this time slot.");
 		}
+
 		tour.setDate(openDay);
 		tour.setNumberOfParticipants(numberOfParticipants);
 		Tour updatedTour = tourRepository.save(tour);
 
 		String message = "Your request for tour booking id: " + String.valueOf(tour.getBookingId()) + " to modify to"
 				+ tour.getDate().toString() + "and " + tour.getNumberOfParticipants()
-				+ " participants has been processed! The following email from the Museum will have your updated tickets.";
+				+ " participants has been processed! The following email from the Museum will have your updated tour booking.";
 
 		notificationService.createNotificationByUsername(tour.getVisitor().getUsername(), message);
+
 		return updatedTour;
 	}
 
