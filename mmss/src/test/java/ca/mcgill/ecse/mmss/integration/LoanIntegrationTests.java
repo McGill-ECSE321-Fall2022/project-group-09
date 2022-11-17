@@ -293,7 +293,7 @@ public class LoanIntegrationTests {
         assertNotNull(extractedLoans);
         assertEquals(1, extractedLoans.size());
 
-    };
+    }
 
     /**
      * Tests getting all loans by their status
