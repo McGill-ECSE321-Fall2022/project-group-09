@@ -20,7 +20,7 @@ import ca.mcgill.ecse.mmss.model.Ticket;
 import ca.mcgill.ecse.mmss.service.TicketService;
 
 @RestController
-@RequestMapping("/ticket")
+@RequestMapping({"/ticket", "/ticket/"})
 public class TicketController {
 
 	@Autowired
@@ -33,7 +33,7 @@ public class TicketController {
 	 * @return response entity with the ticket and ok status
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/{id}")
+	@GetMapping({"/{id}", "/{id}/"})
 	public ResponseEntity<TicketDto> getTicket(@PathVariable int id) {
 		Ticket retrievedTicket = ticketService.retrieveTicketById(id);
 		return new ResponseEntity<TicketDto>(new TicketDto(retrievedTicket), HttpStatus.OK);
@@ -80,7 +80,7 @@ public class TicketController {
 	 * @return message indicated ticket deleted
 	 * @author Shyam Desai
 	 */
-	@DeleteMapping("/{id}")
+	@DeleteMapping({"/{id}", "/{id}/"})
 	public ResponseEntity<String> deleteTicket(@PathVariable int id) {
 
 		ticketService.deleteTicket(id);
@@ -116,7 +116,7 @@ public class TicketController {
 	 * @return ArrayList of all tickets as DTOs
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/date")
+	@GetMapping({"/date", "/date/"})
 	public ResponseEntity<ArrayList<TicketDto>> getAllTicketsWithDate(
 			@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
 		ArrayList<Ticket> retrievedTickets = ticketService.getAllTicketsByDate(date);
@@ -136,7 +136,7 @@ public class TicketController {
 	 * @return ArrayList of all tickets as DTOs
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/visitor")
+	@GetMapping({"/visitor", "/visitor/"})
 	public ResponseEntity<ArrayList<TicketDto>> getAllTicketsWithUsername(@RequestParam String username) {
 		ArrayList<Ticket> retrievedTickets = ticketService.getAllTicketsByVisitor(username);
 

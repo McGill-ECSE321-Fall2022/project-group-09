@@ -78,6 +78,7 @@ public class TourServiceTests {
 	public void deleteObjects() {
 		this.person.delete();
 		this.visitor.delete();
+		this.openDay.delete();
 		this.tour.delete();
 	}
 

@@ -74,6 +74,7 @@ public class TicketServiceTests {
 	public void deleteObjects() {
 		this.person.delete();
 		this.visitor.delete();
+		this.openDay.delete();
 		this.ticket.delete();
 	}
 

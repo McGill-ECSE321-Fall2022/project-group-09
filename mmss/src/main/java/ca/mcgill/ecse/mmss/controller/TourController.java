@@ -21,7 +21,7 @@ import ca.mcgill.ecse.mmss.model.Tour.ShiftTime;
 import ca.mcgill.ecse.mmss.service.TourService;
 
 @RestController
-@RequestMapping("/tour")
+@RequestMapping({"/tour","/tour/"})
 public class TourController {
 
 	@Autowired
@@ -34,7 +34,7 @@ public class TourController {
 	 * @return response entity with tour and ok status
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/{id}")
+	 @GetMapping({"/{id}", "/{id}/"})
 	public ResponseEntity<TourDto> getTour(@PathVariable int id) {
 		Tour retrievedTour = tourService.retrieveTourById(id);
 		return new ResponseEntity<TourDto>(new TourDto(retrievedTour), HttpStatus.OK);
@@ -83,7 +83,7 @@ public class TourController {
 	 * @return message indicating tour deleted
 	 * @author Shyam Desai
 	 */
-	@DeleteMapping
+	@DeleteMapping({"/{id}", "/{id}/"})
 	public ResponseEntity<String> deleteTour(@PathVariable int id) {
 		tourService.deleteTour(id);
 
@@ -117,7 +117,7 @@ public class TourController {
 	 * @return ArrayList of all tours as DTOs
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/date")
+	@GetMapping({"/date", "/date/"})
 	public ResponseEntity<ArrayList<TourDto>> getAllToursWithDate(
 			@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
 		ArrayList<Tour> retrievedTours = tourService.getAllToursByDate(date);
@@ -137,7 +137,7 @@ public class TourController {
 	 * @return ArrayList of all tours as DTOs
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/visitor")
+	@GetMapping({"/visitor", "/visitor/"})
 	public ResponseEntity<ArrayList<TourDto>> getAllToursWithUsername(@RequestParam String username) {
 		ArrayList<Tour> retrievedTours = tourService.getAllToursByVisitor(username);
 
@@ -156,7 +156,7 @@ public class TourController {
 	 * @return ArrayList of all tours as DTOs
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/participants")
+	@GetMapping({"/participants", "/participants/"})
 	public ResponseEntity<ArrayList<TourDto>> getAllToursWithParticipantsLessThan(
 			@RequestParam int numberOfParticipants) {
 		ArrayList<Tour> retrievedNumberOfParticipants = tourService
@@ -177,7 +177,7 @@ public class TourController {
 	 * @return ArrayList of all tours as DTOs
 	 * @author Shyam Desai
 	 */
-	@GetMapping("/shift")
+	@GetMapping({"/shift", "/shift/"})
 	public ResponseEntity<ArrayList<TourDto>> getAllToursWithShiftTime(@RequestParam ShiftTime tourTime) {
 		ArrayList<Tour> retrievedShiftTime = tourService.getAllToursByShiftTime(tourTime);
 
