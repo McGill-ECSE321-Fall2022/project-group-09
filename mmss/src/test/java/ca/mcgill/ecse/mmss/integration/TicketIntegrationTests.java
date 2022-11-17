@@ -3,20 +3,16 @@ package ca.mcgill.ecse.mmss.integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.sql.Date;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.TicketRepository;
@@ -26,10 +22,8 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Ticket;
 import ca.mcgill.ecse.mmss.model.Visitor;
-import ca.mcgill.ecse.mmss.service.NotificationService;
-import ca.mcgill.ecse.mmss.service.TicketService;
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TicketIntegrationTests {
 
 	@Autowired
@@ -98,7 +92,7 @@ public class TicketIntegrationTests {
 	@Test
 	public void testCreateAndGetTicket() {
 		int ticketId = testCreateTicket();
-//		testGetTicket(ticketId);
+		testGetTicket(ticketId);
 	}
 
 	/**
