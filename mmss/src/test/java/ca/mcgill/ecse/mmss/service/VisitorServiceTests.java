@@ -22,6 +22,7 @@ import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
+import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Communication;
@@ -34,6 +35,9 @@ public class VisitorServiceTests {
 
 	 @Mock
 	 private VisitorRepository visitorRepository;
+	 
+	 @Mock
+	 private EmployeeRepository employeeRepository;
 	 
 	 @Mock
 	 private CommunicationRepository communicationRepository;
@@ -426,20 +430,31 @@ public class VisitorServiceTests {
 	@Test
 	public void testDeleteVisitor() {
 		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor); 
-
+		
         visitorService.deleteVisitor(visitor.getUsername());
-
+   
         verify(visitorRepository, times(1)).deleteById(visitor.getUsername());
 	}
 	
 	@Test
-	public void testDeleteVisitorInvalid() {
+	public void testDeleteVisitorInvalidUsername() {
 		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
 
         MmssException ex = assertThrows(MmssException.class,() -> visitorService.deleteVisitor(visitor.getUsername()));
 
         // assert the exception is as expected
         assertEquals("The visitor with this username was not found", ex.getMessage()); 
+        assertEquals (HttpStatus.NOT_FOUND, ex.getStatus());
+	}
+	
+	@Test
+	public void testGetAllVisitorsInvalidPerson() {
+		when(personRepository.findPersonByPersonId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> null);
+		
+		MmssException ex = assertThrows(MmssException.class,() -> visitorService.getAllVisitorsByPerson(-22));
+
+        // assert the exception is as expected
+        assertEquals("The person with this id was not found", ex.getMessage()); 
         assertEquals (HttpStatus.NOT_FOUND, ex.getStatus());
 	}
 	

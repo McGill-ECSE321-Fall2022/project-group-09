@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
+import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Communication;
+import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
@@ -26,6 +28,8 @@ public class VisitorService {
 	CommunicationRepository communicationRepository;
 	@Autowired
 	VisitorRepository visitorRepository;
+	@Autowired
+	EmployeeRepository employeeRepository;
 	
 	/**
      * create a Visitor Account
@@ -216,7 +220,21 @@ public class VisitorService {
         if (visitor == null)
             throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this username was not found");
         // calls the repository to delete the visitor
+        Person person = visitor.getPerson();
+        int count = 1;
+        ArrayList<Visitor> allVisitors = visitorRepository.findAll();
+        for (Visitor additionalVisit : allVisitors) {
+        	if (additionalVisit.getPerson().equals(person)) count++;
+        }
+        
+        ArrayList<Employee> allEmployees = employeeRepository.findAll();
+        for (Employee additionalEmp : allEmployees) {
+        	if (additionalEmp.getPerson().equals(person)) count++;
+        }
         visitorRepository.deleteById(visitor.getUsername());
+        if (count==1) {
+        	personRepository.deleteById(person.getPersonId());
+        }
     }
 	
 	/**
@@ -236,27 +254,6 @@ public class VisitorService {
 
         // use the repository
         ArrayList<Visitor> allVisitors = visitorRepository.findByPerson(person);
-
-        return allVisitors;
-    }
-	
-	/**
-     * get all visitor accounts belonging to a communication
-     * 
-     * @author Saviru Perera
-     * @param communicationID
-     * @return An arraylist of all visitors belonging to a communication 
-     */
-	@Transactional
-    public ArrayList<Visitor> getAllVisitorsByCommunication(int communicationID) {
-
-        Communication communication = communicationRepository.findCommunicationByCommunicationId(communicationID);
-        if (communication == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "The communication with this id was not found");
-        }
-
-        // use the repository
-        ArrayList<Visitor> allVisitors = visitorRepository.findByCommunication(communication);
 
         return allVisitors;
     }

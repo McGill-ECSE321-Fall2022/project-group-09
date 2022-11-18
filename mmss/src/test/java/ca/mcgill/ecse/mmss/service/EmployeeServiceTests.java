@@ -458,6 +458,17 @@ public class EmployeeServiceTests {
 	}
 	
 	@Test
+	public void testGetAllEmployeesInvalidShift() {
+		when(shiftRepository.findShiftByShiftId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> null);
+		
+		MmssException ex = assertThrows(MmssException.class,() -> employeeService.getAllEmployeesByShift(-27));
+
+        // assert the exception is as expected
+        assertEquals("The shift with this id was not found", ex.getMessage()); 
+        assertEquals (HttpStatus.NOT_FOUND, ex.getStatus());
+	}
+	
+	@Test
 	public void testCheckValidUser() {
 		
 		boolean isValidUser = employeeService.checkValidUser("John@Jones");

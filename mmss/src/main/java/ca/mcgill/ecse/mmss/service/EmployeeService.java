@@ -229,8 +229,21 @@ public class EmployeeService {
         Employee employee = employeeRepository.findEmployeeByUsername(username);
         if (employee == null)
             throw new MmssException(HttpStatus.NOT_FOUND, "The employee with this username was not found");
-        // calls the repository to delete the employee
+        Person person = employee.getPerson();
+        int count = 1;
+        ArrayList<Visitor> allVisitors = visitorRepository.findAll();
+        for (Visitor additionalVisit : allVisitors) {
+        	if (additionalVisit.getPerson().equals(person)) count++;
+        }
+        
+        ArrayList<Employee> allEmployees = employeeRepository.findAll();
+        for (Employee additionalEmp : allEmployees) {
+        	if (additionalEmp.getPerson().equals(person)) count++;
+        }
         employeeRepository.deleteById(employee.getUsername());
+        if (count==1) {
+        	personRepository.deleteById(person.getPersonId());
+        }
     }
 	
 	/**
