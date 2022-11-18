@@ -15,6 +15,7 @@ import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Donation;
+import ca.mcgill.ecse.mmss.model.Exchange;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
@@ -89,6 +90,23 @@ public class DonationService {
 
         // use the repository
         ArrayList<Donation> allDonations = donationRepository.findBySubmittedDate(submittedDate);
+
+        return allDonations;
+    }
+
+    /**
+	 * @author Mohamed Elsamadouny
+	 * Finds all the donations by their status
+	 *
+	 * @param status to look for
+	 * @return ArrayList of Donations
+	 */
+	
+	@Transactional
+    public ArrayList<Donation> getAllDonationsByStatus(ExchangeStatus status) {
+
+        // use the repository
+        ArrayList<Donation> allDonations = donationRepository.findByExchangeStatus(status);
 
         return allDonations;
     }
