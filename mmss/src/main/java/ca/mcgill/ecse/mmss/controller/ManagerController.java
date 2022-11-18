@@ -29,7 +29,7 @@ public class ManagerController {
      * Get the manager
      * 
      * @author Shidan Javaheri
-     * @return a respnose entity with the manager
+     * @return a response entity with a {@link ManagerDto} and HttpStatus
      */
     @GetMapping
     public ResponseEntity<ManagerDto> getMangaer() {
@@ -44,8 +44,8 @@ public class ManagerController {
      * @author Shidan Javaheri
      * @param oldPassword
      * @param newPassword
-     * @return the updated manager in a response entity (password not included in
-     *         Dto)
+     * @return a response entity with a {@link ManagerDto} (password not included in
+     *         Dto), and an HttpStatus
      */
     @PutMapping
     public ResponseEntity<ManagerDto> updatePassword(@RequestParam String oldPassword,
