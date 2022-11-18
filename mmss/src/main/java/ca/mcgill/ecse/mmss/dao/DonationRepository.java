@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.springframework.data.repository.CrudRepository;
 import ca.mcgill.ecse.mmss.model.Donation;
-import ca.mcgill.ecse.mmss.model.Loan;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
 

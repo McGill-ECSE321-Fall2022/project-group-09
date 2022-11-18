@@ -1,8 +1,6 @@
 package ca.mcgill.ecse.mmss.dto;
 
-import ca.mcgill.ecse.mmss.model.Notification;
 
-import java.sql.Date;
 
 public class RequestNotificationDto {
     private String message;

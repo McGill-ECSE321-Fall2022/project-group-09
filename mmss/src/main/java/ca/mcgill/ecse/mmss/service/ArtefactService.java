@@ -239,7 +239,7 @@ public class ArtefactService {
         // Valid artefact id
         Artefact artefact = getArtefactById(artefactId);
         // Valid room id
-        Room room = roomService.retrieveRoomById(roomId);
+        roomService.retrieveRoomById(roomId);
         // Destination and current rooms are the same
         if (artefact.getRoom().getRoomId() == roomId)
             throw new MmssException(HttpStatus.BAD_REQUEST, "The destination and current rooms cannot be the same.");

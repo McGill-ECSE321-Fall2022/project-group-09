@@ -1,8 +1,6 @@
 package ca.mcgill.ecse.mmss.controller;
 import ca.mcgill.ecse.mmss.dto.CommunicationDto;
-import ca.mcgill.ecse.mmss.dto.LoanDto;
 import ca.mcgill.ecse.mmss.model.Communication;
-import ca.mcgill.ecse.mmss.model.Loan;
 import ca.mcgill.ecse.mmss.service.CommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

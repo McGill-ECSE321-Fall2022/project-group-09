@@ -10,7 +10,6 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
-import java.util.ArrayList;
 
 public interface LoanRepository extends CrudRepository<Loan, Integer> {
 

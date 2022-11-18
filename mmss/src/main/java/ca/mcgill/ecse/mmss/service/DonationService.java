@@ -18,7 +18,6 @@ import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
-import ca.mcgill.ecse.mmss.service.ArtefactService;
 
 @Service
 public class DonationService {

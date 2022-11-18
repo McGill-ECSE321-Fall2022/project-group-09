@@ -23,6 +23,10 @@ import ca.mcgill.ecse.mmss.model.Loan;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.service.LoanService;
 
+
+/**
+ * API of all Loan services
+ */
 @RestController
 @RequestMapping({ "/loan", "/loan/" })
 public class LoanController {
