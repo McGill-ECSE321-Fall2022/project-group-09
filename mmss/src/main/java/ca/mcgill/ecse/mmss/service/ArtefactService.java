@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
 @Service
-public class ArtefactService {
+public class git aArtefactService {
 
     @Autowired
     private ArtefactRepository artefactRepository;

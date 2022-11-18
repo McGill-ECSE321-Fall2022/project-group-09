@@ -3,8 +3,6 @@ package ca.mcgill.ecse.mmss.integration;
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dto.ArtefactDto;
-import ca.mcgill.ecse.mmss.dto.LoanDto;
-import ca.mcgill.ecse.mmss.dto.NotificationDto;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Room;
 import org.junit.jupiter.api.AfterEach;
@@ -200,7 +198,7 @@ public class ArtefactIntegrationTests {
     }
 
     /**
-     * Create a new artefact based on an input request and add it to a room
+     * Create a new artefact based on an input request and add it to the small room
      */
     @Test
     public void testCreateArtefact() {
@@ -232,7 +230,6 @@ public class ArtefactIntegrationTests {
         artefactDto.setCanLoan(false);
         artefactDto.setInsuranceFee(0);
         artefactDto.setLoanFee(0);
-        artefactDto.setRoomId(largeRoom.getRoomId());
         // make an entity to send the request with
         HttpEntity<ArtefactDto> request = new HttpEntity<>(artefactDto);
         // make the post
@@ -265,10 +262,10 @@ public class ArtefactIntegrationTests {
     }
 
     /**
-     * Delete a notification given its primary key
+     * Delete an artefact given its primary key
      */
     @Test
-    public void testDeleteLoan() {
+    public void testDeleteArtefact() {
         // make DTO for request
         int id = artefacts.get(0).getArtefactId();
         ResponseEntity<String> response = client.exchange("/artefact/"+ id, HttpMethod.DELETE,null, String.class);

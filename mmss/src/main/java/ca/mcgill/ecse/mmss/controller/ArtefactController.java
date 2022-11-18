@@ -1,11 +1,7 @@
 package ca.mcgill.ecse.mmss.controller;
 
 import ca.mcgill.ecse.mmss.dto.ArtefactDto;
-import ca.mcgill.ecse.mmss.dto.LoanDto;
-import ca.mcgill.ecse.mmss.dto.RoomDto;
 import ca.mcgill.ecse.mmss.model.Artefact;
-import ca.mcgill.ecse.mmss.model.Loan;
-import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.service.ArtefactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -198,7 +194,7 @@ public class ArtefactController {
      * @return A message saying the artefact was deleted
      */
     @DeleteMapping({"/{id}", "/{id}/"})
-    public ResponseEntity<String> deleteLoan(@PathVariable int id) {
+    public ResponseEntity<String> deleteArtefact(@PathVariable int id) {
         artefactService.deleteArtefact(id);
         return new ResponseEntity<String>("Artefact successfully deleted", HttpStatus.OK);
     }
