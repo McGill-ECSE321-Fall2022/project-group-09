@@ -52,7 +52,7 @@ public class NotificationController {
     /**
      * Create a notification based on an input request
      *
-     * @param request a RequestNotificationDto instance
+     * @param request a RequestNotificationDto instance {@link RequestNotificationDto}
      * @return a response entity with a message and the HttpStatus
      */
     @PostMapping
