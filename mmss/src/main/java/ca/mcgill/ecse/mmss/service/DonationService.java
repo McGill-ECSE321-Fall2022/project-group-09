@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,6 +18,7 @@ import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
+import ca.mcgill.ecse.mmss.service.ArtefactService;
 
 @Service
 public class DonationService {
@@ -37,7 +37,10 @@ public class DonationService {
 	private RoomRepository roomRepository;
 	
 	@Autowired 
-    private NotificationService notificationService; 
+    private NotificationService notificationService;
+    
+    @Autowired
+    private ArtefactService artefactService;
 	
 	
 	/**
@@ -82,7 +85,7 @@ public class DonationService {
 	 */
 	
 	@Transactional
-    public ArrayList<Donation> getAllLoansBySubmittedDate(Date submittedDate) {
+    public ArrayList<Donation> getAllDonationsBySubmittedDate(Date submittedDate) {
 
         // use the repository
         ArrayList<Donation> allDonations = donationRepository.findBySubmittedDate(submittedDate);
@@ -99,7 +102,7 @@ public class DonationService {
 	 */
 	
     @Transactional
-    public ArrayList<Donation> getAllLoansByVisitor(String username) {
+    public ArrayList<Donation> getAllDonationsByVisitor(String username) {
 
         Visitor visitor = visitorRepository.findVisitorByUsername(username);
         if (visitor == null) {
@@ -157,7 +160,6 @@ public class DonationService {
         return donation;
           
     }
-    
     /**
 	 * @author Mohamed Elsamadouny
 	 * 
@@ -174,8 +176,37 @@ public class DonationService {
         if (donation == null)
             throw new MmssException(HttpStatus.NOT_FOUND, "The donation with this Id was not found");
 
-        // calls the repository to delete the loan
+        // calls the repository to delete the donation
         donationRepository.deleteById(donation.getExchangeId());
+    }
+    
+    /**
+     * @author Mohamed Elsamadouny
+     * 
+     * Declines a donation by deleting it from the repo and sending a notification
+     * 
+     * @param id
+     * @param status
+     * @return
+     */
+    
+    @Transactional
+    public void declineDonation(int id, ExchangeStatus status) {
+    	
+        Donation donation = donationRepository.findDonationByExchangeId(id);
+        
+        if (status == ExchangeStatus.Declined) {
+        // create notification message
+        String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
+        + "with name: " + String.valueOf(donation.getItemName())
+        + "has been declined!";
+
+        // send notification method
+        notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message); 
+    	
+        // delete donation using service method
+        deleteDonation(id);
+        } 
     }
     
     /**
@@ -186,6 +217,9 @@ public class DonationService {
      * 
      * @param id
      * @param status
+     * @param canLoan
+     * @param insuranceFees
+     * @param loanFee
      * @return
      */
     
@@ -202,32 +236,17 @@ public class DonationService {
         } else {
             // can't set status to pending
             if (status == ExchangeStatus.Pending) {
-                throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot set the status of a loan to pending");
+                throw new MmssException(HttpStatus.BAD_REQUEST, "Cannot set the status of a Donation to pending");
                 // declined daontions are deleted immediately
-            } else if (status == ExchangeStatus.Declined) {
-            	
-            	// Delete Donation
-                deleteDonation(donation.getExchangeId());
-
-                // create a notification with this message, attached to this visitor
-                String message = "Your Donation request submitted on date" + donation.getSubmittedDate().toString()
-                        + "with name: " + String.valueOf(donation.getItemName()) + "has been denied";
-                
-                // send notification
-                
             } else if (status == ExchangeStatus.Approved) {
             	
             	// Once Donation has been approved, create a new artifact and delete donation from the repository
-                artefact = new Artefact();
-                artefact.setArtefactName(donation.getItemName());
-                artefact.setDescription(donation.getDescription());
-                artefact.setCanLoan(canLoan);
-                artefact.setCurrentlyOnLoan(false);
-                artefact.setInsuranceFee(loanFee);
-                artefact.setLoanFee(loanFee);
-                // TODO: set the room to storage, waiting for room service to be completed
+                artefact = artefactService.createArtefact(donation.getItemName(), donation.getDescription(), canLoan, insuraceFees, loanFee);
+
+                // set room to storage
                 artefact.setRoom(roomRepository.findAllByRoomType(RoomType.Storage).get(0));
                 
+                // Persist to DB
                 artefactRepository.save(artefact);
                 
                 // create notification message

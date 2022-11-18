@@ -69,7 +69,7 @@ public class OpenDayService {
 
         // wat to do if it doesnt exist?
         if (openDays.size() < 7) {
-            throw new MmssException(HttpStatus.BAD_REQUEST, "OpenDay not found, please contact the manager");
+            throw new MmssException(HttpStatus.BAD_REQUEST, "Not enough OpenDays, please contact the manager");
         }
         // get the 6th index
         OpenDay dueDate = openDays.get(6);
