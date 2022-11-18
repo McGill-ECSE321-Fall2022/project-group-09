@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import org.aopalliance.intercept.Invocation;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,6 +27,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Tests all of the methods in the ManagerService class
+ * @author Shidan Javaheri
+ */
 @ExtendWith(MockitoExtension.class)
 public class ManagerServiceTests {
 
@@ -38,8 +40,8 @@ public class ManagerServiceTests {
     @Mock
     private PersonRepository personRepository;
 
-    @Mock 
-    private CommunicationRepository communicationRepository; 
+    @Mock
+    private CommunicationRepository communicationRepository;
 
     @InjectMocks
     private ManagerService managerService;
@@ -78,7 +80,7 @@ public class ManagerServiceTests {
     }
 
     /**
-     * Tests getting the manager
+     * Tests getting the manager by his username
      * @author Shidan Javaheri
      */
     @Test
@@ -154,6 +156,8 @@ public class ManagerServiceTests {
 
     /**
      * Tests updating the managers password with incorrect current password
+     * 
+     * @author Shidan Javaheri
      */
     @Test
     public void testUpdatePasswordWithWrongPassword() {

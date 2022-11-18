@@ -14,12 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse.mmss.dao.ManagerRepository;
-import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dto.ManagerDto;
 import ca.mcgill.ecse.mmss.model.Manager;
-import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.service.ManagerService;
 
+/**
+ * Tests the functionality of all services exposed through the URL "/manager"
+ * @author Shidan Javaheri
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ManagerIntegrationTests {
 
@@ -33,9 +35,9 @@ public class ManagerIntegrationTests {
     @Autowired ManagerService managerService; 
 
    /**
-     * Create objects needed for tests
-     * Uses the service method that is not exposed
-     * This service method was already tested
+     * Create objects needed for tests. 
+     * Uses the service method that is not exposed. 
+     * This service method was already tested. 
      * @author Shidan Javaheri
      */
     @BeforeEach

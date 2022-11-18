@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/** 
+ * Exposes relevant Manager service methods at the URL "/manager"
+ * @author Shidan Javaheri
+ */
 @RestController
 @RequestMapping({ "/manager", "/manager/" })
 public class ManagerController {
