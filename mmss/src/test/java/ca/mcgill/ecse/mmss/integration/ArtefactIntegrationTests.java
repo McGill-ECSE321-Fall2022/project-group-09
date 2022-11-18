@@ -247,27 +247,36 @@ public class ArtefactIntegrationTests {
     }
 
     /**
-     * Update an artefact based on an input request
+     * Move an artefact from large room to small room
      */
     @Test
     public void testMoveArtefactToRoom() {
-        ArtefactDto artefactDto = new ArtefactDto(artefacts.get(0));
-        artefactDto.setDescription("World");
-        artefactDto.setCanLoan(false);
-        artefactDto.setInsuranceFee(0);
-        artefactDto.setLoanFee(0);
-        artefactDto.setRoomId(largeRoom.getRoomId());
-        // make an entity to send the request with
-        HttpEntity<ArtefactDto> request = new HttpEntity<>(artefactDto);
+        int artefactId = artefacts.get(0).getArtefactId();
+        int roomId = smallRoom.getRoomId();
         // make the post
-        ResponseEntity<ArtefactDto> response = client.exchange("/artefact", HttpMethod.PUT, request, ArtefactDto.class);
+        ResponseEntity<String> response = client.exchange("/artefact/move?artefactId=" + artefactId + "&roomId=" + roomId, HttpMethod.PUT, null, String.class);
+        // make assertions on the post
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Artefact successfully moved.", response.getBody());
+        // Check for updated room count
+        assertEquals(2, roomRepository.findAllByRoomType(Room.RoomType.Large).get(0).getArtefactCount());
+        assertEquals(4, roomRepository.findAllByRoomType(Room.RoomType.Small).get(0).getArtefactCount());
+    }
+
+    /**
+     * Delete a notification given its primary key
+     */
+    @Test
+    public void testDeleteLoan() {
+        // make DTO for request
+        int id = artefacts.get(0).getArtefactId();
+        ResponseEntity<String> response = client.exchange("/artefact/"+ id, HttpMethod.DELETE,null, String.class);
         // make assertions on the post
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals("1", response.getBody().getArtefactName());
-        assertEquals("World", response.getBody().getDescription());
-        assertEquals(false, response.getBody().getCanLoan());
+        assertEquals("Artefact successfully deleted", response.getBody());
+        assertEquals(2, roomRepository.findAllByRoomType(Room.RoomType.Large).get(0).getArtefactCount());
     }
-
 }
