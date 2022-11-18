@@ -48,10 +48,31 @@ public class OpenDayService {
     public ArrayList<OpenDay> getAllOpenDays() {
 
         // use repository method
-        ArrayList<OpenDay> allLoans = openDayRepository.findAll();
+        ArrayList<OpenDay> openDays = openDayRepository.findAll();
         
 
-        return allLoans;
+        return openDays;
+    }
+
+    /**
+     * 
+     * Return 7 days after a given date
+     * 
+     * @author Mohamed Elsamadouny
+     * @return an arraylist of OpenDays
+     */
+    @Transactional
+    public OpenDay calculateLoanDueDate(Date date) {
+
+        // use repository method
+        ArrayList<OpenDay> openDays = openDayRepository.findByDateGreaterThan(date);
+
+        // wat to do if it doesnt exist?
+
+        // get the 6th index
+        OpenDay dueDate = openDays.get(6);
+        
+        return dueDate;
     }
     
     /**
@@ -65,8 +86,13 @@ public class OpenDayService {
     	// create new openDay
     	OpenDay openDay = new OpenDay();
     	openDay.setDate(date);
+
+        // save the openDay
+        openDayRepository.save(openDay);
     	return openDay;
     }
+
+
     
     /**
      * Deletes an OpenDay with a specific day if it exists
