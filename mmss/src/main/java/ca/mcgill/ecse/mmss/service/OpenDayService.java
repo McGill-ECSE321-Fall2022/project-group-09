@@ -2,6 +2,7 @@ package ca.mcgill.ecse.mmss.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import javax.transaction.Transactional;
 
@@ -67,6 +68,9 @@ public class OpenDayService {
         // use repository method
         ArrayList<OpenDay> openDays = openDayRepository.findByDateGreaterThan(date);
 
+        // sort the openDays by date
+        openDays.sort(new ComparatorForOpenDay ()); 
+
         // wat to do if it doesnt exist?
         if (openDays.size() < 7) {
             throw new MmssException(HttpStatus.BAD_REQUEST, "Not enough OpenDays, please contact the manager");
@@ -113,4 +117,11 @@ public class OpenDayService {
         openDayRepository.deleteById(date);
     }
     
+
+    public class ComparatorForOpenDay implements Comparator<OpenDay> {
+    @Override
+    public int compare(OpenDay openDay1, OpenDay openDay2) {
+        return openDay1.getDate().compareTo(openDay2.getDate());
+    }
+}
 }
