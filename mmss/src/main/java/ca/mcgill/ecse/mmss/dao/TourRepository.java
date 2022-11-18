@@ -16,11 +16,11 @@ public interface TourRepository extends CrudRepository<Tour, Integer> {
 
 	ArrayList<Tour> findByNumberOfParticipantsLessThan(int numberOfParticipants);
 
-	ArrayList<Tour> findByShiftTime(ShiftTime tourTime);
+	ArrayList<Tour> findByTourTime(ShiftTime tourTime);
 
-	ArrayList<Tour> findByDateAndShiftTime(OpenDay date, ShiftTime tourTime);
+	ArrayList<Tour> findByDateAndTourTime(OpenDay date, ShiftTime tourTime);
 
-	ArrayList<Tour> findByShiftTimeAndDateAndNumberOfParticipantsLessThan(ShiftTime shift, OpenDay date,
+	ArrayList<Tour> findByTourTimeAndDateAndNumberOfParticipantsLessThan(ShiftTime shiftTime, OpenDay date,
 			int numberOfParticipants);
 
 	ArrayList<Tour> findAll();

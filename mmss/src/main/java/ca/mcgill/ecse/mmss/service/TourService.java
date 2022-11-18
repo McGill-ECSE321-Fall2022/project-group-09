@@ -121,11 +121,11 @@ public class TourService {
 	 */
 	@Transactional
 	public ArrayList<Tour> getAllToursByShiftTime(ShiftTime tourTime) {
-		return tourRepository.findByShiftTime(tourTime);
+		return tourRepository.findByTourTime(tourTime);
 	}
 
 	public ArrayList<Tour> getAllToursByDateAndShiftTime(OpenDay date, ShiftTime tourTime) {
-		return tourRepository.findByDateAndShiftTime(date, tourTime);
+		return tourRepository.findByDateAndTourTime(date, tourTime);
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class TourService {
 	@Transactional
 	public ArrayList<Tour> getAllToursByShiftTimeAndDateAndNumberOfParticipantsLessThan(ShiftTime shift, OpenDay date,
 			int numberOfParticipants) {
-		return tourRepository.findByShiftTimeAndDateAndNumberOfParticipantsLessThan(shift, date, numberOfParticipants);
+		return tourRepository.findByTourTimeAndDateAndNumberOfParticipantsLessThan(shift, date, numberOfParticipants);
 	}
 
 	/**

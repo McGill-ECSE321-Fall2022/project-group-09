@@ -59,7 +59,7 @@ public class TicketIntegrationTests {
 		this.visitor = new Visitor("jon.snow@got.com", "IDontWantIt", person);
 		visitorRepository.save(this.visitor);
 
-		this.openDay = new OpenDay(new Date(2022 - 11 - 15));
+		this.openDay = new OpenDay(Date.valueOf("2022-11-15"));
 		openDayRepository.save(this.openDay);
 
 		this.ticket = new Ticket(0, 20, openDay, visitor);
@@ -73,15 +73,15 @@ public class TicketIntegrationTests {
 	 */
 	@AfterEach
 	public void deleteObjects() {
-		this.person.delete();
-		this.visitor.delete();
-		this.openDay.delete();
 		this.ticket.delete();
+		this.visitor.delete();
+		this.person.delete();
+		this.openDay.delete();
 
-		personRepository.deleteAll();
-		visitorRepository.deleteAll();
-		openDayRepository.deleteAll();
 		ticketRepository.deleteAll();
+		visitorRepository.deleteAll();
+		personRepository.deleteAll();
+		openDayRepository.deleteAll();
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class TicketIntegrationTests {
 	public int testCreateTicket() {
 		TicketDto request = new TicketDto();
 		request.setVisitorUsername("jon.snow@got.com");
-		request.setBookingId(ticket.getBookingId());
+		request.setDate(Date.valueOf("2022-11-15"));
 
 		ResponseEntity<TicketDto> response = client.postForEntity("/ticket", request, TicketDto.class);
 
