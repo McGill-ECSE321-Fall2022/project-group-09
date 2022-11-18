@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
+/**
+ * Business logic for the Room class
+ */
 @Service
 public class RoomService {
 
@@ -20,11 +23,12 @@ public class RoomService {
      * Get a room by its primary key
      *
      * @author Sasha Denouvilliez-Pech
-     * @param id
-     * @return the room or an exception
+     * @param id the room's primary key
+     * @return the room instance or an exception
+     * @throws MmssException
      */
     @Transactional
-    public Room retrieveRoomById(int id) {
+    public Room getRoomById(int id) {
         Room room = roomRepository.findRoomByRoomId(id);
         if (room == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Room not found");
@@ -35,8 +39,8 @@ public class RoomService {
     /**
      * Get rooms by their room type
      *
-     * @param type
-     * @return an array list of rooms
+     * @param type the room type: large, small, or storage
+     * @return an array list of room instances
      */
     @Transactional
     public ArrayList<Room> getAllRoomsByRoomType(Room.RoomType type) {
@@ -44,8 +48,9 @@ public class RoomService {
     }
 
     /**
-     * Get all the rooms
-     * @return a array list of rooms
+     * Get all the rooms in the museum
+     *
+     * @return an array list of room instances
      */
     @Transactional
     public ArrayList<Room> getAllRooms() {
@@ -53,12 +58,12 @@ public class RoomService {
     }
 
     /**
-     * Get the display capacity
+     * Get the display current artefact count
      *
-     * @return the display capacity
+     * @return the display current artefact count
      */
     @Transactional
-    public int getDisplayCapacity() {
+    public int getDisplayArtefactCount() {
         int displayCapacity = 0;
         // Get current capacity for small rooms
         for (Room smallRoom : getAllRoomsByRoomType(Room.RoomType.Small)) {
@@ -73,7 +78,7 @@ public class RoomService {
 
     /**
      * Create the necessary rooms for the museum
-     * This method should be called only ONCE when booting the app.
+     * This method is called when booting the app.
      */
     @Transactional
     public ArrayList<Room> createRooms() {
@@ -101,14 +106,14 @@ public class RoomService {
     }
 
     /**
-     * Checks whether the room is full
+     * Checks if the room is full
      *
-     * @param roomId
+     * @param roomId the room's primary key
      * @return whether the room is full
      */
     @Transactional
     public boolean isRoomFull(int roomId) {
-        Room room = retrieveRoomById(roomId);
+        Room room = getRoomById(roomId);
         Room.RoomType type = room.getRoomType();
         int artefactCount = room.getArtefactCount();
         if (type == Room.RoomType.Small)

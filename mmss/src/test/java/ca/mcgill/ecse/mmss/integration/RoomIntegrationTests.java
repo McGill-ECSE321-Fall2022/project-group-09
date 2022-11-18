@@ -103,10 +103,10 @@ public class RoomIntegrationTests {
     }
 
     /**
-     * Get the display capacity
+     * Get the display artefact count
      */
     @Test
-    public void testGetDisplayCapacity() {
+    public void testGetDisplayArtefactCount() {
         // Update room count
         for (Room room : rooms) {
             room.setArtefactCount(50);
