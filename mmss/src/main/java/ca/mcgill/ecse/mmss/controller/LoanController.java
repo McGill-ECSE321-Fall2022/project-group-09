@@ -24,7 +24,7 @@ import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.service.LoanService;
 
 @RestController
-@RequestMapping({"/loan","/loan/"})
+@RequestMapping({ "/loan", "/loan/" })
 public class LoanController {
 
     @Autowired
@@ -32,28 +32,31 @@ public class LoanController {
 
     /**
      * Get a loan by its Id
-     * @author Shidan Javaheri
      * 
-     * @param id
-     * @return a response entity with the loan and ok status
+     * @author Shidan Javaheri
+     * @param id the int id of the loan
+     * @return a response entity with the {@link LoanDto} and the Http status
      */
-    @GetMapping({"/{id}", "/{id}/"})
+    @GetMapping({ "/{id}", "/{id}/" })
     public ResponseEntity<LoanDto> getLoan(@PathVariable int id) {
         // call service
-        Loan retrievedLoan = loanService.retrieveLoanById(id);
+        Loan retrievedLoan = loanService.getLoanById(id);
         // return response entity with Dto
         return new ResponseEntity<LoanDto>(new LoanDto(retrievedLoan), HttpStatus.OK);
     }
 
     /**
      * Create a new loan based on an input request
-     * @author Shidan Javaheri
      * 
-     * @param request a LoanDto
-     * @return the created Loan as a Dto, in a response entity, status ok
+     * @author Shidan Javaheri
+     * @param request {@link LoanDto}, the LoanDto containg the Username of the
+     *                visitor and the Id of the artefact that is part of the Loan
+     *                request.
+     * @return the created {@link LoanDto} in a response entity, with an Http status
      */
     @PostMapping
     public ResponseEntity<LoanDto> createLoan(@RequestBody LoanDto request) {
+
         // get parameters
         int artefactId = request.getArtefactId();
         String username = request.getVisitorId();
@@ -67,11 +70,12 @@ public class LoanController {
     }
 
     /**
-     * Update a loan's status
-     * @author Shidan Javaheri
+     * Update a loan's status to Approved or Declined
      * 
-     * @param request containing the loan id and status
-     * @return the updated loan as a Dto, in a response entity, status ok
+     * @author Shidan Javaheri
+     * @param request a {@link LoanDto} containing the loan id and status to update
+     *                to
+     * @return an updated {@link LoanDto} in a ResponseEntity, with an Http Status
      */
     @PutMapping
     public ResponseEntity<LoanDto> updateLoanStatus(@RequestBody LoanDto request) {
@@ -89,12 +93,13 @@ public class LoanController {
 
     /**
      * Delete a loan given its id
-     * @author Shidan Javaheri
      * 
-     * @param request 
-     * @return A message saying the loan was deleted
+     * @author Shidan Javaheri
+     * @param id the int id of the loan
+     * @return A ResponseEntity with a string message saying the loan was deleted,
+     *         and an Http status
      */
-    @DeleteMapping({"/{id}", "/{id}/"})
+    @DeleteMapping({ "/{id}", "/{id}/" })
     public ResponseEntity<String> deleteLoan(@PathVariable int id) {
         // call service layer
         loanService.deleteLoan(id);
@@ -107,9 +112,10 @@ public class LoanController {
 
     /**
      * Gets all the loans in the system
-     * @author Shidan Javaheri
      * 
-     * @return an array list with a list of all loans as Dtos
+     * @author Shidan Javaheri
+     * @return a ResponseEntity with an ArrayList of type {@link LoanDto} and an
+     *         Http status
      */
     @GetMapping
     public ResponseEntity<ArrayList<LoanDto>> getAllLoans() {
@@ -128,13 +134,14 @@ public class LoanController {
     }
 
     /**
-     * Gts all the loans in the system with a given status
-     * @author Shidan Javaheri
+     * Gets all the loans in the system with a given status
      * 
-     * @param status the status
-     * @return an array list with all the loans as Dtos
+     * @author Shidan Javaheri
+     * @param status an ExchangeStatus ( Approved, Pending or Declined )
+     * @return a ResponseEntity with an ArrayList of type {@link LoanDto} and an
+     *         Http status
      */
-    @GetMapping({"/status", "/status/"})
+    @GetMapping({ "/status", "/status/" })
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithStatus(@RequestParam ExchangeStatus status) {
 
         // get all loans
@@ -152,13 +159,15 @@ public class LoanController {
 
     /**
      * Gets all loans due on a certain day
-     * @author Shidan Javaheri
      * 
-     * @param date
-     * @return an array list with all the loans as Dtos
+     * @author Shidan Javaheri
+     * @param date a date
+     * @return a ResponseEntity with an ArrayList of type {@link LoanDto} and an
+     *         Http status
      */
-    @GetMapping({"/dueDate", "/dueDate/"})
-    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithDueDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
+    @GetMapping({ "/dueDate", "/dueDate/" })
+    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithDueDate(
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         // get all loans
         ArrayList<Loan> retrievedLoans = loanService.getAllLoansByDueDate(Date.valueOf(date));
@@ -175,13 +184,15 @@ public class LoanController {
 
     /**
      * Gets all the loans submitted on a certain day
-     * @author Shidan Javaheri
      * 
-     * @param date
-     * @return an array list with all the loans as Dtos
+     * @author Shidan Javaheri
+     * @param date a date
+     * @return a ResponseEntity with an ArrayList of type {@link LoanDto} and an
+     *         Http status
      */
-    @GetMapping({"/submittedDate", "/submittedDate/"})
-    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithSubmittedDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+    @GetMapping({ "/submittedDate", "/submittedDate/" })
+    public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithSubmittedDate(
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         // get all loans
         ArrayList<Loan> retrievedLoans = loanService.getAllLoansBySubmittedDate(Date.valueOf(date));
@@ -198,11 +209,13 @@ public class LoanController {
 
     /**
      * Gets all the loans belonging to a visitor
+     * 
      * @author Shidan Javaheri
-     * @param username
-     * @return an array list with all the loans as Dtos
+     * @param username the string username of the visitor
+     * @return a ResponseEntity with an ArrayList of type {@link LoanDto} and an
+     *         Http status
      */
-    @GetMapping({"/visitor","/visitor/"})
+    @GetMapping({ "/visitor", "/visitor/" })
     public ResponseEntity<ArrayList<LoanDto>> getAllLoansWithVisitor(@RequestParam String username) {
 
         // get all loans

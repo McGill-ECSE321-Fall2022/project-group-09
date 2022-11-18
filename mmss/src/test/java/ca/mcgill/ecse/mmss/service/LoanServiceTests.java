@@ -32,6 +32,10 @@ import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
+
+/** 
+ * Tests for all Loan Service Methods
+ */
 @ExtendWith(MockitoExtension.class)
 public class LoanServiceTests {
 
@@ -49,7 +53,10 @@ public class LoanServiceTests {
     private OpenDayRepository openDayRepository;
 
     @Mock
-    private NotificationService notificationService; 
+    private NotificationService notificationService;
+
+    @Mock
+    private OpenDayService openDayService;
 
     // We inject the mocks in the loan service - the thing that calls on the
     // repositories
@@ -71,7 +78,7 @@ public class LoanServiceTests {
     public void createObjects() {
 
         // create necessary objects for test
-        // This will Mock the content of your database
+        // This will Mock the content of the database
         // Basically a fake database system
         this.person = new Person(0, "Henry", "Doppleganger");
         this.artefact = new Artefact(2, "Lightsaber", "From the death star", true, 0, 0);
@@ -103,13 +110,13 @@ public class LoanServiceTests {
      * @author Shidan Javaheri
      */
     @Test 
-    public void testRetrieveLoanById () { 
+    public void testGetLoanById () { 
 
         // setup mocks
         when(loanRepository.findLoanByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> loan ); 
 
         // call service layer
-        Loan retrievedLoan = loanService.retrieveLoanById(0); 
+        Loan retrievedLoan = loanService.getLoanById(0); 
 
         // assertions
         assertEquals (0, retrievedLoan.getExchangeId()); 
@@ -133,7 +140,7 @@ public class LoanServiceTests {
         when(loanRepository.findLoanByExchangeId(invalidId)).thenAnswer((InvocationOnMock invocation) -> null);
 
         // call service layer and get the exception
-        MmssException ex = assertThrows(MmssException.class, () -> loanService.retrieveLoanById(invalidId));
+        MmssException ex = assertThrows(MmssException.class, () -> loanService.getLoanById(invalidId));
 
         // check the message contains the right message and status
         assertEquals("Loan not found", ex.getMessage());
@@ -408,7 +415,6 @@ public class LoanServiceTests {
 
     /**
      * Test successfully updating the status of a loan to Declined
-     * May need to add tests that the notification respotiory is called
      * @author Shidan Javaheri
 
      */
@@ -445,13 +451,10 @@ public class LoanServiceTests {
 
     /**
      * Test successfully updating the status of a loan to Approved
-     * May need to add tests that the notification respotiory is called
-     * 
      * @author Shidan Javaheri
      */
     @Test
     public void testUpdateStatusToApproved() {
-
          // set up the mocks
 
         // return the loan that is saved
@@ -462,6 +465,9 @@ public class LoanServiceTests {
 
         // return the artefact when it is saved
         when(artefactRepository.save((any(Artefact.class)))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0)); 
+
+        // when the openDay service is called
+        when(openDayService.calculateLoanDueDate(any(Date.class))).thenAnswer((InvocationOnMock invocation) -> new OpenDay(Date.valueOf("2023-12-12"))); 
 
         // call the service layer
         Loan updatedLoan = loanService.updateStatus(0, ExchangeStatus.Approved); 
@@ -480,11 +486,14 @@ public class LoanServiceTests {
         verify(artefactRepository, times(1)).save((any(Artefact.class))); 
 
 
-        String message ="Your loan request submitted on date" + updatedLoan.getSubmittedDate().toString()
-                        + "with id: " + String.valueOf(updatedLoan.getExchangeId())
-                        + "has been approved! Please follow this link to process payment, and pass by the Museum to pick it up. http://payhere.com"; 
+        String message = "Your loan request submitted on date" + loan.getSubmittedDate().toString()
+                + "with id: " + String.valueOf(loan.getExchangeId())
+                + "has been approved! Please follow this link to process payment, and pass by the Museum to pick up the related artefact. http://payhere.com";
 
         verify(notificationService,times(1)).createNotificationByUsername(updatedLoan.getVisitor().getUsername(), message); 
+
+        // verify that the due date was calculated
+        verify(openDayService, times(1)).calculateLoanDueDate(any(Date.class)); 
 
     }
 
@@ -579,6 +588,7 @@ public class LoanServiceTests {
 
     /**
      * Tests getting all loans with an invalid username
+     * 
      * @author Shidan Javaheri
      */
     @Test
@@ -603,6 +613,7 @@ public class LoanServiceTests {
 
     /**
      * Tests getting all loans with invalid open day
+     * 
      * @author Shidan Javaheri
      */
     @Test
@@ -628,6 +639,7 @@ public class LoanServiceTests {
 
     /**
      * Makes a list of loans useful for tests
+     * 
      * @return an ArrayList<Loan> of loans
      * 
      * @author Shidan Javaheri
@@ -664,6 +676,7 @@ public class LoanServiceTests {
         loans.add(loan6);
 
         return loans;
+
     }
 
 }
