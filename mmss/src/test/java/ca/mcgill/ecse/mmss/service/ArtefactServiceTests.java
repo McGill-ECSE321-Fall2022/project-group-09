@@ -1,7 +1,6 @@
 package ca.mcgill.ecse.mmss.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -23,6 +22,9 @@ import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse.mmss.exception.MmssException;
 
+/**
+ * Tests for the ArtefactService class
+ */
 @ExtendWith(MockitoExtension.class)
 public class ArtefactServiceTests {
 
@@ -69,7 +71,7 @@ public class ArtefactServiceTests {
                 artefact.setRoom(storage);
                 storage.setArtefactCount(storage.getArtefactCount() + 1);
             }
-            setCanLoan(true);
+            setCanLoan();
             // Store in array list
             artefacts.add(artefact);
         }
@@ -330,7 +332,7 @@ public class ArtefactServiceTests {
         // assertion
         assertEquals("Hello", artefact.getArtefactName());
         assertEquals("World", artefact.getDescription());
-        assertEquals(true, artefact.getCanLoan());
+        assertTrue(artefact.getCanLoan());
         assertEquals(2, artefact.getInsuranceFee());
         assertEquals(3, artefact.getLoanFee());
         // Verify
@@ -352,7 +354,7 @@ public class ArtefactServiceTests {
         // assertion
         assertEquals("Hello", artefact.getArtefactName());
         assertEquals("World", artefact.getDescription());
-        assertEquals(true, artefact.getCanLoan());
+        assertTrue(artefact.getCanLoan());
         assertEquals(2, artefact.getInsuranceFee());
         assertEquals(3, artefact.getLoanFee());
         // Verify
@@ -373,7 +375,7 @@ public class ArtefactServiceTests {
         // call service layer
         artefactService.removeArtefactFromItsRoom(artefact.getArtefactId());
         // assertion
-        assertEquals(null, artefact.getRoom());
+        assertNull(artefact.getRoom());
         assertEquals(3-1, smallRoom.getArtefactCount());
         // Verify
         verify(artefactRepository, times(1)).findArtefactByArtefactId(any(int.class));
@@ -556,9 +558,8 @@ public class ArtefactServiceTests {
 
     /**
      * Helper method to set the artefacts to a particular loan value
-     * @param canLoan
      */
-    private void setCanLoan(boolean canLoan) {
+    private void setCanLoan() {
         for (Artefact artefact : artefacts) {
             if (artefact.getArtefactId() % 2 == 0)
                 artefact.setCanLoan(true);

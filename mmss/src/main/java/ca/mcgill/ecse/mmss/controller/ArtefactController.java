@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+/**
+ * REST API for the Artefact class
+ */
 @RestController
 @RequestMapping({"/artefact", "/artefact/"})
 public class ArtefactController {
@@ -20,8 +23,8 @@ public class ArtefactController {
     /**
      * Get an artefact by its primary key
      *
-     * @param id
-     * @return a response entity with the artefact as DTO and ok status
+     * @param id the artefact's primary key
+     * @return a response entity with the ArtefactDto instance and the HttpStatus
      */
     @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<ArtefactDto> getArtefact(@PathVariable int id) {
@@ -30,9 +33,9 @@ public class ArtefactController {
     }
 
     /**
-     * Get all artefacts
+     * Get all artefacts in the museum
      *
-     * @return an array list of artefacts as DTOs
+     * @return a response entity with an array list of ArtefactDto instances and the HttpStatus
      */
     @GetMapping
     public ResponseEntity<ArrayList<ArtefactDto>> getAllArtefacts() {
@@ -48,8 +51,8 @@ public class ArtefactController {
     /**
      * Get all artefacts with a specific canLoan value
      *
-     * @param canLoan
-     * @return an array list with the artefacts as DTOs
+     * @param canLoan whether an artefact is available for loan
+     * @return a response entity with an array list of ArtefactDto instances and the HttpStatus
      */
     @GetMapping({"/canLoan", "/canLoan/"})
     public ResponseEntity<ArrayList<ArtefactDto>> getAllArtefactsByCanLoan(@RequestParam boolean canLoan) {
@@ -63,10 +66,10 @@ public class ArtefactController {
     }
 
     /**
-     * Get all the artefacts associated with a given room
+     * Get all the artefacts in a given room
      *
-     * @param roomId, the primary key of a room
-     * @return an array list with the artefacts as DTOs
+     * @param roomId a room's primary key
+     * @return a response entity with an array list of ArtefactDto instances and the HttpStatus
      */
     @GetMapping({"/room", "/room/"})
     public ResponseEntity<ArrayList<ArtefactDto>> getAllArtefactsByRoom(@RequestParam int roomId) {
@@ -82,9 +85,9 @@ public class ArtefactController {
     /**
      * Get all the artefacts associated with a given room and a given canLoan value
      *
-     * @param roomId
-     * @param canLoan
-     * @return an array list with the artefacts as DTOs
+     * @param roomId a room's primary key
+     * @param canLoan whether an artefact is available for loan
+     * @return a response entity with an array list of ArtefactDto instances and the HttpStatus
      */
     @GetMapping({"/roomAndCanLoan", "/roomAndCanLoan/"})
     public ResponseEntity<ArrayList<ArtefactDto>> getAllArtefactsByRoomAndByCanLoan(@RequestParam int roomId, @RequestParam boolean canLoan) {
@@ -100,7 +103,7 @@ public class ArtefactController {
     /**
      * Get all artefacts in display
      *
-     * @return an array list of artefacts as DTOs
+     * @return a response entity with an array list of ArtefactDto instances and the HttpStatus
      */
     @GetMapping({"/display", "/display/"})
     public ResponseEntity<ArrayList<ArtefactDto>> getAllArtefactsInDisplay() {
@@ -116,8 +119,8 @@ public class ArtefactController {
     /**
      * Get all artefacts in display with a specific canLoan value
      *
-     * @param canLoan
-     * @return an array list with the artefacts as DTOs
+     * @param canLoan whether an artefact is available for loan
+     * @return a response entity with an array list of ArtefactDto instances and the HttpStatus
      */
     @GetMapping({"/display/canLoan", "/display/canLoan/"})
     public ResponseEntity<ArrayList<ArtefactDto>> getAllArtefactsInDisplayByCanLoan(@RequestParam boolean canLoan) {
@@ -133,8 +136,8 @@ public class ArtefactController {
     /**
      * Create a new artefact based on an input request and add it to a room
      *
-     * @param request
-     * @return a response entity with the artefact as DTO and CREATED status
+     * @param request a ArtefactDto instance {@link ArtefactDto}
+     * @return a response entity with the ArtefactDto instance and the HttpStatus
      */
     @PostMapping
     public ResponseEntity<ArtefactDto> createArtefact(@RequestBody ArtefactDto request) {
@@ -156,8 +159,8 @@ public class ArtefactController {
     /**
      * Update an artefact based on an input request
      *
-     * @param request
-     * @return a response entity with the artefact as DTO and ok status
+     * @param request a ArtefactDto instance {@link ArtefactDto}
+     * @return a response entity with the ArtefactDto instance and the HttpStatus
      */
     @PutMapping
     public ResponseEntity<ArtefactDto> updateArtefact(@RequestBody ArtefactDto request) {
@@ -177,9 +180,9 @@ public class ArtefactController {
     /**
      * Move an artefact to another room
      *
-     * @param artefactId
-     * @param roomId
-     * @return A message saying the artefact was moved
+     * @param artefactId the artefact's primary key
+     * @param roomId the room's primary key
+     * @return a response entity with a message and the HttpStatus
      */
     @PutMapping({"/move", "/move/"})
     public ResponseEntity<String> moveArtefactToRoom(@RequestParam int artefactId, @RequestParam int roomId) {
@@ -190,8 +193,8 @@ public class ArtefactController {
     /**
      * Delete an artefact given its primary key
      *
-     * @param id
-     * @return A message saying the artefact was deleted
+     * @param id the artefact's primary key
+     * @return a response entity with a message and the HttpStatus
      */
     @DeleteMapping({"/{id}", "/{id}/"})
     public ResponseEntity<String> deleteArtefact(@PathVariable int id) {
