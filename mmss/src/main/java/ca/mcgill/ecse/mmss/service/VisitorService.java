@@ -13,7 +13,6 @@ import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
-import ca.mcgill.ecse.mmss.model.AccountType;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
@@ -38,11 +37,16 @@ public class VisitorService {
 	@Transactional
 	public Visitor createVisitor(String firstName, String lastName, String userName, String passWord) {
 		
-		if (!checkValidUser(userName)) {
+		if (checkValidUser(userName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
 		
-		if(!checkValidPassword(passWord)) {
+		Visitor existVisit = visitorRepository.findVisitorByUsername(userName);
+		if (existVisit!=null) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
+		}
+		
+		if(checkValidPassword(passWord)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
 		
@@ -79,11 +83,16 @@ public class VisitorService {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no visitor with this username.");
 		}
 		
-		if (!checkValidUser(newUserName)) {
+		if (checkValidUser(newUserName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
 		
-		if (!checkValidPassword(newPassWord)) {
+		Visitor existVisit = visitorRepository.findVisitorByUsername(newUserName);
+		if (existVisit!=null) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
+		}
+		
+		if (checkValidPassword(newPassWord)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
 		
@@ -133,8 +142,13 @@ public class VisitorService {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
 		}
 		
-		if (!checkValidUser(newUser)) {
+		if (checkValidUser(newUser)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
+		}
+		
+		Visitor existVisit = visitorRepository.findVisitorByUsername(newUser);
+		if (existVisit!=null) {
+			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
 		
 		// all tests should have passed, so it is a valid username
@@ -156,11 +170,12 @@ public class VisitorService {
 		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
 		}
+		
 		if (!oldPass.equals(visitor.getPassword())) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not correct. Please enter correct password.");
 		}
 		
-		if (!checkValidPassword(newPass)) {
+		if (checkValidPassword(newPass)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
 		
@@ -267,12 +282,7 @@ public class VisitorService {
      * @param userInputName
      * @return boolean indicating whether or not the entered username is valid
      */
-	@Transactional
-	private boolean checkValidUser (String userInputName) {
-		Visitor existVisit = visitorRepository.findVisitorByUsername(userInputName);
-		if (existVisit!=null) {
-			return false;
-		}
+	public boolean checkValidUser (String userInputName) {
 		int validUser = 0;
 		for (int i=0; i<userInputName.length(); i++) {
 			if (userInputName.charAt(i) == '@') {
@@ -292,7 +302,7 @@ public class VisitorService {
      * @param inputPassword
      * @return boolean indicating whether or not the entered password is valid
      */
-	private boolean checkValidPassword(String inputPassword) {
+	public boolean checkValidPassword(String inputPassword) {
 		boolean result;
 		int validUpper = 0;
 		int validDigit = 0;
