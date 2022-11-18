@@ -192,7 +192,7 @@ public class VisitorService {
      * @return A modified Visitor Account object, or exceptions indicating invalid input information
      */
 	@Transactional
-	public Visitor updateVisitorBalance(String username, int newBalance) {
+	public Visitor updateVisitorBalance(String username, double newBalance) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
 		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");

@@ -57,7 +57,8 @@ public class VisitorServiceTests {
 		 this.person = new Person(0, "John", "Coder");
 		 this.communication = new Communication(2);
 		 this.visitor = new Visitor("John@Coder", "ILikeSoftwareTests1", person);
-		 visitor.setCommunication(communication);
+		 this.visitor.setCommunication(communication);
+		 this.visitor.setBalance(0); // setting it for test purposes
 		 this.visitorTwo = new Visitor("Jon@Jones","Fngannou270", person);
 		 this.newName = "travis@scott";
 	 }
@@ -392,6 +393,33 @@ public class VisitorServiceTests {
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
         
         verify(visitorRepository, times(1)).findVisitorByUsername("ksi@deji");
+	}
+	
+	@Test
+	public void testUpdateVisitorBalance() {
+		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor);
+		when(visitorRepository.save(any(Visitor.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
+		
+		Visitor visitorUpdated = visitorService.updateVisitorBalance(visitor.getUsername(), 25);
+		assertEquals(visitorUpdated.getBalance(), 25);
+		
+		verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
+		verify(visitorRepository, times(1)).save(any(Visitor.class));
+	}
+	
+	@Test
+	public void testUpdateVisitorBalanceInvalidUser() {
+		final String invalidUsername = "bobcode";
+        
+		when(visitorRepository.findVisitorByUsername(invalidUsername)).thenAnswer((InvocationOnMock invocation) -> null); 
+		
+		MmssException ex = assertThrows(MmssException.class, () -> visitorService.updateVisitorBalance(invalidUsername,25));
+		
+		// check the message contains the right message and status
+        assertEquals("There is no such visitor account with this username.", ex.getMessage());
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+        
+        verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
 	}
 	
 	// needs modification

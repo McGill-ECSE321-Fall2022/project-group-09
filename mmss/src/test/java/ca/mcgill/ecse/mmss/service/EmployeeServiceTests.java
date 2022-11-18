@@ -395,6 +395,47 @@ public class EmployeeServiceTests {
         verify(employeeRepository, times(1)).findEmployeeByUsername("ksi@deji");
 	}
 	
+	@Test
+	public void testUpdateEmployeePhoneNumber() {
+		when(employeeRepository.findEmployeeByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> employee); 
+		when(employeeRepository.save(any(Employee.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
+		
+		Employee employeeUpdated = employeeService.updateEmployeePhoneNumber(employee.getUsername(),"514-333-5555");
+		assertEquals(employeeUpdated.getPhoneNumber(),"514-333-5555");
+		
+		verify(employeeRepository, times(1)).findEmployeeByUsername(employee.getUsername());
+		verify(employeeRepository, times(1)).save(any(Employee.class));
+	}
+	
+	@Test
+	public void testUpdateEmployeePhoneNumberInvalidUser() {
+		final String invalidUsername = "bobcode";
+        
+		when(employeeRepository.findEmployeeByUsername(invalidUsername)).thenAnswer((InvocationOnMock invocation) -> null); 
+		
+		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePhoneNumber(invalidUsername,"514-333-5555"));
+		
+		// check the message contains the right message and status
+        assertEquals("There is no such employee account with this username.", ex.getMessage());
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+        
+        verify(employeeRepository, times(1)).findEmployeeByUsername(invalidUsername);
+	}
+	
+	@Test
+	public void testUpdateEmployeePhoneNumberInvalidPhoneNumber() {
+        
+		when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
+		
+		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePhoneNumber(employee.getUsername(),"5143335555"));
+		
+		// check the message contains the right message and status
+        assertEquals("Enter a valid phone number in the format xxx-xxx-xxxx.", ex.getMessage());
+        assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
+        
+        verify(employeeRepository, times(1)).findEmployeeByUsername(employee.getUsername());
+	}
+	
 	// needs modification
 	@Test
 	public void testDeleteEmployee() {
