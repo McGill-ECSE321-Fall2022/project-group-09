@@ -6,10 +6,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.sql.Date;
-import java.util.ArrayList;
-
-import ca.mcgill.ecse.mmss.dao.*;
 import ca.mcgill.ecse.mmss.model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,11 +19,12 @@ import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse.mmss.exception.MmssException;
 
+/**
+ * Tests for the CommunicationService class
+ */
 @ExtendWith(MockitoExtension.class)
 public class CommunicationServiceTests {
 
-    @Mock
-    private CommunicationRepository communicationRepository;
     @Mock
     private LoginService loginService;
     @InjectMocks
@@ -88,5 +85,4 @@ public class CommunicationServiceTests {
         // verify calls to repositories
         verify(loginService, times (1)).getAccountByUsername(any(String.class));
     }
-
 }

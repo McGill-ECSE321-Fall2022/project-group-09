@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.util.ArrayList;
 
+/**
+ * Business logic for the Notification class
+ */
 @Service
 public class NotificationService {
 
@@ -22,8 +25,10 @@ public class NotificationService {
 
     /**
      * Get a notification by its primary key
-     * @param id
-     * @return a notification
+     *
+     * @param id the notification's primary key
+     * @return the notification instance
+     * @throws MmssException
      */
     @Transactional
     public Notification getNotificationById(int id) {
@@ -35,8 +40,9 @@ public class NotificationService {
 
     /**
      * Get all notifications associated with a username
-     * @param username
-     * @return an array list of notifications associated with a username
+     *
+     * @param username an account's primary key
+     * @return an array list of notification instances
      */
     @Transactional
     public ArrayList<Notification> getAllNotificationsByUsername(String username) {
@@ -46,9 +52,11 @@ public class NotificationService {
 
     /**
      * Create a notification to be sent to an account
-     * @param username
-     * @param message
-     * @return a notification
+     *
+     * @param username an account's primary key
+     * @param message the message to be sent
+     * @return a notification instance
+     * @throws MmssException
      */
     @Transactional
     public Notification createNotificationByUsername(String username, String message) {
@@ -68,7 +76,8 @@ public class NotificationService {
 
     /**
      * Delete a notification with a specific id
-     * @param id
+     *
+     * @param id the notification's primary key
      */
     @Transactional
     public void deleteNotification(int id) {
