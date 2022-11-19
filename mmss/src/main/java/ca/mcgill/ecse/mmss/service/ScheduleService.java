@@ -13,10 +13,7 @@ import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.ScheduleRepository;
 import ca.mcgill.ecse.mmss.dao.ShiftRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
-import ca.mcgill.ecse.mmss.model.Artefact;
-import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.OpenDay;
-import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Schedule;
 import ca.mcgill.ecse.mmss.model.Shift;
 
@@ -26,8 +23,6 @@ public class ScheduleService {
     private ScheduleRepository scheduleRepository;
 	@Autowired
     private OpenDayRepository openDayRepository;
-    @Autowired
-    private OpenDayService openDayService;
     @Autowired
     private ShiftRepository shiftRepository;
     @Autowired
@@ -41,8 +36,8 @@ public class ScheduleService {
      * @return the schedule or an exception
      */
     @Transactional
-    public Schedule getScheduleById(int scheduleId) {
-        Schedule schedule = scheduleRepository.findScheduleByScheduleId(scheduleId);
+    public Schedule getSchedule() {
+        Schedule schedule = scheduleRepository.findAll().get(0);
         if (schedule == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
@@ -66,66 +61,47 @@ public class ScheduleService {
     /**
      * If both the schedule and the open day exist, assign the schedule to a single open day
      *
-     * @param scheduleId
      * @param date
      */
     @Transactional
-    public void assignScheduleToOpenDay(int scheduleId, Date date) {
-    	OpenDay openDay = openDayService.getOpenDayByDate(date);
+    public void assignScheduleToOpenDay(Date date) {
+    	OpenDay openDay = openDayRepository.findOpenDayByDate(date);
         if (openDay == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
-        else if (openDayService.getOpenDayByDate(date) == null) {
+        else if (openDayRepository.findOpenDayByDate(date) == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Open day not found");
         }
-    	openDay.setSchedule(getScheduleById(scheduleId));
+    	openDay.setSchedule(getSchedule());
     	openDayRepository.save(openDay);
     }    
 
     /**
      * If the schedule exists, assign the schedule to a list of open days
      *
-     * @param scheduleId
      * @param employeeList
      */
     @Transactional
-    public void assignScheduleToOpenDays(int scheduleId, ArrayList<OpenDay> dateList) {
-        if (getScheduleById(scheduleId) == null) {
+    public void assignScheduleToOpenDays(ArrayList<OpenDay> dateList) {
+        if (getSchedule() == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
         for(OpenDay openDay : dateList) {
-        	assignScheduleToOpenDay(scheduleId, openDay.getDate());
+        	assignScheduleToOpenDay(openDay.getDate());
         }
-    }
-    
-    /**
-     * If the open day exists, assign the schedule of an open day to null
-     *
-     * @param date
-     */
-    @Transactional
-    public void removeScheduleFromOpenDay(Date date) {
-    	OpenDay openDay = openDayService.getOpenDayByDate(date);
-    	if (openDay == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Open day not found");
-    	}
-    	openDay.setSchedule(null);
-    	openDayRepository.save(openDay);
     }
     
     /**
      * If the schedule exists, assign the schedule to all shifts
-     *
-     * @param scheduleId
      */
     @Transactional
-    public void assignScheduleToShifts(int scheduleId) {
-        if (getScheduleById(scheduleId) == null) {
+    public void assignScheduleToShifts() {
+        if (getSchedule() == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
         ArrayList<Shift> shiftList = shiftService.getAllShifts();
         for(Shift shift : shiftList) {
-        	shift.setSchedule(getScheduleById(scheduleId));
+        	shift.setSchedule(getSchedule());
         	shiftRepository.save(shift);
         }
     }

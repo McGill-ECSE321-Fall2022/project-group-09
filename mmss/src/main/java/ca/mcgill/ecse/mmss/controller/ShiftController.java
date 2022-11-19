@@ -61,15 +61,12 @@ public class ShiftController {
     /**
      * Create new shifts based on an input request
      *
-     * @param request a ShiftDto instance {@link ShiftDto}
      * @return a response entity with the ShiftDto ArrayList and the HttpStatus
      */
     @PostMapping
-    public ResponseEntity<ArrayList<ShiftDto>> createShifts(@RequestBody ShiftDto request) {
-        // get schedule id
-        int scheduleId = request.getScheduleId();
+    public ResponseEntity<ArrayList<ShiftDto>> createShifts() {
         // create the shifts
-        ArrayList<Shift> shifts = shiftService.createShifts(scheduleId);
+        ArrayList<Shift> shifts = shiftService.createShifts();
         //DTOs
         ArrayList<ShiftDto> shiftDTOs = new ArrayList<>();
         for (Shift shift : shifts) {
