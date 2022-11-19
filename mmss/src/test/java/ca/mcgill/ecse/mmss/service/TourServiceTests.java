@@ -102,7 +102,7 @@ public class TourServiceTests {
 	public void testRetrieveTourById() {
 		when(tourRepository.findTourByBookingId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> tour);
 
-		Tour retrievedTour = tourService.retrieveTourById(0);
+		Tour retrievedTour = tourService.getTourById(0);
 
 		assertEquals(0, retrievedTour.getBookingId());
 		assertEquals(visitor, retrievedTour.getVisitor());
@@ -126,7 +126,7 @@ public class TourServiceTests {
 
 		when(tourRepository.findTourByBookingId(invalidId)).thenAnswer((InvocationOnMock invocation) -> null);
 
-		MmssException ex = assertThrows(MmssException.class, () -> tourService.retrieveTourById(invalidId));
+		MmssException ex = assertThrows(MmssException.class, () -> tourService.getTourById(invalidId));
 
 		assertEquals("Tour not found.", ex.getMessage());
 		assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());

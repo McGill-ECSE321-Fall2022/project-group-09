@@ -39,7 +39,7 @@ public class TourService {
 	 * @author Shyam Desai
 	 */
 	@Transactional
-	public Tour retrieveTourById(int id) {
+	public Tour getTourById(int id) {
 		Tour tour = tourRepository.findTourByBookingId(id);
 
 		if (tour == null) {

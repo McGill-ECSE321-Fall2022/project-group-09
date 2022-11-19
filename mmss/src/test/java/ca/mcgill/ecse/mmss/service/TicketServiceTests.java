@@ -101,7 +101,7 @@ public class TicketServiceTests {
 		when(ticketRepository.findTicketByBookingId(any(int.class)))
 				.thenAnswer((InvocationOnMock invocation) -> ticket);
 
-		Ticket retrievedTicket = ticketService.retrieveTicketById(0);
+		Ticket retrievedTicket = ticketService.getTicketById(0);
 
 		assertEquals(0, retrievedTicket.getBookingId());
 		assertEquals(visitor, retrievedTicket.getVisitor());
@@ -121,7 +121,7 @@ public class TicketServiceTests {
 
 		when(ticketRepository.findTicketByBookingId(invalidId)).thenAnswer((InvocationOnMock invocation) -> null);
 
-		MmssException ex = assertThrows(MmssException.class, () -> ticketService.retrieveTicketById(invalidId));
+		MmssException ex = assertThrows(MmssException.class, () -> ticketService.getTicketById(invalidId));
 
 		assertEquals("Ticket not found.", ex.getMessage());
 		assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());

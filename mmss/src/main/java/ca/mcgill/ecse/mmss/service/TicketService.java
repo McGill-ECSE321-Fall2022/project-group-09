@@ -38,7 +38,7 @@ public class TicketService {
 	 * @author Shyam Desai
 	 */
 	@Transactional
-	public Ticket retrieveTicketById(int id) {
+	public Ticket getTicketById(int id) {
 		Ticket ticket = ticketRepository.findTicketByBookingId(id);
 		if (ticket == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "Ticket not found.");
