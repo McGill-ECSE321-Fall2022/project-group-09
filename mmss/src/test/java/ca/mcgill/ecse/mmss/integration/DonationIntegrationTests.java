@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,22 +23,17 @@ import org.springframework.http.ResponseEntity;
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.DonationRepository;
-import ca.mcgill.ecse.mmss.dao.LoanRepository;
 import ca.mcgill.ecse.mmss.dao.NotificationRepository;
-import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.dto.ArtefactDto;
 import ca.mcgill.ecse.mmss.dto.DonationDto;
-import ca.mcgill.ecse.mmss.dto.LoanDto;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Donation;
-import ca.mcgill.ecse.mmss.model.Loan;
-import ca.mcgill.ecse.mmss.model.OpenDay;
+import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
-import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class DonationIntegrationTests {

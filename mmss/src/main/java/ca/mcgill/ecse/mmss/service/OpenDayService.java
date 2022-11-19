@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
+import ca.mcgill.ecse.mmss.dao.ScheduleRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 
@@ -19,6 +20,12 @@ public class OpenDayService {
 	
 	@Autowired
 	private OpenDayRepository openDayRepository;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private ScheduleService scheduleService;
 	
 	/**
      * Finds an OpenDay by its Date
@@ -93,6 +100,8 @@ public class OpenDayService {
     	OpenDay openDay = new OpenDay();
     	openDay.setDate(date);
 
+        // set the scheduale 
+
         // save the openDay
         openDayRepository.save(openDay);
     	return openDay;
@@ -113,6 +122,8 @@ public class OpenDayService {
         if (openDay == null)
             throw new MmssException(HttpStatus.NOT_FOUND, "The openDat with this date was not found");
 
+        // delete from scheduale
+        
         // calls the repository to delete the date
         openDayRepository.deleteById(date);
     }
