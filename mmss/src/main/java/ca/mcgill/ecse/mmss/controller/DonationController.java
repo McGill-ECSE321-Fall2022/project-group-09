@@ -77,13 +77,9 @@ public class DonationController {
      * @return the updated loan as a Dto, in a response entity, status ok
      */
     @PutMapping
-    public ResponseEntity<String> declineDonation(@RequestBody DonationDto request) {
-        
-        // get parameters
-        int loanId = request.getExchangeId();
-        ExchangeStatus status = request.getExchangeStatus();
+    public ResponseEntity<String> declineDonation(@RequestParam int id) {
 
-        donationService.declineDonation(loanId, status);
+        donationService.declineDonation(id, ExchangeStatus.Declined);
 
         // return updated Loan as Dto
         return new ResponseEntity<String>("Donation successfully Declined", HttpStatus.OK);
@@ -97,16 +93,17 @@ public class DonationController {
      * @param request containing the loan id and status
      * @return the updated loan as a Dto, in a response entity, status ok
      */
-    @PutMapping
-    public ResponseEntity<ArtefactDto> updateDonation(@RequestBody DonationDto request) {
+    @PutMapping({"/{id}", "/{id}/"})
+    public ResponseEntity<ArtefactDto> updateDonation(@PathVariable int id , @RequestBody ArtefactDto request) {
         
         // get parameters
-        int donationId = request.getExchangeId();
-        ExchangeStatus status = request.getExchangeStatus();
+        boolean canLoan = request.getCanLoan();
+        double insuranceFee  = request.getInsuranceFee();
+        double loanFee = request.getLoanFee();
 
         // call service layer
         // not sure how to get the fees
-        Artefact createdArtefact = donationService.updateStatus(donationId, status, false, 2, 1);
+        Artefact createdArtefact = donationService.updateStatus(id, ExchangeStatus.Approved, canLoan, insuranceFee, loanFee);
 
         // return updated Loan as Dto
         return new ResponseEntity<ArtefactDto>(new ArtefactDto(createdArtefact), HttpStatus.OK);
