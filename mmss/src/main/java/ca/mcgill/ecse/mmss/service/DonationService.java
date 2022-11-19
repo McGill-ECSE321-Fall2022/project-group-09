@@ -273,7 +273,7 @@ public class DonationService {
                 // send notification method
                 notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message);
                 
-                // delete the donation from 
+                // delete the donation from the database
                 deleteDonation(donation.getExchangeId());
             }
         }

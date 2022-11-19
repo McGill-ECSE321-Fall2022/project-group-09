@@ -90,7 +90,7 @@ public class DonationController {
      * Approve a donation
      * @author Mohamed Elsamadouny
      * 
-     * @param request containing the loan id and status
+     * @param request containing the donation id and an artefactDto
      * @return the updated loan as a Dto, in a response entity, status ok
      */
     @PutMapping({"/{id}", "/{id}/"})
@@ -102,10 +102,9 @@ public class DonationController {
         double loanFee = request.getLoanFee();
 
         // call service layer
-        // not sure how to get the fees
         Artefact createdArtefact = donationService.updateStatus(id, ExchangeStatus.Approved, canLoan, insuranceFee, loanFee);
 
-        // return updated Loan as Dto
+        // return created Artefact as Dto
         return new ResponseEntity<ArtefactDto>(new ArtefactDto(createdArtefact), HttpStatus.OK);
 
     }
