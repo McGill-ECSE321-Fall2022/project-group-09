@@ -97,10 +97,7 @@ public class ShiftService {
     @Transactional
     public Shift getShiftFromEmployee(String username) {
     	Employee employee = employeeRepository.findEmployeeByUsername(username);
-    	if (employee == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Employee not found");
-        }
-    	else if (employee.getShift() == null) {
+    	if (employee.getShift() == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Employee shift not found");
         }
     	return employee.getShift();
@@ -117,9 +114,6 @@ public class ShiftService {
     	Employee employee = employeeRepository.findEmployeeByUsername(username);
         if (getShiftById(shiftId) == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Shift not found");
-        }
-        else if (employee == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Employee not found");
         }
     	employee.setShift(getShiftById(shiftId));
     	employeeRepository.save(employee);

@@ -59,9 +59,7 @@ public class ScheduleService {
      */
     @Transactional
     public void assignScheduleToOpenDay(Date date) {
-    	OpenDay openDay = openDayRepository.findOpenDayByDate(date);if (openDayRepository.findOpenDayByDate(date) == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Open day not found");
-        }
+    	OpenDay openDay = openDayRepository.findOpenDayByDate(date);
     	openDay.setSchedule(getSchedule());
     	openDayRepository.save(openDay);
     }    

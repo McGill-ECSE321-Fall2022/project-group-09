@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import ca.mcgill.ecse.mmss.dto.ScheduleDto;
 import ca.mcgill.ecse.mmss.dto.ShiftDto;
 import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Shift;
@@ -21,7 +22,7 @@ public class ShiftController {
      * Get shift with a specific shiftTime value
      *
      * @param shiftTime a shift's assigned time
-     * @return a response entity with the ShiftDto instance and the HttpStatus
+     * @return a response entity with the ShiftDto {@link ScheduleDto} instance and the HttpStatus
      */
     @GetMapping({"/{shiftTime}", "/{shiftTime}/"})
     public ResponseEntity<ShiftDto> getShiftByShiftTime(@PathVariable Shift.ShiftTime shiftTime) {
@@ -32,7 +33,7 @@ public class ShiftController {
     /**
      * Get all shifts available
      *
-     * @return a response entity with an array list of ShiftDto instances and the HttpStatus
+     * @return a response entity with an array list of ShiftDto {@link ScheduleDto} instances and the HttpStatus
      */
     @GetMapping
     public ResponseEntity<ArrayList<ShiftDto>> getAllShifts() {
@@ -49,7 +50,7 @@ public class ShiftController {
      * Get shift of an employee
      *
      * @param shiftTime a shift's assigned time
-     * @return a response entity with the ShiftDto instance and the HttpStatus
+     * @return a response entity with the ShiftDto {@link ScheduleDto} instance and the HttpStatus
      */
     @GetMapping({"/username", "/username/"})
     public ResponseEntity<ShiftDto> getShiftFromEmployee(@RequestParam String username) {

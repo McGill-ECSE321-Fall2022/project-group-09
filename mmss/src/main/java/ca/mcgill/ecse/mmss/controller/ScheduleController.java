@@ -15,11 +15,10 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
     
-
     /**
      * Get a schedule by its primary key
      *
-     * @return a response entity with the ScheduleDto instance and the HttpStatus
+     * @return a response entity with the ScheduleDto instance {@link ScheduleDto} and the HttpStatus
      */
     @GetMapping
     public ResponseEntity<ScheduleDto> getSchedule() {
