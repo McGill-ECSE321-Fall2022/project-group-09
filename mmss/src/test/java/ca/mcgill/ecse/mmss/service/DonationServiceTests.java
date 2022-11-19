@@ -101,7 +101,7 @@ public class DonationServiceTests {
         when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> donation ); 
 
         // call service layer
-        Donation retrievedDonation = donationService.getDonationById(0); 
+        Donation retrievedDonation = donationService.retreiveDonationById(0); 
 
         // assertions
         assertEquals(0, retrievedDonation.getExchangeId()); 
@@ -125,7 +125,7 @@ public class DonationServiceTests {
         when(donationRepository.findDonationByExchangeId(invalidId)).thenAnswer((InvocationOnMock invocation) -> null);
 
         // call service layer and get the exception
-        MmssException ex = assertThrows(MmssException.class, () -> donationService.getDonationById(invalidId));
+        MmssException ex = assertThrows(MmssException.class, () -> donationService.retreiveDonationById(invalidId));
 
         // check the message contains the right message and status
         assertEquals("Donation not found", ex.getMessage());

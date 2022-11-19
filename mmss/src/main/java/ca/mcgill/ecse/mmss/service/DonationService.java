@@ -50,7 +50,7 @@ public class DonationService {
 	 */
 
 	@Transactional
-	public Donation getDonationById(int id) {
+	public Donation retreiveDonationById(int id) {
 		// use the repository method
 		Donation donation = donationRepository.findDonationByExchangeId(id);
 		if (donation == null) {
