@@ -21,7 +21,7 @@ import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.service.VisitorService;
 
 @RestController
-@RequestMapping ({"/visitor","/visitor"})
+@RequestMapping ({"/visitor","/visitor/"})
 public class VisitorController {
 	
 	@Autowired

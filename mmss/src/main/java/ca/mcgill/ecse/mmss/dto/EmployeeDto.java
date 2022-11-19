@@ -20,7 +20,7 @@ public class EmployeeDto {
 	 * @author Shidan Javaheri, Shyam Desai
 	 * @param employee
 	 */
-	public void EmpoloyeeDto(Employee employee) {
+	public EmployeeDto(Employee employee) {
 		this.phoneNumber = employee.getPhoneNumber();
 		this.userName = employee.getUsername();
 		this.personId = employee.getPerson().getPersonId();

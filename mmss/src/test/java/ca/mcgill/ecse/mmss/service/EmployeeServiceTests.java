@@ -337,14 +337,15 @@ public class EmployeeServiceTests {
 	}
 	
 	@Test
-	public void testUpdateEmployeePassword() {
+	public void testUpdateEmployeePasswordandPhone() {
 		when(employeeRepository.findEmployeeByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> employee); 
 
 		when(employeeRepository.save(any(Employee.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
 		
-		Employee employeeUpdated = employeeService.updateEmployeePassword(employee.getUsername(), employee.getPassword(),"Ilovecontrollers2");
+		Employee employeeUpdated = employeeService.updateEmployeePasswordAndPhone(employee.getUsername(), employee.getPassword(),"Ilovecontrollers2","514-456-7896");
 		
 		assertEquals("Ilovecontrollers2", employeeUpdated.getPassword());
+		assertEquals("514-456-7896", employeeUpdated.getPhoneNumber());
 		
 		verify(employeeRepository, times (1)).findEmployeeByUsername(employee.getUsername());
 		verify(employeeRepository, times(1)).save(any(Employee.class)); 
@@ -356,7 +357,7 @@ public class EmployeeServiceTests {
         
 		when(employeeRepository.findEmployeeByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> employee); 
 		
-		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePassword(employee.getUsername(),employee.getPassword(),invalidPassword));
+		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePasswordAndPhone (employee.getUsername(), employee.getPassword(), invalidPassword, employee.getPhoneNumber()));
 		
 		// check the message contains the right message and status
         assertEquals("The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.", ex.getMessage());
@@ -371,7 +372,7 @@ public class EmployeeServiceTests {
         
 		when(employeeRepository.findEmployeeByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> employee); 
 		
-		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePassword(employee.getUsername(),"savCodes3",invalidPassword));
+		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePasswordAndPhone(employee.getUsername(),"savCodes3",invalidPassword, employee.getPhoneNumber()));
 		
 		// check the message contains the right message and status
         assertEquals("The password entered is not correct. Please enter correct password.", ex.getMessage());
@@ -386,7 +387,7 @@ public class EmployeeServiceTests {
         
 		when(employeeRepository.findEmployeeByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
 		
-		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePassword("ksi@deji","savCodes3",validPassword));
+		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePasswordAndPhone("ksi@deji","savCodes3",validPassword,employee.getPhoneNumber()));
 		
 		// check the message contains the right message and status
         assertEquals("There is no such employee account with this password.", ex.getMessage());
@@ -396,38 +397,11 @@ public class EmployeeServiceTests {
 	}
 	
 	@Test
-	public void testUpdateEmployeePhoneNumber() {
-		when(employeeRepository.findEmployeeByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> employee); 
-		when(employeeRepository.save(any(Employee.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
-		
-		Employee employeeUpdated = employeeService.updateEmployeePhoneNumber(employee.getUsername(),"514-333-5555");
-		assertEquals(employeeUpdated.getPhoneNumber(),"514-333-5555");
-		
-		verify(employeeRepository, times(1)).findEmployeeByUsername(employee.getUsername());
-		verify(employeeRepository, times(1)).save(any(Employee.class));
-	}
-	
-	@Test
-	public void testUpdateEmployeePhoneNumberInvalidUser() {
-		final String invalidUsername = "bobcode";
-        
-		when(employeeRepository.findEmployeeByUsername(invalidUsername)).thenAnswer((InvocationOnMock invocation) -> null); 
-		
-		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePhoneNumber(invalidUsername,"514-333-5555"));
-		
-		// check the message contains the right message and status
-        assertEquals("There is no such employee account with this username.", ex.getMessage());
-        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
-        
-        verify(employeeRepository, times(1)).findEmployeeByUsername(invalidUsername);
-	}
-	
-	@Test
 	public void testUpdateEmployeePhoneNumberInvalidPhoneNumber() {
         
 		when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
 		
-		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePhoneNumber(employee.getUsername(),"5143335555"));
+		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeePasswordAndPhone(employee.getUsername(),employee.getPassword(),"Ilikecontrollers3","5143335555"));
 		
 		// check the message contains the right message and status
         assertEquals("Enter a valid phone number in the format xxx-xxx-xxxx.", ex.getMessage());

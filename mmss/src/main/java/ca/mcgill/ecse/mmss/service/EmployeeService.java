@@ -173,7 +173,7 @@ public class EmployeeService {
      * @return the modified employee object, or throw exceptions for incorrect input information
      */
 	@Transactional
-	public Employee updateEmployeePassword(String username, String oldPass, String newPass) {
+	public Employee updateEmployeePasswordAndPhone(String username, String oldPass, String newPass, String newPhoneNumber) {
 		
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
 		if (employee == null) {
@@ -187,31 +187,12 @@ public class EmployeeService {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
 		
-		employee.setPassword(newPass);
-		employeeRepository.save(employee);
-		return employee;
-	}
-	
-	/**
-     * update an employee phoneNumber to a new one
-     * 
-     * @author Saviru Perera
-     * @param username, newPhoneNumber
-     * @return the modified employee object, or throw exceptions for incorrect input information
-     */
-	@Transactional
-	public Employee updateEmployeePhoneNumber(String username, String newPhoneNumber) {
-		
-		Employee employee = employeeRepository.findEmployeeByUsername(username);
-		if (employee == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this username.");
-		}
-		
 		if (newPhoneNumber.length()!=12) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "Enter a valid phone number in the format xxx-xxx-xxxx.");
 		}
 		
 		employee.setPhoneNumber(newPhoneNumber);
+		employee.setPassword(newPass);
 		employeeRepository.save(employee);
 		return employee;
 	}
