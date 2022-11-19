@@ -269,7 +269,7 @@ public class LoanService {
      * @author Shidan Javaheri
      * @param id
      * @param status
-     * @return
+     * @return the loan object
      */
     @Transactional
     public Loan updateStatus(int id, ExchangeStatus status) {
