@@ -33,6 +33,7 @@ public class TicketService {
 	 * Find ticket by its Id
 	 * 
 	 * @param id
+	 * @throws exception - ticket not found
 	 * @return ticket, or an exception if not found
 	 * @author Shyam Desai
 	 */
@@ -62,6 +63,7 @@ public class TicketService {
 	 * Find all tickets given a date
 	 * 
 	 * @param date
+	 * @throws exception - no open day
 	 * @return ArrayList of all tickets
 	 * @author Shyam Desai
 	 */
@@ -82,6 +84,7 @@ public class TicketService {
 	 * Get all tickets given a visitor
 	 * 
 	 * @param username
+	 * @throws exception - no visitor with username
 	 * @return ArrayList of all tickets
 	 * @author Shyam Desai
 	 */
@@ -103,6 +106,8 @@ public class TicketService {
 	 * 
 	 * @param username
 	 * @param date
+	 * @throws exception - no visitor with username
+	 * @throws exception - no open day to book tickets
 	 * @return ticket
 	 * @author Shyam Desai
 	 */
@@ -134,6 +139,8 @@ public class TicketService {
 	 * 
 	 * @param id
 	 * @param date
+	 * @throws exception - id doesn't exist
+	 * @throws exception - no open day to update ticket
 	 * @return ticket
 	 * @author Shyam Desai
 	 */
@@ -167,6 +174,7 @@ public class TicketService {
 	 * Delete ticket of given Id if it exists
 	 * 
 	 * @param id
+	 * @throws exception - id doesn't exist
 	 * @author Shyam Desai
 	 */
 	@Transactional

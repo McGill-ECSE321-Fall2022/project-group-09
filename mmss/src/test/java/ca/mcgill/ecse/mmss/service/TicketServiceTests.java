@@ -112,6 +112,7 @@ public class TicketServiceTests {
 	/**
 	 * Test retrieving a ticket with an invalid id
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -192,6 +193,7 @@ public class TicketServiceTests {
 	/**
 	 * Test get all tickets given an invalid date
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -253,6 +255,7 @@ public class TicketServiceTests {
 	/**
 	 * Test get all tickets given an invalid visitor username
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -380,6 +383,7 @@ public class TicketServiceTests {
 	/**
 	 * Tests updating a ticket with an invalid id
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -400,6 +404,7 @@ public class TicketServiceTests {
 	/**
 	 * Tests updating a ticket with an invalid date
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -444,6 +449,7 @@ public class TicketServiceTests {
 	/**
 	 * Tests deleting a ticket with an invalid id
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test

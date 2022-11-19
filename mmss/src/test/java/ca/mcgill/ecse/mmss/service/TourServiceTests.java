@@ -117,6 +117,7 @@ public class TourServiceTests {
 	/**
 	 * Test for retrieving tour with invalid id
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -196,6 +197,7 @@ public class TourServiceTests {
 	/**
 	 * Test get all tours given an invalid date
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -257,6 +259,7 @@ public class TourServiceTests {
 	/**
 	 * Test get all tours given an invalid visitor username
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -507,6 +510,7 @@ public class TourServiceTests {
 	/**
 	 * Test creating a tour with an invalid username
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -526,6 +530,7 @@ public class TourServiceTests {
 	/**
 	 * Test creating a tour with an invalid open day
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -549,6 +554,7 @@ public class TourServiceTests {
 	/**
 	 * Test creating a tour with 0 participants
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -572,6 +578,7 @@ public class TourServiceTests {
 	/**
 	 * Test creating a tour with too many participants
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -636,6 +643,7 @@ public class TourServiceTests {
 	/**
 	 * Test updating a tour with an invalid id
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -656,6 +664,7 @@ public class TourServiceTests {
 	/**
 	 * Test updating a tour with an invalid date
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -677,6 +686,7 @@ public class TourServiceTests {
 	/**
 	 * Test updating a tour to 0 participants
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -699,6 +709,7 @@ public class TourServiceTests {
 	/**
 	 * Test updating a tour to more than 20 participants
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test
@@ -735,6 +746,7 @@ public class TourServiceTests {
 	/**
 	 * Test deleting a tour with an invalid id
 	 * 
+	 * @throws ex
 	 * @author Shyam Desai
 	 */
 	@Test

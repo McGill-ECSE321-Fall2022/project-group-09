@@ -34,6 +34,7 @@ public class TourService {
 	 * Find tour by its Id
 	 * 
 	 * @param id
+	 * @throws exception - id doesn't exist
 	 * @return tour
 	 * @author Shyam Desai
 	 */
@@ -64,6 +65,7 @@ public class TourService {
 	 * Get all tours given date
 	 * 
 	 * @param date
+	 * @throws exception - no open day
 	 * @return ArrayList of all tours
 	 * @author Shyam Desai
 	 */
@@ -84,6 +86,7 @@ public class TourService {
 	 * Get all tours given a visitor
 	 * 
 	 * @param username
+	 * @throws exception - visitor's username not found
 	 * @return ArrayList of all tours
 	 * @author Shyam Desai
 	 */
@@ -159,6 +162,10 @@ public class TourService {
 	 * @param date
 	 * @param numberOfParticipants
 	 * @param tourTime
+	 * @throws exception - visitor's username not found
+	 * @throws exception - no open day
+	 * @throws exception - 0 participants
+	 * @throws exception - more than 20 participants
 	 * @return tour
 	 * @author Shyam Desai
 	 */
@@ -198,6 +205,10 @@ public class TourService {
 	 * @param id
 	 * @param date
 	 * @param numberOfParticipants
+	 * @throws exception - visitor's username not found
+	 * @throws exception - no open day
+	 * @throws exception - 0 participants
+	 * @throws exception - more than 20 participants
 	 * @return tour
 	 * @author Shyam Desai
 	 */
@@ -234,6 +245,7 @@ public class TourService {
 	 * Deletes tour given an Id
 	 * 
 	 * @param id
+	 * @throws exception - id doesn't exist
 	 * @author Shyam Desai
 	 */
 	@Transactional
