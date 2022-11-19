@@ -193,7 +193,7 @@ public class DonationService {
             throw new MmssException(HttpStatus.NOT_FOUND, "The donation with this Id was not found");
 
         // calls the repository to delete the donation
-        donationRepository.deleteById(donation.getExchangeId());
+        donationRepository.deleteById(id);
     }
     
     /**

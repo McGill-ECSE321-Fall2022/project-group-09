@@ -95,7 +95,7 @@ public class DonationServiceTests {
      * @author Mohamed Elsamadouny
      */
     @Test 
-    public void testRetrieveDonationById () { 
+    public void testGetDonationById () { 
 
         // setup mocks
         when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> donation ); 
@@ -203,27 +203,29 @@ public class DonationServiceTests {
         // delete donation
         donationService.deleteDonation(0);
 
-        // try to get the donation by id and verify it was removed
-        // catch the exception
-        MmssException ex = assertThrows(MmssException.class,
-                () -> donationService.getDonationById(0));
-
-        // assert that the donation no longer exists
-        assertEquals(ex.getMessage(), "Donation not found");
-
         // verify that the delete method was called
         verify(donationRepository, times(1)).deleteById(0);
 
     }
 
+    /**
+     * Tests deleting a donation with invalid Id
+     * @author Mohamed Elsamadouny
+     */
 
+    @Test
+    public void testDeleteDonationByInvalid() { 
+        // set up the mocks
+        when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> null); 
 
+        // call service layer, and get the exception
+        MmssException ex = assertThrows(MmssException.class,
+                () -> donationService.deleteDonation(0));
 
+        // assert the exception is as expected
+        assertEquals("The donation with this Id was not found", ex.getMessage()); 
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
 
-
-
-
-
-
+    }
 
 }
