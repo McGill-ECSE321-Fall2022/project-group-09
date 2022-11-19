@@ -113,17 +113,26 @@ public class TourService {
 	}
 
 	/**
-	 * Get all tours given a date and shift time
+	 * Get all tours given shift time
 	 * 
 	 * @param tourTime
 	 * @return ArrayList of all tours
 	 * @author Shyam Desai
 	 */
 	@Transactional
-	public ArrayList<Tour> getAllToursByShiftTime(ShiftTime tourTime) {
+	public ArrayList<Tour> getAllToursByTourTime(ShiftTime tourTime) {
 		return tourRepository.findByTourTime(tourTime);
 	}
 
+	/**
+	 * Get all tours given a date and shift time
+	 * 
+	 * @param date
+	 * @param tourTime
+	 * @return ArrayList of all tours
+	 * @author Shyam Desai
+	 */
+	@Transactional
 	public ArrayList<Tour> getAllToursByDateAndShiftTime(OpenDay date, ShiftTime tourTime) {
 		return tourRepository.findByDateAndTourTime(date, tourTime);
 	}
@@ -136,9 +145,10 @@ public class TourService {
 	 * @author Shyam Desai
 	 */
 	@Transactional
-	public ArrayList<Tour> getAllToursByShiftTimeAndDateAndNumberOfParticipantsLessThan(ShiftTime shift, OpenDay date,
+	public ArrayList<Tour> getAllToursByTourTimeAndDateAndNumberOfParticipantsLessThan(ShiftTime tourTime, OpenDay date,
 			int numberOfParticipants) {
-		return tourRepository.findByTourTimeAndDateAndNumberOfParticipantsLessThan(shift, date, numberOfParticipants);
+		return tourRepository.findByTourTimeAndDateAndNumberOfParticipantsLessThan(tourTime, date,
+				numberOfParticipants);
 	}
 
 	/**

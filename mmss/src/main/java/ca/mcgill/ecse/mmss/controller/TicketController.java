@@ -1,6 +1,7 @@
 package ca.mcgill.ecse.mmss.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,7 +21,7 @@ import ca.mcgill.ecse.mmss.model.Ticket;
 import ca.mcgill.ecse.mmss.service.TicketService;
 
 @RestController
-@RequestMapping({"/ticket", "/ticket/"})
+@RequestMapping({ "/ticket", "/ticket/" })
 public class TicketController {
 
 	@Autowired
@@ -33,7 +34,7 @@ public class TicketController {
 	 * @return response entity with the ticket and ok status
 	 * @author Shyam Desai
 	 */
-	@GetMapping({"/{id}", "/{id}/"})
+	@GetMapping({ "/{id}", "/{id}/" })
 	public ResponseEntity<TicketDto> getTicket(@PathVariable int id) {
 		Ticket retrievedTicket = ticketService.retrieveTicketById(id);
 		return new ResponseEntity<TicketDto>(new TicketDto(retrievedTicket), HttpStatus.OK);
@@ -64,7 +65,7 @@ public class TicketController {
 	 * @author Shyam Desai
 	 */
 	@PutMapping
-	public ResponseEntity<TicketDto> updateTicketStatus(@RequestBody TicketDto request) {
+	public ResponseEntity<TicketDto> updateTicket(@RequestBody TicketDto request) {
 		int ticketId = request.getBookingId();
 		Date date = request.getDate();
 
@@ -80,12 +81,12 @@ public class TicketController {
 	 * @return message indicated ticket deleted
 	 * @author Shyam Desai
 	 */
-	@DeleteMapping({"/{id}", "/{id}/"})
+	@DeleteMapping({ "/{id}", "/{id}/" })
 	public ResponseEntity<String> deleteTicket(@PathVariable int id) {
 
 		ticketService.deleteTicket(id);
 
-		return new ResponseEntity<String>("Ticket succesfully deleted.", HttpStatus.OK);
+		return new ResponseEntity<String>("Ticket successfully deleted.", HttpStatus.OK);
 	}
 
 	// MAPPING OF OTHER GET METHODS.
@@ -116,10 +117,10 @@ public class TicketController {
 	 * @return ArrayList of all tickets as DTOs
 	 * @author Shyam Desai
 	 */
-	@GetMapping({"/date", "/date/"})
+	@GetMapping({ "/date", "/date/" })
 	public ResponseEntity<ArrayList<TicketDto>> getAllTicketsWithDate(
-			@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
-		ArrayList<Ticket> retrievedTickets = ticketService.getAllTicketsByDate(date);
+			@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+		ArrayList<Ticket> retrievedTickets = ticketService.getAllTicketsByDate(Date.valueOf(date));
 
 		ArrayList<TicketDto> allTicketsDto = new ArrayList<>();
 		for (Ticket ticket : retrievedTickets) {
@@ -136,7 +137,7 @@ public class TicketController {
 	 * @return ArrayList of all tickets as DTOs
 	 * @author Shyam Desai
 	 */
-	@GetMapping({"/visitor", "/visitor/"})
+	@GetMapping({ "/visitor", "/visitor/" })
 	public ResponseEntity<ArrayList<TicketDto>> getAllTicketsWithUsername(@RequestParam String username) {
 		ArrayList<Ticket> retrievedTickets = ticketService.getAllTicketsByVisitor(username);
 

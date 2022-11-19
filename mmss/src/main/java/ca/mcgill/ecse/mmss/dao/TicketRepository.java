@@ -8,7 +8,10 @@ import ca.mcgill.ecse.mmss.model.Visitor;
 
 public interface TicketRepository extends CrudRepository<Ticket, Integer> {
     Ticket findTicketByBookingId(int bookingId);
+
     ArrayList<Ticket> findByDate(OpenDay date);
+
     ArrayList<Ticket> findByVisitor(Visitor visitor);
+
     ArrayList<Ticket> findAll();
 }

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.sql.Date;
+import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,12 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.TicketRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
+import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Ticket;
@@ -40,12 +43,16 @@ public class TicketServiceTests {
 	@Mock
 	private NotificationService notificationService;
 
+	@Mock
+	private CommunicationRepository communicationRepository;
+
 	@InjectMocks
 	private TicketService ticketService;
 
 	private Person person;
 	private Visitor visitor;
 	private OpenDay openDay;
+	private Communication commmunication;
 	private Ticket ticket;
 
 	/**
@@ -58,6 +65,10 @@ public class TicketServiceTests {
 		this.person = new Person(0, "Jon", "Snow");
 		this.visitor = new Visitor("jon.snow@got.com", "IDontWantIt", person);
 		this.openDay = new OpenDay(new Date(2022 - 11 - 15));
+		this.commmunication = new Communication(1);
+
+		visitor.setCommunication(commmunication);
+
 		this.ticket = new Ticket();
 		ticket.setVisitor(visitor);
 		ticket.setPricePerPerson(20);
@@ -75,6 +86,7 @@ public class TicketServiceTests {
 		this.person.delete();
 		this.visitor.delete();
 		this.openDay.delete();
+		this.commmunication.delete();
 		this.ticket.delete();
 	}
 
@@ -114,6 +126,149 @@ public class TicketServiceTests {
 		assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
 
 		verify(ticketRepository, times(1)).findTicketByBookingId(invalidId);
+	}
+
+	/**
+	 * Test get all tickets
+	 * 
+	 * @author Shyam Desai
+	 */
+	@Test
+	public void testGetAllTickets() {
+		ArrayList<Ticket> tickets = new ArrayList<>();
+
+		Person personTwo = new Person(1, "Grogu", "Mandalorian");
+		Visitor visitorTwo = new Visitor("grogu@starwars.com", "BabyYoda", personTwo);
+		Ticket ticketTwo = new Ticket(1, 20, new OpenDay(Date.valueOf("2022-11-17")), visitorTwo);
+
+		Ticket ticketThree = new Ticket(2, 20, new OpenDay(Date.valueOf("2022-11-18")), visitorTwo);
+
+		tickets.add(ticket);
+		tickets.add(ticketTwo);
+		tickets.add(ticketThree);
+
+		when(ticketRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> tickets);
+
+		ArrayList<Ticket> ticketsTest = ticketService.getAllTickets();
+
+		assertEquals(tickets, ticketsTest);
+
+		verify(ticketRepository, times(1)).findAll();
+	}
+
+	/**
+	 * Test get all tickets given a date
+	 * 
+	 * @author Shyam Desai
+	 */
+	@Test
+	public void testGetAllTicketsByDate() {
+		ArrayList<Ticket> ticketsForDate = new ArrayList<>();
+
+		Person personTwo = new Person(1, "Grogu", "Mandalorian");
+		Visitor visitorTwo = new Visitor("grogu@starwars.com", "BabyYoda", personTwo);
+		OpenDay dateToCheck = new OpenDay(Date.valueOf("2022-11-15"));
+
+		Ticket ticketTwo = new Ticket(1, 20, dateToCheck, visitorTwo);
+		Ticket ticketThree = new Ticket(2, 20, new OpenDay(Date.valueOf("2022-11-18")), visitorTwo);
+
+		ticketsForDate.add(ticket);
+		ticketsForDate.add(ticketTwo);
+		ticketsForDate.add(ticketThree);
+
+		when(openDayRepository.findOpenDayByDate(any(Date.class)))
+				.thenAnswer((InvocationOnMock invocation) -> dateToCheck);
+		when(ticketRepository.findByDate(any(OpenDay.class)))
+				.thenAnswer((InvocationOnMock invocation) -> ticketsForDate);
+
+		ArrayList<Ticket> ticketsTest = ticketService.getAllTicketsByDate(Date.valueOf("2022-11-15"));
+
+		assertEquals(ticketsForDate, ticketsTest);
+
+		verify(openDayRepository, times(1)).findOpenDayByDate(dateToCheck.getDate());
+		verify(ticketRepository, times(1)).findByDate(dateToCheck);
+	}
+
+	/**
+	 * Test get all tickets given an invalid date
+	 * 
+	 * @author Shyam Desai
+	 */
+	@Test
+	public void testGetAllTicketsByInvalidDate() {
+		OpenDay invalidDate = new OpenDay(Date.valueOf("2022-12-25"));
+
+		when(openDayRepository.findOpenDayByDate(any(Date.class))).thenAnswer((InvocationOnMock invocation) -> null);
+
+		MmssException ex = assertThrows(MmssException.class,
+				() -> ticketService.getAllTicketsByDate(invalidDate.getDate()));
+
+		assertEquals("There is no open day on this date.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+
+		verify(openDayRepository, times(1)).findOpenDayByDate(invalidDate.getDate());
+	}
+
+	/**
+	 * Test get all tickets given a visitor username
+	 * 
+	 * @author Shyam Desai
+	 */
+	@Test
+	public void testGetAllTicketsByVisitor() {
+		ArrayList<Ticket> ticketsForVisitorTwo = new ArrayList<>();
+
+		Person personTwo = new Person(1, "Grogu", "Mandalorian");
+		Visitor visitorTwo = new Visitor("grogu@starwars.com", "BabyYoda", personTwo);
+
+		Ticket ticketTwo = new Ticket();
+		ticketTwo.setBookingId(1);
+		ticketTwo.setDate(new OpenDay(Date.valueOf("2022-11-15")));
+		ticketTwo.setPricePerPerson(20);
+		ticketTwo.setVisitor(visitorTwo);
+
+		Ticket ticketThree = new Ticket();
+		ticketThree.setBookingId(2);
+		ticketThree.setDate(new OpenDay(Date.valueOf("2022-11-18")));
+		ticketThree.setPricePerPerson(20);
+		ticketThree.setVisitor(visitorTwo);
+
+		ticketsForVisitorTwo.add(ticket);
+		ticketsForVisitorTwo.add(ticketTwo);
+		ticketsForVisitorTwo.add(ticketThree);
+
+		when(visitorRepository.findVisitorByUsername(any(String.class)))
+				.thenAnswer((InvocationOnMock invocation) -> visitorTwo);
+		when(ticketRepository.findByVisitor(any(Visitor.class)))
+				.thenAnswer((InvocationOnMock invocation) -> ticketsForVisitorTwo);
+
+		ArrayList<Ticket> ticketsTest = ticketService.getAllTicketsByVisitor(visitorTwo.getUsername());
+
+		assertEquals(ticketsForVisitorTwo, ticketsTest);
+
+		verify(visitorRepository, times(1)).findVisitorByUsername("grogu@starwars.com");
+		verify(ticketRepository, times(1)).findByVisitor(visitorTwo);
+	}
+
+	/**
+	 * Test get all tickets given an invalid visitor username
+	 * 
+	 * @author Shyam Desai
+	 */
+	@Test
+	public void testGetAllTicketsByInvalidVisitor() {
+		String invalidUsername = "cats@outlook.com";
+
+		when(visitorRepository.findVisitorByUsername(any(String.class)))
+				.thenAnswer((InvocationOnMock invocation) -> null);
+
+		MmssException ex = assertThrows(MmssException.class,
+				() -> ticketService.getAllTicketsByVisitor(invalidUsername));
+
+		assertEquals("The visitor with this username was not found.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+
+		verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
 	}
 
 	/**

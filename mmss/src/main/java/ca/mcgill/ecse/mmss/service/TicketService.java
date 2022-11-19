@@ -70,7 +70,7 @@ public class TicketService {
 		OpenDay openDateToFind = openDayRepository.findOpenDayByDate(date);
 
 		if (openDateToFind == null) {
-			throw new MmssException(HttpStatus.NOT_FOUND, "There is no open day with this date.");
+			throw new MmssException(HttpStatus.NOT_FOUND, "There is no open day on this date.");
 		}
 
 		ArrayList<Ticket> allTickets = ticketRepository.findByDate(openDateToFind);
