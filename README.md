@@ -63,7 +63,7 @@ The task of writing classes and its tests were split as follows:
 * **Login:** Saviru Perera
 * **Manager:** Shidan Javaheri
 * **Notification:** Sasha Denouvilliez-Pech
-* **Open Day:** Mohamed Elsamadouny
+* **OpenDay:** Mohamed Elsamadouny
 * **Person:**
 * **Room:** Sasha Denouvilliez-Pech
 * **Schedule:**  Athmane Benarous
