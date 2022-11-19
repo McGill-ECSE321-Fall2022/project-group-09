@@ -72,9 +72,8 @@ public class ManagerService {
      * Update the managers password
      * 
      * @author Shidan Javaheri
-     * @param currentPassword the string current password that must match the stored
-     *                        password
-     * @param newPassword     the string new password
+     * @param currentPassword the current password that must match the stored password
+     * @param newPassword the string new password    
      * @return the manager
      */
     @Transactional
@@ -94,5 +93,4 @@ public class ManagerService {
         }
         return manager;
     }
-
 }
