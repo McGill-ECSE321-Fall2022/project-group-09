@@ -41,7 +41,7 @@ public class DonationController {
     @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<DonationDto> getDonation(@PathVariable int id) {
         // call service
-        Donation retrievedDonation = donationService.retreiveDonationById(id);
+        Donation retrievedDonation = donationService.getDonationById(id);
         // return response entity with Dto
         return new ResponseEntity<DonationDto>(new DonationDto(retrievedDonation), HttpStatus.OK);
     }
@@ -159,29 +159,6 @@ public class DonationController {
 
         // get all donations
         ArrayList<Donation> retrievedDonations = donationService.getAllDonationsBySubmittedDate(Date.valueOf(date));
-
-        // make Dtos
-        ArrayList<DonationDto> allDonationsDto = new ArrayList<>();
-        for (Donation donation : retrievedDonations) {
-            allDonationsDto.add(new DonationDto(donation));
-        }
-        // return the Dtos
-        return new ResponseEntity<ArrayList<DonationDto>>(allDonationsDto, HttpStatus.OK);
-
-    }
-
-    /**
-     * Gts all the donations in the system with a given status
-     * @author Mohamed Elsamadouny
-     * 
-     * @param status the status
-     * @return an array list with all the donations as Dtos
-     */
-    @GetMapping({"/status", "/status/"})
-    public ResponseEntity<ArrayList<DonationDto>> getAllDonationsWithStatus(@RequestParam ExchangeStatus status) {
-
-        // get all donations
-        ArrayList<Donation> retrievedDonations = donationService.getAllDonationsByStatus(status);
 
         // make Dtos
         ArrayList<DonationDto> allDonationsDto = new ArrayList<>();

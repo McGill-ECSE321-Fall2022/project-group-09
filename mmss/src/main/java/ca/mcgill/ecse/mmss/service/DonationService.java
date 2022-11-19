@@ -50,7 +50,7 @@ public class DonationService {
 	 */
 
 	@Transactional
-	public Donation retreiveDonationById(int id) {
+	public Donation getDonationById(int id) {
 		// use the repository method
 		Donation donation = donationRepository.findDonationByExchangeId(id);
 		if (donation == null) {
@@ -62,6 +62,7 @@ public class DonationService {
 	/**
 	 * @author Mohamed Elsamadouny
 	 * Finds all the donations in the database
+     * All donations will have a pending status, any approved or declined donation gets removed
 	 *
 	 * @return ArrayList of Donations
 	 */
@@ -88,23 +89,6 @@ public class DonationService {
 
         // use the repository
         ArrayList<Donation> allDonations = donationRepository.findBySubmittedDate(submittedDate);
-
-        return allDonations;
-    }
-
-    /**
-	 * @author Mohamed Elsamadouny
-	 * Finds all the donations by their status
-	 *
-	 * @param status to look for
-	 * @return ArrayList of Donations
-	 */
-	
-	@Transactional
-    public ArrayList<Donation> getAllDonationsByStatus(ExchangeStatus status) {
-
-        // use the repository
-        ArrayList<Donation> allDonations = donationRepository.findByExchangeStatus(status);
 
         return allDonations;
     }
@@ -153,7 +137,7 @@ public class DonationService {
             throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this username was not found");
         }
         // Check if name and donation pass the requirements
-        if (username.length() > 50) {
+        if (itemName.length() > 50) {
         	throw new MmssException(HttpStatus.BAD_REQUEST, "The donation name should not exceed 50 characters");
         }
         
@@ -176,6 +160,9 @@ public class DonationService {
         return donation;
           
     }
+
+
+
     /**
 	 * @author Mohamed Elsamadouny
 	 * 
@@ -262,8 +249,6 @@ public class DonationService {
                 // set room to storage
                 artefact.setRoom(roomRepository.findAllByRoomType(RoomType.Storage).get(0));
                 
-                // Persist to DB
-                artefactRepository.save(artefact);
                 
                 // create notification message
                 String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()

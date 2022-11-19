@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
+/**
+ * Business logic for the Artefact class
+ */
 @Service
 public class ArtefactService {
 
@@ -30,7 +33,7 @@ public class ArtefactService {
      * Get an artefact by its primary key
      *
      * @author Sasha Denouvilliez-Pech
-     * @param id
+     * @param id the primary key of an artefact
      * @return an artefact or an exception
      */
     @Transactional
@@ -43,9 +46,9 @@ public class ArtefactService {
     }
 
     /**
-     * Get all artefacts
+     * Get all artefacts in the museum
      *
-     * @return an array list of artefacts
+     * @return an array list of artefact instance
      */
     @Transactional
     public ArrayList<Artefact> getAllArtefacts() {
@@ -55,8 +58,8 @@ public class ArtefactService {
     /**
      * Get all artefacts with a specific canLoan value
      *
-     * @param canLoan boolean, available for loan
-     * @return an array list all artefacts with a given canLoan value
+     * @param canLoan whether an artefact is available for loan
+     * @return an array list of artefact instances
      */
     @Transactional
     public ArrayList<Artefact> getAllArtefactsByCanLoan(boolean canLoan) {
@@ -64,34 +67,36 @@ public class ArtefactService {
     }
 
     /**
-     * Gets all the loans associated with a given room
+     * Get all the artefacts in a given room
      *
-     * @param roomId, the primary key of a room
-     * @return an array list of artefacts for a given room
+     * @param roomId a room's primary key
+     * @return an array list of artefact instances
+     * @throws MmssException
      */
     @Transactional
     public ArrayList<Artefact> getAllArtefactsByRoom(int roomId) {
-        return artefactRepository.findAllByRoom(roomService.retrieveRoomById(roomId));
+        return artefactRepository.findAllByRoom(roomService.getRoomById(roomId));
     }
 
     /**
-     * Gets all the loans associated with a given room and a given canLoan value
+     * Get all the artefacts associated with a given room and a given canLoan value
      *
-     * @param roomId
-     * @param canLoan
-     * @return an array list of artefacts gor a given room and canLoan value
+     * @param roomId a room's primary key
+     * @param canLoan whether an artefact is available for loan
+     * @return an array list of artefact instances
+     * @throws MmssException
      */
     @Transactional
     public ArrayList<Artefact> getAllArtefactsByRoomAndByCanLoan(int roomId, boolean canLoan) {
         // Valid room
-        Room room = roomService.retrieveRoomById(roomId);
+        Room room = roomService.getRoomById(roomId);
         return artefactRepository.findAllByRoomAndCanLoan(room, canLoan);
     }
 
     /**
      * Get all artefacts in display
      *
-     * @return an array list of artefacts in display
+     * @return an array list of artefact instance
      */
     @Transactional
     public ArrayList<Artefact> getAllArtefactsInDisplay() {
@@ -108,8 +113,8 @@ public class ArtefactService {
     /**
      * Get all artefacts in display with a given canLoan value
      *
-     * @param canLoan
-     * @return an array list of artefacts in display with a given canLoan value
+     * @param canLoan whether an artefact is available for loan
+     * @return an array list of artefact instance
      */
     @Transactional
     public ArrayList<Artefact> getAllArtefactsInDisplayByCanLoan(boolean canLoan) {
@@ -124,14 +129,15 @@ public class ArtefactService {
     }
 
     /**
-     * Create an artefact and persist it in the DB
+     * Create an artefact
      *
-     * @param name
-     * @param description
-     * @param canLoan
-     * @param insuranceFee
-     * @param loanFee
+     * @param name the artefact's name
+     * @param description the artefact's description
+     * @param canLoan whether an artefact is available for loan
+     * @param insuranceFee the artefact's insurance fee
+     * @param loanFee the artefact's loan fee
      * @return the artefact instance
+     * @throws MmssException
      */
     @Transactional
     public Artefact createArtefact(String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
@@ -145,20 +151,20 @@ public class ArtefactService {
         artefact.setInsuranceFee(insuranceFee);
         artefact.setLoanFee(loanFee);
         // Persist to DB
-        artefactRepository.save(artefact);
-        return artefact;
+        return artefactRepository.save(artefact);
     }
 
     /**
      * Update a valid artefact
      *
-     * @param artefactId
-     * @param name
-     * @param description
-     * @param canLoan
-     * @param insuranceFee
-     * @param loanFee
-     * @return
+     * @param artefactId the artefact's primary key
+     * @param name the artefact's name
+     * @param description the artefact's description
+     * @param canLoan whether an artefact is available for loan
+     * @param insuranceFee the artefact's insurance fee
+     * @param loanFee the artefact's loan fee
+     * @return the artefact instance
+     * @throws MmssException
      */
     @Transactional
     public Artefact updateArtefact(int artefactId, String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
@@ -173,15 +179,15 @@ public class ArtefactService {
         artefact.setInsuranceFee(insuranceFee);
         artefact.setLoanFee(loanFee);
         // Persist to DB
-        artefactRepository.save(artefact);
-        return artefact;
+        return artefactRepository.save(artefact);
     }
 
     /**
-     * Remove an artefact from its assigned room
-     * Works also if the room has no room.
+     * Remove an artefact from its assigned room.
+     * Works also if the artefact has no room.
      *
-     * @param artefactId
+     * @param artefactId the artefact's primary key
+     * @throws MmssException
      */
     @Transactional
     public void removeArtefactFromItsRoom(int artefactId) {
@@ -203,8 +209,9 @@ public class ArtefactService {
      * Add an artefact to a valid room
      * Assume the artefact did not have a room previously
      *
-     * @param artefactId
-     * @param roomId
+     * @param artefactId the artefact's primary key
+     * @param roomId the room's primary key
+     * @throws MmssException
      */
     @Transactional
     public void addArtefactToRoom(int artefactId, int roomId) {
@@ -212,12 +219,12 @@ public class ArtefactService {
         // Valid artefact id
         Artefact artefact = getArtefactById(artefactId);
         // Valid room id
-        Room room = roomService.retrieveRoomById(roomId);
+        Room room = roomService.getRoomById(roomId);
         // Destination room full
         if (roomService.isRoomFull(roomId))
             throw new MmssException(HttpStatus.BAD_REQUEST, "The destination room is already full.");
         // Display full
-        if (!(room.getRoomType() == Room.RoomType.Storage) && roomService.getDisplayCapacity() >= 1000)
+        if (!(room.getRoomType() == Room.RoomType.Storage) && roomService.getDisplayArtefactCount() >= 1000)
             throw new MmssException(HttpStatus.BAD_REQUEST, "The display is already full.");
         // Increment room's artefact count
         room.setArtefactCount(room.getArtefactCount() + 1);
@@ -231,17 +238,18 @@ public class ArtefactService {
     /**
      * Move an artefact to a room
      *
-     * @param artefactId
-     * @param roomId
+     * @param artefactId the artefact's primary key
+     * @param roomId the room's primary key
+     * @throws MmssException
      */
     @Transactional
     public void moveArtefactToRoom(int artefactId, int roomId) {
         // Valid artefact id
         Artefact artefact = getArtefactById(artefactId);
         // Valid room id
-        Room room = roomService.retrieveRoomById(roomId);
+        Room room = roomService.getRoomById(roomId);
         // Destination and current rooms are the same
-        if (artefact.getRoom().getRoomId() == roomId)
+        if (artefact.hasRoom() && artefact.getRoom().getRoomId() == roomId)
             throw new MmssException(HttpStatus.BAD_REQUEST, "The destination and current rooms cannot be the same.");
         // Not previously in a room
         if (!artefact.hasRoom())
@@ -253,13 +261,18 @@ public class ArtefactService {
         }
     }
 
+    /**
+     * Delete an artefact with a specific id
+     * @param artefactId the artefact's primary key
+     * @throws MmssException
+     */
     @Transactional
     public void deleteArtefact(int artefactId) {
         // Valid artefact id
         Artefact artefact = getArtefactById(artefactId);
         // Check if loan are associated with it
         ArrayList<Loan> loans = loanRepository.findAllByArtefact(artefact);
-        if (loans != null)
+        if (!loans.isEmpty())
             throw new MmssException(HttpStatus.NOT_FOUND, "The artefact is loaned or a loan request for this artefact is pending.");
         // Update the artefact count for a room
         removeArtefactFromItsRoom(artefactId);
@@ -270,19 +283,20 @@ public class ArtefactService {
     /**
      * Check for valid artefact parameters
      *
-     * @param name
-     * @param description
-     * @param canLoan
-     * @param insuranceFee
-     * @param loanFee
+     * @param name the artefact's name
+     * @param description the artefact's description
+     * @param canLoan whether an artefact is available for loan
+     * @param insuranceFee the artefact's insurance fee
+     * @param loanFee the artefact's loan fee
+     * @throws MmssException
      */
-    private void checkValidArtefactParams(String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
+    public void checkValidArtefactParams(String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
         // Check for valid name
-        if ( name.length() > 50 || name.isEmpty())
+        if ( name.length() > 50 || name.isBlank())
             throw new MmssException(HttpStatus.BAD_REQUEST,
                     "The artefact’s name cannot be empty or longer than 50 characters.");
         // Check for valid description
-        if (description.length() > 300 || description.isEmpty())
+        if (description.length() > 300 || description.isBlank())
             throw new MmssException(HttpStatus.BAD_REQUEST,
                     "The artefact’s description cannot be empty or longer than 300 characters.");
         // Check for fees

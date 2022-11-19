@@ -18,15 +18,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.DonationRepository;
+import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
+import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Person;
+import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
+import ca.mcgill.ecse.mmss.model.Room.RoomType;
 
 @ExtendWith(MockitoExtension.class)
 public class DonationServiceTests {
@@ -43,16 +48,24 @@ public class DonationServiceTests {
 
     @Mock
     private NotificationService notificationService;
+
+    @Mock 
+    private RoomRepository roomRepository;
     
     // We inject the mocks in the doantion service - the thing that calls on the
     // repositories
     @InjectMocks
     private DonationService donationService;
 
+    @Mock 
+    private ArtefactService artefactService;
+
     // Objects we will need in all our tests
     private Donation donation;
     private Person person;
     private Visitor visitor;
+    private Artefact artefact;
+    private Room storageRoom;
 
     /**
      * Creates the obejcts needed by all test cases
@@ -68,6 +81,14 @@ public class DonationServiceTests {
         this.person = new Person(0, "Henry", "Doppleganger");
         this.visitor = new Visitor("henry@doppleganger", "ILikeCheese", person);
         this.donation = new Donation();
+        this.artefact = new Artefact();
+        this.storageRoom = new Room(0, RoomType.Storage);
+        artefact.setArtefactName("Lightsaber");
+        artefact.setDescription("From the death star");
+        artefact.setArtefactId(0);
+        artefact.setCanLoan(false);
+        artefact.setInsuranceFee(1.0);
+        artefact.setLoanFee(0.5);
         donation.setItemName("Lightsaber");
         donation.setDescription("From the death star");
         donation.setVisitor(visitor);
@@ -87,6 +108,8 @@ public class DonationServiceTests {
         this.visitor.delete();
         this.person.delete();
         this.donation.delete();
+        this.artefact.delete();
+        this.storageRoom.delete();
     }
 
     /**
@@ -101,7 +124,7 @@ public class DonationServiceTests {
         when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> donation ); 
 
         // call service layer
-        Donation retrievedDonation = donationService.retreiveDonationById(0); 
+        Donation retrievedDonation = donationService.getDonationById(0); 
 
         // assertions
         assertEquals(0, retrievedDonation.getExchangeId()); 
@@ -110,6 +133,58 @@ public class DonationServiceTests {
 
         // verify calls to repositories
         verify(donationRepository, times (1)).findDonationByExchangeId(0); 
+    }
+
+    /**
+     * Tests retrieving all donations by a visiot
+     * 
+     * @author Mohamed Elsamadouny
+     */
+    @Test 
+    public void testGetAllDonationsByVisitor () { 
+
+        // setup mocks
+        when(visitorRepository.findVisitorByUsername(any(String.class)))
+        .thenAnswer((InvocationOnMock invocation) -> visitor);
+        ArrayList<Donation> list = new ArrayList<Donation>();
+        list.add(donation);
+        when(donationRepository.findByVisitor(visitor)).thenAnswer((InvocationOnMock invocation) -> list);
+
+        // call service layer
+        ArrayList<Donation> retrievedDonations = donationService.getAllDonationsByVisitor(visitor.getUsername()); 
+
+        // assertions
+        assertEquals(1, retrievedDonations.size());
+        assertEquals(visitor.getUsername(), retrievedDonations.get(0).getVisitor().getUsername());  
+
+        // verify calls to repositories
+        verify(visitorRepository, times (1)).findVisitorByUsername(visitor.getUsername()); 
+        verify(donationRepository, times (1)).findByVisitor(visitor); 
+    }
+
+    /**
+     * Tests getting all donations with an invalid username
+     * 
+     * @author Mohamed Elsamadouny
+     */
+    @Test
+    public void testGetAllDonationsByVisitorInvalidUsername() {
+        final String invalidUsername = "badUsername";
+
+        // setup mocks
+        when(visitorRepository.findVisitorByUsername(any(String.class)))
+                .thenAnswer((InvocationOnMock invocation) -> null);
+
+        // call service
+        MmssException ex = assertThrows(MmssException.class, () -> donationService.getAllDonationsByVisitor(invalidUsername));
+
+        // assertions on error
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+        assertEquals("The visitor with this Id was not found", ex.getMessage());
+
+        // verfications
+        verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
+
     }
 
     /**
@@ -125,7 +200,7 @@ public class DonationServiceTests {
         when(donationRepository.findDonationByExchangeId(invalidId)).thenAnswer((InvocationOnMock invocation) -> null);
 
         // call service layer and get the exception
-        MmssException ex = assertThrows(MmssException.class, () -> donationService.retreiveDonationById(invalidId));
+        MmssException ex = assertThrows(MmssException.class, () -> donationService.getDonationById(invalidId));
 
         // check the message contains the right message and status
         assertEquals("Donation not found", ex.getMessage());
@@ -161,6 +236,46 @@ public class DonationServiceTests {
 
         // check that each repository was called the right number of times, and with right arguments
         verify(donationRepository, times(1)).save(any(Donation.class)); 
+        verify(visitorRepository, times(1)).findVisitorByUsername("henry@doppleganger"); 
+    }
+
+    /**
+     * Tests creating a donation successfully
+     * @author Mohamed Elsamadouny
+     */
+    @Test
+    public void testCreateDonationInvalidName() { 
+
+        // mock the repositories in the create Donation cl
+        // when a visitor is requested, return the visitor
+        when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor); 
+
+        // call the service to create a donation
+        MmssException ex = assertThrows(MmssException.class, () -> donationService.createDonation("henry@doppleganger", "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+         "From the death star")); 
+
+        // assertions 
+        assertEquals("The donation name should not exceed 50 characters", ex.getMessage());
+
+        // check that each repository was called the right number of times, and with right arguments
+        verify(visitorRepository, times(1)).findVisitorByUsername("henry@doppleganger"); 
+    }
+
+    @Test
+    public void testCreateDonationInvalidDescription() { 
+
+        // mock the repositories in the create Donation cl
+        // when a visitor is requested, return the visitor
+        when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor); 
+
+        // call the service to create a donation
+        MmssException ex = assertThrows(MmssException.class, () -> donationService.createDonation("henry@doppleganger", "Lightsaber",
+         "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz")); 
+
+        // assertions 
+        assertEquals("The donation description should not exceed 300 characters", ex.getMessage());
+
+        // check that each repository was called the right number of times, and with right arguments
         verify(visitorRepository, times(1)).findVisitorByUsername("henry@doppleganger"); 
     }
 
@@ -203,6 +318,8 @@ public class DonationServiceTests {
         // delete donation
         donationService.deleteDonation(0);
 
+        //add assertion
+
         // verify that the delete method was called
         verify(donationRepository, times(1)).deleteById(0);
 
@@ -223,9 +340,42 @@ public class DonationServiceTests {
                 () -> donationService.deleteDonation(0));
 
         // assert the exception is as expected
+        // add verify
         assertEquals("The donation with this Id was not found", ex.getMessage()); 
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
-
     }
+
+    // /**
+    //  * Test successfully approving a donation
+    //  * @author Mohamed Elsamadouny
+    //  */
+    // @Test
+    // public void testUpdateStatusToApproved() {
+    //      // set up the mocks
+
+    //     // retrieve the loan
+    //     when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> donation); 
+
+    //     // return the artefact when it is saved
+    //     when(artefactRepository.save((any(Artefact.class)))).thenAnswer((InvocationOnMock invocation) -> artefact); 
+    //     ArrayList<Room> list = new ArrayList<Room>();
+    //     list.add(storageRoom);
+    //     when(roomRepository.findAllByRoomType(any(RoomType.class))).thenAnswer((InvocationOnMock invocation) -> list);
+        
+    //     // call the service layer
+    //     Artefact createdArtefact = donationService.updateStatus(0, ExchangeStatus.Approved, false, 1.0, 0.5); 
+
+    //     // assertions
+    //     assertEquals(createdArtefact.getArtefactId(), 0);
+    //     assertEquals(donation.getItemName(), createdArtefact.getArtefactName());
+    
+
+    //     // add assertion that its due date is set 
+
+    //     // verify the calls to the repository are with the correct arguments
+    //     verify(donationRepository, times(1)).findDonationByExchangeId(0); 
+    //     verify(artefactRepository, times(1)).save((any(Artefact.class))); 
+
+    // }
 
 }

@@ -27,6 +27,7 @@ import ca.mcgill.ecse.mmss.dao.NotificationRepository;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.ScheduleRepository;
+import ca.mcgill.ecse.mmss.dto.OpenDayDto;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.dto.ArtefactDto;
 import ca.mcgill.ecse.mmss.dto.DonationDto;
@@ -42,8 +43,13 @@ import ca.mcgill.ecse.mmss.model.Visitor;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class OpenDayIntegrationTests {
 
+    @Autowired
+    private TestRestTemplate client;
+    
+    @Autowired
     private OpenDayRepository openDayRepository;
 
+    @Autowired
     private ScheduleRepository schedualRepository;
 
     // Objects that we will need 
@@ -81,5 +87,32 @@ public class OpenDayIntegrationTests {
         openDayRepository.deleteAll();
         schedualRepository.deleteAll();
     }
-    
+
+    /**
+     * Tests creating and retrieving a donation
+     *
+     * @author Mohamed Elsamadouny
+     */
+    // @Test
+    // public void testCreateAndGetOpenDay() {
+    //     // create donation dto
+    //     OpenDayDto request = new OpenDayDto(openDay);
+
+    //     // make the post
+    //     ResponseEntity<OpenDayDto> response1 = client.postForEntity("/openday", request, OpenDayDto.class);
+        
+    //     // make assertions on the post
+    //     assertNotNull(response1, "The response is not null");
+    //     assertEquals(HttpStatus.CREATED, response1.getStatusCode());
+    //     assertNotNull(response1.getBody(), "Response has a body");
+    //     Date date = response1.getBody().getDate();
+
+    //     // try the get
+    //     ResponseEntity<OpenDayDto> response2 = client.getForEntity("/openday?=" + date, OpenDayDto.class);
+
+    //     // make assertions on the get
+    //     assertNotNull(response2);
+    //     assertEquals(HttpStatus.OK, response2.getStatusCode());
+    //     assertNotNull(response2.getBody(), "Response has a body");
+    // }
 }

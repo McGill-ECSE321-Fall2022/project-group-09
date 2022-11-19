@@ -35,7 +35,7 @@ public class OpenDayService {
      * @return the OpenDay with the specific date
      */
     @Transactional
-    public OpenDay retrieveOpenDayByDate(Date date) {
+    public OpenDay getOpenDayByDate(Date date) {
 
         // use the repository method
         OpenDay openDay = openDayRepository.findOpenDayByDate(date);
@@ -100,34 +100,13 @@ public class OpenDayService {
     	OpenDay openDay = new OpenDay();
     	openDay.setDate(date);
 
-        // set the scheduale 
+        // set the scheduale
+        openDay.setSchedule(scheduleService.getSchedule()); 
 
         // save the openDay
         openDayRepository.save(openDay);
     	return openDay;
-    }
-
-
-    
-    /**
-     * Deletes an OpenDay with a specific day if it exists
-     * 
-     * @author Mohamed Elsamadouny
-     * @param date
-     */
-    @Transactional
-    public void deleteOpenDay(Date date) {
-
-        OpenDay openDay = openDayRepository.findOpenDayByDate(date);
-        if (openDay == null)
-            throw new MmssException(HttpStatus.NOT_FOUND, "The openDat with this date was not found");
-
-        // delete from scheduale
-        
-        // calls the repository to delete the date
-        openDayRepository.deleteById(date);
-    }
-    
+    }    
 
     public class ComparatorForOpenDay implements Comparator<OpenDay> {
     @Override

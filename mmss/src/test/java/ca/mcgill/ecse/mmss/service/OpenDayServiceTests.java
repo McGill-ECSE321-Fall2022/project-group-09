@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.OpenDay;
+import ca.mcgill.ecse.mmss.model.Schedule;
 
 @ExtendWith(MockitoExtension.class)
 public class OpenDayServiceTests {
@@ -33,8 +34,12 @@ public class OpenDayServiceTests {
     @InjectMocks
     private OpenDayService openDayService;
 
+    @Mock
+    private ScheduleService scheduleService;
+
     // Objects we will need in the tests
     OpenDay openDay;
+    Schedule schedule;
     Date testDate = Date.valueOf("2022-10-10");
 
     /**
@@ -45,7 +50,10 @@ public class OpenDayServiceTests {
     @BeforeEach
     public void createObjects() {
         // create necessary objects for test
-        this.openDay = new OpenDay(testDate);
+        openDay = new OpenDay(testDate);
+        schedule = new Schedule();
+        openDay.setSchedule(schedule);
+
     }
 
     /**
@@ -57,6 +65,7 @@ public class OpenDayServiceTests {
     public void deleteObjects() {
         // delete the objects from the test
         this.openDay.delete();
+        schedule.delete();
     }
 
     /**
@@ -65,13 +74,13 @@ public class OpenDayServiceTests {
      * @author Mohamed Elsamadouny
      */
     @Test 
-    public void testRetrieveOpenDayByDate () { 
+    public void testGetOpenDayByDate () { 
 
         // setup mocks
         when(openDayRepository.findOpenDayByDate(any(Date.class))).thenAnswer((InvocationOnMock invocation) -> openDay ); 
 
         // call service layer
-        OpenDay retrievedOpenDay = openDayService.retrieveOpenDayByDate(testDate); 
+        OpenDay retrievedOpenDay = openDayService.getOpenDayByDate(testDate); 
 
         // assertions
         assertEquals (Date.valueOf("2022-10-10"), retrievedOpenDay.getDate()); 
@@ -93,7 +102,7 @@ public class OpenDayServiceTests {
 
         // call service layer
         // call service layer and get the exception
-        MmssException ex = assertThrows(MmssException.class, () -> openDayService.retrieveOpenDayByDate(testDate));
+        MmssException ex = assertThrows(MmssException.class, () -> openDayService.getOpenDayByDate(testDate));
 
         // assertions
         assertEquals ("OpenDay not found", ex.getMessage()); 
@@ -108,43 +117,21 @@ public class OpenDayServiceTests {
      */
 
     @Test
-    public void testCreateDonation() { 
+    public void testCreateOpenDay() { 
 
         // mock the repositories in the create Donation class
 
         // when a loan is saved, return that loan
-        when(openDayRepository.save(any(OpenDay.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0)); 
+        when(openDayRepository.save(any(OpenDay.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
+        when(scheduleService.getSchedule()).thenAnswer((InvocationOnMock invocation) -> schedule); 
 
         // call the service
         OpenDay openDayCreated = openDayService.createOpenDay(testDate); 
 
+        assertEquals(openDay.getDate(), openDayCreated.getDate());
+        assertEquals(openDay.getSchedule(), openDayCreated.getSchedule());
         verify(openDayRepository, times(1)).save(openDayCreated); 
+        verify(scheduleService, times(1)).getSchedule();
     }
-
-    @Test
-    public void testDeleteDonation () { 
-
-        // set up the mocks
-        when(openDayRepository.findOpenDayByDate(testDate)).thenAnswer((InvocationOnMock invocation) -> openDay); 
-        
-        // delete the openday
-        openDayService.deleteOpenDay(testDate);
-
-        // verify that the delete method was called
-        verify(openDayRepository, times(1)).deleteById(testDate);
-
-    }
-
-
-
-
-
-
-
-
-    
-
-
-
     
 }

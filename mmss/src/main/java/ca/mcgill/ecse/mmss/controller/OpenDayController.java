@@ -34,7 +34,7 @@ public class OpenDayController {
     @GetMapping({"/{date}", "/{date}/"})
     public ResponseEntity<OpenDayDto> getOpenDay(@PathVariable Date date) {
         // call service
-        OpenDay retreivedOpenDay = openDayService.retrieveOpenDayByDate(date);
+        OpenDay retreivedOpenDay = openDayService.getOpenDayByDate(date);
         // return response entity with Dto
         return new ResponseEntity<OpenDayDto>(new OpenDayDto(retreivedOpenDay), HttpStatus.OK);
     }
@@ -58,22 +58,5 @@ public class OpenDayController {
         return new ResponseEntity<OpenDayDto>(new OpenDayDto(retreivedOpenDay), HttpStatus.CREATED);
 
     }
-
-    /**
-     * Delete an OpenDay given its date
-     * @author Mohamed Elsamadouny
-     * 
-     * @param request 
-     * @return A message saying the donation was deleted
-     */
-    @DeleteMapping({"/{date}", "/{date}/"})
-    public ResponseEntity<String> deleteOpenDay(@PathVariable Date date) {
-        // call service layer
-        openDayService.deleteOpenDay(date);
-
-        // return updated Loan as Dto
-        return new ResponseEntity<String>("OpenDay successfully deleted", HttpStatus.OK);
-    }
-
     
 }
