@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
+import ca.mcgill.ecse.mmss.dao.NotificationRepository;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
@@ -64,6 +65,8 @@ public class LoanIntegrationTests {
 
     @Autowired
     private CommunicationRepository communicationRepository;
+
+    @Autowired NotificationRepository notificationRepository;
 
     // Four objects we will need in all our tests
     private Person person;
@@ -140,9 +143,11 @@ public class LoanIntegrationTests {
         this.loan.delete();
         loanRepository.deleteAll();
         visitorRepository.deleteAll();
+        notificationRepository.deleteAll(); 
+        communicationRepository.deleteAll();
         artefactRepository.deleteAll();
         personRepository.deleteAll();
-
+        
     }
 
     /**
