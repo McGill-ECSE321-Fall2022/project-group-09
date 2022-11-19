@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse.mmss.dto.VisitorDto;
-import ca.mcgill.ecse.mmss.dto.VisitorCreateAdditionalDto;
+import ca.mcgill.ecse.mmss.dto.VisitorRequestDto;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.service.VisitorService;
 
@@ -28,7 +28,7 @@ public class VisitorController {
 	VisitorService visitorService;
 	
 	@PostMapping
-    public ResponseEntity<VisitorDto> createVisitor(@RequestBody VisitorCreateAdditionalDto request) {
+    public ResponseEntity<VisitorDto> createVisitor(@RequestBody VisitorRequestDto request) {
         // get parameters
 		String firstname = request.getFirstName();
 		String lastname = request.getLastName();
@@ -43,8 +43,8 @@ public class VisitorController {
 
     }
 	
-	@PostMapping
-    public ResponseEntity<VisitorDto> createAdditionalVisitor(@RequestBody VisitorCreateAdditionalDto request) {
+	@PostMapping ({"/{addAccount}", "/{addAccount}/"})
+    public ResponseEntity<VisitorDto> createAdditionalVisitor(@RequestBody VisitorRequestDto request) {
         // get parameters
         String username = request.getUsername();
         String newUsername = request.getNewUserName();
@@ -66,26 +66,13 @@ public class VisitorController {
     }
 	
 	@PutMapping
-    public ResponseEntity<VisitorDto> updateVisitorUsername(@RequestBody VisitorCreateAdditionalDto request) {
+    public ResponseEntity<VisitorDto> updateVisitorPassword(@RequestBody VisitorRequestDto request) {
         // get parameters
         String username = request.getUsername();
-        String newUsername = request.getNewUserName();
-
+        String oldPassword = request.getPassword();
+        String newPassword = request.getNewPassword();
         // call service layer
-        Visitor updatedVisitor = visitorService.updateVisitorUsername(username, newUsername);
-
-        // return updated Visitor as Dto
-        return new ResponseEntity<VisitorDto>(new VisitorDto(updatedVisitor), HttpStatus.OK);
-    }
-	
-	@PutMapping
-    public ResponseEntity<VisitorDto> updateVisitorBalance(@RequestBody VisitorCreateAdditionalDto request) {
-        // get parameters
-        String username = request.getUsername();
-        double updatedBalance = request.getBalance();
-
-        // call service layer
-        Visitor updatedVisitor = visitorService.updateVisitorBalance(username, updatedBalance);
+        Visitor updatedVisitor = visitorService.updateVisitorPassword(username, oldPassword, newPassword);
 
         // return updated Visitor as Dto
         return new ResponseEntity<VisitorDto>(new VisitorDto(updatedVisitor), HttpStatus.OK);
@@ -116,7 +103,7 @@ public class VisitorController {
 
     }
 	
-	@GetMapping
+	@GetMapping ({"/{byPerson}", "/{byPerson}/"})
     public ResponseEntity<ArrayList<VisitorDto>> getAllVisitorsByPerson(@RequestParam int id) {
 
         // get all visitors

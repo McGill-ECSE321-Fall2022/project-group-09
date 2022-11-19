@@ -1,7 +1,7 @@
 package ca.mcgill.ecse.mmss.dto;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
-public class VisitorCreateAdditionalDto {
+public class VisitorRequestDto {
 	private String firstName;
 	private String lastName;
 	private String userName;
@@ -14,7 +14,7 @@ public class VisitorCreateAdditionalDto {
 	 * Null constructor
 	 * @author Saviru Perera
 	 */
-	public VisitorCreateAdditionalDto() {}
+	public VisitorRequestDto() {}
 	
 	/**
 	 * Constructor that takes in a visitor as an argument
@@ -22,7 +22,7 @@ public class VisitorCreateAdditionalDto {
 	 * @author Saviru Perera
 	 * @param visitor
 	 */
-	public VisitorCreateAdditionalDto(Visitor visitor, String newUserName, String newPassword) {
+	public VisitorRequestDto(Visitor visitor, String newUserName, String newPassword) {
 		this.firstName = visitor.getPerson().getFirstName();
 		this.lastName = visitor.getPerson().getLastName();
 		this.userName = visitor.getUsername();
