@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ca.mcgill.ecse.mmss.dto.ArtefactDto;
 import ca.mcgill.ecse.mmss.dto.DonationDto;
+import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.service.DonationService;
@@ -96,7 +98,7 @@ public class DonationController {
      * @return the updated loan as a Dto, in a response entity, status ok
      */
     @PutMapping
-    public ResponseEntity<String> updateDonation(@RequestBody DonationDto request) {
+    public ResponseEntity<ArtefactDto> updateDonation(@RequestBody DonationDto request) {
         
         // get parameters
         int donationId = request.getExchangeId();
@@ -104,10 +106,10 @@ public class DonationController {
 
         // call service layer
         // not sure how to get the fees
-        donationService.updateStatus(donationId, status, false, 2, 1);
+        Artefact createdArtefact = donationService.updateStatus(donationId, status, false, 2, 1);
 
         // return updated Loan as Dto
-        return new ResponseEntity<String>("Donation successfully Approved", HttpStatus.OK);
+        return new ResponseEntity<ArtefactDto>(new ArtefactDto(createdArtefact), HttpStatus.OK);
 
     }
 
