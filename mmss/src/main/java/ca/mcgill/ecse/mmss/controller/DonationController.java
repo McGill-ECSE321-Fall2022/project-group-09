@@ -39,9 +39,9 @@ public class DonationController {
      * @return a response entity with the donation and ok status
      */
     @GetMapping({"/{id}", "/{id}/"})
-    public ResponseEntity<DonationDto> getLoan(@PathVariable int id) {
+    public ResponseEntity<DonationDto> getDonation(@PathVariable int id) {
         // call service
-        Donation retrievedDonation = donationService.getDonationById(id);
+        Donation retrievedDonation = donationService.retreiveDonationById(id);
         // return response entity with Dto
         return new ResponseEntity<DonationDto>(new DonationDto(retrievedDonation), HttpStatus.OK);
     }
@@ -54,7 +54,7 @@ public class DonationController {
      * @return the created Donation as a Dto with status ok
      */
     @PostMapping
-    public ResponseEntity<DonationDto> createLoan(@RequestBody DonationDto request) {
+    public ResponseEntity<DonationDto> createDonation(@RequestBody DonationDto request) {
         // get parameters
         String itemName = request.getItemName();
         String username = request.getVisitorUsername();
@@ -118,7 +118,7 @@ public class DonationController {
      * @return A message saying the donation was deleted
      */
     @DeleteMapping({"/{id}", "/{id}/"})
-    public ResponseEntity<String> deleteLoan(@PathVariable int id) {
+    public ResponseEntity<String> deleteDonation(@PathVariable int id) {
         // call service layer
         donationService.deleteDonation(id);
 
