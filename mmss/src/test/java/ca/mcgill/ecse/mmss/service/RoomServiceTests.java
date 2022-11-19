@@ -111,7 +111,7 @@ public class RoomServiceTests {
     }
 
     /**
-     * Test to all rooms in the museum
+     * Test to get all rooms in the museum
      */
     @Test
     public void testGetAllRooms() {
