@@ -43,7 +43,7 @@ public class TicketController {
 	/**
 	 * Create ticket based on input request
 	 * 
-	 * @param request
+	 * @param request {@link TicketDto}
 	 * @return created Ticket as Dto in response entity with created status
 	 * @author Shyam Desai
 	 */
@@ -60,7 +60,7 @@ public class TicketController {
 	/**
 	 * Update ticket date given its Id
 	 * 
-	 * @param request
+	 * @param request {@link TicketDto}
 	 * @return updated Ticket Dto in response entity with ok status
 	 * @author Shyam Desai
 	 */

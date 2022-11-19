@@ -44,7 +44,7 @@ public class TourController {
 	/**
 	 * Create tour
 	 * 
-	 * @param request
+	 * @param request {@link TourDto}
 	 * @return tour as Dto in response entity with created status
 	 * @author Shyam Desai
 	 */
@@ -62,7 +62,7 @@ public class TourController {
 	/**
 	 * Update tour's date and number of participants
 	 * 
-	 * @param request
+	 * @param request {@link TourDto}
 	 * @return updated Tour Dto in response entity with ok status
 	 * @author Shyam Desai
 	 */
