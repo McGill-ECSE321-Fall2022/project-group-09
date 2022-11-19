@@ -25,7 +25,7 @@ public class CommunicationController {
      * Get a communication by a username
      *
      * @param username an account's primary key
-     * @return a response entity with the CommunicationDto instance and the HttpStatus
+     * @return a response entity with the {@link CommunicationDto} instance and the HttpStatus
      */
     @GetMapping({"/{username}", "/{username}/"})
     public ResponseEntity<CommunicationDto> getCommunication(@PathVariable String username) {

@@ -25,7 +25,7 @@ public class NotificationController {
      * Get a notification by its primary key
      *
      * @param id the notification's primary key
-     * @return a response entity with the NotificationDto instance and the HttpStatus
+     * @return a response entity with the {@link NotificationDto} instance and the HttpStatus
      */
     @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<NotificationDto> getNotification(@PathVariable int id) {
@@ -37,7 +37,7 @@ public class NotificationController {
      * Get all the notifications associated with a username
      *
      * @param username an account's primary key
-     * @return a response entity with an array list of NotificationDto instances and the HttpStatus
+     * @return a response entity with an array list of {@link NotificationDto} instances and the HttpStatus
      */
     @GetMapping({"/username", "/username/"})
     public ResponseEntity<ArrayList<NotificationDto>> getAllNotificationsByUsername(@RequestParam String username) {
@@ -52,7 +52,7 @@ public class NotificationController {
     /**
      * Create a notification based on an input request
      *
-     * @param request a RequestNotificationDto instance {@link RequestNotificationDto}
+     * @param request a {@link NotificationDto} instance
      * @return a response entity with a message and the HttpStatus
      */
     @PostMapping

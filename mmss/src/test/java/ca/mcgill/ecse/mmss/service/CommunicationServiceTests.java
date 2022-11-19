@@ -70,7 +70,6 @@ public class CommunicationServiceTests {
     /**
      * Test get a communication with a valid username with no prior communication
      */
-
     @Test
     public void testGetCommunicationInvalid() {
         // setup mocks
