@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,18 +22,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
+import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
+import ca.mcgill.ecse.mmss.dao.NotificationRepository;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.dto.LoanDto;
 import ca.mcgill.ecse.mmss.model.Artefact;
+import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Loan;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
+
+/** 
+ * Tests the functionality of all services exposed through 
+ * the URL "/loan"
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class LoanIntegrationTests {
 
@@ -52,8 +61,12 @@ public class LoanIntegrationTests {
     private LoanRepository loanRepository;
 
     @Autowired
-    private OpenDayRepository openDayRepository; 
+    private OpenDayRepository openDayRepository;
 
+    @Autowired
+    private CommunicationRepository communicationRepository;
+
+    @Autowired NotificationRepository notificationRepository;
 
     // Four objects we will need in all our tests
     private Person person;
@@ -63,9 +76,8 @@ public class LoanIntegrationTests {
     private Loan loan;
 
     /**
-     * Creates the obejcts needed by all test cases
-     * BeforeAll because these objects are only modified in the database,
-     * not themselves
+     * Creates the obejcts needed by all test cases. 
+     * This is a BeforeEach because objects that are manipulated by certain calls should be reset for each test
      * 
      * @author Shidan Javaheri
      */
@@ -99,6 +111,11 @@ public class LoanIntegrationTests {
 
         // the visitor
         this.visitor = new Visitor("mo.salah@gmail.com", "IScoreGoalz", person);
+
+        // a visitor is always created with a communication
+        Communication communication = new Communication();
+        communicationRepository.save(communication);
+        visitor.setCommunication(communication);
         visitorRepository.save(visitor);
 
         // the loan
@@ -126,9 +143,11 @@ public class LoanIntegrationTests {
         this.loan.delete();
         loanRepository.deleteAll();
         visitorRepository.deleteAll();
+        notificationRepository.deleteAll(); 
+        communicationRepository.deleteAll();
         artefactRepository.deleteAll();
         personRepository.deleteAll();
-
+        
     }
 
     /**
@@ -157,7 +176,7 @@ public class LoanIntegrationTests {
         ResponseEntity<LoanDto> response = client.postForEntity("/loan", request, LoanDto.class);
 
         // make assertions on the post
-        assertNotNull(response);
+        assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
         assertTrue(response.getBody().getExchangeId() > 0, "Response has a valid id");
@@ -191,26 +210,37 @@ public class LoanIntegrationTests {
      */
     @Test
     public void testUpdateLoantoApproved() {
+
+        // adds openDays to the database
+        createAndSaveOpenDays();
+
         // make Dto for request
         LoanDto loanDto = new LoanDto(loan);
         loanDto.setExchangeStatus(ExchangeStatus.Approved);
 
-        // make an entity to send the request with 
-        HttpEntity<LoanDto> request= new HttpEntity<>(loanDto); 
+        // make an entity to send the request with
+        HttpEntity<LoanDto> request = new HttpEntity<>(loanDto);
 
         // send the request
-        ResponseEntity<LoanDto> response = client.exchange("/loan", HttpMethod.PUT ,request, LoanDto.class);
+        ResponseEntity<LoanDto> response = client.exchange("/loan", HttpMethod.PUT, request, LoanDto.class);
 
         // assertions on response
-        assertNotNull(response); 
-        assertNotNull(response.getBody()); 
-        assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Approved); 
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Approved);
 
         // get the updated Loan from the database
         Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId());
 
-        // verify the update
+        // verify the update of the status
         assertEquals(updatedLoan.getExchangeStatus(), ExchangeStatus.Approved);
+    
+        // get the correct due date
+        Date correctDueDate = addDays(new Date(System.currentTimeMillis()),7); 
+
+        // verify the dueDate is set to 7 days from the current date
+        assertEquals(correctDueDate.toString(), updatedLoan.getDueDate().getDate().toString()); 
 
     }
 
@@ -226,22 +256,23 @@ public class LoanIntegrationTests {
         LoanDto loanDto = new LoanDto(loan);
         loanDto.setExchangeStatus(ExchangeStatus.Declined);
 
-        // make an entity to send the request with 
-        HttpEntity<LoanDto> request= new HttpEntity<>(loanDto); 
+        // make an entity to send the request with
+        HttpEntity<LoanDto> request = new HttpEntity<>(loanDto);
 
         // send the request
-        ResponseEntity<LoanDto> response = client.exchange("/loan", HttpMethod.PUT ,request, LoanDto.class);
+        ResponseEntity<LoanDto> response = client.exchange("/loan", HttpMethod.PUT, request, LoanDto.class);
 
         // assertions on response
-        assertNotNull(response); 
-        assertNotNull(response.getBody()); 
-        assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Declined); 
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(response.getBody().getExchangeStatus(), ExchangeStatus.Declined);
 
         // get the updated Loan from the database
         Loan updatedLoan = loanRepository.findLoanByExchangeId(loan.getExchangeId());
 
         // verify the loan doesn't exist anymore
-        assertNull(updatedLoan); 
+        assertNull(updatedLoan);
 
     }
 
@@ -258,11 +289,11 @@ public class LoanIntegrationTests {
         LoanDto request = new LoanDto(loan);
         int id = request.getExchangeId();
 
-        
-        ResponseEntity<String> response = client.exchange("/loan/" + id, HttpMethod.DELETE,null, String.class);
+        ResponseEntity<String> response = client.exchange("/loan/" + id, HttpMethod.DELETE, null, String.class);
 
         // assert on the response
         assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("Loan successfully deleted", response.getBody());
 
@@ -284,10 +315,14 @@ public class LoanIntegrationTests {
     public void testGetAllLoans() {
 
         // make request
-        var request = client.getForEntity("/loan", ArrayList.class);
+        var response = client.getForEntity("/loan", ArrayList.class);
 
+        // assertions on the response
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
 
         // assertions
         assertNotNull(extractedLoans);
@@ -304,12 +339,21 @@ public class LoanIntegrationTests {
     @Test
     public void testGetAllLoansByStatus() {
         // make request
-        var request = client.getForEntity("/loan/status?status=Pending", ArrayList.class);
-        var requestEmpty = client.getForEntity("/loan/status?status=Declined", ArrayList.class);
+        var response = client.getForEntity("/loan/status?status=Pending", ArrayList.class);
+        var responseEmpty = client.getForEntity("/loan/status?status=Declined", ArrayList.class);
+
+        // assertions on the responses
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+
+        assertNotNull(responseEmpty);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(responseEmpty.getBody());
 
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
-        ArrayList<LoanDto> empty = requestEmpty.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
+        ArrayList<LoanDto> empty = responseEmpty.getBody();
 
         // assertions
         assertNotNull(extractedLoans);
@@ -318,7 +362,7 @@ public class LoanIntegrationTests {
     }
 
     /**
-     * Tests getting all loans by their Submitted date 
+     * Tests getting all loans by their Submitted date
      * 
      * @author Shidan Javaheri
      */
@@ -326,12 +370,21 @@ public class LoanIntegrationTests {
     @Test
     public void testGetAllLoansBySubmittedDate() {
         // make request
-        var request = client.getForEntity("/loan/submittedDate?date=2022-10-10", ArrayList.class);
-        var requestEmpty = client.getForEntity("/loan/submittedDate?date=2022-09-09", ArrayList.class);
+        var response = client.getForEntity("/loan/submittedDate?date=2022-10-10", ArrayList.class);
+        var responseEmpty = client.getForEntity("/loan/submittedDate?date=2022-09-09", ArrayList.class);
+
+        // assertions on the responses
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+
+        assertNotNull(responseEmpty);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(responseEmpty.getBody());
 
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
-        ArrayList<LoanDto> empty = requestEmpty.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
+        ArrayList<LoanDto> empty = responseEmpty.getBody();
 
         // assertions
         assertNotNull(extractedLoans);
@@ -340,7 +393,7 @@ public class LoanIntegrationTests {
     }
 
     /**
-     * Tests getting all loans by their due date 
+     * Tests getting all loans by their due date
      * 
      * @author Shidan Javaheri
      */
@@ -349,17 +402,22 @@ public class LoanIntegrationTests {
     public void testGetAllLoansByDueDate() {
 
         // make the loan have a due date
-        OpenDay dueDate = new OpenDay(Date.valueOf("2022-10-17")); 
-        openDayRepository.save(dueDate); 
+        OpenDay dueDate = new OpenDay(Date.valueOf("2022-10-17"));
+        openDayRepository.save(dueDate);
 
-        loan.setDueDate(dueDate); 
-        loanRepository.save(loan); 
+        loan.setDueDate(dueDate);
+        loanRepository.save(loan);
 
         // make request
-        var request = client.getForEntity("/loan/dueDate?date=2022-10-17", ArrayList.class);
+        var response = client.getForEntity("/loan/dueDate?date=2022-10-17", ArrayList.class);
+
+        // assertions on the response
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
 
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
 
         // assertions
         assertNotNull(extractedLoans);
@@ -375,15 +433,56 @@ public class LoanIntegrationTests {
     @Test
     public void testGetAllLoansByVisitor() {
         // make request
-        var request = client.getForEntity("/loan/visitor?username=mo.salah@gmail.com", ArrayList.class);
+        var response = client.getForEntity("/loan/visitor?username=mo.salah@gmail.com", ArrayList.class);
+
+        // assertions on the response
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
 
         // get array list of loans
-        ArrayList<LoanDto> extractedLoans = request.getBody();
+        ArrayList<LoanDto> extractedLoans = response.getBody();
 
         // assertions
         assertNotNull(extractedLoans);
         assertEquals(1, extractedLoans.size());
+
     }
 
+
+    // HELPER METHODS
+
+    /**
+     * Helper method to increase a date by 1 day. 
+     * Inspired by this Source: https://stackoverflow.com/questions/15802010/how-to-add-days-to-java-sql-date
+     * @param date the date to add
+     * @param days the integer number of days to add to the date
+     * @return the date increased by the given number of days
+     */
+    public Date addDays(Date date, int days) {
+        // adds one day to the input date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, days);
+        return new Date(calendar.getTimeInMillis());
+    }
+
+    /**
+     * Makes 10 open days that to be used for testing, and saves them to 
+     * the database. All of these 10 days are after the current date
+     * 
+     * @return and ArrayList of OpenDays
+     */
+    public void createAndSaveOpenDays() {
+        // get the current date
+        Date currentDate = new Date(System.currentTimeMillis());
+        // add the current date and 9 future days to the openDay list
+        for (int i = 0; i < 10; i++) {
+            OpenDay openDay = new OpenDay(currentDate);
+            openDayRepository.save(openDay); 
+            currentDate = addDays(currentDate, 1);
+        }
+
+    }
 
 }

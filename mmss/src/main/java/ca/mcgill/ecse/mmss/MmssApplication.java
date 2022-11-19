@@ -1,26 +1,24 @@
 package ca.mcgill.ecse.mmss;
 
-import ca.mcgill.ecse.mmss.dao.RoomRepository;
-import ca.mcgill.ecse.mmss.model.Room;
-import ca.mcgill.ecse.mmss.service.RoomService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import java.util.TimeZone;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 public class MmssApplication {
 
 
-//	@Autowired
-//	private RoomRepository roomRepository;
-//
-//	@Autowired
-//	private RoomService roomService;
+	@PostConstruct
+	void started() {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(MmssApplication.class, args);
@@ -28,11 +26,5 @@ public class MmssApplication {
 
 
 
-//	@Bean
-//	CommandLineRunner commandLineRunner() {
-//		return args -> {
-//				Room r1 = new Room();
-//				roomRepository.save(r1);
-//		};
-//	}
+
 }

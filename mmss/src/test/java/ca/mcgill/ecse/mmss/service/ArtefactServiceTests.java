@@ -158,7 +158,7 @@ public class ArtefactServiceTests {
     public void testGetAllArtefactsInStorage() {
         ArrayList<Artefact> artefactsTest = getArtefactsByRoomTest(Room.RoomType.Storage);
         // setup mocks
-        when(roomService.retrieveRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> storage);
+        when(roomService.getRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> storage);
         when(artefactRepository.findAllByRoom(any(Room.class))).thenAnswer((InvocationOnMock invocation) -> artefactsTest);
         // call service layer
         ArrayList<Artefact> artefactsService = artefactService.getAllArtefactsByRoom(3);
@@ -166,7 +166,7 @@ public class ArtefactServiceTests {
         assertEquals(artefactsTest.size(), artefactsService.size());
         // Verify
         verify(artefactRepository, times(1)).findAllByRoom(any(Room.class));
-        verify(roomService, times(1)).retrieveRoomById(any(int.class));
+        verify(roomService, times(1)).getRoomById(any(int.class));
     }
 
     /**
@@ -176,7 +176,7 @@ public class ArtefactServiceTests {
     public void testGetAllArtefactsNoLoanAndInLargeRoom() {
         ArrayList<Artefact> artefactsTest = getArtefactsByRoomTest(Room.RoomType.Large);
         // setup mocks
-        when(roomService.retrieveRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> largeRoom);
+        when(roomService.getRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> largeRoom);
         when(artefactRepository.findAllByRoomAndCanLoan(any(Room.class), any(boolean.class))).thenAnswer((InvocationOnMock invocation) -> artefactsTest);
         // call service layer
         ArrayList<Artefact> artefactsService = artefactService.getAllArtefactsByRoomAndByCanLoan(2, false);
@@ -184,7 +184,7 @@ public class ArtefactServiceTests {
         assertEquals(artefactsTest.size(), artefactsService.size());
         // Verify
         verify(artefactRepository, times(1)).findAllByRoomAndCanLoan(any(Room.class), any(boolean.class));
-        verify(roomService, times(1)).retrieveRoomById(any(int.class));
+        verify(roomService, times(1)).getRoomById(any(int.class));
     }
 
     /**
@@ -393,7 +393,7 @@ public class ArtefactServiceTests {
         smallRoom.setArtefactCount(smallRoom.getArtefactCount() - 1);
         // setup mocks
         when(artefactRepository.findArtefactByArtefactId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> artefact);
-        when(roomService.retrieveRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
+        when(roomService.getRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
         when(roomService.isRoomFull(any(int.class))).thenAnswer((InvocationOnMock invocation) -> true);
         // call service layer and get the exception
         MmssException ex = assertThrows(MmssException.class, () -> artefactService.addArtefactToRoom(artefact.getArtefactId(), smallRoom.getRoomId()));
@@ -402,7 +402,7 @@ public class ArtefactServiceTests {
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
         // verify calls to repositories
         verify(artefactRepository, times (1)).findArtefactByArtefactId(any(int.class));
-        verify(roomService, times (1)).retrieveRoomById(any(int.class));
+        verify(roomService, times (1)).getRoomById(any(int.class));
         verify(roomService, times (1)).isRoomFull(any(int.class));
     }
 
@@ -416,9 +416,9 @@ public class ArtefactServiceTests {
         smallRoom.setArtefactCount(smallRoom.getArtefactCount() - 1);
         // setup mocks
         when(artefactRepository.findArtefactByArtefactId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> artefact);
-        when(roomService.retrieveRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
+        when(roomService.getRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
         when(roomService.isRoomFull(any(int.class))).thenAnswer((InvocationOnMock invocation) -> false);
-        when(roomService.getDisplayCapacity()).thenAnswer((InvocationOnMock invocation) -> 1000);
+        when(roomService.getDisplayArtefactCount()).thenAnswer((InvocationOnMock invocation) -> 1000);
         // call service layer and get the exception
         MmssException ex = assertThrows(MmssException.class, () -> artefactService.addArtefactToRoom(artefact.getArtefactId(), smallRoom.getRoomId()));
         // assertion
@@ -426,9 +426,9 @@ public class ArtefactServiceTests {
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
         // verify calls to repositories
         verify(artefactRepository, times (1)).findArtefactByArtefactId(any(int.class));
-        verify(roomService, times (1)).retrieveRoomById(any(int.class));
+        verify(roomService, times (1)).getRoomById(any(int.class));
         verify(roomService, times (1)).isRoomFull(any(int.class));
-        verify(roomService, times (1)).getDisplayCapacity();
+        verify(roomService, times (1)).getDisplayArtefactCount();
     }
 
     /**
@@ -441,9 +441,9 @@ public class ArtefactServiceTests {
         smallRoom.setArtefactCount(smallRoom.getArtefactCount() - 1);
         // setup mocks
         when(artefactRepository.findArtefactByArtefactId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> artefact);
-        when(roomService.retrieveRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
+        when(roomService.getRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
         when(roomService.isRoomFull(any(int.class))).thenAnswer((InvocationOnMock invocation) -> false);
-        when(roomService.getDisplayCapacity()).thenAnswer((InvocationOnMock invocation) -> 5); // 6 - 1
+        when(roomService.getDisplayArtefactCount()).thenAnswer((InvocationOnMock invocation) -> 5); // 6 - 1
         when(roomRepository.save(any(Room.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
         when(artefactRepository.save(any(Artefact.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
         // call service layer
@@ -453,9 +453,9 @@ public class ArtefactServiceTests {
         assertEquals(3, smallRoom.getArtefactCount());
         // verify calls to repositories
         verify(artefactRepository, times (1)).findArtefactByArtefactId(any(int.class));
-        verify(roomService, times (1)).retrieveRoomById(any(int.class));
+        verify(roomService, times (1)).getRoomById(any(int.class));
         verify(roomService, times (1)).isRoomFull(any(int.class));
-        verify(roomService, times (1)).getDisplayCapacity();
+        verify(roomService, times (1)).getDisplayArtefactCount();
         verify(artefactRepository, times (1)).save(any(Artefact.class));
         verify(roomRepository, times (1)).save(any(Room.class));
     }
@@ -468,7 +468,7 @@ public class ArtefactServiceTests {
         Artefact artefact = artefacts.get(2);
         // setup mocks
         when(artefactRepository.findArtefactByArtefactId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> artefact);
-        when(roomService.retrieveRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
+        when(roomService.getRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
         // call service layer and get the exception
         MmssException ex = assertThrows(MmssException.class, () -> artefactService.moveArtefactToRoom(artefact.getArtefactId(), smallRoom.getRoomId()));
         // assertion
@@ -476,7 +476,7 @@ public class ArtefactServiceTests {
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
         // verify calls to repositories
         verify(artefactRepository, times (1)).findArtefactByArtefactId(any(int.class));
-        verify(roomService, times (1)).retrieveRoomById(any(int.class));
+        verify(roomService, times (1)).getRoomById(any(int.class));
     }
 
     /**
@@ -488,7 +488,7 @@ public class ArtefactServiceTests {
         artefact.setArtefactId(10);
         // setup mocks
         when(artefactRepository.findArtefactByArtefactId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> artefact);
-        when(roomService.retrieveRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
+        when(roomService.getRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
         // call service layer
         artefactService.moveArtefactToRoom(artefact.getArtefactId(), smallRoom.getRoomId());
         // assertion
@@ -496,7 +496,7 @@ public class ArtefactServiceTests {
         assertEquals(3 + 1, smallRoom.getArtefactCount());
         // verify calls to repositories
         verify(artefactRepository, times (2)).findArtefactByArtefactId(any(int.class));
-        verify(roomService, times (2)).retrieveRoomById(any(int.class));
+        verify(roomService, times (2)).getRoomById(any(int.class));
     }
 
     /**
@@ -507,7 +507,7 @@ public class ArtefactServiceTests {
         Artefact artefact = artefacts.get(0);
         // setup mocks
         when(artefactRepository.findArtefactByArtefactId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> artefact);
-        when(roomService.retrieveRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
+        when(roomService.getRoomById(any(int.class))).thenAnswer((InvocationOnMock invocation) -> smallRoom);
         // call service layer
         artefactService.moveArtefactToRoom(artefact.getArtefactId(), smallRoom.getRoomId());
         // assertion
@@ -516,7 +516,7 @@ public class ArtefactServiceTests {
         assertEquals(3 - 1,  largeRoom.getArtefactCount());
         // verify calls to repositories
         verify(artefactRepository, times (3)).findArtefactByArtefactId(any(int.class));
-        verify(roomService, times (2)).retrieveRoomById(any(int.class));
+        verify(roomService, times (2)).getRoomById(any(int.class));
     }
 
     /**

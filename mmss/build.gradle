@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
 	id 'jacoco'
+
 }
 
 group = 'ca.mcgill.ecse'
@@ -20,7 +21,8 @@ dependencies {
   runtimeOnly 'org.postgresql:postgresql'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
+
+} 
 
 tasks.named('test') {
 	useJUnitPlatform()
@@ -48,7 +50,5 @@ jacocoTestCoverageVerification {
 		}
 	}
 }
-
-
 
 targetCompatibility = JavaVersion.VERSION_17
