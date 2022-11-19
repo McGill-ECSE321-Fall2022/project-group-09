@@ -20,6 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse.mmss.exception.MmssException;
+/**
+ * Unit tests for the RoomService class
+ */
 
 @ExtendWith(MockitoExtension.class)
 public class RoomServiceTests {
