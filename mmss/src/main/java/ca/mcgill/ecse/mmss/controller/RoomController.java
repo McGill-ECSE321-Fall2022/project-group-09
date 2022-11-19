@@ -24,7 +24,7 @@ public class RoomController {
      * Get a room by its primary key
      *
      * @param id the room's primary key
-     * @return a response entity with the RoomDto instance and the HttpStatus
+     * @return a response entity with the {@link RoomDto} instance and the HttpStatus
      */
     @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<RoomDto> getRoom(@PathVariable int id) {
@@ -36,7 +36,7 @@ public class RoomController {
      * Get all the rooms of a given type
      *
      * @param type the room type: large, small, or storage
-     * @return a response entity with an array list of RoomDto instances and the HttpStatus
+     * @return a response entity with an array list of {@link RoomDto} instances and the HttpStatus
      */
     @GetMapping({"/type", "/type/"})
     public ResponseEntity<ArrayList<RoomDto>> getAllRoomsByRoomType(@RequestParam Room.RoomType type) {
@@ -52,7 +52,7 @@ public class RoomController {
     /**
      * Get all the rooms in the museum
      *
-     * @return a response entity with an array list of RoomDto instances and the HttpStatus
+     * @return a response entity with an array list of {@link RoomDto} instances and the HttpStatus
      */
     @GetMapping
     public ResponseEntity<ArrayList<RoomDto>> getAllRooms() {
