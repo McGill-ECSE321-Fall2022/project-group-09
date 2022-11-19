@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+/**
+ * REST API for the Room class
+ */
 @RestController
 @RequestMapping ({"/room", "/room/"})
 public class RoomController {
@@ -19,19 +22,21 @@ public class RoomController {
 
     /**
      * Get a room by its primary key
-     * @param id
-     * @return a response entity with the room and ok status
+     *
+     * @param id the room's primary key
+     * @return a response entity with the {@link RoomDto} instance and the HttpStatus
      */
     @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<RoomDto> getRoom(@PathVariable int id) {
-        Room room = roomService.retrieveRoomById(id);
+        Room room = roomService.getRoomById(id);
         return new ResponseEntity<RoomDto>(new RoomDto(room), HttpStatus.OK);
     }
 
     /**
      * Get all the rooms of a given type
-     * @param type RoomType
-     * @return an array list with the rooms as DTOs
+     *
+     * @param type the room type: large, small, or storage
+     * @return a response entity with an array list of {@link RoomDto} instances and the HttpStatus
      */
     @GetMapping({"/type", "/type/"})
     public ResponseEntity<ArrayList<RoomDto>> getAllRoomsByRoomType(@RequestParam Room.RoomType type) {
@@ -45,8 +50,9 @@ public class RoomController {
     }
 
     /**
-     * Get all rooms
-     * @return an array list of rooms as DTOs
+     * Get all the rooms in the museum
+     *
+     * @return a response entity with an array list of {@link RoomDto} instances and the HttpStatus
      */
     @GetMapping
     public ResponseEntity<ArrayList<RoomDto>> getAllRooms() {
@@ -60,12 +66,13 @@ public class RoomController {
     }
 
     /**
-     * Get the display capacity
-     * @return the display capacity
+     * Get the display current artefact count
+     *
+     * @return a response entity with the display current artefact count and the HttpStatus
      */
     @GetMapping({"/displayCapacity", "/displayCapacity/"})
-    public ResponseEntity<Integer> getDisplayCapacity() {
-        int displayCapacity = roomService.getDisplayCapacity();
+    public ResponseEntity<Integer> getDisplayArtefactCount() {
+        int displayCapacity = roomService.getDisplayArtefactCount();
         return new ResponseEntity<Integer>(displayCapacity, HttpStatus.OK);
     }
 }

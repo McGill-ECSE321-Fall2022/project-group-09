@@ -1,6 +1,5 @@
 package ca.mcgill.ecse.mmss.service;
 
-
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.AccountType;
 import ca.mcgill.ecse.mmss.model.Communication;
@@ -9,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Business logic for the Communication class
+ */
 @Service
 public class CommunicationService {
 
@@ -17,8 +19,10 @@ public class CommunicationService {
 
     /**
      * Get a communication by a username
-     * @param username
-     * @return a communication associated with this username
+     *
+     * @param username an account's primary key
+     * @return the communication instance
+     * @throws MmssException
      */
     @Transactional
     public Communication getCommunicationByUsername(String username) {

@@ -1,4 +1,5 @@
 package ca.mcgill.ecse.mmss.controller;
+
 import ca.mcgill.ecse.mmss.dto.CommunicationDto;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.service.CommunicationService;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST API for the Communication class
+ */
 @RestController
 @RequestMapping({"/communication", "/communication/"})
 public class CommunicationController {
@@ -20,13 +24,12 @@ public class CommunicationController {
     /**
      * Get a communication by a username
      *
-     * @param username
-     * @return a response entity with the communication and ok status
+     * @param username an account's primary key
+     * @return a response entity with the {@link CommunicationDto} instance and the HttpStatus
      */
     @GetMapping({"/{username}", "/{username}/"})
     public ResponseEntity<CommunicationDto> getCommunication(@PathVariable String username) {
         Communication communication = communicationService.getCommunicationByUsername(username);
         return new ResponseEntity<CommunicationDto>(new CommunicationDto(communication), HttpStatus.OK);
     }
-    
 }

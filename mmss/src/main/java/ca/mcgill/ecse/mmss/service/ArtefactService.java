@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
+/**
+ * Business logic for the Artefact class
+ */
 @Service
 public class ArtefactService {
 
@@ -30,7 +33,7 @@ public class ArtefactService {
      * Get an artefact by its primary key
      *
      * @author Sasha Denouvilliez-Pech
-     * @param id
+     * @param id the primary key of an artefact
      * @return an artefact or an exception
      */
     @Transactional
@@ -43,7 +46,7 @@ public class ArtefactService {
     }
 
     /**
-     * Get all artefacts
+     * Get all artefacts in the museum
      *
      * @return an array list of artefacts
      */
@@ -71,7 +74,7 @@ public class ArtefactService {
      */
     @Transactional
     public ArrayList<Artefact> getAllArtefactsByRoom(int roomId) {
-        return artefactRepository.findAllByRoom(roomService.retrieveRoomById(roomId));
+        return artefactRepository.findAllByRoom(roomService.getRoomById(roomId));
     }
 
     /**
@@ -84,7 +87,7 @@ public class ArtefactService {
     @Transactional
     public ArrayList<Artefact> getAllArtefactsByRoomAndByCanLoan(int roomId, boolean canLoan) {
         // Valid room
-        Room room = roomService.retrieveRoomById(roomId);
+        Room room = roomService.getRoomById(roomId);
         return artefactRepository.findAllByRoomAndCanLoan(room, canLoan);
     }
 
@@ -212,12 +215,12 @@ public class ArtefactService {
         // Valid artefact id
         Artefact artefact = getArtefactById(artefactId);
         // Valid room id
-        Room room = roomService.retrieveRoomById(roomId);
+        Room room = roomService.getRoomById(roomId);
         // Destination room full
         if (roomService.isRoomFull(roomId))
             throw new MmssException(HttpStatus.BAD_REQUEST, "The destination room is already full.");
         // Display full
-        if (!(room.getRoomType() == Room.RoomType.Storage) && roomService.getDisplayCapacity() >= 1000)
+        if (!(room.getRoomType() == Room.RoomType.Storage) && roomService.getDisplayArtefactCount() >= 1000)
             throw new MmssException(HttpStatus.BAD_REQUEST, "The display is already full.");
         // Increment room's artefact count
         room.setArtefactCount(room.getArtefactCount() + 1);
@@ -239,7 +242,7 @@ public class ArtefactService {
         // Valid artefact id
         Artefact artefact = getArtefactById(artefactId);
         // Valid room id
-        roomService.retrieveRoomById(roomId);
+        Room room = roomService.getRoomById(roomId);
         // Destination and current rooms are the same
         if (artefact.getRoom().getRoomId() == roomId)
             throw new MmssException(HttpStatus.BAD_REQUEST, "The destination and current rooms cannot be the same.");

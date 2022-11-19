@@ -10,9 +10,11 @@ public class ManagerDto {
 
 	/**
 	 * Null constructor
+	 * 
 	 * @author Shyam Desai
 	 */
-	public ManagerDto() {}
+	public ManagerDto() {
+	}
 
 	/**
 	 * Constructor that takes in the manager as the argument
@@ -23,7 +25,8 @@ public class ManagerDto {
 	public ManagerDto(Manager manager) {
 		this.userName = manager.getUsername();
 		this.personId = manager.getPerson().getPersonId();
-		this.communicationId = manager.getCommunication().getCommunicationId();
+		if (manager.getCommunication() != null)
+			this.communicationId = manager.getCommunication().getCommunicationId();
 	}
 
 	/**

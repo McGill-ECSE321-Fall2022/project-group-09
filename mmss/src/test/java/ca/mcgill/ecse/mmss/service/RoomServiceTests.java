@@ -20,6 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse.mmss.exception.MmssException;
+/**
+ * Unit tests for the RoomService class
+ */
 
 @ExtendWith(MockitoExtension.class)
 public class RoomServiceTests {
@@ -61,11 +64,11 @@ public class RoomServiceTests {
      * Test retrieving a room with a valid id
      */
     @Test
-    public void testRetrieveRoomById() {
+    public void testGetRoomById() {
         // setup mocks
         when(roomRepository.findRoomByRoomId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> museumRooms.get(0));
         // call service layer
-        Room room = roomService.retrieveRoomById(0);
+        Room room = roomService.getRoomById(0);
         // assertion
         assertEquals(museumRooms.get(0).getRoomId(), room.getRoomId());
         assertEquals(museumRooms.get(0).getRoomType(), room.getRoomType());
@@ -82,7 +85,7 @@ public class RoomServiceTests {
         // setup mocks
         when(roomRepository.findRoomByRoomId(invalidId)).thenAnswer((InvocationOnMock invocation) -> null);
         // call service layer and get the exception
-        MmssException ex = assertThrows(MmssException.class, () -> roomService.retrieveRoomById(invalidId));
+        MmssException ex = assertThrows(MmssException.class, () -> roomService.getRoomById(invalidId));
         // check the message contains the right message and status
         assertEquals("Room not found", ex.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
@@ -123,10 +126,10 @@ public class RoomServiceTests {
     }
 
     /**
-     * Test for successful display capacity count
+     * Test for successful display artefact count
      */
     @Test
-    public void testGetDisplayCapacity() {
+    public void testGetDisplayArtefactCount() {
         // Set current capacity to 100 for all rooms in the museum
         for (Room room : museumRooms)
             room.setArtefactCount(100);
@@ -136,7 +139,7 @@ public class RoomServiceTests {
         when(roomRepository.findAllByRoomType(Room.RoomType.Small)).thenAnswer((InvocationOnMock invocation) -> smallRooms);
         when(roomRepository.findAllByRoomType(Room.RoomType.Large)).thenAnswer((InvocationOnMock invocation) -> largeRooms);
         // call service layer
-        int displayCapacity = roomService.getDisplayCapacity();
+        int displayCapacity = roomService.getDisplayArtefactCount();
         // assertion
         assertEquals(1000, displayCapacity);
         // Verify
@@ -184,7 +187,7 @@ public class RoomServiceTests {
     }
 
     /**
-     * Test for a full small room
+     * Test for a not full large room
      */
     @Test
     public void testIsRoomFullWithNotFullLargeRoom() {
