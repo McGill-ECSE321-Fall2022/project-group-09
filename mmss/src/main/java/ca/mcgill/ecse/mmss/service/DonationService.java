@@ -15,11 +15,9 @@ import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Donation;
-import ca.mcgill.ecse.mmss.model.Exchange;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
-import ca.mcgill.ecse.mmss.service.ArtefactService;
 
 @Service
 public class DonationService {
@@ -52,7 +50,7 @@ public class DonationService {
 	 */
 
 	@Transactional
-	public Donation retrieveDonationById(int id) {
+	public Donation getDonationById(int id) {
 		// use the repository method
 		Donation donation = donationRepository.findDonationByExchangeId(id);
 		if (donation == null) {
@@ -152,7 +150,7 @@ public class DonationService {
 
         // check visitor not null
         if (visitor == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found");
+            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this username was not found");
         }
         // Check if name and donation pass the requirements
         if (username.length() > 50) {
