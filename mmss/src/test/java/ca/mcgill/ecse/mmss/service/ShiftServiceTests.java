@@ -27,4 +27,5 @@ import ca.mcgill.ecse.mmss.exception.MmssException;
 
 @ExtendWith(MockitoExtension.class)
 public class ShiftServiceTests {
+	
 }

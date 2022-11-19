@@ -17,27 +17,14 @@ public class ShiftController {
     @Autowired
     private ShiftService shiftService;
     
-
-    /**
-     * Get a shift by its primary key
-     *
-     * @param id the shift's primary key
-     * @return a response entity with the ShiftDto instance and the HttpStatus
-     */
-    @GetMapping({"/{id}", "/{id}/"})
-    public ResponseEntity<ShiftDto> getShiftById(@PathVariable int id) {
-        Shift shift = shiftService.getShiftById(id);
-        return new ResponseEntity<ShiftDto>(new ShiftDto(shift), HttpStatus.OK);
-    }
-    
     /**
      * Get shift with a specific shiftTime value
      *
      * @param shiftTime a shift's assigned time
      * @return a response entity with the ShiftDto instance and the HttpStatus
      */
-    @GetMapping({"/shiftTime", "/shiftTime/"})
-    public ResponseEntity<ShiftDto> getShiftByShiftTime(@RequestParam Shift.ShiftTime shiftTime) {
+    @GetMapping({"/{shiftTime}", "/{shiftTime}/"})
+    public ResponseEntity<ShiftDto> getShiftByShiftTime(@PathVariable Shift.ShiftTime shiftTime) {
         Shift shift = shiftService.getShiftByShiftTime(shiftTime);
         return new ResponseEntity<ShiftDto>(new ShiftDto(shift), HttpStatus.OK);
     }
@@ -59,24 +46,6 @@ public class ShiftController {
     }
     
     /**
-     * Create new shifts based on an input request
-     *
-     * @return a response entity with the ShiftDto ArrayList and the HttpStatus
-     */
-    @PostMapping
-    public ResponseEntity<ArrayList<ShiftDto>> createShifts() {
-        // create the shifts
-        ArrayList<Shift> shifts = shiftService.createShifts();
-        //DTOs
-        ArrayList<ShiftDto> shiftDTOs = new ArrayList<>();
-        for (Shift shift : shifts) {
-        	shiftDTOs.add(new ShiftDto(shift));
-        }
-        // return them in the response entity
-        return new ResponseEntity<ArrayList<ShiftDto>>(shiftDTOs, HttpStatus.CREATED);
-    }
-    
-    /**
      * Get shift of an employee
      *
      * @param shiftTime a shift's assigned time
@@ -89,26 +58,26 @@ public class ShiftController {
     }
     
     /**
-     * Move an shift to another employee
+     * Assign a shift to an employee
      *
      * @param shiftId the shift's primary key
      * @param username the employee's primary key
      * @return a response entity with a message and the HttpStatus
      */
-    @PutMapping({"/assign", "/assign/"})
+    @PutMapping
     public ResponseEntity<String> assignShiftToEmployee(@RequestParam int shiftId, @RequestParam String username) {
         shiftService.assignShiftToEmployee(shiftId, username);
         return new ResponseEntity<String>("Shift successfully assigned.", HttpStatus.OK);
     }
 
     /**
-     * Move an shift to other employees
+     * Assign a shift to a list of employees
      *
      * @param shiftId the shift's primary key
      * @param employeeList the list of employees
      * @return a response entity with a message and the HttpStatus
      */
-    @PutMapping({"/assign", "/assign/"})
+    @PutMapping({"/assignToAll", "/assignToAll/"})
     public ResponseEntity<String> assignShiftToEmployees(@RequestParam int shiftId, @RequestParam ArrayList<Employee> employeeList) {
         shiftService.assignShiftToEmployees(shiftId, employeeList);
         return new ResponseEntity<String>("Shift successfully assigned.", HttpStatus.OK);

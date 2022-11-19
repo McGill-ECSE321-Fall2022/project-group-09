@@ -133,9 +133,6 @@ public class ShiftService {
      */
     @Transactional
     public void assignShiftToEmployees(int shiftId, ArrayList<Employee> employeeList) {
-        if (getShiftById(shiftId) == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Shift not found");
-        }
         for(Employee employee : employeeList) {
         	assignShiftToEmployee(shiftId, employee.getUsername());
         }

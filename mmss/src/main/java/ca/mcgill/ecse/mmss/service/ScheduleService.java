@@ -11,11 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.ScheduleRepository;
-import ca.mcgill.ecse.mmss.dao.ShiftRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Schedule;
-import ca.mcgill.ecse.mmss.model.Shift;
 
 @Service
 public class ScheduleService {
@@ -23,10 +21,6 @@ public class ScheduleService {
     private ScheduleRepository scheduleRepository;
 	@Autowired
     private OpenDayRepository openDayRepository;
-    @Autowired
-    private ShiftRepository shiftRepository;
-    @Autowired
-    private ShiftService shiftService;
 
     /**
      * Get a schedule by its primary key
@@ -37,10 +31,10 @@ public class ScheduleService {
      */
     @Transactional
     public Schedule getSchedule() {
-        Schedule schedule = scheduleRepository.findAll().get(0);
-        if (schedule == null) {
+        if (scheduleRepository.findAll().size() == 0) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
+        Schedule schedule = scheduleRepository.findAll().get(0);
         return schedule;
     }
     
@@ -65,11 +59,7 @@ public class ScheduleService {
      */
     @Transactional
     public void assignScheduleToOpenDay(Date date) {
-    	OpenDay openDay = openDayRepository.findOpenDayByDate(date);
-        if (openDay == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
-        }
-        else if (openDayRepository.findOpenDayByDate(date) == null) {
+    	OpenDay openDay = openDayRepository.findOpenDayByDate(date);if (openDayRepository.findOpenDayByDate(date) == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Open day not found");
         }
     	openDay.setSchedule(getSchedule());
@@ -83,26 +73,8 @@ public class ScheduleService {
      */
     @Transactional
     public void assignScheduleToOpenDays(ArrayList<OpenDay> dateList) {
-        if (getSchedule() == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
-        }
         for(OpenDay openDay : dateList) {
         	assignScheduleToOpenDay(openDay.getDate());
-        }
-    }
-    
-    /**
-     * If the schedule exists, assign the schedule to all shifts
-     */
-    @Transactional
-    public void assignScheduleToShifts() {
-        if (getSchedule() == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
-        }
-        ArrayList<Shift> shiftList = shiftService.getAllShifts();
-        for(Shift shift : shiftList) {
-        	shift.setSchedule(getSchedule());
-        	shiftRepository.save(shift);
         }
     }
 }
