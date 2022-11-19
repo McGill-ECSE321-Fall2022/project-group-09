@@ -1,11 +1,7 @@
 package ca.mcgill.ecse.mmss.controller;
-import ca.mcgill.ecse.mmss.dto.CommunicationDto;
-import ca.mcgill.ecse.mmss.dto.LoanDto;
+
 import ca.mcgill.ecse.mmss.dto.NotificationDto;
 import ca.mcgill.ecse.mmss.dto.RequestNotificationDto;
-import ca.mcgill.ecse.mmss.model.Communication;
-import ca.mcgill.ecse.mmss.model.Exchange;
-import ca.mcgill.ecse.mmss.model.Loan;
 import ca.mcgill.ecse.mmss.model.Notification;
 import ca.mcgill.ecse.mmss.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+/**
+ * REST API for the Notification class
+ */
 @RestController
 @RequestMapping ({"/notification", "/notification/"})
 public class NotificationController {
@@ -25,8 +24,8 @@ public class NotificationController {
     /**
      * Get a notification by its primary key
      *
-     * @param id
-     * @return a response entity with the notification and ok status
+     * @param id the notification's primary key
+     * @return a response entity with the {@link NotificationDto} instance and the HttpStatus
      */
     @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<NotificationDto> getNotification(@PathVariable int id) {
@@ -35,10 +34,10 @@ public class NotificationController {
     }
 
     /**
-     * Get all the notification associated with a username
+     * Get all the notifications associated with a username
      *
-     * @param username
-     * @return an array list with the notifications as DTOs
+     * @param username an account's primary key
+     * @return a response entity with an array list of {@link NotificationDto} instances and the HttpStatus
      */
     @GetMapping({"/username", "/username/"})
     public ResponseEntity<ArrayList<NotificationDto>> getAllNotificationsByUsername(@RequestParam String username) {
@@ -53,8 +52,8 @@ public class NotificationController {
     /**
      * Create a notification based on an input request
      *
-     * @param request
-     * @return a response entity with a message and CREATED status
+     * @param request a {@link NotificationDto} instance
+     * @return a response entity with a message and the HttpStatus
      */
     @PostMapping
     public ResponseEntity<String> createNotification(@RequestBody RequestNotificationDto request) {
@@ -62,7 +61,7 @@ public class NotificationController {
         String username = request.getUsername();
         String message = request.getMessage();
         // create the notification
-        Notification notification = notificationService.createNotificationByUsername(username, message);
+        notificationService.createNotificationByUsername(username, message);
         // return it in the response entity
         return new ResponseEntity<String>("Notification successfully created.", HttpStatus.CREATED);
     }
@@ -70,13 +69,12 @@ public class NotificationController {
     /**
      * Delete a notification given its primary key
      *
-     * @param id
-     * @return A message saying the notification was deleted
+     * @param id the notification's primary key
+     * @return a response entity with a message and the HttpStatus
      */
     @DeleteMapping({"/{id}", "/{id}/"})
     public ResponseEntity<String> deleteNotification(@PathVariable int id) {
         notificationService.deleteNotification(id);
         return new ResponseEntity<String>("Notification successfully deleted.", HttpStatus.OK);
     }
-    
 }
