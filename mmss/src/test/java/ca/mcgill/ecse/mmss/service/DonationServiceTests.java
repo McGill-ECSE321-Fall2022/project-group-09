@@ -44,7 +44,7 @@ public class DonationServiceTests {
     @Mock
     private NotificationService notificationService;
     
-    // We inject the mocks in the loan service - the thing that calls on the
+    // We inject the mocks in the doantion service - the thing that calls on the
     // repositories
     @InjectMocks
     private DonationService donationService;
@@ -144,13 +144,13 @@ public class DonationServiceTests {
 
         // mock the repositories in the create Donation class
 
-        // when a loan is saved, return that loan
+        // when a donation is saved, return that donation
         when(donationRepository.save(any(Donation.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0)); 
 
         // when a visitor is requested, return the visitor
         when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor); 
 
-        // call the service to create a loan
+        // call the service to create a donation
         Donation donationCreated = donationService.createDonation("henry@doppleganger", "LightSaber", "From the death star"); 
 
         // assertions 
@@ -165,11 +165,11 @@ public class DonationServiceTests {
     }
 
     /**
-     * Tests creating a loan with an invalid username
+     * Tests creating a donation with an invalid username
      * @author Mohamed Elsamadouny
      */
     @Test
-    public void testCreateLoanInvalidUsername () { 
+    public void testCreateDonationInvalidUsername () { 
 
         // set up mocks
         when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
@@ -195,7 +195,7 @@ public class DonationServiceTests {
      */
 
     @Test
-    public void testDeleteLoan () { 
+    public void testDeleteDonation () { 
 
         // set up the mocks
         when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> donation); 
