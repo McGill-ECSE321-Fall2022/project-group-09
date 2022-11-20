@@ -73,9 +73,6 @@ public class ShiftService {
      */
     @Transactional
     public ArrayList<Shift> createShifts() {
-        if (scheduleService.getSchedule() == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
-        }
     	for(ShiftTime time : ShiftTime.values()) {
     		if (shiftRepository.findAllByShiftTime(time) != null)
                 throw new MmssException(HttpStatus.BAD_REQUEST, "The shift " + time.name() + " already exists.");
@@ -97,8 +94,8 @@ public class ShiftService {
     @Transactional
     public Shift getShiftFromEmployee(String username) {
     	Employee employee = employeeRepository.findEmployeeByUsername(username);
-    	if (employee.getShift() == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Employee shift not found");
+        if (employee == null) {
+            throw new MmssException(HttpStatus.NOT_FOUND, "Employee not found");
         }
     	return employee.getShift();
     }
@@ -112,6 +109,9 @@ public class ShiftService {
     @Transactional
     public void assignShiftToEmployee(int shiftId, String username) {
     	Employee employee = employeeRepository.findEmployeeByUsername(username);
+        if (employee == null) {
+            throw new MmssException(HttpStatus.NOT_FOUND, "Employee not found");
+        }
         if (getShiftById(shiftId) == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Shift not found");
         }
@@ -141,7 +141,7 @@ public class ShiftService {
     @Transactional
     public void removeShiftFromEmployee(String username) {
     	Employee employee = employeeRepository.findEmployeeByUsername(username);
-    	if (employee == null) {
+        if (employee == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Employee not found");
         }
     	employee.setShift(null);
