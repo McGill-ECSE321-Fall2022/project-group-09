@@ -80,5 +80,5 @@ The task of writing classes and its tests were split as follows:
 | Mohamed Elsamadouny | - OpenDay and Donation classes <br> - xx <br> - xx <br> - xx | xx hours |
 | Sasha Denouvilliez-Pech | - Setting the views in the Kanban board <br> - Writing initial issues and labels <br> - Artefact, Room, Communication, and Notification classes <br> - Review code and PRs <br> - Writing test plan | 45 hours |
 | Saviru Perera | - Employee, Visitor, and Login classes <br> - xx <br> - xx <br> - xx | xx hours |
-| Shidan Javaheri | - Providing code examples and templates <br> - Loan and Manager classes <br> - Review code and PRs <br> - Writing API documentation <br> - Final wiki review | xx hours |
+| Shidan Javaheri | - Providing code examples and templates <br> - Loan and Manager classes <br> - Review code and PRs <br> - Writing API documentation <br> - Final wiki review <br> - xx | xx hours |
 | Shyam Desai | - Tour and Ticket classes <br> - Writing the meeting minutes <br> - Writing API documentation <br> - xx | xx hours |
