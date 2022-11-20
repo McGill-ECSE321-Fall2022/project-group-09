@@ -78,7 +78,7 @@ The task of writing classes and its tests were split as follows:
 |:----------------:|:----------------------------------------------------------------- |:----------------------:|
 | Athmane Benarous | - xx <br> - xx <br> - xx <br> - xx | xx hours |
 | Mohamed Elsamadouny | - xx <br> - xx <br> - xx <br> - xx | xx hours |
-| Sasha Denouvilliez-Pech | - xx <br> - xx <br> - xx <br> - xx | xx hours |
+| Sasha Denouvilliez-Pech | - Setting the views in the Kanban board <br> - Writing initial issues and labels <br> - Artefact, Room, Communication, and Notification classes <br> - Writing test plan <br> - xx <br> - xx | 45 hours |
 | Saviru Perera | - xx <br> - xx <br> - xx <br> - xx | xx hours |
 | Shidan Javaheri | - xx <br> - xx <br> - xx <br> - xx | xx hours |
 | Shyam Desai | - xx <br> - xx <br> - xx <br> - xx | xx hours |
