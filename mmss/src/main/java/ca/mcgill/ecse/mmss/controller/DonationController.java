@@ -151,7 +151,7 @@ public class DonationController {
      * Gets all the donations submitted on a certain day
      * @author Mohamed Elsamadouny
      * 
-     * @param date
+     * @param date a request parameter in the format yyyy-MM-dd
      * @return an array list with all the donations as Dtos
      */
     @GetMapping({"/submittedDate", "/submittedDate/"})
@@ -173,7 +173,7 @@ public class DonationController {
     /**
      * Gets all the donations belonging to a visitor
      * @author Mohamed Elsamadouny
-     * @param username
+     * @param username username of the visitor
      * @return an array list with all the donations as Dtos
      */
     @GetMapping({"/visitor","/visitor/"})

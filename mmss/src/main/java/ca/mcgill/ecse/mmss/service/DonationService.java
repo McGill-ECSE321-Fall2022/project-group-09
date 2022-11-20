@@ -40,6 +40,9 @@ public class DonationService {
     
     @Autowired
     private ArtefactService artefactService;
+
+    @Autowired
+    private RoomService roomService;
 	
 	
 	/**
@@ -247,9 +250,8 @@ public class DonationService {
                 artefact = artefactService.createArtefact(donation.getItemName(), donation.getDescription(), canLoan, insuraceFees, loanFee);
 
                 // set room to storage
-                // artefact = artefactService.moveArtefactToRoom(artefact.getArtefactId(), // get storageroom id);
-                artefact.setRoom(roomRepository.findAllByRoomType(RoomType.Storage).get(0));
-                
+                int roomId = roomService.getAllRoomsByRoomType(RoomType.Storage).get(0).getRoomId();
+                artefactService.moveArtefactToRoom(artefact.getArtefactId(), roomId);
                 
                 // create notification message
                 String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()

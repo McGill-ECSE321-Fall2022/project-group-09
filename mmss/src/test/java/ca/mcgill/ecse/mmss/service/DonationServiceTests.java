@@ -60,6 +60,9 @@ public class DonationServiceTests {
     @Mock 
     private ArtefactService artefactService;
 
+    @Mock 
+    private RoomService roomService;
+
     // Objects we will need in all our tests
     private Donation donation;
     private Person person;
@@ -89,6 +92,7 @@ public class DonationServiceTests {
         artefact.setCanLoan(false);
         artefact.setInsuranceFee(1.0);
         artefact.setLoanFee(0.5);
+        artefact.setRoom(storageRoom);
         donation.setItemName("Lightsaber");
         donation.setDescription("From the death star");
         donation.setVisitor(visitor);
@@ -345,16 +349,20 @@ public class DonationServiceTests {
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
     }
 
-    // /**
-    //  * Test successfully approving a donation
-    //  * @author Mohamed Elsamadouny
-    //  */
+    /**
+     * Test successfully approving a donation
+     * @author Mohamed Elsamadouny
+     */
     // @Test
     // public void testUpdateStatusToApproved() {
     //      // set up the mocks
 
-    //     // retrieve the loan
+    //     // retrieve the donation
     //     when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> donation); 
+
+    //     when(roomService.getAllRoomsByRoomType(RoomType.Storage).get(0).getRoomId()).thenAnswer((InvocationOnMock invocation) -> 0);
+    //     // cant mock it because it has no return value
+    //     when(artefactService.moveArtefactToRoom(any(int.class), any(int.class))).thenAnswer((InvocationOnMock invocation) -> );
 
     //     // return the artefact when it is saved
     //     when(artefactRepository.save((any(Artefact.class)))).thenAnswer((InvocationOnMock invocation) -> artefact); 
