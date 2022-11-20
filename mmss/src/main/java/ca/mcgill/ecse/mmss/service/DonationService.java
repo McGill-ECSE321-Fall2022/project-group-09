@@ -15,6 +15,7 @@ import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Donation;
+import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
@@ -250,7 +251,10 @@ public class DonationService {
                 artefact = artefactService.createArtefact(donation.getItemName(), donation.getDescription(), canLoan, insuraceFees, loanFee);
 
                 // set room to storage
-                int roomId = roomService.getAllRoomsByRoomType(RoomType.Storage).get(0).getRoomId();
+                ArrayList<Room> storageRoomList = roomService.getAllRoomsByRoomType(RoomType.Storage); 
+                int roomId = storageRoomList.get(0).getRoomId();
+
+                // move the artefact to storage
                 artefactService.moveArtefactToRoom(artefact.getArtefactId(), roomId);
                 
                 // create notification message
@@ -262,7 +266,7 @@ public class DonationService {
                 notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message);
                 
                 // delete the donation from the database
-                deleteDonation(donation.getExchangeId());
+                donationRepository.delete(donation);
             }
         }
         return artefact;

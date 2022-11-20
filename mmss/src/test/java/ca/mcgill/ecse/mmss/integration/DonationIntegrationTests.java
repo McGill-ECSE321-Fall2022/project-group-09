@@ -25,6 +25,7 @@ import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.DonationRepository;
 import ca.mcgill.ecse.mmss.dao.NotificationRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
+import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.dto.ArtefactDto;
 import ca.mcgill.ecse.mmss.dto.DonationDto;
@@ -32,8 +33,9 @@ import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
-import ca.mcgill.ecse.mmss.service.ArtefactService;
+import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Person;
+import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -59,6 +61,9 @@ public class DonationIntegrationTests {
 
     @Autowired 
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private RoomRepository roomRepository; 
 
     // Objects we will need in all our tests
     private Donation donation;
@@ -89,7 +94,7 @@ public class DonationIntegrationTests {
         communicationRepository.save(communication);
         visitor.setCommunication(communication);
         visitorRepository.save(visitor);
-
+        
         // the donation
         donation = new Donation();
         donation.setVisitor(visitor);
@@ -99,6 +104,12 @@ public class DonationIntegrationTests {
         donation.setDescription("Won from World Cup 2022");
         donation.setExchangeStatus(ExchangeStatus.Pending);
         donationRepository.save(donation);
+
+        // create a storate room for the artefact to be moved to
+        Room storageRoom = new Room();
+        storageRoom.setRoomType(RoomType.Storage);
+        roomRepository.save(storageRoom);
+
     }
 
     /**
@@ -113,6 +124,9 @@ public class DonationIntegrationTests {
         this.person.delete();
         this.visitor.delete();
         this.donation.delete();
+
+        artefactRepository.deleteAll(); 
+        roomRepository.deleteAll();
         donationRepository.deleteAll();
         visitorRepository.deleteAll();
         notificationRepository.deleteAll(); 
@@ -157,41 +171,39 @@ public class DonationIntegrationTests {
      * 
      * @author Mohamed Elsamadouny
      */
-    // @Test
-    // public void testUpdateDonationtoApproved() {
+    @Test
+    public void testUpdateDonationtoApproved() {
 
-    //     // make Dto for request
-    //     DonationDto donationDto = new DonationDto(donation);
-    //     donationDto.setExchangeStatus(ExchangeStatus.Approved);
-    //     int donationId = donationDto.getExchangeId();
+        // get the donation id
+        int donationId = donation.getExchangeId();
 
-    //     ArtefactDto artefactDto = new ArtefactDto();
-    //     artefactDto.setCanLoan(false);
-    //     artefactDto.setInsuranceFee(1.0);
-    //     artefactDto.setLoanFee(0.5);
+        // create an artefact Dto
+        ArtefactDto artefactDto = new ArtefactDto();
+        artefactDto.setCanLoan(false);
+        artefactDto.setInsuranceFee(1.0);
+        artefactDto.setLoanFee(0.5);
 
+        // make an entity to send the request with
+        HttpEntity<ArtefactDto> request = new HttpEntity<>(artefactDto);
 
-    //     // make an entity to send the request with
-    //     HttpEntity<ArtefactDto> request = new HttpEntity<>(artefactDto);
+        // send the request
+        ResponseEntity<ArtefactDto> response = client.exchange("/donation/" + donationId, HttpMethod.PUT, request, ArtefactDto.class);
 
-    //     // send the request
-    //     ResponseEntity<ArtefactDto> response = client.exchange("/donation/" + donationId, HttpMethod.PUT, request, ArtefactDto.class);
+        // assertions on response
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
 
-    //     // assertions on response
-    //     assertNotNull(response);
-    //     assertEquals(HttpStatus.OK, response.getStatusCode());
-    //     assertNotNull(response.getBody());
+        // asssert artefact was created
+        ArrayList<Artefact> artefacts = artefactRepository.findAll();
+        assertEquals(1, artefacts.size());
 
-    //     // asssert artefact was created
-    //     ArrayList<Artefact> artefacts = artefactRepository.findAll();
-    //     assertEquals(1, artefacts.size());
+        // get the updated Donation from the database
+        Donation updatedDonation = donationRepository.findDonationByExchangeId(donation.getExchangeId());
 
-    //     // get the updated Donation from the database
-    //     Donation updatedDonation = donationRepository.findDonationByExchangeId(donation.getExchangeId());
-
-    //     // verify the doantion doesn't exist anymore
-    //     assertNull(updatedDonation);
-    // }
+        // verify the doantion doesn't exist anymore
+        assertNull(updatedDonation);
+    }
 
     /**
      * Tests declining a loan status

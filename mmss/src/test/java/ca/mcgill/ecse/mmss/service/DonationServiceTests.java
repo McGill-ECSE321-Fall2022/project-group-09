@@ -35,7 +35,7 @@ import ca.mcgill.ecse.mmss.model.Room.RoomType;
 
 @ExtendWith(MockitoExtension.class)
 public class DonationServiceTests {
-    
+
     // We mock repositories - the entities that access things from the database
     @Mock
     private DonationRepository donationRepository;
@@ -49,19 +49,21 @@ public class DonationServiceTests {
     @Mock
     private NotificationService notificationService;
 
-    @Mock 
+    @Mock
+    private ArtefactService artefactService;
+
+    @Mock
+    private RoomService roomService;
+
+    @Mock
     private RoomRepository roomRepository;
-    
+
     // We inject the mocks in the doantion service - the thing that calls on the
     // repositories
     @InjectMocks
     private DonationService donationService;
 
-    @Mock 
-    private ArtefactService artefactService;
 
-    @Mock 
-    private RoomService roomService;
 
     // Objects we will need in all our tests
     private Donation donation;
@@ -101,7 +103,7 @@ public class DonationServiceTests {
 
     }
 
-     /**
+    /**
      * Deletes objects after each test
      * 
      * @author Mohamed Elsamadouny
@@ -180,7 +182,8 @@ public class DonationServiceTests {
                 .thenAnswer((InvocationOnMock invocation) -> null);
 
         // call service
-        MmssException ex = assertThrows(MmssException.class, () -> donationService.getAllDonationsByVisitor(invalidUsername));
+        MmssException ex = assertThrows(MmssException.class,
+                () -> donationService.getAllDonationsByVisitor(invalidUsername));
 
         // assertions on error
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
@@ -353,37 +356,43 @@ public class DonationServiceTests {
      * Test successfully approving a donation
      * @author Mohamed Elsamadouny
      */
-    // @Test
-    // public void testUpdateStatusToApproved() {
-    //      // set up the mocks
+    @Test
+    public void testUpdateStatusToApproved() {
+         // set up the mocks
 
-    //     // retrieve the donation
-    //     when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> donation); 
+        // retrieve the donation
+        when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> donation); 
 
-    //     when(roomService.getAllRoomsByRoomType(RoomType.Storage).get(0).getRoomId()).thenAnswer((InvocationOnMock invocation) -> 0);
-    //     // cant mock it because it has no return value
-    //     when(artefactService.moveArtefactToRoom(any(int.class), any(int.class))).thenAnswer((InvocationOnMock invocation) -> );
+        // create the artefact
+        when(artefactService.createArtefact((any(String.class)), any(String.class), any(boolean.class), any(double.class), any(double.class))).thenAnswer((InvocationOnMock invocation) -> artefact);
 
-    //     // return the artefact when it is saved
-    //     when(artefactRepository.save((any(Artefact.class)))).thenAnswer((InvocationOnMock invocation) -> artefact); 
-    //     ArrayList<Room> list = new ArrayList<Room>();
-    //     list.add(storageRoom);
-    //     when(roomRepository.findAllByRoomType(any(RoomType.class))).thenAnswer((InvocationOnMock invocation) -> list);
+        // get the id of the storage room
+        ArrayList<Room> rooms = new ArrayList<Room>();
+        rooms.add(storageRoom);
+        when(roomService.getAllRoomsByRoomType(RoomType.Storage)).thenAnswer((InvocationOnMock invocation) -> rooms);
         
-    //     // call the service layer
-    //     Artefact createdArtefact = donationService.updateStatus(0, ExchangeStatus.Approved, false, 1.0, 0.5); 
+        // call the service layer
+        Artefact createdArtefact = donationService.updateStatus(0, ExchangeStatus.Approved, false, 1.0, 0.5); 
 
-    //     // assertions
-    //     assertEquals(createdArtefact.getArtefactId(), 0);
-    //     assertEquals(donation.getItemName(), createdArtefact.getArtefactName());
-    
+        // assertions
+        assertEquals(createdArtefact.getArtefactId(), artefact.getArtefactId());
+        assertEquals(donation.getItemName(), createdArtefact.getArtefactName());
+        
+        // verify the calls to the repository are with the correct arguments
+        verify(donationRepository, times(1)).findDonationByExchangeId(0); 
+        verify(artefactService, times(1)).createArtefact(donation.getItemName(), donation.getDescription(), false, 1.0, 0.5);
+        verify(artefactService, times(1)).moveArtefactToRoom(0, 0);
 
-    //     // add assertion that its due date is set 
+        String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
+                + "with name: " + String.valueOf(donation.getItemName())
+                + "has been approved! Thank you very much for your donation!";
 
-    //     // verify the calls to the repository are with the correct arguments
-    //     verify(donationRepository, times(1)).findDonationByExchangeId(0); 
-    //     verify(artefactRepository, times(1)).save((any(Artefact.class))); 
+        // verify notification was created
+        verify(notificationService, times (1)).createNotificationByUsername(donation.getVisitor().getUsername(), message);
 
-    // }
+        // verify donation was deleted
+        verify(donationRepository, times(1)).delete(donation);
+
+    }
 
 }

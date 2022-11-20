@@ -95,7 +95,6 @@ public class DonationController {
      */
     @PutMapping({"/{id}", "/{id}/"})
     public ResponseEntity<ArtefactDto> updateDonation(@PathVariable int id , @RequestBody ArtefactDto request) {
-        
         // get parameters
         boolean canLoan = request.getCanLoan();
         double insuranceFee  = request.getInsuranceFee();
