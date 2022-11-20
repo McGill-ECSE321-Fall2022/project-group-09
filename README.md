@@ -48,9 +48,10 @@ _Note: All major decisions were always discussed and made by the entire team dur
 | Shyam Desai | - Designed the domain model <br> - Reviewed and finalized requirements <br> - Reviewed other teammates' use-case diagrams <br> - Populated and updated the GitHub Wiki page <br> - Wrote test case for the Visitor class | 25 hours |
 
 - - -
+
 # Deliverable 2
 
-(add description and links here)
+The API documentation for each controller method in the system is found [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/API-Documentation#api-documentation). The plan we followed while writing tests is detailed [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Test-Plan). Our backlog is seen [here](https://github.com/orgs/McGill-ECSE321-Fall2022/projects/21). The project report detailing meeting minutes is [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report-Deliverable-2#meeting-minutes), and the updates made to the class diagram are shown [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report-Deliverable-2#update-to-uml-class-diagram).
 
 ## Team Roles
 
