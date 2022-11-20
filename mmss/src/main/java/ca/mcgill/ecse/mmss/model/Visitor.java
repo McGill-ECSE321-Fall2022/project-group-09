@@ -20,7 +20,7 @@ public class Visitor extends AccountType
 
   //Visitor Attributes
   @Column(nullable = false)
-  private int balance;
+  private double balance;
 
   //------------------------
   // CONSTRUCTOR
@@ -38,7 +38,7 @@ public class Visitor extends AccountType
   // INTERFACE
   //------------------------
 
-  public boolean setBalance(int aBalance)
+  public boolean setBalance(double aBalance)
   {
     boolean wasSet = false;
     balance = aBalance;
@@ -46,7 +46,7 @@ public class Visitor extends AccountType
     return wasSet;
   }
 
-  public int getBalance()
+  public double getBalance()
   {
     return balance;
   }

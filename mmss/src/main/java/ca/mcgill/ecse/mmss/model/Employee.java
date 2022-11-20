@@ -19,6 +19,8 @@ public class Employee extends AccountType
 
   //Employee Attributes
   private String phoneNumber;
+  
+
 
   //Employee Associations
   @ManyToOne
@@ -32,7 +34,7 @@ public class Employee extends AccountType
   public Employee(String aUsername, String aPassword, Person aPerson, String aPhoneNumber)
   {
     super(aUsername, aPassword, aPerson);
-    phoneNumber = aPhoneNumber;
+    this.phoneNumber = aPhoneNumber;
   }
 
   //------------------------
@@ -84,4 +86,5 @@ public class Employee extends AccountType
             "phoneNumber" + ":" + getPhoneNumber()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "shift = "+(getShift()!=null?Integer.toHexString(System.identityHashCode(getShift())):"null");
   }
+
 }

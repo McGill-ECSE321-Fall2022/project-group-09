@@ -21,7 +21,7 @@ public abstract class Booking
   private int bookingId;
 
   @Column(nullable = false)
-  private int pricePerPerson;
+  private double pricePerPerson;
 
   //Booking Associations
   @ManyToOne(optional = false)
@@ -34,7 +34,7 @@ public abstract class Booking
   public Booking () {}
   
   
-  public Booking(int aBookingId, int aPricePerPerson, OpenDay aDate)
+  public Booking(int aBookingId, double aPricePerPerson, OpenDay aDate)
   {
     bookingId = aBookingId;
     pricePerPerson = aPricePerPerson;
@@ -56,7 +56,7 @@ public abstract class Booking
     return wasSet;
   }
 
-  public boolean setPricePerPerson(int aPricePerPerson)
+  public boolean setPricePerPerson(double aPricePerPerson)
   {
     boolean wasSet = false;
     pricePerPerson = aPricePerPerson;
@@ -69,7 +69,7 @@ public abstract class Booking
     return bookingId;
   }
 
-  public int getPricePerPerson()
+  public double getPricePerPerson()
   {
     return pricePerPerson;
   }

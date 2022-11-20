@@ -26,7 +26,7 @@ public class OpenDay
   //OpenDay Associations
   
   @ManyToOne
-  private Schedule weeklySchedule;
+  private Schedule Schedule;
 
   //------------------------
   // CONSTRUCTOR
@@ -56,28 +56,28 @@ public class OpenDay
     return date;
   }
   /* Code from template association_GetOne */
-  public Schedule getWeeklySchedule()
+  public Schedule getSchedule()
   {
-    return weeklySchedule;
+    return Schedule;
   }
 
-  public boolean hasWeeklySchedule()
+  public boolean hasSchedule()
   {
-    boolean has = weeklySchedule != null;
+    boolean has = Schedule != null;
     return has;
   }
   /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setWeeklySchedule(Schedule aNewWeeklySchedule)
+  public boolean setSchedule(Schedule aNewSchedule)
   {
     boolean wasSet = false;
-    weeklySchedule = aNewWeeklySchedule;
+    Schedule = aNewSchedule;
     wasSet = true;
     return wasSet;
   }
 
   public void delete()
   {
-    weeklySchedule = null;
+    Schedule = null;
   }
 
 
@@ -85,6 +85,6 @@ public class OpenDay
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "weeklySchedule = "+(getWeeklySchedule()!=null?Integer.toHexString(System.identityHashCode(getWeeklySchedule())):"null");
+            "  " + "Schedule = "+(getSchedule()!=null?Integer.toHexString(System.identityHashCode(getSchedule())):"null");
   }
 }

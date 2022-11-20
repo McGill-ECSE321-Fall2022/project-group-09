@@ -29,8 +29,11 @@ public class Artefact
   private String description;
   @Column(nullable = false)
   private boolean canLoan;
-  private int insuranceFee;
-  private int loanFee;
+  @Column(nullable = false)
+  private boolean currentlyOnLoan;
+
+  private double insuranceFee;
+  private double loanFee;
 
   //Artefact Associations
   @ManyToOne
@@ -42,12 +45,13 @@ public class Artefact
 
   public Artefact () {}
   
-  public Artefact(int aArtefactId, String aArtefactName, String aDescription, boolean aCanLoan, int aInsuranceFee, int aLoanFee)
+  public Artefact(int aArtefactId, String aArtefactName, String aDescription, boolean aCanLoan, double aInsuranceFee, double aLoanFee)
   {
     artefactId = aArtefactId;
     artefactName = aArtefactName;
     description = aDescription;
     canLoan = aCanLoan;
+    this.currentlyOnLoan = false;
     insuranceFee = aInsuranceFee;
     loanFee = aLoanFee;
   }
@@ -88,7 +92,7 @@ public class Artefact
     return wasSet;
   }
 
-  public boolean setInsuranceFee(int aInsuranceFee)
+  public boolean setInsuranceFee(double aInsuranceFee)
   {
     boolean wasSet = false;
     insuranceFee = aInsuranceFee;
@@ -96,7 +100,7 @@ public class Artefact
     return wasSet;
   }
 
-  public boolean setLoanFee(int aLoanFee)
+  public boolean setLoanFee(double aLoanFee)
   {
     boolean wasSet = false;
     loanFee = aLoanFee;
@@ -104,7 +108,7 @@ public class Artefact
     return wasSet;
   }
 
-  public int getArtefactId()
+  public  int getArtefactId()
   {
     return artefactId;
   }
@@ -124,12 +128,12 @@ public class Artefact
     return canLoan;
   }
 
-  public int getInsuranceFee()
+  public double getInsuranceFee()
   {
     return insuranceFee;
   }
 
-  public int getLoanFee()
+  public double getLoanFee()
   {
     return loanFee;
   }
@@ -157,6 +161,16 @@ public class Artefact
     wasSet = true;
     return wasSet;
   }
+
+  public boolean getCurrentlyOnLoan() {
+    return currentlyOnLoan;
+  }
+
+  public void setCurrentlyOnLoan(boolean currentlyOnLoan) {
+    this.currentlyOnLoan = currentlyOnLoan;
+  }
+
+
 
   public void delete()
   {
