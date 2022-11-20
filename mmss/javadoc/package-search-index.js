@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"ca.mcgill.ecse.mmss"},{"l":"ca.mcgill.ecse.mmss.controller"},{"l":"ca.mcgill.ecse.mmss.dao"},{"l":"ca.mcgill.ecse.mmss.dto"},{"l":"ca.mcgill.ecse.mmss.exception"},{"l":"ca.mcgill.ecse.mmss.integration"},{"l":"ca.mcgill.ecse.mmss.model"},{"l":"ca.mcgill.ecse.mmss.service"}];updateSearchResults();

@@ -23,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import ca.mcgill.ecse.mmss.dto.EmployeeDto;
 import ca.mcgill.ecse.mmss.dto.EmployeeRequestDto;
 import ca.mcgill.ecse.mmss.dto.VisitorDto;
-import ca.mcgill.ecse.mmss.dto.VisitorRequestDto;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Schedule;
 import ca.mcgill.ecse.mmss.model.Communication;

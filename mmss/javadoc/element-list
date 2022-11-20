@@ -1,0 +1,8 @@
+ca.mcgill.ecse.mmss
+ca.mcgill.ecse.mmss.controller
+ca.mcgill.ecse.mmss.dao
+ca.mcgill.ecse.mmss.dto
+ca.mcgill.ecse.mmss.exception
+ca.mcgill.ecse.mmss.integration
+ca.mcgill.ecse.mmss.model
+ca.mcgill.ecse.mmss.service
