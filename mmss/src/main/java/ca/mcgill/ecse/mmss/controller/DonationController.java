@@ -24,6 +24,10 @@ import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.service.DonationService;
 
+/**
+ * REST API for Donation 
+ */
+
 @RestController
 @RequestMapping("/donation")
 public class DonationController {

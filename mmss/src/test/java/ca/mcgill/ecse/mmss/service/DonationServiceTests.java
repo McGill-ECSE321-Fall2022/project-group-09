@@ -33,6 +33,10 @@ import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 
+/**
+ * Tests for all business Logic for Donation
+ */
+
 @ExtendWith(MockitoExtension.class)
 public class DonationServiceTests {
 

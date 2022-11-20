@@ -38,6 +38,10 @@ import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
+
+/**
+ * Integration tests for Donation
+ */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class DonationIntegrationTests {
 

@@ -20,6 +20,9 @@ import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
+/**
+ * Business Logic for Donation
+ */
 @Service
 public class DonationService {
 
