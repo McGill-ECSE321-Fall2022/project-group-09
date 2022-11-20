@@ -1,4 +1,5 @@
 package ca.mcgill.ecse.mmss.integration;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -20,16 +21,22 @@ import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
-import ca.mcgill.ecse.mmss.dao.VisitorRepository;
+import ca.mcgill.ecse.mmss.dao.ScheduleRepository;
+import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
+import ca.mcgill.ecse.mmss.dao.ShiftRepository;
+import ca.mcgill.ecse.mmss.dto.EmployeeDto;
+import ca.mcgill.ecse.mmss.dto.EmployeeRequestDto;
 import ca.mcgill.ecse.mmss.dto.VisitorDto;
 import ca.mcgill.ecse.mmss.dto.VisitorRequestDto;
 import ca.mcgill.ecse.mmss.model.Person;
+import ca.mcgill.ecse.mmss.model.Schedule;
 import ca.mcgill.ecse.mmss.model.Communication;
-import ca.mcgill.ecse.mmss.model.Visitor;
+import ca.mcgill.ecse.mmss.model.Employee;
+import ca.mcgill.ecse.mmss.model.Shift;
+import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class VisitorIntegrationTests {
-	
+public class EmployeeIntegrationTests {
 	@Autowired
     private TestRestTemplate client;
 
@@ -37,14 +44,23 @@ public class VisitorIntegrationTests {
     private PersonRepository personRepository;
     
     @Autowired
+    private ScheduleRepository scheduleRepository;
+    
+    @Autowired
+    private ShiftRepository shiftRepository;
+    
+    @Autowired
     private CommunicationRepository communicationRepository;
 
+    
     @Autowired
-    private VisitorRepository visitorRepository;
+    private EmployeeRepository employeeRepository;
     
     private Person person;
     private Communication communication;
-    private Visitor visitor;
+    private Shift shift;
+    private Schedule schedule;
+    private Employee employee;
 
     /**
      * Creates the obejcts needed by all test cases
@@ -58,7 +74,7 @@ public class VisitorIntegrationTests {
     public void createObjects() {
         // create necessary objects for test, and save them to the database
 
-        // person for visitor
+        // person for employee
         person = new Person();
         person.setFirstName("Young");
         person.setLastName("Jeezy");
@@ -67,11 +83,22 @@ public class VisitorIntegrationTests {
         communication = new Communication();
         communication.setCommunicationId(0);
         communicationRepository.save(communication);
+        
+        schedule = new Schedule();
+        schedule.setScheduleId(0);
+        scheduleRepository.save(schedule);
+        
+        shift = new Shift();
+        shift.setShiftId(0);
+        shift.setShiftTime(ShiftTime.Morning);
+        shift.setSchedule(schedule);
+        shiftRepository.save(shift);
 
         // the visitor
-        this.visitor = new Visitor("young.jeezy@gmail.com", "hardestOut2", person);
-        visitor.setCommunication(communication);
-        visitorRepository.save(visitor);
+        this.employee = new Employee("young.jeezy@gmail.com", "hardestOut2", person, "514-354-6789");
+        employee.setCommunication(communication);
+        employee.setShift(shift);
+        employeeRepository.save(employee);
     }
     
     /**
@@ -83,39 +110,41 @@ public class VisitorIntegrationTests {
     public void deleteObjects() {
 
         // delete the objects from the test
-    	this.visitor.delete();
-        this.person.delete();
+    	this.employee.delete();
         this.communication.delete();
-        visitorRepository.deleteAll();
-        personRepository.deleteAll();
+        this.shift.delete();
+        this.schedule.delete();
+        this.person.delete();
+        employeeRepository.deleteAll();
+        shiftRepository.deleteAll();
+        scheduleRepository.deleteAll();
         communicationRepository.deleteAll();
-
+        personRepository.deleteAll();
     }
     
-    
-    
     /**
-     * Tests creating a visitor, and returns its username
+     * Tests creating a employee, and returns its username
      * 
      * @author Saviru Perera
      * @return the username of the person
      */
+   
     @Test
-    public void testCreateVisitor() {
-        VisitorRequestDto request = new VisitorRequestDto();
+    public void testCreateEmployee() {
+        EmployeeRequestDto request = new EmployeeRequestDto();
         request.setFirstName("Chandler");
         request.setLastName("Jeezy");
-        request.setUsername("chandler.jeezy@gmail.com");
-        request.setPassword("hardestOut2");
+        request.setUsername("chandler@gmail");
+        request.setPhoneNumber("514-555-6787");
 
         // make the post
-        ResponseEntity<VisitorDto> response = client.postForEntity("/visitor", request, VisitorDto.class);
+        ResponseEntity<EmployeeDto> response = client.postForEntity("/employee", request, EmployeeDto.class);
 
         // make assertions on the post
         assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertTrue(response.getBody().getUsername() != null, "Response has a valid username");
+        assertTrue(response.getBody().getUserName() != null, "Response has a valid username");
 
     }
     
@@ -126,14 +155,14 @@ public class VisitorIntegrationTests {
      * @return the username of the person
      */
     @Test
-    public void testCreateAdditionalVisitor() {
-        VisitorRequestDto request = new VisitorRequestDto();
-        request.setUsername(visitor.getUsername());
+    public void testCreateAdditionalVisitorForEmployee() {
+        EmployeeRequestDto request = new EmployeeRequestDto();
+        request.setUsername(employee.getUsername());
         request.setNewUsername("travis@scott");
         request.setNewPassword("Beanforever24");
 
         // make the post
-        ResponseEntity<VisitorDto> response = client.postForEntity("/visitor/addAccount", request, VisitorDto.class);
+        ResponseEntity<VisitorDto> response = client.postForEntity("/employee/addVisitorAccount", request, VisitorDto.class);
 
         // make assertions on the post
         assertNotNull(response, "The response is not null");
@@ -143,41 +172,40 @@ public class VisitorIntegrationTests {
 
     }
 
-    
     /**
-     * Retrieves the visitor that was created by its username
+     * Retrieves the employee that was created by its username
      * 
      * @author Saviru Perera
      */
     @Test
-    public void testGetVisitor(String username) {
+    public void testGetEmployee(String username) {
         // try the get
-        ResponseEntity<VisitorDto> response = client.getForEntity("/visitor/" + username, VisitorDto.class);
+        ResponseEntity<EmployeeDto> response = client.getForEntity("/employee/" + username, EmployeeDto.class);
 
         // make assertions on the get
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertEquals(response.getBody().getUsername(), username, "Response has correct username");
+        assertEquals(response.getBody().getUserName(), username, "Response has correct username");
 
     }
     
     /**
-     * Tests updating a visitor password
+     * Tests updating a employee password and phone number
      * 
      * @author Saviru Perera
      */
     @Test
-    public void testUpdateVisitorPassword() {
+    public void testUpdateEmployeePasswordAndPhone() {
         // make Dto for request
-        VisitorRequestDto visitorDto = new VisitorRequestDto(visitor,visitor.getUsername(),"Ilovejava23");
+        EmployeeRequestDto employeeDto = new EmployeeRequestDto(employee,employee.getUsername(),"Ilovejava23","514-987-5786");
 
         // make an entity to send the request with 
-        HttpEntity<VisitorRequestDto> request= new HttpEntity<>(visitorDto); 
+        HttpEntity<EmployeeRequestDto> request= new HttpEntity<>(employeeDto); 
 
         // send the request
-        ResponseEntity<VisitorDto> response = client.exchange("/visitor", HttpMethod.PUT ,request, VisitorDto.class);
+        ResponseEntity<EmployeeDto> response = client.exchange("/employee", HttpMethod.PUT ,request, EmployeeDto.class);
 
         // assertions on response
         assertNotNull(response); 
@@ -185,80 +213,80 @@ public class VisitorIntegrationTests {
         assertNotNull(response.getBody()); 
         assertEquals(response.getBody().getPassword(), "Ilovejava23"); 
 
-        // get the updated visitor from the database
-        Visitor updatedVisitor = visitorRepository.findVisitorByUsername(visitor.getUsername());
+        // get the updated employee from the database
+        Employee updatedEmployee = employeeRepository.findEmployeeByUsername(employee.getUsername());
 
         // verify the update
-        assertEquals(updatedVisitor.getPassword(), "Ilovejava23");
+        assertEquals(updatedEmployee.getPassword(), "Ilovejava23");
 
     }
 
     
     /**
-     * Tests deleting a visitor
+     * Tests deleting an employee
      * 
      * @author Saviru Perera
      */
     
     @Test
-    public void testDeleteVisitor() {
+    public void testDeleteEmployee() {
 
         // make Dto for request
-        VisitorDto request = new VisitorDto(visitor);
-        String username = request.getUsername();
+        EmployeeDto request = new EmployeeDto(employee);
+        String username = request.getUserName();
 
         
-        ResponseEntity<String> response = client.exchange("/visitor/" + username, HttpMethod.DELETE,null, String.class);
+        ResponseEntity<String> response = client.exchange("/employee/" + username, HttpMethod.DELETE,null, String.class);
 
         // assert on the response
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals("Visitor successfully deleted", response.getBody());
+        assertEquals("Employee successfully deleted", response.getBody());
 
-        // get the updated visitor from the database
-        Visitor updatedVisitor = visitorRepository.findVisitorByUsername(username);
+        // get the updated employee from the database
+        Employee updatedEmployee = employeeRepository.findEmployeeByUsername(username);
 
-        // verify the visitor has been deleted
-        assertNull(updatedVisitor, "Visitor successfully deleted");
+        // verify the employee has been deleted
+        assertNull(updatedEmployee, "Employee successfully deleted");
 
     }
 
     /**
-     * Tests getting all visitors
+     * Tests getting all employees
      * 
      * @author Saviru Perera
      */
 
     @Test
-    public void testGetAllVisitors() {
+    public void testGetAllEmployees() {
 
         // make request
-        var response = client.getForEntity("/visitor", ArrayList.class);
+        var response = client.getForEntity("/employee", ArrayList.class);
 
         // assertions on the response
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody()); 
-        // get array list of visitors
-        ArrayList<VisitorDto> extractedVisitors = response.getBody();
+        // get array list of employees
+        ArrayList<EmployeeDto> extractedEmployees = response.getBody();
 
         // assertions
-        assertNotNull(extractedVisitors);
-        assertEquals(1, extractedVisitors.size());
+        assertNotNull(extractedEmployees);
+        assertEquals(1, extractedEmployees.size());
 
     };
     
     /**
-     * Tests getting all visitors by their person
+     * Tests getting all employees by their shift
      * 
      * @author Saviru Perera
      */
 
     @Test
-    public void testGetAllVisitorsByPerson() {
+    public void testGetAllEmployeesByShift() {
         // make request
-        var response = client.getForEntity("/visitor/byPerson?id=" + person.getPersonId(), ArrayList.class);
+        var response = client.getForEntity("/employee/byShift?id=" + shift.getShiftId(), ArrayList.class);
 
         // assertions on the responses
         assertNotNull(response);
@@ -267,11 +295,11 @@ public class VisitorIntegrationTests {
 
        
         // get array list of employees
-        ArrayList<VisitorDto> extractedVisitors = response.getBody();
+        ArrayList<EmployeeDto> extractedEmployees = response.getBody();
 
         // assertions
-        assertNotNull(extractedVisitors);
-        assertEquals(1, extractedVisitors.size());
+        assertNotNull(extractedEmployees);
+        assertEquals(1, extractedEmployees.size());
     }
 
 }

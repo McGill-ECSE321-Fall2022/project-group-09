@@ -86,12 +86,13 @@ public class EmployeeServiceTests {
 	 @AfterEach
 	 public void deleteObjects() {
 		 // delete the objects from the test
-	     this.person.delete();
+	     
 	     this.personTwo.delete();
 	     this.communication.delete();
 	     this.visitor.delete();
 	     this.employee.delete();
 	     this.employeeTwo.delete();
+	     this.person.delete();
 	 }
 	 
 	 @Test

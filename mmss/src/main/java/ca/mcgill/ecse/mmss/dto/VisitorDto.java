@@ -5,6 +5,7 @@ import ca.mcgill.ecse.mmss.model.Visitor;
 public class VisitorDto {
 	private double balance;
 	private String username;
+	private String password;
 	private int personId;
 	private int communicationId;
 
@@ -23,6 +24,7 @@ public class VisitorDto {
 	public VisitorDto(Visitor visitor) {
 		this.balance = visitor.getBalance();
 		this.username = visitor.getUsername();
+		this.password = visitor.getPassword();
 		this.personId = visitor.getPerson().getPersonId();
 		this.communicationId = visitor.getCommunication().getCommunicationId();
 	}
@@ -50,6 +52,10 @@ public class VisitorDto {
 
 	public String getUsername() {
 		return username;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 
 	public int getPersonId() {

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse.mmss.dto.VisitorDto;
 import ca.mcgill.ecse.mmss.dto.VisitorRequestDto;
+import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.service.VisitorService;
 
@@ -43,7 +44,7 @@ public class VisitorController {
 
     }
 	
-	@PostMapping ({"/{addAccount}", "/{addAccount}/"})
+	@PostMapping ({"/addAccount", "/addAccount/"})
     public ResponseEntity<VisitorDto> createAdditionalVisitor(@RequestBody VisitorRequestDto request) {
         // get parameters
         String username = request.getUsername();
@@ -103,7 +104,7 @@ public class VisitorController {
 
     }
 	
-	@GetMapping ({"/{byPerson}", "/{byPerson}/"})
+	@GetMapping ({"/byPerson", "/byPerson/"})
     public ResponseEntity<ArrayList<VisitorDto>> getAllVisitorsByPerson(@RequestParam int id) {
 
         // get all visitors

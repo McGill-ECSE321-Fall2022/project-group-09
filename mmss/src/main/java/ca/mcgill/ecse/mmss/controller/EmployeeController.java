@@ -108,7 +108,7 @@ public class EmployeeController {
 
     }
 	
-	@GetMapping ({"/{byShift}", "/{byShift}/"})
+	@GetMapping ({"/byShift", "/byShift/"})
     public ResponseEntity<ArrayList<EmployeeDto>> getAllEmployeesByShift(@RequestParam int id) {
 
         // get all employees

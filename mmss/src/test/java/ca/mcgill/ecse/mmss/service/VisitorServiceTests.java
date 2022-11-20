@@ -70,10 +70,11 @@ public class VisitorServiceTests {
 	 @AfterEach
 	 public void deleteObjects() {
 		 // delete the objects from the test
-	     this.person.delete();
+	     
 	     this.communication.delete();
 	     this.visitor.delete();
 	     this.visitorTwo.delete();
+	     this.person.delete();
 	 }
 	 
 	 @Test
