@@ -65,7 +65,7 @@ public class ShiftController {
      * @param username the employee's primary key
      * @return a response entity with a message and the HttpStatus
      */
-    @PutMapping
+    @PutMapping({"/assign", "/assign/"})
     public ResponseEntity<String> assignShiftToEmployee(@RequestParam int shiftId, @RequestParam String username) {
         shiftService.assignShiftToEmployee(shiftId, username);
         return new ResponseEntity<String>("Shift successfully assigned.", HttpStatus.OK);
@@ -81,7 +81,7 @@ public class ShiftController {
     @PutMapping({"/assignToAll", "/assignToAll/"})
     public ResponseEntity<String> assignShiftToEmployees(@RequestParam int shiftId, @RequestParam ArrayList<Employee> employeeList) {
         shiftService.assignShiftToEmployees(shiftId, employeeList);
-        return new ResponseEntity<String>("Shift successfully assigned.", HttpStatus.OK);
+        return new ResponseEntity<String>("Shifts successfully assigned.", HttpStatus.OK);
     }
     
     /**
@@ -93,6 +93,6 @@ public class ShiftController {
     @DeleteMapping({"/{username}", "/{username}/"})
     public ResponseEntity<String> removeShiftFromEmployee(@PathVariable String username) {
         shiftService.removeShiftFromEmployee(username);
-        return new ResponseEntity<String>("Artefact successfully removed", HttpStatus.OK);
+        return new ResponseEntity<String>("Shift successfully removed", HttpStatus.OK);
     }
 }
