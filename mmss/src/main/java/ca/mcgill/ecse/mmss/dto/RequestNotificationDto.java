@@ -1,8 +1,6 @@
 package ca.mcgill.ecse.mmss.dto;
 
-import ca.mcgill.ecse.mmss.model.Notification;
 
-import java.sql.Date;
 
 public class RequestNotificationDto {
     private String message;
@@ -24,7 +22,15 @@ public class RequestNotificationDto {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

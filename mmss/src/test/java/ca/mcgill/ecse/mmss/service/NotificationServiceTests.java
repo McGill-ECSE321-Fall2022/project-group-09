@@ -23,6 +23,9 @@ import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse.mmss.exception.MmssException;
 
+/**
+ * Tests for the NotificationService class
+ */
 @ExtendWith(MockitoExtension.class)
 public class NotificationServiceTests {
 

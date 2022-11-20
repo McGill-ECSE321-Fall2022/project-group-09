@@ -25,7 +25,7 @@ public class LoanDto {
 	 * Constructor that takes a loan as input
 	 * 
 	 * @author Shidan Javaheri
-	 * @param loan
+	 * @param loan the loan object
 	 */
 	public LoanDto(Loan loan) {
 		if (loan.getDueDate() != null) {
@@ -43,12 +43,12 @@ public class LoanDto {
 	 * Constructor that takes in seperate inputs
 	 * 
 	 * @author Shidan Javaheri
-	 * @param exchangeId
-	 * @param dueDate
-	 * @param submittedDate
-	 * @param exchangeStatus
-	 * @param visitorId
-	 * @param artefactId
+	 * @param exchangeId the id of the loan
+	 * @param dueDate the due date of the loan
+	 * @param submittedDate the submitted date of the loan
+	 * @param exchangeStatus the status of the loan
+	 * @param visitorId the id of the visitor who asked for the loan
+	 * @param artefactId the artefact associated with the loan
 	 */
 	public LoanDto(Integer exchangeId, Date dueDate, Date submittedDate, ExchangeStatus exchangeStatus,
 			String visitorId, Integer artefactId) {
