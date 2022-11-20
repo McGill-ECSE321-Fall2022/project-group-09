@@ -71,18 +71,6 @@ public class ShiftController {
         return new ResponseEntity<String>("Shift successfully assigned.", HttpStatus.OK);
     }
 
-    /**
-     * Assign a shift to a list of employees
-     *
-     * @param shiftId the shift's primary key
-     * @param employeeList the list of employees
-     * @return a response entity with a message and the HttpStatus
-     */
-    @PutMapping({"/assignToAll", "/assignToAll/"})
-    public ResponseEntity<String> assignShiftToEmployees(@RequestParam int shiftId, @RequestParam ArrayList<Employee> employeeList) {
-        shiftService.assignShiftToEmployees(shiftId, employeeList);
-        return new ResponseEntity<String>("Shifts successfully assigned.", HttpStatus.OK);
-    }
     
     /**
      * Remove a shift from an employee
