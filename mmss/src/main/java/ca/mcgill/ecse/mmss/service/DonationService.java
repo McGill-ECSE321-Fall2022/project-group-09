@@ -15,10 +15,14 @@ import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Donation;
+import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
+/**
+ * Business Logic for Donation
+ */
 @Service
 public class DonationService {
 
@@ -40,6 +44,9 @@ public class DonationService {
     
     @Autowired
     private ArtefactService artefactService;
+
+    @Autowired
+    private RoomService roomService;
 	
 	
 	/**
@@ -50,7 +57,7 @@ public class DonationService {
 	 */
 
 	@Transactional
-	public Donation retrieveDonationById(int id) {
+	public Donation getDonationById(int id) {
 		// use the repository method
 		Donation donation = donationRepository.findDonationByExchangeId(id);
 		if (donation == null) {
@@ -62,6 +69,7 @@ public class DonationService {
 	/**
 	 * @author Mohamed Elsamadouny
 	 * Finds all the donations in the database
+     * All donations will have a pending status, any approved or declined donation gets removed
 	 *
 	 * @return ArrayList of Donations
 	 */
@@ -133,10 +141,10 @@ public class DonationService {
 
         // check visitor not null
         if (visitor == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this Id was not found");
+            throw new MmssException(HttpStatus.NOT_FOUND, "The visitor with this username was not found");
         }
         // Check if name and donation pass the requirements
-        if (username.length() > 50) {
+        if (itemName.length() > 50) {
         	throw new MmssException(HttpStatus.BAD_REQUEST, "The donation name should not exceed 50 characters");
         }
         
@@ -159,6 +167,9 @@ public class DonationService {
         return donation;
           
     }
+
+
+
     /**
 	 * @author Mohamed Elsamadouny
 	 * 
@@ -176,7 +187,7 @@ public class DonationService {
             throw new MmssException(HttpStatus.NOT_FOUND, "The donation with this Id was not found");
 
         // calls the repository to delete the donation
-        donationRepository.deleteById(donation.getExchangeId());
+        donationRepository.deleteById(id);
     }
     
     /**
@@ -243,10 +254,11 @@ public class DonationService {
                 artefact = artefactService.createArtefact(donation.getItemName(), donation.getDescription(), canLoan, insuraceFees, loanFee);
 
                 // set room to storage
-                artefact.setRoom(roomRepository.findAllByRoomType(RoomType.Storage).get(0));
-                
-                // Persist to DB
-                artefactRepository.save(artefact);
+                ArrayList<Room> storageRoomList = roomService.getAllRoomsByRoomType(RoomType.Storage); 
+                int roomId = storageRoomList.get(0).getRoomId();
+
+                // move the artefact to storage
+                artefactService.moveArtefactToRoom(artefact.getArtefactId(), roomId);
                 
                 // create notification message
                 String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
@@ -256,8 +268,8 @@ public class DonationService {
                 // send notification method
                 notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message);
                 
-                // delete the donation from 
-                deleteDonation(donation.getExchangeId());
+                // delete the donation from the database
+                donationRepository.delete(donation);
             }
         }
         return artefact;
