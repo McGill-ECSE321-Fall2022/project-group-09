@@ -4,21 +4,20 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.DonationRepository;
-import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Donation;
+import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
 import ca.mcgill.ecse.mmss.model.Visitor;
-import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 
 /**
  * Business Logic for Donation
@@ -32,12 +31,6 @@ public class DonationService {
 
 	@Autowired
 	private VisitorRepository visitorRepository;
-	
-	@Autowired
-    private ArtefactRepository artefactRepository;
-	
-	@Autowired
-	private RoomRepository roomRepository;
 	
 	@Autowired 
     private NotificationService notificationService;

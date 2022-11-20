@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
-import ca.mcgill.ecse.mmss.dao.ScheduleRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 
@@ -20,9 +19,6 @@ public class OpenDayService {
 	
 	@Autowired
 	private OpenDayRepository openDayRepository;
-
-    @Autowired
-    private ScheduleRepository scheduleRepository;
 
     @Autowired
     private ScheduleService scheduleService;

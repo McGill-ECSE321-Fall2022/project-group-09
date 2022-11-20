@@ -1,10 +1,10 @@
 package ca.mcgill.ecse.mmss.integration;
 
-import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
-import ca.mcgill.ecse.mmss.dao.RoomRepository;
-import ca.mcgill.ecse.mmss.dto.ArtefactDto;
-import ca.mcgill.ecse.mmss.model.Artefact;
-import ca.mcgill.ecse.mmss.model.Room;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +16,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
+import ca.mcgill.ecse.mmss.dao.RoomRepository;
+import ca.mcgill.ecse.mmss.dto.ArtefactDto;
+import ca.mcgill.ecse.mmss.model.Artefact;
+import ca.mcgill.ecse.mmss.model.Room;
 
 /**
  * Tests for the ArtefactController class
