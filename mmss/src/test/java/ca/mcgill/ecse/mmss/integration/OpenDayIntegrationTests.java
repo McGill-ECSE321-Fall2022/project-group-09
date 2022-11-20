@@ -93,26 +93,27 @@ public class OpenDayIntegrationTests {
      *
      * @author Mohamed Elsamadouny
      */
-    // @Test
-    // public void testCreateAndGetOpenDay() {
-    //     // create donation dto
-    //     OpenDayDto request = new OpenDayDto(openDay);
+    @Test
+    public void testCreateAndGetOpenDay() {
+        // create donation dto
+        OpenDayDto request = new OpenDayDto(openDay);
 
-    //     // make the post
-    //     ResponseEntity<OpenDayDto> response1 = client.postForEntity("/openday", request, OpenDayDto.class);
+        // make the post
+        ResponseEntity<OpenDayDto> response1 = client.postForEntity("/openday", request, OpenDayDto.class);
         
-    //     // make assertions on the post
-    //     assertNotNull(response1, "The response is not null");
-    //     assertEquals(HttpStatus.CREATED, response1.getStatusCode());
-    //     assertNotNull(response1.getBody(), "Response has a body");
-    //     Date date = response1.getBody().getDate();
+        // make assertions on the post
+        assertNotNull(response1, "The response is not null");
+        assertEquals(HttpStatus.CREATED, response1.getStatusCode());
+        assertNotNull(response1.getBody(), "Response has a body");
+        Date date = response1.getBody().getDate();
 
-    //     // try the get
-    //     ResponseEntity<OpenDayDto> response2 = client.getForEntity("/openday?=" + date, OpenDayDto.class);
 
-    //     // make assertions on the get
-    //     assertNotNull(response2);
-    //     assertEquals(HttpStatus.OK, response2.getStatusCode());
-    //     assertNotNull(response2.getBody(), "Response has a body");
-    // }
+        // try the get
+        ResponseEntity<OpenDayDto> response2 = client.getForEntity("/openday/2022-10-10", OpenDayDto.class);
+
+        // make assertions on the get
+        assertNotNull(response2);
+        assertEquals(HttpStatus.OK, response2.getStatusCode());
+        assertNotNull(response2.getBody(), "Response has a body");
+    }
 }

@@ -303,15 +303,15 @@ public class DonationIntegrationTests {
     }
 
     /**
-     * Tests getting all loans by a visitor
+     * Tests getting all donations by a visitor
      * 
-     * @author Shidan Javaheri
+     * @author Mohamed Elsamadouny
      */
 
     @Test
-    public void testGetAllLoansByVisitor() {
+    public void testGetAllDonationsByVisitor() {
         // make request
-        var response = client.getForEntity("/doantion/visitor?username=mo.salah@gmail.com", ArrayList.class);
+        var response = client.getForEntity("/donation/visitor?username=mo.salah@gmail.com", ArrayList.class);
 
         // assertions on the response
         assertNotNull(response);
@@ -319,11 +319,11 @@ public class DonationIntegrationTests {
         assertNotNull(response.getBody());
 
         // get array list of loans
-        ArrayList<DonationDto> extractedLoans = response.getBody();
+        ArrayList<DonationDto> extractedDonations = response.getBody();
 
         // assertions
-        assertNotNull(extractedLoans);
-        assertEquals(1, extractedLoans.size());
+        assertNotNull(extractedDonations);
+        assertEquals(1, extractedDonations.size());
 
     }
 

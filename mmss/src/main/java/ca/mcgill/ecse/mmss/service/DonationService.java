@@ -247,6 +247,7 @@ public class DonationService {
                 artefact = artefactService.createArtefact(donation.getItemName(), donation.getDescription(), canLoan, insuraceFees, loanFee);
 
                 // set room to storage
+                // artefact = artefactService.moveArtefactToRoom(artefact.getArtefactId(), // get storageroom id);
                 artefact.setRoom(roomRepository.findAllByRoomType(RoomType.Storage).get(0));
                 
                 

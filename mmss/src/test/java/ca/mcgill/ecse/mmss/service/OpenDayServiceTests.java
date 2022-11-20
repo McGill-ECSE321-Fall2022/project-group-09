@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +70,30 @@ public class OpenDayServiceTests {
     }
 
     /**
+     * Tests get all openDay
+     * 
+     * @author Mohamed Elsamadouny
+     */
+    @Test 
+    public void testGetAllOpenDay () { 
+
+        // setup mocks
+        ArrayList<OpenDay> list = new ArrayList<OpenDay>();
+        list.add(openDay);
+
+        when(openDayRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> list);
+
+        // call service layer
+        ArrayList<OpenDay> retrievedOpenDays = openDayService.getAllOpenDays(); 
+
+        // assertions
+        assertEquals(1, retrievedOpenDays.size()); 
+
+        // verify calls to repositories
+        verify(openDayRepository, times (1)).findAll(); 
+    }
+
+    /**
      * Tests retreiving an OpenDay by valid Date
      * 
      * @author Mohamed Elsamadouny
@@ -95,7 +120,7 @@ public class OpenDayServiceTests {
      * @author Mohamed Elsamadouny
      */
     @Test 
-    public void testRetrieveOpenDayByInvalidDate() { 
+    public void testGetOpenDayByInvalidDate() { 
 
         // setup mocks
         when(openDayRepository.findOpenDayByDate(any(Date.class))).thenAnswer((InvocationOnMock invocation) -> null); 
@@ -132,6 +157,56 @@ public class OpenDayServiceTests {
         assertEquals(openDay.getSchedule(), openDayCreated.getSchedule());
         verify(openDayRepository, times(1)).save(openDayCreated); 
         verify(scheduleService, times(1)).getSchedule();
+    }
+
+    /**
+     * Tests calculating due date
+     * @author Mohamed Elsamadouny
+     */
+    @Test
+    public void testCalculateLoanDueDate(){
+        when(openDayRepository.findByDateGreaterThan(any(Date.class))).thenAnswer((InvocationOnMock invocation) -> generateOpenDays());
+
+        OpenDay generatedDueDate = openDayService.calculateLoanDueDate(testDate);
+
+        assertEquals(Date.valueOf("2022-10-18"), generatedDueDate.getDate());
+
+        verify(openDayRepository, times(1)).findByDateGreaterThan(testDate);
+
+    }
+
+    /**
+     * Tests calculating due date when there are not enough due dates
+     * @author Mohamed Elsamadouny
+     */
+    @Test
+    public void testInvalidCalculateLoanDueDate(){
+        ArrayList<OpenDay> list = new ArrayList<OpenDay>();
+        list.add(new OpenDay(Date.valueOf("2022-10-10")));
+        when(openDayRepository.findByDateGreaterThan(any(Date.class))).thenAnswer((InvocationOnMock invocation) -> list);
+
+        // catch exception
+        MmssException ex = assertThrows(MmssException.class, () -> openDayService.calculateLoanDueDate(testDate));
+
+        // assertions
+        assertEquals ("Not enough OpenDays, please contact the manager", ex.getMessage()); 
+
+        verify(openDayRepository, times(1)).findByDateGreaterThan(testDate);
+
+    }
+
+    private ArrayList<OpenDay> generateOpenDays() {
+
+        ArrayList<OpenDay> list = new ArrayList<OpenDay>();
+        list.add(new OpenDay(Date.valueOf("2022-10-10")));
+        list.add(new OpenDay(Date.valueOf("2022-10-11")));
+        list.add(new OpenDay(Date.valueOf("2022-10-14")));
+        list.add(new OpenDay(Date.valueOf("2022-10-15")));
+        list.add(new OpenDay(Date.valueOf("2022-10-16")));
+        list.add(new OpenDay(Date.valueOf("2022-10-17")));
+        list.add(new OpenDay(Date.valueOf("2022-10-18")));
+
+        return list;
     }
     
 }
