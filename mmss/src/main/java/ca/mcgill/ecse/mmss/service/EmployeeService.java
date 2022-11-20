@@ -21,6 +21,9 @@ import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Shift;
 
+/**
+ * Business logic for the Employee class
+ */
 @Service
 public class EmployeeService {
 	
@@ -34,21 +37,24 @@ public class EmployeeService {
 	EmployeeRepository employeeRepository;
 	@Autowired
 	VisitorRepository visitorRepository;
-	
+
+
 	/**
-     * Creates an Employee Account
-     * 
-     * @author Saviru Perera
-     * @param firstName, lastname, userName, passWord
-     * @return the employee account object, or throw exceptions for incorrect input information
-     */
+	 * Create an employee
+	 *
+	 * @param firstName the employee's first name
+	 * @param lastName the employee's last name
+	 * @param userName the employee's username
+	 * @param password the employee's password
+	 * @param phoneNumber the employee's phone number
+	 * @return a employee instance
+	 * @throws MmssException
+	 */
 	@Transactional
 	public Employee createEmployee(String firstName, String lastName, String userName, String password, String phoneNumber) {
-				
 		if(checkValidUser(userName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		
 		Employee existEmp = employeeRepository.findEmployeeByUsername(userName);
 		if (existEmp!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
@@ -57,16 +63,12 @@ public class EmployeeService {
 		if (phoneNumber.length()!=12) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "Please enter a valid phone number in the format xxx-xxx-xxxx.");
 		}
-
-		// pass all tests before creating account
 		Person person = new Person();
 		person.setFirstName(firstName);
 		person.setLastName(lastName);
 		personRepository.save(person);
-		
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
-		
 		Employee employee = new Employee();
 		employee.setUsername(userName);
 		employee.setPhoneNumber(phoneNumber);
@@ -76,42 +78,35 @@ public class EmployeeService {
 		Employee savedEmployee = employeeRepository.save(employee);
 		return savedEmployee;
 	}
-	
+
 	/**
-     * Creates another visitor account for a person who already has a visitor account
-     * 
-     * @author Saviru Perera
-     * @param userName, newUserName, newPassword
-     * @return the new visitor account object, or throw exceptions for incorrect input information
-     */
+	 * Create a visitor account for an employee
+	 *
+	 * @param userName the employee's old username
+	 * @param newUserName the employee's new username
+	 * @param newPassword the employee's new password
+	 * @return a employee instance
+	 * @throws MmssException
+	 */
 	@Transactional
 	public Visitor createVisitorForEmployee(String userName, String newUserName, String newPassword) {
 		Employee employee = employeeRepository.findEmployeeByUsername(userName);
-		
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no employee account with that username.");
 		}
-		
 		if (checkValidUser(newUserName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		
 		Visitor existVisit = visitorRepository.findVisitorByUsername(newUserName);
 		if (existVisit!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
-		
 		if (checkValidPassword(newPassword)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
-		
-		// all tests should have passed by now
 		Person person = employee.getPerson();
-		
-		// create a communication
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
-		
 		Visitor newVisitor = new Visitor();
 		newVisitor.setUsername(newUserName);
 		newVisitor.setPassword(newPassword);
@@ -122,11 +117,12 @@ public class EmployeeService {
 	}
 	
 	/**
-     * get a specific employee by their username
+     * Get an employee by its primary key
      * 
      * @author Saviru Perera
-     * @param username
-     * @return the employee object, or throw exceptions for incorrect input information
+     * @param username the employee's username
+     * @return an employee instance
+	 * @throws MmssException
      */
 	@Transactional
 	public Employee getEmployeeByUsername(String username){
@@ -138,44 +134,44 @@ public class EmployeeService {
 	}
 	
 	/**
-     * update an employee username from the current one to a new one
+     * Update an employee username
      * 
      * @author Saviru Perera
-     * @param username, newUser
-     * @return the modified employee object, or throw exceptions for incorrect input information
+     * @param username the employee's old username
+	 * @param newUser the employee's new username
+	 * @return a employee instance
+	 * @throws MmssException
      */
 	@Transactional
 	public Employee updateEmployeeUsername(String username, String newUser) {
-		
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this username.");
 		}
-		
 		if(checkValidUser(newUser)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		
 		Employee existEmp = employeeRepository.findEmployeeByUsername(newUser);
 		if (existEmp!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
-		
 		employee.setUsername(newUser);
 		employeeRepository.save(employee);
 		return employee;
 	}
 	
 	/**
-     * update an employee password from their current one to a new one
+     * Update an employee password
      * 
      * @author Saviru Perera
-     * @param username, oldPass, newPass
-     * @return the modified employee object, or throw exceptions for incorrect input information
+	 * @param username the employee's username
+	 * @param oldPass the employee's old password
+	 * @param newPass the employee's new password
+	 * @return a employee instance
+	 * @throws MmssException
      */
 	@Transactional
 	public Employee updateEmployeePasswordAndPhone(String username, String oldPass, String newPass, String newPhoneNumber) {
-		
 		Employee employee = employeeRepository.findEmployeeByUsername(username);
 		if (employee == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such employee account with this password.");
@@ -183,15 +179,12 @@ public class EmployeeService {
 		if (!oldPass.equals(employee.getPassword())) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not correct. Please enter correct password.");
 		}
-		
 		if (checkValidPassword(newPass)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
-		
 		if (newPhoneNumber.length()!=12) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "Enter a valid phone number in the format xxx-xxx-xxxx.");
 		}
-		
 		employee.setPhoneNumber(newPhoneNumber);
 		employee.setPassword(newPass);
 		employeeRepository.save(employee);
@@ -199,11 +192,11 @@ public class EmployeeService {
 	}
 	
 	/**
-     * delete an employee account from the system
-     * 
-     * @author Saviru Perera
-     * @param username
-     * @return void
+     * Delete an employee account from the system
+     *
+	 * @author Saviru Perera
+	 * @param username the employee's username
+	 * @throws MmssException
      */
 	@Transactional
     public void deleteEmployee(String username) {
@@ -229,23 +222,21 @@ public class EmployeeService {
     }
 	
 	/**
-     * get all employees assigned to a specific shift
+     * Get all employees assigned to a specific shift
      * 
      * @author Saviru Perera
-     * @param shiftID
-     * @return an arraylist of employees assigned to the shift
+     * @param shiftID the shift's primary key
+	 * @return An arraylist of employee instances
+	 * @throws MmssException
      */
 	@Transactional
     public ArrayList<Employee> getAllEmployeesByShift(int shiftID) {
-
         Shift shift = shiftRepository.findShiftByShiftId(shiftID);
         if (shift == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "The shift with this id was not found");
         }
-
         // use the repository
         ArrayList<Employee> allEmployees = employeeRepository.findByShift(shift);
-
         return allEmployees;
     }
 	
@@ -253,8 +244,7 @@ public class EmployeeService {
      * get all employee accounts in the system
      * 
      * @author Saviru Perera
-     * @param 
-     * @return an arraylist of all the employee accounts
+	 * @return an arraylist of employee instances
      */
 	@Transactional
 	public List<Employee> getAllEmployees(){
@@ -264,10 +254,10 @@ public class EmployeeService {
 	}
 	
 	/**
-     * helper method to check if a username is valid
+     * Helper method to check if a username is valid
      * 
      * @author Saviru Perera
-     * @param userInputName
+     * @param userInputName the employee's username
      * @return a boolean indicating whether the username is valid or not
      */
 	public boolean checkValidUser (String userInputName) {
@@ -284,10 +274,10 @@ public class EmployeeService {
 	}
 		
 	/**
-     * helper method to check if a password is valid
+     * Helper method to check if a password is valid
      * 
      * @author Saviru Perera
-     * @param inputPassword
+     * @param inputPassword the visitor's password
      * @return a boolean indicating whether the password is valid or not
      */
 	public boolean checkValidPassword(String inputPassword) {

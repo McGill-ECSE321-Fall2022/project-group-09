@@ -238,29 +238,24 @@ public class VisitorService {
      */
 	@Transactional
     public ArrayList<Visitor> getAllVisitorsByPerson(int personID) {
-
         Person person = personRepository.findPersonByPersonId(personID);
         if (person == null) {
             throw new MmssException(HttpStatus.NOT_FOUND, "The person with this id was not found");
         }
-
         // use the repository
         ArrayList<Visitor> allVisitors = visitorRepository.findByPerson(person);
-
         return allVisitors;
     }
 	
 	/**
-     * get all visitor accounts in the system
+     * Get all visitor accounts in the system
      * 
      * @author Saviru Perera
-     * @param 
-     * @return An arraylist of all visitor accounts in the system
+     * @return an arraylist of visitor instances
      */
 	@Transactional
 	public List<Visitor> getAllVisitors(){
 		ArrayList<Visitor> allVisitors = visitorRepository.findAll();
-
         return allVisitors;
 	}
 	
@@ -268,8 +263,8 @@ public class VisitorService {
      * helper method to check if username is valid
      * 
      * @author Saviru Perera
-     * @param userInputName
-     * @return boolean indicating whether or not the entered username is valid
+     * @param userInputName the visitor's username
+     * @return boolean indicating whether the entered username is valid
      */
 	public boolean checkValidUser (String userInputName) {
 		int validUser = 0;
@@ -288,7 +283,7 @@ public class VisitorService {
      * helper method to check if password is valid
      * 
      * @author Saviru Perera
-     * @param inputPassword
+     * @param inputPassword the visitor's password
      * @return boolean indicating whether or not the entered password is valid
      */
 	public boolean checkValidPassword(String inputPassword) {
