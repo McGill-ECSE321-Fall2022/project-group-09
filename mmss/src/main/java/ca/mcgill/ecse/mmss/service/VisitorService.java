@@ -19,6 +19,9 @@ import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
+/**
+ * Business logic for the Visitor class
+ */
 @Service
 public class VisitorService {
 	
@@ -30,39 +33,35 @@ public class VisitorService {
 	VisitorRepository visitorRepository;
 	@Autowired
 	EmployeeRepository employeeRepository;
-	
+
 	/**
-     * create a Visitor Account
-     * 
-     * @author Saviru Perera
-     * @param firstName, lastName, userName, passWord
-     * @return A Visitor Account object, or exceptions indicating invalid input information
-     */
+	 * Create a visitor
+	 *
+	 * @param firstName the visitor's first name
+	 * @param lastName the visitor's last name
+	 * @param userName the visitor's username
+	 * @param passWord the visitor's password
+	 * @return a visitor instance
+	 * @throws MmssException
+	 */
 	@Transactional
 	public Visitor createVisitor(String firstName, String lastName, String userName, String passWord) {
-		
 		if (checkValidUser(userName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		
 		Visitor existVisit = visitorRepository.findVisitorByUsername(userName);
 		if (existVisit!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
-		
 		if(checkValidPassword(passWord)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
-		
-		// all tests should have passed now
 		Person person = new Person();
 		person.setFirstName(firstName);
 		person.setLastName(lastName);
 		personRepository.save(person);
-		
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
-		
 		Visitor visitor = new Visitor();
 		visitor.setUsername(userName);
 		visitor.setPassword(passWord);
@@ -71,42 +70,36 @@ public class VisitorService {
 		visitorRepository.save(visitor);
 		return visitor;
 	}
-	
+
 	/**
-     * create an additional Visitor Account for a person who already has a visitor account
-     * 
-     * @author Saviru Perera
-     * @param userName, newUserName, newPassWord
-     * @return A new Visitor Account object, or exceptions indicating invalid input information
-     */
+	 * Create an additional account for a visitor
+	 *
+	 * @param userName the visitor's old username
+	 * @param newUserName the visitor's new username
+	 * @param newPassWord the visitor's new password
+	 * @return a visitor instance
+	 * @throws MmssException
+	 */
 	@Transactional
 	public Visitor createAdditionalVisitor(String userName, String newUserName, String newPassWord) {
-		
 		Visitor existingVisitor = visitorRepository.findVisitorByUsername(userName);
 		if (existingVisitor==null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no visitor with this username.");
 		}
-		
 		if (checkValidUser(newUserName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		
 		Visitor existVisit = visitorRepository.findVisitorByUsername(newUserName);
 		if (existVisit!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
-		
 		if (checkValidPassword(newPassWord)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
-		
-		// all tests should have passed by now
 		Person person = existingVisitor.getPerson();
-		
 		// create a communication
 		Communication communication = new Communication();
 		communicationRepository.save(communication);
-		
 		Visitor newVisitor = new Visitor();
 		newVisitor.setUsername(newUserName);
 		newVisitor.setPassword(newPassWord);
@@ -117,11 +110,12 @@ public class VisitorService {
 	}
 	
 	/**
-     * get a specific visitor account
+     * Get a visitor account by its primary key
      * 
      * @author Saviru Perera
-     * @param username
-     * @return A Visitor Account object, or exceptions indicating invalid input information
+     * @param username the visitor's username
+	 * @return a visitor instance
+	 * @throws MmssException
      */
 	@Transactional
 	public Visitor getVisitorByUsername(String username){
@@ -131,70 +125,67 @@ public class VisitorService {
 		}
 		return visitor;
 	}
-	
+
 	/**
-     * update the username for a Visitor Account to a new username
-     * 
-     * @author Saviru Perera
-     * @param username, newUser
-     * @return A modified Visitor Account object, or exceptions indicating invalid input information
-     */
+	 * Update a visitor's username
+	 *
+	 * @param username the visitor's old username
+	 * @param newUser the visitor's new username
+	 * @return a visitor instance
+	 * @throws MmssException
+	 */
 	@Transactional
 	public Visitor updateVisitorUsername(String username, String newUser) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
 		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
 		}
-		
 		if (checkValidUser(newUser)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		
 		Visitor existVisit = visitorRepository.findVisitorByUsername(newUser);
 		if (existVisit!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
-		
-		// all tests should have passed, so it is a valid username
 		visitor.setUsername(newUser);
 		visitorRepository.save(visitor);
 		return visitor;
 	}
-	
+
 	/**
-     * update a Visitor Account password to a new one
-     * 
-     * @author Saviru Perera
-     * @param username, oldPass, newPass
-     * @return A modified Visitor Account object, or exceptions indicating invalid input information
-     */
+	 * Update a visitor's password
+	 *
+	 * @param username the visitor's username
+	 * @param oldPass the visitor's old password
+	 * @param newPass the visitor's new password
+	 * @return a visitor instance
+	 * @throws MmssException
+	 */
 	@Transactional
 	public Visitor updateVisitorPassword(String username, String oldPass, String newPass) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
 		if (visitor == null) {
 			throw new MmssException(HttpStatus.NOT_FOUND, "There is no such visitor account with this username.");
 		}
-		
 		if (!oldPass.equals(visitor.getPassword())) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is not correct. Please enter correct password.");
 		}
-		
 		if (checkValidPassword(newPass)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.");
 		}
-		
 		visitor.setPassword(newPass);
 		visitorRepository.save(visitor);
 		return visitor;
 	}
-	
+
 	/**
-     * update a visitor account balance to a new one
-     * 
-     * @author Saviru Perera
-     * @param username, newBalance
-     * @return A modified Visitor Account object, or exceptions indicating invalid input information
-     */
+	 * Update a visitor's balance
+	 *
+	 * @param username the visitor's username
+	 * @param newBalance the visitor's updated balance
+	 * @return a visitor instance
+	 * @throws MmssException
+	 */
 	@Transactional
 	public Visitor updateVisitorBalance(String username, double newBalance) {
 		Visitor visitor = visitorRepository.findVisitorByUsername(username);
@@ -207,11 +198,11 @@ public class VisitorService {
 	}
 	
 	/**
-     * delete a Visitor Account from the system
+     * Delete a visitor from the system
      * 
      * @author Saviru Perera
-     * @param username
-     * @return void
+     * @param username the visitor's username
+	 * @throws MmssException
      */
 	@Transactional
     public void deleteVisitor(String username) {
@@ -238,11 +229,12 @@ public class VisitorService {
     }
 	
 	/**
-     * get all visitor Accounts belonging to a Person
+     * Get all visitor accounts belonging to a person
      * 
      * @author Saviru Perera
-     * @param personID
-     * @return An arraylist of all visitor accounts belonging to a person or exceptions indicating invalid input
+     * @param personID the person's primary key
+     * @return An arraylist of visitor instances
+	 * @throws MmssException
      */
 	@Transactional
     public ArrayList<Visitor> getAllVisitorsByPerson(int personID) {

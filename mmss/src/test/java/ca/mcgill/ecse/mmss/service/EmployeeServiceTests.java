@@ -106,7 +106,7 @@ public class EmployeeServiceTests {
 		 
 		 when(employeeRepository.save(any(Employee.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
 		 // call the service to create a loan
-	     Employee employeeCreated = employeeService.createEmployee("John", "Coder", "John@Coder", "514-396-2314"); 
+	     Employee employeeCreated = employeeService.createEmployee("John", "Coder", "John@Coder", "password", "514-396-2314");
 	     
 	     assertEquals(person.getFirstName(), employeeCreated.getPerson().getFirstName());
 	     assertEquals(person.getLastName(), employeeCreated.getPerson().getLastName());
@@ -121,7 +121,7 @@ public class EmployeeServiceTests {
 	 
 	 @Test
 	 public void testCreateInvalidEmployeeUsername() {
-		 MmssException ex = assertThrows(MmssException.class, () -> employeeService.createEmployee("John", "Coder", "badUsernameNoSign", "514-396-2314")); 
+		 MmssException ex = assertThrows(MmssException.class, () -> employeeService.createEmployee("John", "Coder", "badUsernameNoSign", "password", "514-396-2314"));
 
 	     // assert the exception is thrown with the right message and status
 
@@ -132,7 +132,7 @@ public class EmployeeServiceTests {
 	 @Test
 	 public void testCreateInvalidEmployeeUsernameTaken() {
 		 when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
-		 MmssException ex = assertThrows(MmssException.class, () -> employeeService.createEmployee("John", "Coder", employee.getUsername(), "514-396-2314")); 
+		 MmssException ex = assertThrows(MmssException.class, () -> employeeService.createEmployee("John", "Coder", employee.getUsername(), "password", "514-396-2314"));
 
 	     // assert the exception is thrown with the right message and status
 
@@ -144,7 +144,7 @@ public class EmployeeServiceTests {
 	 @Test
 	 public void testCreateInvalidEmployeePhoneNumber() {
 		 
-		 MmssException ex = assertThrows(MmssException.class, () -> employeeService.createEmployee("John", "Coder", visitor.getUsername(), "password")); 
+		 MmssException ex = assertThrows(MmssException.class, () -> employeeService.createEmployee("John", "Coder", visitor.getUsername(), "password", "514-396-2314--"));
 
 	     // assert the exception is thrown with the right message and status
 

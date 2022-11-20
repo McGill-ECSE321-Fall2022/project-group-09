@@ -37,17 +37,17 @@ public class EmployeeController {
 		String firstname = request.getFirstName();
 		String lastname = request.getLastName();
         String username = request.getUsername();
+        String password = request.getPassword();
 		String phoneNumber = request.getPhoneNumber();
 
         // create the object with the service
-        Employee persistedEmployee = employeeService.createEmployee(firstname,lastname,username,phoneNumber);
+        Employee persistedEmployee = employeeService.createEmployee(firstname,lastname,username,password,phoneNumber);
 
         // return it in the response entity
         return new ResponseEntity<EmployeeDto>(new EmployeeDto(persistedEmployee), HttpStatus.CREATED);
-
     }
 	
-	@PostMapping ({"/{addVisitorAccount}", "/{addVIsitorAccount}/"})
+	@PostMapping ({"/addVisitorAccount", "/addVisitorAccount/"})
     public ResponseEntity<VisitorDto> createAdditionalVisitor(@RequestBody EmployeeRequestDto request) {
         // get parameters
         String username = request.getUsername();
@@ -61,7 +61,7 @@ public class EmployeeController {
         return new ResponseEntity<VisitorDto>(new VisitorDto(persistedVisitor), HttpStatus.CREATED);
     }
 	
-	@GetMapping({"/{empUsername}", "/{empUsername}/"})
+	@GetMapping({"/{username}", "/{username}/"})
 	public ResponseEntity<EmployeeDto> getEmployee(@PathVariable String username) {
         // call service
         Employee retrievedEmployee = employeeService.getEmployeeByUsername(username);

@@ -43,7 +43,7 @@ public class EmployeeService {
      * @return the employee account object, or throw exceptions for incorrect input information
      */
 	@Transactional
-	public Employee createEmployee(String firstName, String lastName, String userName, String phoneNumber) {
+	public Employee createEmployee(String firstName, String lastName, String userName, String password, String phoneNumber) {
 				
 		if(checkValidUser(userName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
@@ -72,8 +72,9 @@ public class EmployeeService {
 		employee.setPhoneNumber(phoneNumber);
 		employee.setCommunication(communication);
 		employee.setPerson(person);
-		employeeRepository.save(employee);
-		return employee;
+		employee.setPassword(password);
+		Employee savedEmployee = employeeRepository.save(employee);
+		return savedEmployee;
 	}
 	
 	/**

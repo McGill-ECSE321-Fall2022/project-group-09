@@ -123,7 +123,6 @@ public class VisitorIntegrationTests {
      * Tests creating an additional visitor, and returns its username
      * 
      * @author Saviru Perera
-     * @return the username of the person
      */
     @Test
     public void testCreateAdditionalVisitor() {
@@ -150,7 +149,8 @@ public class VisitorIntegrationTests {
      * @author Saviru Perera
      */
     @Test
-    public void testGetVisitor(String username) {
+    public void testGetVisitor() {
+        String username = visitor.getUsername();
         // try the get
         ResponseEntity<VisitorDto> response = client.getForEntity("/visitor/" + username, VisitorDto.class);
 

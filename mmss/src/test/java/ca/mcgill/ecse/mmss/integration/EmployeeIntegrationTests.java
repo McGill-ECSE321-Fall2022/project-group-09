@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 
+import ca.mcgill.ecse.mmss.dao.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
-import ca.mcgill.ecse.mmss.dao.PersonRepository;
-import ca.mcgill.ecse.mmss.dao.ScheduleRepository;
-import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
-import ca.mcgill.ecse.mmss.dao.ShiftRepository;
 import ca.mcgill.ecse.mmss.dto.EmployeeDto;
 import ca.mcgill.ecse.mmss.dto.EmployeeRequestDto;
 import ca.mcgill.ecse.mmss.dto.VisitorDto;
@@ -52,6 +48,8 @@ public class EmployeeIntegrationTests {
     @Autowired
     private CommunicationRepository communicationRepository;
 
+    @Autowired
+    private VisitorRepository visitorRepository;
     
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -69,36 +67,23 @@ public class EmployeeIntegrationTests {
      * 
      * @author Saviru Perera
      */
-
     @BeforeEach
     public void createObjects() {
         // create necessary objects for test, and save them to the database
-
-        // person for employee
         person = new Person();
         person.setFirstName("Young");
         person.setLastName("Jeezy");
-        personRepository.save(person);
-        
-        communication = new Communication();
-        communication.setCommunicationId(0);
-        communicationRepository.save(communication);
-        
-        schedule = new Schedule();
-        schedule.setScheduleId(0);
-        scheduleRepository.save(schedule);
-        
+        person = personRepository.save(person);
+        communication = communicationRepository.save(new Communication());
+        schedule = scheduleRepository.save(new Schedule());
         shift = new Shift();
-        shift.setShiftId(0);
         shift.setShiftTime(ShiftTime.Morning);
         shift.setSchedule(schedule);
-        shiftRepository.save(shift);
-
-        // the visitor
-        this.employee = new Employee("young.jeezy@gmail.com", "hardestOut2", person, "514-354-6789");
+        shift = shiftRepository.save(shift);
+        employee = new Employee("young.jeezy@gmail.com", "hardestOut2", person, "514-354-6789");
         employee.setCommunication(communication);
         employee.setShift(shift);
-        employeeRepository.save(employee);
+        employee = employeeRepository.save(employee);
     }
     
     /**
@@ -111,48 +96,44 @@ public class EmployeeIntegrationTests {
 
         // delete the objects from the test
     	this.employee.delete();
-        this.communication.delete();
         this.shift.delete();
         this.schedule.delete();
         this.person.delete();
+        this.communication.delete();
         employeeRepository.deleteAll();
+        visitorRepository.deleteAll();
         shiftRepository.deleteAll();
         scheduleRepository.deleteAll();
-        communicationRepository.deleteAll();
         personRepository.deleteAll();
+        communicationRepository.deleteAll();
     }
     
     /**
      * Tests creating a employee, and returns its username
      * 
      * @author Saviru Perera
-     * @return the username of the person
      */
-   
     @Test
     public void testCreateEmployee() {
         EmployeeRequestDto request = new EmployeeRequestDto();
-        request.setFirstName("Chandler");
-        request.setLastName("Jeezy");
-        request.setUsername("chandler@gmail");
+        request.setFirstName("Hello");
+        request.setLastName("World");
+        request.setUsername("sasha@gmail");
         request.setPhoneNumber("514-555-6787");
-
+        request.setPassword("password");
         // make the post
-        ResponseEntity<EmployeeDto> response = client.postForEntity("/employee", request, EmployeeDto.class);
-
+        ResponseEntity<EmployeeDto> response = client.postForEntity("/employee/", request, EmployeeDto.class);
         // make assertions on the post
         assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
         assertTrue(response.getBody().getUserName() != null, "Response has a valid username");
-
     }
     
     /**
      * Tests creating an additional visitor, and returns its username
      * 
      * @author Saviru Perera
-     * @return the username of the person
      */
     @Test
     public void testCreateAdditionalVisitorForEmployee() {
@@ -178,7 +159,8 @@ public class EmployeeIntegrationTests {
      * @author Saviru Perera
      */
     @Test
-    public void testGetEmployee(String username) {
+    public void testGetEmployee() {
+        String username = employee.getUsername();
         // try the get
         ResponseEntity<EmployeeDto> response = client.getForEntity("/employee/" + username, EmployeeDto.class);
 

@@ -22,7 +22,6 @@ public class EmployeeRequestDto {
 	 * Constructor that takes in a visitor as an argument
 	 * 
 	 * @author Saviru Perera
-	 * @param visitor
 	 */
 	public EmployeeRequestDto(Employee employee, String newUserName, String newPassword, String newPhoneNumber) {
 		this.firstName = employee.getPerson().getFirstName();
