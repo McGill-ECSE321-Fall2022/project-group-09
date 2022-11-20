@@ -5,6 +5,7 @@ import ca.mcgill.ecse.mmss.model.Employee;
 public class EmployeeDto {
 	private String phoneNumber;
 	private String userName;
+	private String password;
 	private int personId;
 	private int communicationId;
 
@@ -20,9 +21,10 @@ public class EmployeeDto {
 	 * @author Shidan Javaheri, Shyam Desai
 	 * @param employee
 	 */
-	public void EmpoloyeeDto(Employee employee) {
+	public EmployeeDto(Employee employee) {
 		this.phoneNumber = employee.getPhoneNumber();
 		this.userName = employee.getUsername();
+		this.password = employee.getPassword();
 		this.personId = employee.getPerson().getPersonId();
 		this.communicationId = employee.getCommunication().getCommunicationId();
 	}
@@ -50,6 +52,10 @@ public class EmployeeDto {
 
 	public String getUserName() {
 		return userName;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 
 	public int getPersonId() {

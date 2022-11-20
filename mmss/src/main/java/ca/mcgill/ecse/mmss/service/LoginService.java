@@ -46,4 +46,20 @@ public class LoginService {
         else
             throw new MmssException(HttpStatus.NOT_FOUND, "Account with this username not found");
     }
+    
+    /**
+     * Logs a user into their account, or declines the login
+     * 
+     * @author Saviru Perera
+     * @param userName, passWord
+     * @return the account, or throw exceptions that the username or password was incorrect
+     */
+    @Transactional
+    public AccountType loginToAccount(String userName, String passWord) {
+    	AccountType loginInfo = getAccountByUsername(userName);
+    	if (!loginInfo.getPassword().equals(passWord)) {
+    		throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again.");
+    	}
+    	return loginInfo;
+    }
 }
