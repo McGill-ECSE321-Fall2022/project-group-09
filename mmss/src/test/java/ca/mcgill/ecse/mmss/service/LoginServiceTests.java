@@ -1,7 +1,5 @@
 package ca.mcgill.ecse.mmss.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,15 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
-import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
 import ca.mcgill.ecse.mmss.dao.ManagerRepository;
 import ca.mcgill.ecse.mmss.model.AccountType;
-import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Manager;
 import ca.mcgill.ecse.mmss.model.Visitor;
@@ -147,6 +141,35 @@ public class LoginServiceTests {
 	     verify(visitorRepository, times(1)).findVisitorByUsername(manager.getUsername());
 	     verify(employeeRepository, times(1)).findEmployeeByUsername(manager.getUsername());
 	     verify(managerRepository, times(1)).findManagerByUsername(manager.getUsername());
+	 }
+
+	 @Test
+	 public void testLoginManager () { 
+		when(managerRepository.findManagerByUsername(manager.getUsername())).thenAnswer((InvocationOnMock invocation) -> manager); 
+		// call service to login manager
+		Manager manager = loginService.loginManager(this.manager.getUsername(), this.manager.getPassword());
+
+		// make assertions
+		assertEquals(this.manager.getUsername(), manager.getUsername());
+
+	 }
+
+	 @Test 
+	 public void testLoginEmployee() { 
+		when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee);
+		// call service to login employee
+		Employee employee = loginService.loginEmployee(this.employee.getUsername(), this.employee.getPassword());
+		// make assertions
+		assertEquals(this.employee.getUsername(), employee.getUsername());
+	 }
+
+	 @Test
+	 public void testLoginVisitor() { 
+		when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor);
+		// call service to login visitor
+		Visitor visitor = loginService.loginVisitor(this.visitor.getUsername(), this.visitor.getPassword());
+		// make assertions
+		assertEquals(this.visitor.getUsername(), visitor.getUsername());
 	 }
 	 
 
