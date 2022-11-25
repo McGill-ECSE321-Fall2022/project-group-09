@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+/**
+ * Service class for logging in
+ */
 @Service
 public class LoginService {
 
@@ -76,10 +78,10 @@ public class LoginService {
     public Visitor loginVisitor ( String username, String password ) {
         Visitor visitor = visitorRepository.findVisitorByUsername(username);
         if (visitor == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Visitor with this username not found");
+            throw new MmssException(HttpStatus.NOT_FOUND, "Incorrect username entered. Please try again!");
         }
         if (!visitor.getPassword().equals(password)) {
-            throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again.");
+            throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again!");
         }
         return visitor;
     }
@@ -97,14 +99,13 @@ public class LoginService {
     public Employee loginEmployee ( String username, String password ) {
         Employee employee = employeeRepository.findEmployeeByUsername(username);
         if (employee == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Employee with this username not found");
+            throw new MmssException(HttpStatus.NOT_FOUND, "Incorrect username entered. Please try again!");
         }
         if (!employee.getPassword().equals(password)) {
             throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again.");
         }
         return employee;
     }
-
 
     /**
      * Logs a manager into their account, or declines the login
@@ -118,7 +119,7 @@ public class LoginService {
     public Manager loginManager ( String username, String password ) {
         Manager manager = managerRepository.findManagerByUsername(username);
         if (manager == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "The manager account has not yet been created in the system");
+            throw new MmssException(HttpStatus.NOT_FOUND, "Incorrect username entered. Please try again!");
         }
         if (!manager.getPassword().equals(password)) {
             throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again.");
