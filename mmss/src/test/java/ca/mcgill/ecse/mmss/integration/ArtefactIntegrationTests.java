@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dto.ArtefactDto;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Room;
+import ca.mcgill.ecse.mmss.utils.Util;
+
+
 
 /**
  * Tests for the ArtefactController class
@@ -35,11 +39,22 @@ public class ArtefactIntegrationTests {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired 
+    private Util util;
+    
     ArrayList<Artefact> artefacts;
     Room smallRoom;
     Room largeRoom;
     Room storage;
-
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
+    
     /**
      * @author: Sasha Denouvilliez-Pech
      * Create the rooms and the artefacts needed by all the tests
