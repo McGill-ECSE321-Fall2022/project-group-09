@@ -17,15 +17,27 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
+    <h3>Logout</h3>
+    <div>
+      <b-button @click="logout">Logout</b-button>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'hello',
-  data () {
+  data() {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  }, 
+  methods: { 
+    logout () { 
+      sessionStorage.removeItem('loggedInEmployee');
+      sessionStorage.removeItem('loggedInVisitor');
+      sessionStorage.removeItem('loggedInManager');
+      this.$router.push('/login/visitor');
     }
   }
 }
@@ -33,7 +45,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 

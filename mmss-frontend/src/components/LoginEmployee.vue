@@ -1,10 +1,10 @@
 <template>
-    <div id="LoginVisitor">
+    <div id="LoginEmployee">
         <h1>
             Welcome to Marwan's Museum!
         </h1>
         <h2>
-            Visitor Login Page
+            Employee Login Page
         </h2>
 
         <table class="center">
@@ -13,7 +13,7 @@
                     Username:
                 </td>
                 <td>
-                    <input type="text" v-model="visitorUsername" @keydown.space.prevent placeholder="Username">
+                    <input type="text" v-model="employeeUsername" @keydown.space.prevent placeholder="Username">
                 </td>
             </tr>
             <tr>
@@ -21,13 +21,13 @@
                     Password:
                 </td>
                 <td>
-                    <input type="password" v-model="visitorPassword" placeholder="Password">
+                    <input type="password" v-model="employeePassword" placeholder="Password">
                 </td>
 
                 <td>
                     <!-- Button is disabled untill there is non whitespace text. Clicking triggers login-->
-                    <b-button v-bind:disabled="!visitorUsername.trim() || !visitorPassword.trim()"
-                        @click="doLoginVisitor(visitorUsername, visitorPassword)">Login</b-button>
+                    <b-button v-bind:disabled="!employeeUsername.trim() || !employeePassword.trim()"
+                        @click="doLoginEmployee(employeeUsername, employeePassword)">Login</b-button>
                 </td>
             </tr>
 
@@ -35,7 +35,6 @@
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />
     </div>
-
 </template> 
 
 <script>
@@ -52,69 +51,57 @@ var AXIOS = axios.create({
     headers: { 'Access-Control-Allow-Origin': frontendUrl }
 })
 
-
-
 export default {
-    name: 'LoginVisitor',
+    name: 'LoginEmployee',
     // Add the error handler component to the components list
     components: {
         ErrorHandler
     },
     data() {
         return {
-            // username and password for visitor
-            visitorUsername: '',
-            visitorPassword: '',
-            // the error message to be displayed by the Error Handler component
+            employeeUsername: '',
+            employeePassword: '',
             errorMessage: ''
-
         }
     },
     created: function () {
         // checking if the user is already logged in 
+        const loggedInEmployee = sessionStorage.getItem('loggedInEmployee');
         const loggedInVisitor = sessionStorage.getItem('loggedInVisitor');
-        const loggedInEmployee = sessionStorage.getItem('loggedInVisitor');
         const loggedInManager = sessionStorage.getItem('loggedInManager');
 
-        // check to see if an account is already logged in
+        //check to see if an account is already logged in
 
         if (loggedInVisitor) {
-            // redirect to home page for visitors
+            // redirect to page for visitors
             this.$router.push('/');
         }
         else if (loggedInEmployee) {
-            // redirect to home page for employees
+            // redirect to page for employees
             this.$router.push('/');
         }
         else if (loggedInManager) {
-            // redirect to hoem page for managers
+            // redirect to page for managers
             this.$router.push('/');
         }
 
     },
     methods: {
-        // the visitor login method
-        /**
-         * This method is called when the user clicks the login button.
-         * @author Shidan Javaheri
-         * @param {String} username the username of the visitor
-         * @param {String} password the password of the visitor
-         */
-        doLoginVisitor(username, password) {
+        // the employee login method
+        doLoginEmployee(username, password) {
             const self = this;
-            AXIOS.get('/login', { params: { username, password } }, {})
+            // empty feilds
+            self.employeeUsername = '';
+            self.employeePassword = '';
+            AXIOS.get('/login/employee', { params: { username, password } }, {})
                 .then((response) => {
-                    // empty the feilds
-                    self.visitorUsername = '';
-                    self.visitorPassword = '';
-                    // store the logged in visitor
-                    sessionStorage.setItem('loggedInVisitor', JSON.stringify(response.data));
-                    // send to homepage
+                    sessionStorage.setItem('loggedInEmployee', JSON.stringify(response.data));
+                    // send to home page
                     self.$router.push('/');
                 })
                 .catch((error) => {
                     // empty the password
-                    self.visitorPassword = '';
+                    self.employeePassword = '';
                     // logic on the error status. Display backend error message if status is below 450
                     // otherwise display something went wrong
                     if (error.response.status >= 450) {
@@ -138,5 +125,6 @@ export default {
   margin-right: auto;
 }
 </style>
+
 
 
