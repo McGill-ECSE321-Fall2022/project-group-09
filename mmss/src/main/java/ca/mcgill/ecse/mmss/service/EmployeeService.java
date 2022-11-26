@@ -61,6 +61,9 @@ public class EmployeeService {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
 		// check for valid phone number
+		if ( phoneNumber == null) { 
+			throw new MmssException (HttpStatus.NOT_ACCEPTABLE, "Please enter a phone number");
+		}
 		if (phoneNumber.length()!=12) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "Please enter a valid phone number in the format xxx-xxx-xxxx.");
 		}
