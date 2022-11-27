@@ -49,6 +49,16 @@ function requireEmployee(from, to, next) {
   }
 }
 
+function requireStaff(from, to, next) { 
+  // check that either the employee or manager is logged in
+  if (!sessionStorage.getItem('loggedInEmployee') && !sessionStorage.getItem('loggedInManager')) {
+    next({ name: 'LoginManager' });
+  }
+  else { 
+    next(); 
+  }
+}
+
 // routes to all pages
 
 export default new Router({
@@ -76,7 +86,8 @@ export default new Router({
     {
       path: '/artefact/createForm',
       name: 'CreateArtefactForm',
-      component: CreateArtefactForm
+      component: CreateArtefactForm,
+      beforeEnter: requireStaff
     },
     {
       path: "*",
