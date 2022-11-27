@@ -4,6 +4,7 @@ import Hello from '@/components/Hello'
 import LoginVisitor from '@/components/LoginVisitor'
 import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
+import CreateArtefactForm from '@/components/CreateArtefactForm'
 
 Vue.use(Router);
 
@@ -18,7 +19,6 @@ function requireVisitor(from, to, next) {
   // else continue to requested page
   else {
     next();
-
   }
 }
 
@@ -72,6 +72,11 @@ export default new Router({
       path: '/login/employee',
       name: 'LoginEmployee',
       component: LoginEmployee
+    },
+    {
+      path: '/artefact/createForm',
+      name: 'CreateArtefactForm',
+      component: CreateArtefactForm
     },
     {
       path: "*",

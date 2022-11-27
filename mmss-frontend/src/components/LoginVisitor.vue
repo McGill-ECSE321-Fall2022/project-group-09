@@ -87,7 +87,7 @@ export default {
             this.$router.push('/');
         }
         else if (loggedInManager) {
-            // redirect to hoem page for managers
+            // redirect to home page for managers
             this.$router.push('/');
         }
 
