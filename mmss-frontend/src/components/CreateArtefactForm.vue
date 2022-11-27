@@ -122,19 +122,7 @@ export default {
     },
     data() {
         return {
-            roomOptions:[
-                { value: '', text: 'Storage' },
-                { value: '', text: 'Large1' },
-                { value: '', text: 'Large2' },
-                { value: '', text: 'Large3' },
-                { value: '', text: 'Large4' },
-                { value: '', text: 'Large5' },
-                { value: '', text: 'Small1' },
-                { value: '', text: 'Small2' },
-                { value: '', text: 'Small3' },
-                { value: '', text: 'Small4' },
-                { value: '', text: 'Small5' }
-            ],
+            roomOptions:[],
             request: {
                 artefactName: '',
                 description: '',
@@ -157,21 +145,9 @@ export default {
         .then(response => {
         //Assign the roomId to the room names
         const rooms = response.data
-        let smallIndex = 0
-        let largeIndex = 0
         for (let i = 0; i < rooms.length; i++) {
-            let room = rooms[i]
-            if (room.roomtype == 'Storage'){
-                this.roomOptions[0].value = room.roomId
-            }
-            else if (room.roomtype == 'Large'){
-                this.roomOptions[1 + largeIndex].value = room.roomId
-                largeIndex++
-            }
-            else if (room.roomtype == 'Small'){
-                this.roomOptions[6 + smallIndex].value = room.roomId
-                smallIndex++
-            }
+            const room = rooms[i]
+            this.roomOptions.push({ value: room.roomId, text: room.roomName })
         }
         console.log(rooms)
         })
