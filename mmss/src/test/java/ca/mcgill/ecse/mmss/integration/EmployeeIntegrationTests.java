@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import ca.mcgill.ecse.mmss.dao.*;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class EmployeeIntegrationTests {
@@ -59,6 +61,15 @@ public class EmployeeIntegrationTests {
     private Schedule schedule;
     private Employee employee;
 
+
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
     /**
      * Creates the obejcts needed by all test cases
      * BeforeAll because these objects are only modified in the database,

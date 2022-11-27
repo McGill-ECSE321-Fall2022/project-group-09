@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import ca.mcgill.ecse.mmss.dao.ScheduleRepository;
 import ca.mcgill.ecse.mmss.dto.ScheduleDto;
 import ca.mcgill.ecse.mmss.model.Schedule;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ScheduleIntegrationTests {
@@ -26,6 +28,14 @@ public class ScheduleIntegrationTests {
     private ScheduleRepository scheduleRepository;
 
     Schedule schedule;
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
     
     /**
      * @author: Athmane Benarous

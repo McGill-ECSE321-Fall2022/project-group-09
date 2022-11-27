@@ -5,7 +5,10 @@ import ca.mcgill.ecse.mmss.dao.ManagerRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dto.CommunicationDto;
 import ca.mcgill.ecse.mmss.model.*;
+import ca.mcgill.ecse.mmss.utils.Util;
+
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,14 @@ public class CommunicationIntegrationTests {
 
     private Communication communication;
 
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
     /**
      * Create objects before each test
      */
