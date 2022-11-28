@@ -71,6 +71,7 @@ export default {
         // checking if the user is already logged in 
         const loggedInEmployee = sessionStorage.getItem('loggedInManager');
         const loggedInVisitor = sessionStorage.getItem('loggedInVisitor');
+        
         const loggedInManager = sessionStorage.getItem('loggedInManager');
 
         // check to see if an account is already logged in

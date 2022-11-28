@@ -35,6 +35,13 @@
                     <!-- Button is disabled untill there is non whitespace text. Clicking triggers login-->
                     <b-button variant="success" v-bind:disabled="!visitorUsername.trim() || !visitorPassword.trim()"
                         @click="doLoginVisitor(visitorUsername, visitorPassword)">Login</b-button>
+
+                    <hr>
+                    <b-button variant="primary" @click="$router.push({name: 'Hello'})">Create an Account</b-button>
+                <hr>
+                <b-button @click="$router.push({name: 'LoginManager'})">Login as the manager</b-button>
+                <hr>
+                <b-button @click="$router.push({name: 'LoginEmployee'})">Login as an employee</b-button>
                 </td>
             </tr>
 
