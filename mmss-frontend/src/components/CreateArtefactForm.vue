@@ -151,16 +151,16 @@ export default {
         }
         console.log(rooms)
         })
-        .catch(error => {
+        .catch((error) => {
             // logic on the error status. Display backend error message if status is below 450
             // otherwise display something went wrong
             if (error.response.status >= 450) {
-                self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
             } else {
-                self.errorMessage = error.response.data;
+                this.errorMessage = error.response.data;
             }
             // call the error handler component modal (named errorPopUp) to display the error message
-            self.$bvModal.show('errorPopUp');
+            this.$bvModal.show('errorPopUp');
         })
     },
       methods: {
@@ -175,18 +175,16 @@ export default {
                 this.resetVariables()
                 //onReset
                     // send to some page eventually
-                    //self.$router.push('/');
+                    //this.$router.push('/');
             })
             .catch((error) => {
                 if (error.response.status >= 450) {
-                    console.log(error.response)
-                    self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                    this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
                 } else {
-                    self.errorMessage = error.response.data;
+                    this.errorMessage = error.response.data;
                 }
                 // call the error handler component modal (named errorPopUp) to display the error message
-                //console.log(self.errorMessage)
-                self.$bvModal.show('errorPopUp');
+                this.$bvModal.show('errorPopUp');
             });
 
         },
