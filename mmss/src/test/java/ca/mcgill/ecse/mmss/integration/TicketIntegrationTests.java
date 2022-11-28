@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.sql.Date;
 import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Ticket;
 import ca.mcgill.ecse.mmss.model.Visitor;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TicketIntegrationTests {
@@ -59,6 +61,14 @@ public class TicketIntegrationTests {
 	private OpenDay openDay;
 	private Communication commmunication;
 	private Ticket ticket;
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
 
 	/**
 	 * Create objects needed for all test cases, only modified in DB

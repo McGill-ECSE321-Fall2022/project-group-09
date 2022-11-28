@@ -73,16 +73,16 @@ public class Util {
         donationRepository.deleteAll();
         tourRepository.deleteAll();
         ticketRepository.deleteAll();
+        notificationRepository.deleteAll();
         artefactRepository.deleteAll();
+        roomRepository.deleteAll();
         employeeRepository.deleteAll();
         managerRepository.deleteAll();
         visitorRepository.deleteAll();
-        notificationRepository.deleteAll();
-        communicationRepository.deleteAll();
+        openDayRepository.deleteAll();
         shiftRepository.deleteAll();
         scheduleRepository.deleteAll();
-        openDayRepository.deleteAll();
-        roomRepository.deleteAll();
+        communicationRepository.deleteAll();
         personRepository.deleteAll();
 
     } 

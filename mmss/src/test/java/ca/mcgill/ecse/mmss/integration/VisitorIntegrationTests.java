@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import ca.mcgill.ecse.mmss.dto.VisitorRequestDto;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Visitor;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class VisitorIntegrationTests {
@@ -45,6 +47,14 @@ public class VisitorIntegrationTests {
     private Person person;
     private Communication communication;
     private Visitor visitor;
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
 
     /**
      * Creates the obejcts needed by all test cases

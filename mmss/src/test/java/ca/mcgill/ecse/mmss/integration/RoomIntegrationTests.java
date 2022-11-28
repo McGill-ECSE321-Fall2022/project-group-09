@@ -4,7 +4,10 @@ import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dto.RoomDto;
 import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.service.RoomService;
+import ca.mcgill.ecse.mmss.utils.Util;
+
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
  * Integration tests for the Room class
  */
@@ -33,6 +37,14 @@ public class RoomIntegrationTests {
 
     private ArrayList<Room> rooms;
 
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
     /**
      * Create all the rooms in the museum before each test
      */

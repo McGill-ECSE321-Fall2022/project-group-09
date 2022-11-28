@@ -39,8 +39,7 @@ public class ArtefactIntegrationTests {
     @Autowired
     private RoomRepository roomRepository;
 
-    @Autowired 
-    private Util util;
+    
     
     ArrayList<Artefact> artefacts;
     Room smallRoom;
