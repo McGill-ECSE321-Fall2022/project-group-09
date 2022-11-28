@@ -7,13 +7,14 @@
             Visitor Login Page
         </h2>
 
-        <table class="center">
+        <table class="center" width="30%">
             <tr>
                 <td>
                     Username:
                 </td>
                 <td>
-                    <input type="text" v-model="visitorUsername" @keydown.space.prevent placeholder="Username">
+                    <b-input id="usernameInput" type="email" v-model="visitorUsername" :state="usernameState"
+                        @keydown.space.prevent placeholder="Username"></b-input>
                 </td>
             </tr>
             <tr>
@@ -21,12 +22,18 @@
                     Password:
                 </td>
                 <td>
-                    <input type="password" v-model="visitorPassword" placeholder="Password">
+                   
+                    <b-input id="emailInput" type="password" v-model="visitorPassword" :state="passwordState"
+                        placeholder="Password"></b-input>
                 </td>
-
+            </tr>
+        </table>
+        <table class="center">
+            <tr>
                 <td>
+                    <br>
                     <!-- Button is disabled untill there is non whitespace text. Clicking triggers login-->
-                    <b-button v-bind:disabled="!visitorUsername.trim() || !visitorPassword.trim()"
+                    <b-button variant="success" v-bind:disabled="!visitorUsername.trim() || !visitorPassword.trim()"
                         @click="doLoginVisitor(visitorUsername, visitorPassword)">Login</b-button>
                 </td>
             </tr>
@@ -101,41 +108,52 @@ export default {
          * @param {String} password the password of the visitor
          */
         doLoginVisitor(username, password) {
-            const self = this;
+
             AXIOS.get('/login', { params: { username, password } }, {})
                 .then((response) => {
                     // empty the feilds
-                    self.visitorUsername = '';
-                    self.visitorPassword = '';
+                    this.visitorUsername = '';
+                    this.visitorPassword = '';
                     // store the logged in visitor
                     sessionStorage.setItem('loggedInVisitor', JSON.stringify(response.data));
                     // send to homepage
-                    self.$router.push('/');
+                    this.$router.push('/');
                 })
                 .catch((error) => {
                     // empty the password
-                    self.visitorPassword = '';
+                    this.visitorPassword = '';
                     // logic on the error status. Display backend error message if status is below 450
                     // otherwise display something went wrong
                     if (error.response.status >= 450) {
-                        self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                        this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
                     } else {
-                        self.errorMessage = error.response.data;
+                        this.errorMessage = error.response.data;
                     }
                     // call the error handler component modal (named errorPopUp) to display the error message
-                    self.$bvModal.show('errorPopUp');
+                    this.$bvModal.show('errorPopUp');
                 });
 
         }
+    },
+    computed: {
+        usernameState() {
+            return this.visitorUsername.includes("@");
+        },
+        passwordState() {
+            const hasNumber = /\d/;
+            const upper = /[A-Z]/;
+            return this.visitorPassword.length >= 8 && hasNumber.test(this.visitorPassword) && upper.test(this.visitorPassword);
+        }
     }
 }
+
 
 </script> 
 
 <style>
 .center {
-  margin-left: auto;
-  margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>
 

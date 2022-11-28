@@ -7,13 +7,13 @@
             Manager Login Page
         </h2>
 
-        <table class="center">
+        <table class="center" width="30%">
             <tr>
                 <td>
                     Username:
                 </td>
                 <td>
-                    <input type="text" v-model="managerUsername" @keydown.space.prevent placeholder="Username">
+                    <b-input id="usernameInput" type="email" v-model="managerUsername" @keydown.space.prevent :state="usernameState" placeholder="Username"></b-input>
                 </td>
             </tr>
             <tr>
@@ -21,12 +21,16 @@
                     Password:
                 </td>
                 <td>
-                    <input type="password" v-model="managerPassword" placeholder="Password">
+                    <b-input id="passwordInput" type="password" v-model="managerPassword" :state="passwordState" placeholder="Password"></b-input>
                 </td>
-
+            </tr>
+        </table>
+        <table class="center">
+            <tr>
                 <td>
+                    <br>
                     <!-- Button is disabled untill there is non whitespace text. Clicking triggers login-->
-                    <b-button v-bind:disabled="!managerUsername.trim() || !managerPassword.trim()"
+                    <b-button variant="success" v-bind:disabled="!managerUsername.trim() || !managerPassword.trim()"
                         @click="doLoginManager(managerUsername, managerPassword)">Login</b-button>
                 </td>
             </tr>
@@ -88,30 +92,40 @@ export default {
     methods: {
         // the manager login method
         doLoginManager(username, password) {
-            const self = this;
+            
             // empty feilds
-            self.managerUsername = '';
-            self.managerPassword = '';
+            this.managerUsername = '';
+            this.managerPassword = '';
             AXIOS.get('/login/manager/', { params: { username, password } }, {})
                 .then((response) => {
                     sessionStorage.setItem('loggedInManager', JSON.stringify(response.data));
                     // send to home page
-                    self.$router.push('/');
+                    this.$router.push('/');
                 })
                 .catch((error) => {
                     // empty the password
-                    self.managerPassword = '';
+                    this.managerPassword = '';
                     // logic on the error status. Display backend error message if status is below 450
                     // otherwise display something went wrong
                     if (error.response.status >= 450) {
-                        self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                        this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
                     } else {
-                        self.errorMessage = error.response.data;
+                        this.errorMessage = error.response.data;
                     }
                     // call the error handler component modal (named errorPopUp) to display the error message
-                    self.$bvModal.show('errorPopUp');
+                    this.$bvModal.show('errorPopUp');
                 });
 
+        }
+    },
+    computed: {
+        usernameState() {
+            return this.managerUsername.includes("@");
+        },
+        passwordState() { 
+            const hasNumber = /\d/;
+            const upper = /[A-Z]/;
+            return this.managerPassword.length >= 8 && hasNumber.test(this.managerPassword) && upper.test(this.managerPassword);
         }
     }
 }
