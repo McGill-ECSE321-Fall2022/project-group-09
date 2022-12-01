@@ -46,18 +46,19 @@ export default {
                 this.rooms.push({roomName: room.roomName, artefactCount: room.artefactCount})
             }
         }
-        console.log(rooms)
+        console.log(roomList)
         })
         .catch(error => {
+            console.log(error)
             // logic on the error status. Display backend error message if status is below 450
             // otherwise display something went wrong
             if (error.response.status >= 450) {
-                self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
             } else {
-                self.errorMessage = error.response.data;
+                this.errorMessage = error.response.data;
             }
             // call the error handler component modal (named errorPopUp) to display the error message
-            self.$bvModal.show('errorPopUp');
+            this.$bvModal.show('errorPopUp');
         })
     },
     methods: {
@@ -66,7 +67,7 @@ export default {
             {
                 const room = rooms[i]
                 if (room.roomtype == 'Storage') {
-                    this.rooms.push({roomName: room.roomName, artefactCount: room.artefactCount})
+                    return this.rooms.push({roomName: room.roomName, artefactCount: room.artefactCount})
                 }
             }
         },
@@ -79,7 +80,7 @@ export default {
                     count += room.artefactCount
                 }
             }
-            this.rooms.push({roomName: "Small Rooms", artefactCount: count})
+            return this.rooms.push({roomName: "Small Rooms", artefactCount: count})
         },
         largeRooms(rooms) {
             let count = 0
@@ -90,22 +91,22 @@ export default {
                     count += room.artefactCount
                 }
             }
-            this.rooms.push({roomName: "Large Rooms", artefactCount: count})
+            return this.rooms.push({roomName: "Large Rooms", artefactCount: count})
         },
         display() {
             AXIOS.get('/room/displayCapacity', {}, {})
             .then(response => {
             const displayCount = response.data
             console.log(displayCount)
-            this.rooms.push({roomName: "Display", artefactCount: displayCount})
+            return this.rooms.push({roomName: "Display", artefactCount: displayCount})
             })
             .catch(error => {
                 if (error.response.status >= 450) {
-                    self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                    this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
                 } else {
-                    self.errorMessage = error.response.data;
+                    this.errorMessage = error.response.data;
                 }
-                self.$bvModal.show('errorPopUp');
+                this.$bvModal.show('errorPopUp');
             })
         }
     }

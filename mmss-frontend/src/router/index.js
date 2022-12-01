@@ -6,6 +6,8 @@ import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
 import CreateArtefactForm from '@/components/CreateArtefactForm'
 import RoomsTable from '@/components/RoomsTable'
+import NavBarArtefact from '@/components/NavBarArtefact'
+import ArtefactsView from '@/components/ArtefactsView'
 
 Vue.use(Router);
 
@@ -94,6 +96,16 @@ export default new Router({
       path: '/room',
       name: 'RoomsTable',
       component: RoomsTable
+    },
+    {
+      path: '/artefacts',
+      name: 'ViewArtefacts',
+      component: NavBarArtefact
+    },
+    {
+      path: '/artefactsView',
+      name: 'ArtefactsView',
+      component: ArtefactsView
     },
     {
       path: "*",

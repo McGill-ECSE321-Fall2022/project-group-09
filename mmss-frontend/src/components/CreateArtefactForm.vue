@@ -163,7 +163,7 @@ export default {
             this.$bvModal.show('errorPopUp');
         })
     },
-      methods: {
+    methods: {
         onSubmit(event) {
             event.preventDefault()
             // Call getAllRooms, 3 args necessary
