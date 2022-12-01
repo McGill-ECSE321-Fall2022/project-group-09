@@ -34,10 +34,8 @@ export default {
         errorMessage: ''
     }},
     created: function () {
-        // Call getAllRooms, 3 args necessary
         AXIOS.get('/artefact', {}, {})
         .then(response => {
-        //Assign the roomId to the room names
         this.artefacts = response.data
         console.log(artefacts)
         })
