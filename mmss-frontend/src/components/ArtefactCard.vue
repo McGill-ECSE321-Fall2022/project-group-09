@@ -4,8 +4,8 @@
         Add eventually for pictures-->
         <b-col>
             <b-card
-            @click="$bvModal.show(String(artefactId))"
-            :title=artefactName
+            @click="$bvModal.show(String(artefact.artefactId))"
+            :title=artefact.artefactName
             img-src="https://picsum.photos/600/300/?image=25"
             img-alt="Image"
             img-top
@@ -14,38 +14,38 @@
             class="mb-2"
             >
             <b-list-group flush>
-                <b-list-group-item>{{ (canLoan && !currentlyOnLoan)? 'Available for loan' : 'Not available for loan' }}</b-list-group-item>
-                <b-list-group-item>Room: {{ getRoomName() }}</b-list-group-item>
+                <b-list-group-item>{{ (artefact.canLoan && !artefact.currentlyOnLoan)? 'Available for loan' : 'Not available for loan' }}</b-list-group-item>
+                <b-list-group-item>In {{ room.roomName }}</b-list-group-item>
             </b-list-group>
             <!-- Eventually add buttons depending on the user 
             <b-button href="#" variant="primary">Go somewhere</b-button> -->
             </b-card>  
         </b-col> 
-        <b-modal :id=String(artefactId) :title=artefactName centered size="xl" scrollable>
+        <b-modal 
+            :id=String(artefact.artefactId) 
+            :title=artefact.artefactName 
+            centered 
+            size="xl" 
+            scrollable
+            hide-footer>
             <b-container fluid>
                 <b-row>
                     <b-col>
                         <b-img fluid-grow src="https://picsum.photos/600/300/?image=25" alt="Image"></b-img>
                     </b-col>
                     <b-col>
-                        <!-- <b-container fluid> -->
-                            <b-row align-self="stretch">{{ description }}</b-row>
-                            <b-row align-v="end">{{ (canLoan && !currentlyOnLoan)? 'Available for loan' : 'Not available for loan' }}</b-row>
-                            <b-row align-v="end">
-                                <b-list-group horizontal flex-fill>
-                                    <b-list-group-item>Insurance fee: {{ insuranceFee }}</b-list-group-item>
-                                    <b-list-group-item>Loan fee: {{ loanFee }}</b-list-group-item>
-                                </b-list-group>
-                            </b-row>
-                            <b-row align-v="end">Room: {{ getRoomName() }}</b-row>
-                        <!-- </b-container> -->
+                            <b-row align-self="stretch">Description: {{ artefact.description }}</b-row>
+                            <b-row align-v="end">In {{ room.roomName }}</b-row>
+                            <b-row align-v="end">{{ (artefact.canLoan && !artefact.currentlyOnLoan)? 'Available for loan' : 'Not available for loan' }}</b-row>
+                            <b-row align-v="end" v-if="(artefact.canLoan && !artefact.currentlyOnLoan)">Insurance fee: {{ artefact.insuranceFee }}</b-row>
+                            <b-row align-v="end" v-if="(artefact.canLoan && !artefact.currentlyOnLoan)">Loan fee: {{ artefact.loanFee }}</b-row>
                     </b-col>
-                        <!-- <b-list-group flush>
-                            <b-list-group-item>{{ (canLoan && !currentlyOnLoan)? 'Available for loan' : 'Not available for loan' }}</b-list-group-item>
-                            <b-list-group-item>{{ roomId }}</b-list-group-item>
-                        </b-list-group> -->
-                        <!-- Eventually add buttons depending on the user 
-                        <b-button href="#" variant="primary">Go somewhere</b-button> -->
+                    <div class="modal-header">
+                    <div class="ml-auto">
+                        <b-button v-if="(artefact.canLoan && !artefact.currentlyOnLoan)">Loan</b-button>
+                        <b-button>Edit</b-button>
+                    </div>
+                </div>
                 </b-row>
             </b-container>
         </b-modal>  
@@ -71,40 +71,32 @@ var AXIOS = axios.create({
 export default {
     data() {
         return {
-            errorMessage: ''
+            errorMessage: '',
+            room: '',
         }
     },
     props: {
-        artefactId: Number,
-        artefactName: String,
-        description: String,
-        canLoan: Boolean,
-        insuranceFee: Number,
-        loanFee: Number,
-        currentlyOnLoan: Boolean,
-        roomId: Number,
+        artefact : Object
     },
-    methods: {
-        getRoomName() {
-            AXIOS.get(`/room/${this.roomId}`, {}, {})
-            .then(response => {
-            const room = response.data
-            console.log(room)
-            console.log(room.roomName.concat(" - " , String(room.artefactCount)))
-            return room.roomName + ' - ' + String(room.artefactCount)
-            })
-            .catch(error => {
-                // logic on the error status. Display backend error message if status is below 450
-                // otherwise display something went wrong
-                if (error.response.status >= 450) {
-                    this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
-                } else {
-                    this.errorMessage = error.response.data;
-                }
-                // call the error handler component modal (named errorPopUp) to display the error message
-                this.$bvModal.show('errorPopUp');
-            })
-        }
-    } 
+    created: function() {
+        const self = this
+        AXIOS.get(`/room/${self.artefact.roomId}`, {}, {})
+        .then(response => {
+        const room = response.data
+        console.log(room)
+        self.room = room
+        })
+        .catch(error => {
+            // logic on the error status. Display backend error message if status is below 450
+            // otherwise display something went wrong
+            if (error.response.status >= 450) {
+                self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+            } else {
+                self.errorMessage = error.response.data;
+            }
+            // call the error handler component modal (named errorPopUp) to display the error message
+            self.$bvModal.show('errorPopUp');
+        })
+    }
 }
 </script>

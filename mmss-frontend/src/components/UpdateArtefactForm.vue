@@ -5,8 +5,9 @@
     Show numbers of chars left 
     Size of page (pup up)
     Remove form data result
+    What to do with on reset
  -->
-<template>
+ <template>
     <div id="CreateArtefactForm">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
        
@@ -19,7 +20,6 @@
                 v-model="request.artefactName" 
                 type="text" 
                 :state="request.artefactName.length <= 50"
-                placeholder="Enter artefact's name (maximum 50 characters)" 
                 required>
             </b-form-input>
         </b-form-group>
@@ -32,7 +32,6 @@
                 id="textarea-1"
                 v-model="request.description"
                 :state="request.description.length <= 300"
-                placeholder="Enter artefact's description (maximum 300 characters)"
                 rows="3"
                 required>
             </b-form-textarea>
@@ -61,7 +60,6 @@
                 id="input-2"
                 v-model="request.insuranceFee"
                 type="number"
-                placeholder="Enter artefact's insurance fee"
                 required
             ></b-form-input>
         </b-form-group> 
@@ -74,7 +72,6 @@
                 id="input-3"
                 v-model="request.loanFee"
                 type="number"
-                placeholder="Enter artefact's loan fee"
                 required
             ></b-form-input>
         </b-form-group> 
@@ -138,7 +135,10 @@ export default {
             errorMessage: '',
             show: true
         }
-      },
+    },
+    props: {
+        artefactId : Number,
+    },
     created: function () {
         const self = this
         AXIOS.get('/room', {}, {})
@@ -161,21 +161,39 @@ export default {
             }
             // call the error handler component modal (named errorPopUp) to display the error message
             self.$bvModal.show('errorPopUp');
+        })        
+        AXIOS.get(`/artefact/${self.artefactId}`, {}, {})
+        .then(response => {
+        //Assign the roomId to the room names
+        const artefact = response.data
+        console.log(artefact)
+        self.request.artefactName = artefact.artefactName
+        self.request.description = artefact.description
+        self.request.canLoan = artefact.canLoan
+        self.request.insuranceFee = artefact.insuranceFee
+        self.request.loanFee = artefact.loanFee
+        self.request.roomId = artefact.roomId
+        })
+        .catch((error) => {
+            // logic on the error status. Display backend error message if status is below 450
+            // otherwise display something went wrong
+            if (error.response.status >= 450) {
+                self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+            } else {
+                self.errorMessage = error.response.data;
+            }
+            // call the error handler component modal (named errorPopUp) to display the error message
+            self.$bvModal.show('errorPopUp');
         })
     },
     methods: {
         onSubmit(event) {
             event.preventDefault()
             const self = this
-            AXIOS.post('/artefact', self.request, {})
+            AXIOS.put('/artefact', self.request, {})
             .then((response) => {
                 // Show response
                 alert(JSON.stringify(response))
-                // Empty the form
-                self.resetVariables()
-                //onReset
-                    // send to some page eventually
-                    //this.$router.push('/');
             })
             .catch((error) => {
                 if (error.response.status >= 450) {
