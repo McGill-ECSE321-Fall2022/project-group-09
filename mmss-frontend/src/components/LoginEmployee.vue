@@ -1,5 +1,6 @@
 <template>
     <div id="LoginEmployee">
+        <br>
         <h1>
             Welcome to Marwan's Museum!
         </h1>
@@ -9,29 +10,36 @@
 
         <table class="center" width="30%">
             <tr>
+
                 <td>
-                    Username:
-                </td>
-                <td>
-                    <b-input type="email" :state="usernameState" v-model="employeeUsername" @keydown.space.prevent placeholder="Username"></b-input>
+                    <div align="left"><i>Username:</i></div>
+                    <b-input type="email" :state="usernameState" v-model="employeeUsername" @keydown.space.prevent
+                        placeholder=""></b-input>
+                    <span v-if="usernameError" style="color: red;">{{ usernameError }}</span>
+                    <span v-else> <br> </span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    Password:
-                </td>
-                <td>
-                    <b-input type="password" :state="passwordState" v-model="employeePassword" placeholder="Password"></b-input>
+                    <div align="left"><i>Password:</i></div>
+                    <b-input type="password" :state="passwordState" v-model="employeePassword"
+                        placeholder="" @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
                 </td>
             </tr>
-        </table>
-        <table class="center">
             <tr>
                 <td>
                     <br>
                     <!-- Button is disabled untill there is non whitespace text. Clicking triggers login-->
-                    <b-button variant="success" v-bind:disabled="!employeeUsername.trim() || !employeePassword.trim()"
+                    <b-button block variant="success"
+                        v-bind:disabled="(!employeeUsername.trim() || !employeePassword.trim() || !usernameState)"
                         @click="doLoginEmployee(employeeUsername, employeePassword)">Login</b-button>
+                    <hr>
+                    <b-button block variant="primary" @click="$router.push({ name: 'Hello' })">Create an
+                        Account</b-button>
+                    <hr>
+                    <b-button block @click="$router.push({ name: 'LoginManager' })">Login as the manager</b-button>
+                    <hr>
+                    <b-button block @click="$router.push({ name: 'LoginVisitor' })">Login as a visitor</b-button>
                 </td>
             </tr>
 
@@ -65,7 +73,8 @@ export default {
         return {
             employeeUsername: '',
             employeePassword: '',
-            errorMessage: ''
+            errorMessage: '',
+            usernameError: ''
         }
     },
     created: function () {
@@ -122,12 +131,25 @@ export default {
     // functions that display input state ( simple checks )
     computed: {
         usernameState() {
-            return this.employeeUsername.includes("@");
+            this.usernameError = '';
+            if (this.employeeUsername.trim() === '') {
+                this.usernameError = 'Please enter your email address';
+                return false;
+            }
+            if (this.employeeUsername.includes("@")) {
+                return true;
+            } else if (this.employeeUsername.length > 0) {
+                this.usernameError = "Please enter a valid email address";
+                return false;
+            } else {
+                this.usernameError = "";
+                return true;
+            };
         },
         passwordState() {
             const hasNumber = /\d/;
             const upper = /[A-Z]/;
-         
+
             return hasNumber.test(this.employeePassword) && upper.test(this.employeePassword) && this.employeePassword.length >= 8;
         }
     }

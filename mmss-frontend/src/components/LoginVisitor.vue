@@ -1,5 +1,6 @@
 <template>
     <div id="LoginVisitor">
+        <br>
         <h1>
             Welcome to Marwan's Museum!
         </h1>
@@ -9,39 +10,38 @@
 
         <table class="center" width="30%">
             <tr>
+
                 <td>
-                    Username:
-                </td>
-                <td>
+                    <div align="left"><i>Username:</i></div>
                     <b-input id="usernameInput" type="email" v-model="visitorUsername" :state="usernameState"
-                        @keydown.space.prevent placeholder="Username"></b-input>
+                        @keydown.space.prevent placeholder=""></b-input>
+                    <span v-if="usernameError" style="color: red;">{{ usernameError }}</span>
+                    <span v-else >  <br> </span>
                 </td>
             </tr>
             <tr>
+
                 <td>
-                    Password:
-                </td>
-                <td>
-                   
-                    <b-input id="emailInput" type="password" v-model="visitorPassword" :state="passwordState"
-                        placeholder="Password"></b-input>
+                    <div align="left"><i>Password:</i></div>
+                    <b-input id="emailInput" type="password" v-model="visitorPassword" 
+                        placeholder="" @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
                 </td>
             </tr>
-        </table>
-        <table class="center">
+
             <tr>
                 <td>
                     <br>
                     <!-- Button is disabled untill there is non whitespace text. Clicking triggers login-->
-                    <b-button variant="success" v-bind:disabled="!visitorUsername.trim() || !visitorPassword.trim()"
+                    <b-button block variant="success"
+                        v-bind:disabled="((!visitorUsername.trim() || !visitorPassword.trim()) || !usernameState)"
                         @click="doLoginVisitor(visitorUsername, visitorPassword)">Login</b-button>
 
                     <hr>
-                    <b-button variant="primary" @click="$router.push({name: 'Hello'})">Create an Account</b-button>
-                <hr>
-                <b-button @click="$router.push({name: 'LoginManager'})">Login as the manager</b-button>
-                <hr>
-                <b-button @click="$router.push({name: 'LoginEmployee'})">Login as an employee</b-button>
+                    <b-button block variant="primary" @click="$router.push({ name: 'Hello' })">Create an Account</b-button>
+                    <hr>
+                    <b-button block @click="$router.push({ name: 'LoginManager' })">Login as the manager</b-button>
+                    <hr>
+                    <b-button block @click="$router.push({ name: 'LoginEmployee' })">Login as an employee</b-button>
                 </td>
             </tr>
 
@@ -80,7 +80,10 @@ export default {
             visitorUsername: '',
             visitorPassword: '',
             // the error message to be displayed by the Error Handler component
-            errorMessage: ''
+            errorMessage: '',
+            // errors in input
+            usernameError: '',
+
 
         }
     },
@@ -144,7 +147,20 @@ export default {
     },
     computed: {
         usernameState() {
-            return this.visitorUsername.includes("@");
+            this.usernameError = '';
+            if (this.visitorUsername.trim() === '') {
+                this.usernameError = 'Please enter your email address';
+                return false;
+            }
+            if (this.visitorUsername.includes("@")) {
+                return true;
+            } else if (this.visitorUsername.length > 0) {
+                this.usernameError = "Please enter a valid email address";
+                return false;
+            } else {
+                this.usernameError = "";
+                return true;
+            };
         },
         passwordState() {
             const hasNumber = /\d/;

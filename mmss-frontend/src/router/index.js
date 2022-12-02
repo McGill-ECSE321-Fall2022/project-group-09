@@ -4,6 +4,7 @@ import Hello from '@/components/Hello'
 import LoginVisitor from '@/components/LoginVisitor'
 import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
+import ManageLoan from '@/components/ManageLoan'
 
 Vue.use(Router);
 
@@ -72,6 +73,11 @@ export default new Router({
       path: '/login/employee',
       name: 'LoginEmployee',
       component: LoginEmployee
+    },
+    {
+      path: '/loans/manage', 
+      name: 'ManageLoan',
+      component: ManageLoan
     },
     {
       path: "*",
