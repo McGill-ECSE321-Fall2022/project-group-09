@@ -152,13 +152,15 @@ export default {
         showApprovedLoans() {
             this.showLoans("Approved");
         },
-        doUpdateLoan(selectedLoans, status) {
+        async doUpdateLoan(selectedLoans, status) {
             for (var i = 0; i < selectedLoans.length; i++) {
                 this.request.exchangeId = selectedLoans[i].exchangeId;
                 this.request.exchangeStatus = status;
                 AXIOS.put('/loan/', this.request, {})
                     .then(response => {
-                        // do nothing
+                        //refresh the table on the last request
+                        
+                        this.refreshTable();
                     })
                     .catch(error => {
                         if (error.response.status >= 450) {
@@ -173,15 +175,15 @@ export default {
             }
 
         },
-        doApproveLoan() {
-            this.doUpdateLoan(this.selectedLoans, "Approved");
+        async doApproveLoan() {
+            await this.doUpdateLoan(this.selectedLoans, "Approved");
             this.clearSelected();
-            setTimeout(this.refreshTable, 10);
+            this.refreshTable();
         },
-        doDeclineLoan() {
-            this.doUpdateLoan(this.selectedLoans, "Declined");
+        async doDeclineLoan() {
+           await this.doUpdateLoan(this.selectedLoans, "Declined");
             this.clearSelected();
-            setTimeout(this.refreshTable, 10);
+            this.refreshTable();
         }
     },
 }

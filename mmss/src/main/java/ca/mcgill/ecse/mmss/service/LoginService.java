@@ -78,7 +78,7 @@ public class LoginService {
     public Visitor loginVisitor ( String username, String password ) {
         Visitor visitor = visitorRepository.findVisitorByUsername(username);
         if (visitor == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Incorrect username entered. Please try again!");
+            throw new MmssException(HttpStatus.NOT_FOUND, "We do not seem to have this username in our system. Please try again!");
         }
         if (!visitor.getPassword().equals(password)) {
             throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again!");
@@ -99,7 +99,7 @@ public class LoginService {
     public Employee loginEmployee ( String username, String password ) {
         Employee employee = employeeRepository.findEmployeeByUsername(username);
         if (employee == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Incorrect username entered. Please try again!");
+            throw new MmssException(HttpStatus.NOT_FOUND, "The username entered is incorrect. Please try again!");
         }
         if (!employee.getPassword().equals(password)) {
             throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again.");
@@ -119,7 +119,7 @@ public class LoginService {
     public Manager loginManager ( String username, String password ) {
         Manager manager = managerRepository.findManagerByUsername(username);
         if (manager == null) {
-            throw new MmssException(HttpStatus.NOT_FOUND, "Incorrect username entered. Please try again!");
+            throw new MmssException(HttpStatus.NOT_FOUND, "You seem to have mistyped your username. Please try again!");
         }
         if (!manager.getPassword().equals(password)) {
             throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again.");

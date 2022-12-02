@@ -274,7 +274,9 @@ public class LoanService {
             throw new MmssException(HttpStatus.NOT_FOUND, "The loan with this Id was not found");
 
         // set the artefact to currently not on loan
-        loan.getArtefact().setCurrentlyOnLoan(false);
+        Artefact artefact = loan.getArtefact();
+        artefact.setCurrentlyOnLoan(false);
+        artefactRepository.save(artefact);
 
         // calls the repository to delete the loan
         loanRepository.deleteById(loan.getExchangeId());
@@ -306,6 +308,12 @@ public class LoanService {
             } else if (status == ExchangeStatus.Declined) {
 
                 loan.setExchangeStatus(ExchangeStatus.Declined);
+                
+                // make artefact available again
+                Artefact artefact = loan.getArtefact();
+                artefact.setCurrentlyOnLoan(false);
+                artefactRepository.save(artefact);
+
                 deleteLoan(loan.getExchangeId());
 
                 // create a notification with this message, attached to this visitor
