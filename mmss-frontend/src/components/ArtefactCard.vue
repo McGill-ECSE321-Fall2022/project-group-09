@@ -43,20 +43,29 @@
                     <div class="modal-header">
                     <div class="ml-auto">
                         <b-button v-if="(artefact.canLoan && !artefact.currentlyOnLoan)">Loan</b-button>
-                        <b-button>Edit</b-button>
+                        <b-button @click="$bvModal.show('UpdateArtefactForm')">Edit</b-button>
                     </div>
                 </div>
                 </b-row>
             </b-container>
         </b-modal>  
-        <!-- <ErrorHandler :message="errorMessage" />        -->
+        <b-modal 
+            id='UpdateArtefactForm'
+            title="Update an Artefact"
+            centered 
+            size="xl" 
+            scrollable
+            hide-footer>
+            <update-form :artefactId="artefact.artefactId"/>
+        </b-modal>  
+        <ErrorHandler :message="errorMessage" />       
     </div>    
 </template>
 
 
 <script>
 import axios from 'axios'
-// Import the component that displays the error message
+import UpdateArtefactForm from './UpdateArtefactForm.vue'
 import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
 var config = require('../../config')
 
@@ -74,6 +83,10 @@ export default {
             errorMessage: '',
             room: '',
         }
+    },
+    components: {
+        ErrorHandler,
+        "update-form": UpdateArtefactForm,
     },
     props: {
         artefact : Object

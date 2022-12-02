@@ -28,7 +28,7 @@
         </b-navbar>
         <b-container>
             <b-row align-v="center">
-                <custom-card v-for="artefact in artefacts" :key="artefact.artefactId" :artefact="artefact" :name="artefact.artefactName"/>
+                <custom-card v-for="artefact in artefacts" :key="artefact.artefactId" :artefact="artefact"/>
             </b-row>
         </b-container>   
         <b-modal 
@@ -46,9 +46,9 @@
 
 <script>
 import Card from '@/components/ArtefactCard'
-import ErrorHandler from './ErrorPopUp.vue';
+import ErrorHandler from './ErrorPopUp.vue'
 import axios from 'axios'
-import CreateArtefactForm from './CreateArtefactForm.vue';
+import CreateArtefactForm from './CreateArtefactForm.vue'
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port

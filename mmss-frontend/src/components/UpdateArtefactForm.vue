@@ -75,18 +75,6 @@
                 required
             ></b-form-input>
         </b-form-group> 
-    
-        <b-form-group 
-            id="input-group-6" 
-            label="Room:" 
-            label-for="input-4">
-            <b-form-select
-                id="input-4"
-                v-model="request.roomId"
-                :options="roomOptions"
-                required
-            ></b-form-select>
-        </b-form-group>
   
         <b-button type="submit" variant="primary">Create</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
@@ -126,7 +114,7 @@ export default {
                 canLoan: false,
                 insuranceFee: '0.00',
                 loanFee: '0.00',
-                roomId: ''
+                roomId: '',
             },
             availabilities: [
                 { value: 'true', text: 'Available for loan' },
@@ -140,28 +128,7 @@ export default {
         artefactId : Number,
     },
     created: function () {
-        const self = this
-        AXIOS.get('/room', {}, {})
-        .then(response => {
-        //Assign the roomId to the room names
-        const rooms = response.data
-        for (let i = 0; i < rooms.length; i++) {
-            const room = rooms[i]
-            this.roomOptions.push({ value: room.roomId, text: room.roomName + ' - ' + room.artefactCount})
-        }
-        console.log(rooms)
-        })
-        .catch((error) => {
-            // logic on the error status. Display backend error message if status is below 450
-            // otherwise display something went wrong
-            if (error.response.status >= 450) {
-                self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
-            } else {
-                self.errorMessage = error.response.data;
-            }
-            // call the error handler component modal (named errorPopUp) to display the error message
-            self.$bvModal.show('errorPopUp');
-        })        
+        const self = this       
         AXIOS.get(`/artefact/${self.artefactId}`, {}, {})
         .then(response => {
         //Assign the roomId to the room names
@@ -217,13 +184,30 @@ export default {
           })
         },
         resetVariables() {
-            const self = this
-            self.request.artefactName = ''
-            self.request.description = ''
-            self.request.canLoan = false
-            self.request.insuranceFee = '0.00'
-            self.request.loanFee = '0.00'
-            self.request.roomId = ''
+            const self = this       
+            AXIOS.get(`/artefact/${self.artefactId}`, {}, {})
+            .then(response => {
+            //Assign the roomId to the room names
+            const artefact = response.data
+            console.log(artefact)
+            self.request.artefactName = artefact.artefactName
+            self.request.description = artefact.description
+            self.request.canLoan = artefact.canLoan
+            self.request.insuranceFee = artefact.insuranceFee
+            self.request.loanFee = artefact.loanFee
+            self.request.roomId = artefact.roomId
+            })
+            .catch((error) => {
+                // logic on the error status. Display backend error message if status is below 450
+                // otherwise display something went wrong
+                if (error.response.status >= 450) {
+                    self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                } else {
+                    self.errorMessage = error.response.data;
+                }
+                // call the error handler component modal (named errorPopUp) to display the error message
+                self.$bvModal.show('errorPopUp');
+            })
         }
       }
     }
