@@ -8,6 +8,7 @@ import CreateArtefactForm from '@/components/CreateArtefactForm'
 import RoomsTable from '@/components/RoomsTable'
 import NavBarArtefact from '@/components/NavBarArtefact'
 import ArtefactsView from '@/components/ArtefactsView'
+import ArtefactForm from '@/components/ArtefactForm'
 
 Vue.use(Router);
 
@@ -90,7 +91,7 @@ export default new Router({
       path: '/artefact/createForm',
       name: 'CreateArtefactForm',
       component: CreateArtefactForm,
-      beforeEnter: requireStaff
+      //beforeEnter: requireStaff
     },
     {
       path: '/room',
@@ -106,6 +107,11 @@ export default new Router({
       path: '/artefactsView',
       name: 'ArtefactsView',
       component: ArtefactsView
+    },
+    {
+      path: '/artefactForm',
+      name: 'ArtefactsForm',
+      component: ArtefactForm
     },
     {
       path: "*",
