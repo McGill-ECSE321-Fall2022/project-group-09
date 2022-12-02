@@ -15,9 +15,10 @@
                         <b-dropdown-item @click="showApprovedLoans()">Approved</b-dropdown-item>
                         <b-dropdown-item @click="showPendingLoans()">Pending</b-dropdown-item>
                     </b-nav-item-dropdown> <b-nav-form>
-                        <b-form-input class="mr-sm-2" placeholder="Enter Username" v-model="username"></b-form-input>
+                        <b-form-input class="mr-sm-2" placeholder="Enter Username" v-model="username"
+                        @keyup.enter="doGetVisitor(username)"></b-form-input>
                         <b-button v-bind:disabled="(!username.trim())" variant="success" class="my-2 my-sm-0"
-                            @click="doGetVisitor(username)">Search</b-button>
+                            @click="doGetVisitor(username)" >Search</b-button>
                     </b-nav-form>
                 </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
@@ -79,13 +80,14 @@ export default {
         }
     },
     created: function () {
+        const self = this
         AXIOS.get('/loan', {}, {})
             .then(response => {
                 // add response to all loans
-                this.loans = response.data
+                self.loans = response.data
             })
             .catch(error => {
-                this.errorMessage = error.response.data
+                self.errorMessage = error.response.data
             });
 
 
@@ -187,10 +189,6 @@ export default {
         }
     },
 }
-
-
-
-
 
 
 

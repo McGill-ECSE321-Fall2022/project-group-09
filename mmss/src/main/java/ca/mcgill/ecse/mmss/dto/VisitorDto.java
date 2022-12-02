@@ -3,11 +3,11 @@ package ca.mcgill.ecse.mmss.dto;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
 public class VisitorDto {
+	private String userName;
+	private String firstName;
+	private String lastName;
 	private double balance;
-	private String username;
-	private String password;
-	private int personId;
-	private int communicationId;
+
 
 	/**
 	 * Null constructor
@@ -23,10 +23,9 @@ public class VisitorDto {
 	 */
 	public VisitorDto(Visitor visitor) {
 		this.balance = visitor.getBalance();
-		this.username = visitor.getUsername();
-		this.password = visitor.getPassword();
-		this.personId = visitor.getPerson().getPersonId();
-		this.communicationId = visitor.getCommunication().getCommunicationId();
+		this.userName = visitor.getUsername();
+		this.firstName = visitor.getPerson().getFirstName();
+		this.lastName = visitor.getPerson().getLastName();
 	}
 
 	/**
@@ -39,46 +38,37 @@ public class VisitorDto {
 	 * @param person
 	 * @param communicationId
 	 */
-	public VisitorDto(int balance, String username, int personId, int communicationId) {
+	public VisitorDto(int balance, String username, String firstName, String lastName) {
 		this.balance = balance;
-		this.username = username;
-		this.personId = personId;
-		this.communicationId = communicationId;
+		this.userName = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	public double getBalance() {
 		return balance;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
 	}
 	
-	public String getPassword() {
-		return password;
-	}
-
-	public int getPersonId() {
-		return personId;
-	}
-
-	public void setPersonId(int personId) {
-		this.personId = personId;
-	}
-
-	public int getCommunicationId() {
-		return communicationId;
-	}
-
-	public void setCommunicationId(int communicationId) {
-		this.communicationId = communicationId;
-	}
 
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String username) {
+		this.userName = username;
 	}
+
+
 }

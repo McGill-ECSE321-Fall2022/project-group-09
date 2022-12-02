@@ -5,6 +5,7 @@ import LoginVisitor from '@/components/LoginVisitor'
 import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
 import ManageLoan from '@/components/ManageLoan'
+import ManageAccount from '@/components/ManageAccount'
 
 Vue.use(Router);
 
@@ -79,6 +80,11 @@ export default new Router({
       name: 'ManageLoan',
       component: ManageLoan
     },
+    {
+      path: '/accounts/manage',
+      name: 'ManageAccount',
+      component: ManageAccount
+    }, 
     {
       path: "*",
       redirect: "/404"

@@ -159,7 +159,7 @@ public class EmployeeIntegrationTests {
         assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertTrue(response.getBody().getUsername() != null, "Response has a valid username");
+        assertTrue(response.getBody().getUserName() != null, "Response has a valid username");
 
     }
 

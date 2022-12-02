@@ -3,18 +3,19 @@ package ca.mcgill.ecse.mmss.dto;
 import ca.mcgill.ecse.mmss.model.Employee;
 
 public class EmployeeDto {
-	private String phoneNumber;
 	private String userName;
-	private String password;
-	private int personId;
-	private int communicationId;
+	private String phoneNumber;
+	private String firstName;
+	private String lastName;
 
 	/**
 	 * Null constructor
+	 * 
 	 * @author Shyam Desai
 	 */
-	public EmployeeDto() {}
-	
+	public EmployeeDto() {
+	}
+
 	/**
 	 * Constructor that takes in an employee as the argument
 	 * 
@@ -24,9 +25,8 @@ public class EmployeeDto {
 	public EmployeeDto(Employee employee) {
 		this.phoneNumber = employee.getPhoneNumber();
 		this.userName = employee.getUsername();
-		this.password = employee.getPassword();
-		this.personId = employee.getPerson().getPersonId();
-		this.communicationId = employee.getCommunication().getCommunicationId();
+		this.firstName = employee.getPerson().getFirstName();
+		this.lastName = employee.getPerson().getLastName();
 	}
 
 	/**
@@ -39,11 +39,11 @@ public class EmployeeDto {
 	 * @param person
 	 * @param communication
 	 */
-	public EmployeeDto(String phoneNumber, String userName, int personId, int communicationId) {
+	public EmployeeDto(String phoneNumber, String userName, String firstName, String lastName) {
 		this.phoneNumber = phoneNumber;
 		this.userName = userName;
-		this.personId = personId;
-		this.communicationId = communicationId;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	public String getPhoneNumber() {
@@ -53,25 +53,13 @@ public class EmployeeDto {
 	public String getUserName() {
 		return userName;
 	}
-	
-	public String getPassword() {
-		return password;
+
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public int getPersonId() {
-		return personId;
-	}
-
-	public int getCommunicationId() {
-		return communicationId;
-	}
-
-	public void setPersonId(int personId) {
-		this.personId = personId;
-	}
-
-	public void setCommunicationId(int communicationId) {
-		this.communicationId = communicationId;
+	public String getLastName() {
+		return lastName;
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
