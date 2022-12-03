@@ -5,6 +5,7 @@ import LoginVisitor from '@/components/LoginVisitor'
 import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
 import ManageLoan from '@/components/ManageLoan'
+import ManageShift from '@/components/ManageShift'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/loans/manage', 
       name: 'ManageLoan',
       component: ManageLoan
+    },
+    {
+      path: '/shifts/manage', 
+      name: 'ManageShift',
+      component: ManageShift
     },
     {
       path: "*",
