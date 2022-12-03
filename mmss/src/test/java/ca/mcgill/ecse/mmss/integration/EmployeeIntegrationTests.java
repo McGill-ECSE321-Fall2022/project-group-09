@@ -203,7 +203,7 @@ public class EmployeeIntegrationTests {
         assertNotNull(response); 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody()); 
-        assertEquals(response.getBody().getPassword(), "Ilovejava23"); 
+        assertEquals(response.getBody().getPhoneNumber(), "514-987-5786"); 
 
         // get the updated employee from the database
         Employee updatedEmployee = employeeRepository.findEmployeeByUsername(employee.getUsername());

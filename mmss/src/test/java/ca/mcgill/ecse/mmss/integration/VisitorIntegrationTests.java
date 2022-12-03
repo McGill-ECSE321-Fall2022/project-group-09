@@ -193,7 +193,6 @@ public class VisitorIntegrationTests {
         assertNotNull(response); 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody()); 
-        assertEquals(response.getBody().getPassword(), "Ilovejava23"); 
 
         // get the updated visitor from the database
         Visitor updatedVisitor = visitorRepository.findVisitorByUsername(visitor.getUsername());

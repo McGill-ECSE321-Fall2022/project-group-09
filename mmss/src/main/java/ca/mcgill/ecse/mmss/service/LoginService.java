@@ -46,7 +46,7 @@ public class LoginService {
         else if (manager != null)
             return manager;
         else
-            throw new MmssException(HttpStatus.NOT_FOUND, "Account with this username not found");
+            return null; 
     }
     
     /**
