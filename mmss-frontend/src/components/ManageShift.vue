@@ -18,9 +18,9 @@
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
-                    <b-button class="my-2 my-sm-0" @click="refreshTable()"> Refresh Table</b-button>
+                    <b-button class="my-2 my-sm-0" @click="refreshTable()"> Refresh</b-button>
                     <br>
-                    <b-button variant="primary" class="my-2 my-sm-0" @click="clearSelected()"> Clear Selected</b-button>
+                    <b-button variant="primary" class="my-2 my-sm-0" @click="clearSelected()"> Clear Selection</b-button>
                 </b-navbar-nav>
             </b-navbar>
         </div>

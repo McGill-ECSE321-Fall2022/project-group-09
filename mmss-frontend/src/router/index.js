@@ -6,6 +6,7 @@ import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
 import ManageLoan from '@/components/ManageLoan'
 import ManageShift from '@/components/ManageShift'
+import ManageNotification from '@/components/ManageNotification'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
       path: '/shifts/manage', 
       name: 'ManageShift',
       component: ManageShift
+    },
+    {
+      path: '/notification/manage', 
+      name: 'ManageNotification',
+      component: ManageNotification
     },
     {
       path: "*",
