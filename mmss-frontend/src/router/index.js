@@ -38,7 +38,7 @@ export default new Router({
       component: ManageLoan
     },
     {
-      path: '/shifts/manage', 
+      path: '/shift/manage', 
       name: 'ManageShift',
       component: ManageShift
     },

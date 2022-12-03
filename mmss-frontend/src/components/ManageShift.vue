@@ -69,8 +69,8 @@ export default {
             selectMode: 'multi',
             selectedEmployees: [],
             request: {
-                username,
-                shiftTime
+                username: '',
+                shiftTime: ''
             }
 
         }

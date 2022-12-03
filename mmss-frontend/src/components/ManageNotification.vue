@@ -1,5 +1,5 @@
 <template>
-    <div id="ManageShift">
+    <div id="ManageNotification">
         <br>
         <h1>
             Notifications
@@ -14,7 +14,7 @@
                 </b-navbar-nav>
             </b-navbar>
         </div>
-        <b-table ref="NotificationTable" striped hover sticky-header="200px" :items="employees" selectable :select-mode="selectMode"
+        <b-table ref="NotificationTable" striped hover sticky-header="200px" :items="notifications" selectable :select-mode="selectMode"
             @row-selected="onRowSelected"></b-table>
 
         <b-button variant="outline-danger" @click="doDeleteNotification(selectedNotifications)">Delete</b-button>
@@ -58,9 +58,9 @@ export default {
             selectedNotifications: [],
             username: '',
             request: {
-                notificationId,
-                message,
-                date
+                notificationId: '',
+                message: '',
+                date: ''
             }
 
         }
@@ -75,20 +75,20 @@ export default {
 
         if (loggedInVisitor) {
             // get visitor username
-            this.username = loggedInVisitor.username;
+            this.username = JSON.parse(loggedInEmployee).userName;
         }
         else if (loggedInEmployee) {
             // get employee username
-            this.username = loggedInEmployee.username;
+            this.username = JSON.parse(loggedInEmployee).userName;
         }
         else if (loggedInManager) {
             // get manager username
-            this.username = loggedInManager.username;
+            this.username = JSON.parse(loggedInManager).userName;
         }
 
         AXIOS.get('/notification/username/?username=' + this.username, {}, {})
             .then(response => {
-                // add response to all employees
+                // add response to all notifications
                 this.notifications = response.data
             })
             .catch(error => {
@@ -97,7 +97,7 @@ export default {
     },
     methods: {
         onRowSelected(selectedRows) {
-            this.selectedNotifications = selectedNotifications;
+            this.selectedNotifications = selectedRows;
         },
         clearSelected() {
             this.selectedNotifications = [];
@@ -135,9 +135,7 @@ export default {
                         // call the error handler component modal (named errorPopUp) to display the error message
                         this.$bvModal.show('errorPopUp');
                     });
-
-            }
-
+                }
         }
     },
 }
