@@ -4,6 +4,9 @@ import Hello from '@/components/Hello'
 import LoginVisitor from '@/components/LoginVisitor'
 import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
+import BookTicket from '@/components/BookTicket'
+import BookTour from '@/components/BookTour'
+import ManageBooking from '@/components/ManageBooking'
 
 Vue.use(Router);
 
@@ -72,6 +75,21 @@ export default new Router({
       path: '/login/employee',
       name: 'LoginEmployee',
       component: LoginEmployee
+    },
+    {
+      path: '/bookings/ticket',
+      name: 'BookTicket',
+      component: BookTicket
+    },
+    {
+      path: '/bookings/tour',
+      name: 'BookTour',
+      component: BookTour
+    },
+    {
+      path: '/bookings/manage',
+      name: 'ManageBooking',
+      component: ManageBooking
     },
     {
       path: "*",
