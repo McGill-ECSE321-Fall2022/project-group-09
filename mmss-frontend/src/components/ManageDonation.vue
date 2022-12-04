@@ -26,16 +26,46 @@
         <b-table ref="DonationTable" striped hover sticky-header="200px" :items="donations" selectable :select-mode="selectMode"
             @row-selected="onRowSelected"></b-table>
 
-        <b-form-checkbox id="checkbox-1" v-model="status" name="checkbox-1" value="True" unchecked-value="False">
+        <b-form-checkbox id="checkbox-1" v-model="request.canLoan" name="checkbox-1" value='true'>
         Can Loan?
         </b-form-checkbox>
 
-        <div>State: <strong>{{ status }}</strong></div>
+        <div>State: <strong>{{ request.canLoan }}</strong></div>
+
+        <b-form-group 
+            id="input-group-4" 
+            label="Insurance Fee:" 
+            label-for="input-2">
+            <b-form-input
+                id="input-2"
+                v-model="request.insuranceFee"
+                type="number"
+                placeholder="Enter artefact's insurance fee"
+                required
+            ></b-form-input>
+        </b-form-group> 
+
+        <b-form-group 
+            id="input-group-5" 
+            label="Loan Fee:" 
+            label-for="input-3">
+            <b-form-input
+                id="input-3"
+                v-model="request.loanFee"
+                type="number"
+                placeholder="Enter artefact's loan fee"
+                required
+            ></b-form-input>
+        </b-form-group>
+
         <b-button variant="success" @click="doApproveDonation(selectedDonations)">Approve</b-button>
         <b-button variant="danger" @click="doDeclineDonation(selectedDonations)">Decline</b-button>
 
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />
+        <b-card class="mt-3" header="Form Data Result">
+        <pre class="m-0">{{ request }}</pre>
+      </b-card>
     </div>
 
 </template>
@@ -69,8 +99,9 @@ export default {
             selectedDonations: [],
             username: '',
             request: {
-                exchangeId: '',
-                exchangeStatus: ''
+                canLoan: false,
+                insuranceFee: '0.00',
+                loanFee: '0.00',
             }
         }
     },
@@ -125,14 +156,12 @@ export default {
                     this.$bvModal.show('errorPopUp');
                 });
         },
-        async doUpdateLoan(selectedLoans, status) {
-            for (var i = 0; i < selectedLoans.length; i++) {
-                this.request.exchangeId = selectedLoans[i].exchangeId;
-                this.request.exchangeStatus = status;
-                AXIOS.put('/donation/', this.request, {})
+        async doApproveDonation() {
+            for (let i = 0; i < this.selectedDonations.length; i++) {
+                let exchangeId = this.selectedDonations[i].exchangeId;
+                AXIOS.put('/donation/' + exchangeId, this.request, {})
                     .then(response => {
                         //refresh the table on the last request
-                        
                         this.refreshTable();
                     })
                     .catch(error => {
@@ -144,17 +173,28 @@ export default {
                         // call the error handler component modal (named errorPopUp) to display the error message
                         this.$bvModal.show('errorPopUp');
                     });
-
             }
-
-        },
-        async doApproveLoan() {
-            await this.doUpdateLoan(this.selectedDonations, "Approved");
             this.clearSelected();
             this.refreshTable();
         },
         async doDeclineLoan() {
-           await this.doUpdateLoan(this.selectedDonations, "Declined");
+            for (let i = 0; i < this.selectedDonations.length; i++) {
+                let exchangeId = this.selectedDonations[i].exchangeId;
+                AXIOS.put('/donation/', exchangeId, {})
+                    .then(response => {
+                        //refresh the table on the last request
+                        this.refreshTable();
+                    })
+                    .catch(error => {
+                        if (error.response.status >= 450) {
+                            this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                        } else {
+                            this.errorMessage = error.response.data;
+                        }
+                        // call the error handler component modal (named errorPopUp) to display the error message
+                        this.$bvModal.show('errorPopUp');
+                    });
+            }
             this.clearSelected();
             this.refreshTable();
         }
