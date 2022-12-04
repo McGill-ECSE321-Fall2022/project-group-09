@@ -97,7 +97,7 @@ public class ScheduleServiceTests {
      */
     @Test
     public void testGetInvalidSchedule() {
-    	ArrayList<Schedule> mockScheduleList = null;
+    	ArrayList<Schedule> mockScheduleList = new ArrayList<>();
         // setup mocks
         when(scheduleRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> mockScheduleList);
         // call service layer and get the exception
@@ -115,7 +115,7 @@ public class ScheduleServiceTests {
     @Test
     public void testCreateSchedule() {
         // setup mocks
-        lenient().when(scheduleRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> null);
+        lenient().when(scheduleRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> new ArrayList());
         lenient().when(scheduleRepository.save(any(Schedule.class))).thenAnswer((InvocationOnMock invocation) -> schedule);
             
         // call service layer

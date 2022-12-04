@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import ca.mcgill.ecse.mmss.dao.ManagerRepository;
-import ca.mcgill.ecse.mmss.dao.RoomRepository;
+import ca.mcgill.ecse.mmss.exception.MmssException;
 import ca.mcgill.ecse.mmss.model.Manager;
 import ca.mcgill.ecse.mmss.model.Room;
+import ca.mcgill.ecse.mmss.model.Schedule;
 import ca.mcgill.ecse.mmss.service.ManagerService;
 import ca.mcgill.ecse.mmss.service.RoomService;
+import ca.mcgill.ecse.mmss.service.ScheduleService;
 
 @SpringBootApplication
 public class MmssApplication {
@@ -25,6 +26,8 @@ public class MmssApplication {
 
 	@Autowired
 	private ManagerService managerService;
+
+	@Autowired ScheduleService scheduleService;
 
 
 	// method to create rooms and manager put it post construct
@@ -37,6 +40,9 @@ public class MmssApplication {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		Manager manager = managerService.getManager(); 
 		ArrayList<Room> rooms = roomService.getAllRooms();
+		
+		try {scheduleService.getSchedule(); } 
+		catch (MmssException e) {scheduleService.createSchedule();}
 	
 		// create manager if he does not exist
 		if (manager == null) {
@@ -47,6 +53,9 @@ public class MmssApplication {
 		if (rooms.size() == 0) {
 			roomService.createRooms();
 		}
+
+
+
 	}
 
 	public static void main(String[] args) {
