@@ -1,6 +1,30 @@
+<!-- Show the rooms' artefact counts -->
 <template>
     <div id="RoomsTable">
-        <b-table striped hover :items="rooms"></b-table>
+        <b-container fluid>
+            <b-row>
+                <b-col><p><b>Small Rooms</b></p></b-col>
+                <b-col><p><b>Large Rooms</b></p></b-col>
+                <b-col><p><b>Display & Storage</b></p></b-col>
+            </b-row>
+            <b-row>
+                <b-col>
+                    <b-table striped hover :items="smallRooms"></b-table>
+                </b-col>
+                <b-col>
+                    <b-table striped hover :items="largeRooms"></b-table>
+                </b-col>
+                <b-col>
+                    <b-table striped hover :items="storageAndDisplay"></b-table>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col><p><b>Total: </b>{{ smallCount }}</p></b-col>
+                <b-col><p><b>Total: </b>{{ largeCount }}</p></b-col>
+                <b-col><p><b>Total: </b>{{ count }}</p></b-col>
+            </b-row>
+        </b-container>
+        
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />
     </div>
@@ -26,26 +50,38 @@ export default {
     },
     data() {
     return {
-        rooms: [],
-        errorMessage:''
+        smallRooms: [],
+        largeRooms: [],
+        storageAndDisplay: [],
+        errorMessage:'',
+        smallCount: 0,
+        largeCount: 0,
+        count: 0,
     }
     },
     created: function () {
-        // Call getAllRooms, 3 args necessary
+        const self = this
+        self.count += self.getDisplayCapacity()
+        // Call getAllRooms
         AXIOS.get('/room', {}, {})
         .then(response => {
-        //Assign the roomId to the room names
-        const roomList = response.data
-        this.storageRoom(roomList)
-        this.display()
-        this.smallRooms(roomList)
-        this.largeRooms(roomList)
-        for (let i = 0; i < roomList.length; i++) {
-            const room = roomList[i]
-            if (room.roomtype != 'Storage') {
-                this.rooms.push({roomName: room.roomName, artefactCount: room.artefactCount})
+        const rooms = response.data
+        for (let i = 0; i < rooms.length; i++)
+            {
+                const room = rooms[i]
+                if (room.roomtype == 'Small') {
+                    self.smallCount += room.artefactCount
+                    self.smallRooms.push({roomName: room.roomName, artefactCount: room.artefactCount})
+                }
+                if (room.roomtype == 'Large') {
+                    self.largeCount += room.artefactCount
+                    self.largeRooms.push({roomName: room.roomName, artefactCount: room.artefactCount})
+                }
+                if (room.roomtype == 'Storage') {
+                    self.count += room.artefactCount
+                    self.storageAndDisplay.push({roomName: room.roomName, artefactCount: room.artefactCount})
+                }
             }
-        }
         console.log(roomList)
         })
         .catch(error => {
@@ -53,60 +89,29 @@ export default {
             // logic on the error status. Display backend error message if status is below 450
             // otherwise display something went wrong
             if (error.response.status >= 450) {
-                this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
             } else {
-                this.errorMessage = error.response.data;
+                self.errorMessage = error.response.data;
             }
             // call the error handler component modal (named errorPopUp) to display the error message
-            this.$bvModal.show('errorPopUp');
+            self.$bvModal.show('errorPopUp');
         })
     },
     methods: {
-        storageRoom(rooms) {
-            for (let i = 0; i < rooms.length; i++)
-            {
-                const room = rooms[i]
-                if (room.roomtype == 'Storage') {
-                    return this.rooms.push({roomName: room.roomName, artefactCount: room.artefactCount})
-                }
-            }
-        },
-        smallRooms(rooms) {
-            let count = 0
-            for (let i = 0; i < rooms.length; i++)
-            {
-                const room = rooms[i]
-                if (room.roomtype == 'Small') {
-                    count += room.artefactCount
-                }
-            }
-            return this.rooms.push({roomName: "Small Rooms", artefactCount: count})
-        },
-        largeRooms(rooms) {
-            let count = 0
-            for (let i = 0; i < rooms.length; i++)
-            {
-                const room = rooms[i]
-                if (room.roomtype == 'Large') {
-                    count += room.artefactCount
-                }
-            }
-            return this.rooms.push({roomName: "Large Rooms", artefactCount: count})
-        },
-        display() {
+        // Get the artefact count in display
+        getDisplayCapacity() {
+            const self = this
             AXIOS.get('/room/displayCapacity', {}, {})
             .then(response => {
-            const displayCount = response.data
-            console.log(displayCount)
-            return this.rooms.push({roomName: "Display", artefactCount: displayCount})
+            return response.data
             })
             .catch(error => {
                 if (error.response.status >= 450) {
-                    this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                    self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
                 } else {
-                    this.errorMessage = error.response.data;
+                    self.errorMessage = error.response.data;
                 }
-                this.$bvModal.show('errorPopUp');
+                self.$bvModal.show('errorPopUp');
             })
         }
     }

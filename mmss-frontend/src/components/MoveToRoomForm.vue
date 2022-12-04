@@ -1,9 +1,8 @@
+ <!-- Quick form to move an artefact to another room -->
  <template>
     <div>
-      <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-       
+      <b-form @submit="onSubmit" v-if="show">
         <p>Currently in {{ room.roomName }}</p>
-
         <b-form-group 
             id="input-group-6" 
             label="Move to:" 
@@ -15,8 +14,6 @@
                 required
             ></b-form-select>
         </b-form-group>
-  
-
         <b-button type="submit" variant="primary">Update Room</b-button>
       </b-form>
         <!-- The component that displays the error message. Links the message of that component to -->
@@ -26,7 +23,8 @@
   
   <script>
 import axios from 'axios'
-import ErrorHandler from './ErrorPopUp.vue';
+import ErrorHandler from './ErrorPopUp.vue'
+
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
@@ -65,11 +63,12 @@ export default {
             if (room.roomId != self.roomId) {
                 this.roomOptions.push({ value: room.roomId, text: room.roomName + ' - ' + room.artefactCount})
             }
+            // Current room cannot be in the dropdown
             else {
                 self.room = room
             }
         }
-        console.log(rooms)
+        // console.log(rooms)
         })
         .catch((error) => {
             if (error.response.status >= 450) {
@@ -81,13 +80,14 @@ export default {
         })
     },
     methods: {
+        // When the Update Room button is clicked
         onSubmit(event) {
             event.preventDefault()
             const self = this
             AXIOS.put('/artefact/move', {}, { params: { artefactId: self.artefactId , roomId: self.room.roomId } })
             .then((response) => {
                 // Show response
-                alert(JSON.stringify(response))
+                alert('The artefact was successfully moved to a room.')
             })
             .catch((error) => {
                 if (error.response.status >= 450) {
@@ -97,37 +97,8 @@ export default {
                 }
                 // call the error handler component modal (named errorPopUp) to display the error message
                 self.$bvModal.show('errorPopUp');
-            });
-
+            })
         },
-        onReset(event) {
-          event.preventDefault()
-          const self = this
-          // Reset our form values
-          self.resetVariables()
-          // Trick to reset/clear native browser form validation state
-          self.show = false
-          self.$nextTick(() => {
-            self.show = true
-          })
-        },
-        resetVariables() {
-        const self = this
-        AXIOS.get(`/room/${self.roomId}`, {}, {})
-        .then(response => {
-        const room = response.data
-        console.log(room)
-        self.room = room
-        })
-        .catch(error => {
-            if (error.response.status >= 450) {
-                self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
-            } else {
-                self.errorMessage = error.response.data;
-            }
-            self.$bvModal.show('errorPopUp');
-        })
-        }
       }
     }
   </script>

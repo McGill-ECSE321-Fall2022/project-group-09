@@ -1,4 +1,5 @@
 <!-- 
+    Form to create a new artefact
     TODO:
     fees as double
     no fees shown if not available for loan
@@ -9,7 +10,7 @@
 <template>
     <div id="CreateArtefactForm">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-       
+        <!-- Name -->
         <b-form-group 
             id="input-group-1" 
             label="Name:" 
@@ -23,7 +24,7 @@
                 required>
             </b-form-input>
         </b-form-group>
-
+        <!-- Description -->
         <b-form-group
             id="input-group-2" 
             label="Description:" 
@@ -37,7 +38,7 @@
                 required>
             </b-form-textarea>
         </b-form-group>
-  
+        <!-- Loan availability -->
         <b-form-group 
             id="input-group-3" 
             label="Loan Availability" 
@@ -52,7 +53,7 @@
                 required>
             </b-form-radio-group>
         </b-form-group>
-
+        <!-- Insurance fee -->
         <b-form-group 
             id="input-group-4" 
             label="Insurance Fee:" 
@@ -65,7 +66,7 @@
                 required
             ></b-form-input>
         </b-form-group> 
-
+        <!-- Loan fee -->
         <b-form-group 
             id="input-group-5" 
             label="Loan Fee:" 
@@ -78,7 +79,7 @@
                 required
             ></b-form-input>
         </b-form-group> 
-    
+        <!-- Room -->
         <b-form-group 
             id="input-group-6" 
             label="Room:" 
@@ -90,22 +91,32 @@
                 required
             ></b-form-select>
         </b-form-group>
+        <!-- Image URL -->
+        <b-form-group 
+            id="input-group-7" 
+            label="Image URL:" 
+            label-for="input-4">
+            <b-form-input 
+                id="input-4" 
+                v-model="request.imageUrl" 
+                type="text" 
+                required>
+            </b-form-input>
+        </b-form-group>
   
         <b-button type="submit" variant="primary">Create</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
       </b-form>
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />    
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ request }}</pre>
-      </b-card>
     </div>
   </template>
   
   <script>
 import axios from 'axios'
 // Import the component that displays the error message
-import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
+import ErrorHandler from './ErrorPopUp.vue' // This is the error component
+
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
@@ -129,7 +140,8 @@ export default {
                 canLoan: false,
                 insuranceFee: '0.00',
                 loanFee: '0.00',
-                roomId: ''
+                roomId: '',
+                imageUrl: '',
             },
             availabilities: [
                 { value: 'true', text: 'Available for loan' },
@@ -149,7 +161,7 @@ export default {
             const room = rooms[i]
             this.roomOptions.push({ value: room.roomId, text: room.roomName + ' - ' + room.artefactCount})
         }
-        console.log(rooms)
+        // console.log(rooms)
         })
         .catch((error) => {
             // logic on the error status. Display backend error message if status is below 450
@@ -164,13 +176,14 @@ export default {
         })
     },
     methods: {
+        // When the Create button is clicked
         onSubmit(event) {
             event.preventDefault()
             const self = this
             AXIOS.post('/artefact', self.request, {})
             .then((response) => {
                 // Show response
-                alert(JSON.stringify(response))
+                alert('The artefact was successfully created.')
                 // Empty the form
                 self.resetVariables()
                 //onReset
@@ -188,6 +201,7 @@ export default {
             });
 
         },
+        // When the Reset button is clicked
         onReset(event) {
           event.preventDefault()
           // Reset our form values
@@ -198,6 +212,7 @@ export default {
             self.show = true
           })
         },
+        // Reset the request fields with default values
         resetVariables() {
             const self = this
             self.request.artefactName = ''
@@ -206,6 +221,7 @@ export default {
             self.request.insuranceFee = '0.00'
             self.request.loanFee = '0.00'
             self.request.roomId = ''
+            self.request.imageUrl = ''
         }
       }
     }

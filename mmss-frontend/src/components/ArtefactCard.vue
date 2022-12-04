@@ -1,12 +1,12 @@
 <template>
     <div>
-        <!-- img-src="link" img-alt="Image" img-top 
-        Add eventually for pictures-->
         <b-col>
+            <!-- Card to display the artefacts as list 
+                 Passed an artefact DTO as prop -->
             <b-card
             @click="$bvModal.show(String(artefact.artefactId))"
             :title=artefact.artefactName
-            img-src="https://www.shutterstock.com/image-photo/los-angeles-usa-sep-26-600w-336733364.jpg"
+            :img-src=artefact.imageUrl
             img-alt="Image"
             img-top
             tag="artefact"
@@ -17,10 +17,9 @@
                 <b-list-group-item>{{ (artefact.canLoan && !artefact.currentlyOnLoan)? 'Available for loan' : 'Not available for loan' }}</b-list-group-item>
                 <b-list-group-item>In {{ room.roomName }}</b-list-group-item>
             </b-list-group>
-            <!-- Eventually add buttons depending on the user 
-            <b-button href="#" variant="primary">Go somewhere</b-button> -->
             </b-card>  
         </b-col> 
+        <!-- Pop up for more information on a particular artefact -->
         <b-modal 
             :id=String(artefact.artefactId) 
             :title=artefact.artefactName 
@@ -31,7 +30,7 @@
             <b-container fluid>
                 <b-row>
                     <b-col>
-                        <b-img fluid-grow src="https://picsum.photos/600/300/?image=25" alt="Image"></b-img>
+                        <b-img fluid-grow :src=artefact.imageUrl alt="Image"></b-img>
                     </b-col>
                     <b-col>
                             <b-row align-self="stretch">Description: {{ artefact.description }}</b-row>
@@ -41,15 +40,17 @@
                             <b-row align-v="end" v-if="(artefact.canLoan && !artefact.currentlyOnLoan)">Loan fee: {{ artefact.loanFee }}</b-row>
                     </b-col>
                     <div class="modal-header">
-                    <div class="ml-auto">
-                        <b-button v-if="(loggedInVisitor != null && artefact.canLoan && !artefact.currentlyOnLoan)" @click="requestLoan(JSON.parse(loggedInVisitor).username)">Loan</b-button>
-                        <b-button v-if="(loggedInEmployee != null || loggedInManager != null)" @click="$bvModal.show('Edit' + String(artefact.artefactId))">Edit</b-button>
-                        <b-button v-if="(loggedInEmployee != null || loggedInManager != null)" @click="$bvModal.show('Move' + String(artefact.artefactId))">Move</b-button>
+                        <!-- Buttons depending on the user -->
+                        <div class="ml-auto">
+                        <b-button v-if="(loggedInVisitor && artefact.canLoan && !artefact.currentlyOnLoan)" @click="requestLoan(JSON.parse(loggedInVisitor).username)">Loan</b-button>
+                        <b-button v-if="(loggedInEmployee || loggedInManager)" @click="$bvModal.show('Edit' + String(artefact.artefactId))">Edit</b-button>
+                        <b-button v-if="(loggedInEmployee || loggedInManager)" @click="$bvModal.show('Move' + String(artefact.artefactId))">Move</b-button>
                     </div>
                 </div>
                 </b-row>
             </b-container>
-        </b-modal>  
+        </b-modal> 
+       <!-- Form to edit an artefact, called by Edit button -->
         <b-modal 
             :id="'Edit' + String(artefact.artefactId)"
             title="Update an Artefact"
@@ -59,6 +60,7 @@
             hide-footer>
             <update-form :artefactId="artefact.artefactId"/>
         </b-modal>  
+        <!-- Form to move an artefact to another room, called by Move button -->
         <b-modal 
             :id="'Move' + String(artefact.artefactId)"
             title="Move an Artefact"
@@ -67,8 +69,7 @@
             scrollable
             hide-footer>
             <move-form :artefactId="artefact.artefactId" :roomId="artefact.roomId"/>
-        </b-modal>  
-        <!-- <ErrorHandler :message="errorMessage" />        -->
+        </b-modal>       
     </div>    
 </template>
 
@@ -77,7 +78,8 @@
 import axios from 'axios'
 import UpdateArtefactForm from './UpdateArtefactForm.vue'
 import MoveToRoomForm from './MoveToRoomForm.vue'
-import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
+import ErrorHandler from './ErrorPopUp.vue'
+
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
@@ -107,15 +109,16 @@ export default {
         artefact : Object
     },
     created: function() {
+        // Get session info
         this.loggedInVisitor = sessionStorage.getItem('loggedInVisitor');
         this.loggedInEmployee = sessionStorage.getItem('loggedInEmployee');
-        this.oggedInManager = sessionStorage.getItem('loggedInManager');
-
+        this.loggedInManager = sessionStorage.getItem('loggedInManager');
+        // Get info on the artefact's room
         const self = this
         AXIOS.get(`/room/${self.artefact.roomId}`, {}, {})
         .then(response => {
         const room = response.data
-        console.log(room)
+        // console.log(room)
         self.room = room
         })
         .catch(error => {
@@ -131,6 +134,7 @@ export default {
         })
     },
     methods: {
+        // Once the Loan button is clicked
         requestLoan(username) {
             const self = this
             AXIOS.post('/loan', { visitorId: username, artefactId: self.artefact.artefactId }, {})

@@ -4,7 +4,6 @@ import Hello from '@/components/Hello'
 import LoginVisitor from '@/components/LoginVisitor'
 import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
-import CreateArtefactForm from '@/components/CreateArtefactForm'
 import RoomsTable from '@/components/RoomsTable'
 import ArtefactsView from '@/components/ArtefactsView'
 
@@ -86,18 +85,12 @@ export default new Router({
       component: LoginEmployee
     },
     {
-      path: '/artefact/createForm',
-      name: 'CreateArtefactForm',
-      component: CreateArtefactForm,
-      beforeEnter: requireStaff
-    },
-    {
-      path: '/room',
+      path: '/rooms',
       name: 'RoomsTable',
       component: RoomsTable
     },
     {
-      path: '/artefactsView',
+      path: '/artefacts',
       name: 'ArtefactsView',
       component: ArtefactsView
     },

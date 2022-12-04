@@ -1,16 +1,15 @@
 <!-- 
+    Form to update an existing artefact
     TODO:
     fees as double
     no fees shown if not available for loan
     Show numbers of chars left 
-    Size of page (pup up)
     Remove form data result
-    What to do with on reset
  -->
  <template>
     <div>
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-       
+        <!-- Name -->
         <b-form-group 
             id="input-group-1" 
             label="Name:" 
@@ -23,7 +22,7 @@
                 required>
             </b-form-input>
         </b-form-group>
-
+        <!-- Description -->
         <b-form-group
             id="input-group-2" 
             label="Description:" 
@@ -36,7 +35,7 @@
                 required>
             </b-form-textarea>
         </b-form-group>
-  
+        <!-- Loan availability -->
         <b-form-group 
             id="input-group-3" 
             label="Loan Availability" 
@@ -51,7 +50,7 @@
                 required>
             </b-form-radio-group>
         </b-form-group>
-
+        <!-- Insurance fee -->
         <b-form-group 
             id="input-group-4" 
             label="Insurance Fee:" 
@@ -63,7 +62,7 @@
                 required
             ></b-form-input>
         </b-form-group> 
-
+        <!-- Loan fee -->
         <b-form-group 
             id="input-group-5" 
             label="Loan Fee:" 
@@ -75,21 +74,31 @@
                 required
             ></b-form-input>
         </b-form-group> 
+        <!-- Image URL -->
+        <b-form-group 
+            id="input-group-6" 
+            label="Image URL:" 
+            label-for="input-4">
+            <b-form-input 
+                id="input-4" 
+                v-model="request.imageUrl" 
+                type="text" 
+                required>
+            </b-form-input>
+        </b-form-group>
   
         <b-button type="submit" variant="primary">Update</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
       </b-form>
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />    
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ request }}</pre>
-      </b-card>
     </div>
   </template>
   
   <script>
 import axios from 'axios'
-import ErrorHandler from './ErrorPopUp.vue';
+import ErrorHandler from './ErrorPopUp.vue'
+
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
@@ -115,6 +124,7 @@ export default {
                 insuranceFee: '0.00',
                 loanFee: '0.00',
                 roomId: '',
+                imageUrl: '',
             },
             availabilities: [
                 { value: 'true', text: 'Available for loan' },
@@ -131,7 +141,7 @@ export default {
         const self = this       
         AXIOS.get(`/artefact/${self.artefactId}`, {}, {})
         .then(response => {
-        //Assign the roomId to the room names
+        //Assign the artefacts'field to the request object
         const artefact = response.data
         console.log(artefact) 
         self.request.artefactId = artefact.artefactId
@@ -141,6 +151,7 @@ export default {
         self.request.insuranceFee = artefact.insuranceFee
         self.request.loanFee = artefact.loanFee
         self.request.roomId = artefact.roomId
+        self.request.imageUrl = artefact.imageUrl
         })
         .catch((error) => {
             // logic on the error status. Display backend error message if status is below 450
@@ -155,13 +166,14 @@ export default {
         })
     },
     methods: {
+        // When the Update button is clicked
         onSubmit(event) {
             event.preventDefault()
             const self = this
             AXIOS.put('/artefact', self.request, {})
             .then((response) => {
                 // Show response
-                alert(JSON.stringify(response))
+                alert('The artefact was successfully updated.')
             })
             .catch((error) => {
                 if (error.response.status >= 450) {
@@ -174,6 +186,7 @@ export default {
             });
 
         },
+        // When the Reset button is clicked
         onReset(event) {
           event.preventDefault()
           const self = this
@@ -185,11 +198,12 @@ export default {
             self.show = true
           })
         },
+        // Reset the values of the request object for a particular artefact
         resetVariables() {
             const self = this       
             AXIOS.get(`/artefact/${self.artefactId}`, {}, {})
             .then(response => {
-            //Assign the roomId to the room names
+            //Assign the artefacts'field to the request object
             const artefact = response.data
             console.log(artefact)
             self.request.artefactId = artefact.artefactId
@@ -199,6 +213,7 @@ export default {
             self.request.insuranceFee = artefact.insuranceFee
             self.request.loanFee = artefact.loanFee
             self.request.roomId = artefact.roomId
+            self.request.imageUrl = artefact.imageUrl
             })
             .catch((error) => {
                 // logic on the error status. Display backend error message if status is below 450
