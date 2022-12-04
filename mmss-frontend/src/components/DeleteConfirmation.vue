@@ -1,4 +1,5 @@
 <template>
+    <!-- PopUp to prevent accounts from being accidentally created-->
     <div id="deleteConfirmation">
         <p class="center"> Are you sure you want to delete these accounts? This action cannot be
             undone</p>
@@ -8,6 +9,7 @@
 </template>
 
 <script>
+// setup axios
 import axios from 'axios'
 var config = require('../../config')
 
@@ -20,12 +22,14 @@ var AXIOS = axios.create({
 })
 
 export default {
+    // properties of this component
     props: {
         method: '',
         selectedAccounts: []
     },
 
     methods: {
+        // do the delete method based on what account type is being requested to be deleted
         async doDelete(selected, accountType) {
             for (var i = 0; i < selected.length; i++) {
                 await AXIOS.delete('/' + accountType + '/' + selected[i].userName)

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id = NavBar>
         <!-- Navigation Bar Displayed to Visitors-->
         <div id=visitorNavBar>
             <b-navbar type="dark" variant="info">

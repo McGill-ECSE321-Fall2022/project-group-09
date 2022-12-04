@@ -5,29 +5,40 @@
             Loans
         </h1>
         <div>
+            <!-- ToolBar to manage loans-->
             <b-navbar type="dark" variant="info">
                 <b-navbar-brand>Tool Bar</b-navbar-brand>
                 <b-navbar-nav>
 
-                    <!-- Navbar dropdowns -->
+                    <!-- Navbar dropdowns - any status, approved loans, pending loans-->
                     <b-nav-item-dropdown text="Exchange Status" right>
                         <b-dropdown-item @click="refreshTable()">Any</b-dropdown-item>
                         <b-dropdown-item @click="showApprovedLoans()">Approved</b-dropdown-item>
                         <b-dropdown-item @click="showPendingLoans()">Pending</b-dropdown-item>
                     </b-nav-item-dropdown> <b-nav-form>
+                        <!-- Search for loans by username-->
                         <b-form-input class="mr-sm-2" placeholder="Enter Username" v-model="username"
-                        @keyup.enter="doGetVisitor(username)"></b-form-input>
+                            @keyup.enter="doGetVisitor(username)"></b-form-input>
                         <b-button v-bind:disabled="(!username.trim())" variant="success" class="my-2 my-sm-0"
-                            @click="doGetVisitor(username)" >Search</b-button>
+                            @click="doGetVisitor(username)">Search</b-button>
                     </b-nav-form>
                 </b-navbar-nav>
+
+                <!-- Buttons to refresh, clear selections, and select all in table-->
                 <b-navbar-nav class="ml-auto">
+                    <b-button-group>
                     <b-button class="my-2 my-sm-0" @click="refreshTable()"> Refresh Table</b-button>
                     <br>
-                    <b-button variant="primary" class="my-2 my-sm-0" @click="clearSelected()"> Clear Selected</b-button>
+                    <b-button variant="primary" class="my-2 my-sm-0" @click="selectAll()"> Select
+                        All</b-button>
+                    <br>
+                    <b-button class="my-2 my-sm-0" @click="clearSelected()"> Clear Selected</b-button>
+                    </b-button-group>
                 </b-navbar-nav>
             </b-navbar>
         </div>
+
+        <!-- Table that displays the loans-->
         <b-table ref="LoanTable" striped hover sticky-header="200px" :items="loans" selectable :select-mode="selectMode"
             @row-selected="onRowSelected"></b-table>
 
@@ -48,6 +59,8 @@
 import axios from 'axios'
 // Import the component that displays the error message
 import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
+
+// setup axios
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
@@ -65,13 +78,17 @@ export default {
     components: {
         ErrorHandler
     },
+    // variables
     data() {
         return {
+            // to display in table
             loans: [],
             errorMessage: '',
+            // table selection mode
             selectMode: 'multi',
             selectedLoans: [],
             username: '',
+            // to update the status of a loan
             request: {
                 exchangeId: '',
                 exchangeStatus: ''
@@ -79,6 +96,7 @@ export default {
 
         }
     },
+    // initialize tables
     created: function () {
         const self = this
         AXIOS.get('/loan', {}, {})
@@ -94,13 +112,16 @@ export default {
 
     },
     methods: {
+        // select rows
         onRowSelected(selectedRows) {
             this.selectedLoans = selectedRows;
         },
+        // clear selected rows
         clearSelected() {
             this.selectedLoans = [];
             this.$refs.LoanTable.clearSelected();
         },
+        // refresh table
         refreshTable() {
             AXIOS.get('/loan', {}, {})
                 .then(response => {
@@ -111,6 +132,11 @@ export default {
                     this.errorMessage = error.response.data
                 });
         },
+        // select all
+        selectAll() {
+            this.$refs.LoanTable.selectAllRows();
+        },
+        // get a loan by a visitor
         doGetVisitor(username) {
             AXIOS.get('/loan/visitor/?username=' + username, {}, {})
                 .then(response => {
@@ -132,6 +158,7 @@ export default {
                     this.$bvModal.show('errorPopUp');
                 });
         },
+        // show loans with a particular status
         showLoans(status) {
             AXIOS.get('/loan/status/?status=' + status, {}, {})
                 .then(response => {
@@ -148,20 +175,24 @@ export default {
                     this.$bvModal.show('errorPopUp');
                 });
         },
+        // show loans with pending status
         showPendingLoans() {
             this.showLoans("Pending");
         },
+        // show loans with approved status
         showApprovedLoans() {
             this.showLoans("Approved");
         },
+        // update the status of all selected loans
         async doUpdateLoan(selectedLoans, status) {
             for (var i = 0; i < selectedLoans.length; i++) {
                 this.request.exchangeId = selectedLoans[i].exchangeId;
                 this.request.exchangeStatus = status;
+                // send request to backend up update loan
                 AXIOS.put('/loan/', this.request, {})
                     .then(response => {
                         //refresh the table on the last request
-                        
+
                         this.refreshTable();
                     })
                     .catch(error => {
@@ -177,13 +208,15 @@ export default {
             }
 
         },
+        // approving a loan
         async doApproveLoan() {
             await this.doUpdateLoan(this.selectedLoans, "Approved");
             this.clearSelected();
             this.refreshTable();
         },
+        // declining a loan
         async doDeclineLoan() {
-           await this.doUpdateLoan(this.selectedLoans, "Declined");
+            await this.doUpdateLoan(this.selectedLoans, "Declined");
             this.clearSelected();
             this.refreshTable();
         }

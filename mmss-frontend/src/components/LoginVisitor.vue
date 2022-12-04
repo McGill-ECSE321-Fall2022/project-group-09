@@ -8,9 +8,11 @@
             Visitor Login Page
         </h2>
 
+        <!-- Table that displays the login buttons-->
         <table class="center" width="30%">
             <tr>
 
+                <!-- Username input-->
                 <td>
                     <div align="left"><i>Username:</i></div>
                     <b-input id="usernameInput" type="email" v-model="visitorUsername" :state="usernameState"
@@ -20,7 +22,7 @@
                 </td>
             </tr>
             <tr>
-
+                <!-- Password input-->
                 <td>
                     <div align="left"><i>Password:</i></div>
                     <b-input id="emailInput" type="password" v-model="visitorPassword" placeholder=""

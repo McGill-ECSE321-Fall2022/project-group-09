@@ -1,6 +1,7 @@
 <template>
     <div id="LoginManager">
         <br>
+        <!-- Welcome messages - can be changed-->
         <h1>
             Welcome to Marwan's Museum!
         </h1>
@@ -8,6 +9,7 @@
             Manager Login Page
         </h2>
 
+        <!-- Table that contains login buttons-->
         <table class="center" width="30%">
             <tr>
                 <td>
@@ -99,6 +101,12 @@ export default {
     },
     methods: {
         // the manager login method
+        /**
+         * This method is called when the login button is clicked. It sends a request to the backend to login the manager.
+         * @param {String} username The username of the manager
+         * @param {String} password The password of the manager
+         * @author Shidan Javaheri
+         */
         doLoginManager(username, password) {
 
             // empty feilds
@@ -126,7 +134,9 @@ export default {
 
         }
     },
+    // computed functions
     computed: {
+        // make sure username is valid
         usernameState() {
             this.usernameError = '';
             if (this.managerUsername.includes("@")) {

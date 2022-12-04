@@ -8,10 +8,11 @@
             Employee Login Page
         </h2>
 
+        <!-- Table that displays the login buttons-->
         <table class="center" width="30%">
             <tr>
-
                 <td>
+                    <!-- Username input-->
                     <div align="left"><i>Username:</i></div>
                     <b-input type="email" :state="usernameState" v-model="employeeUsername" @keydown.space.prevent
                         placeholder=""></b-input>
@@ -21,9 +22,10 @@
             </tr>
             <tr>
                 <td>
+                    <!-- Password input-->
                     <div align="left"><i>Password:</i></div>
-                    <b-input type="password"  v-model="employeePassword"
-                        placeholder="" @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
+                    <b-input type="password" v-model="employeePassword" placeholder=""
+                        @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
                 </td>
             </tr>
             <tr>
@@ -101,6 +103,11 @@ export default {
     },
     methods: {
         // the employee login method
+        /**
+         * This method logs in the employee
+         * @param {String} username The username of the employee
+         * @param {String} password The password of the employee
+         */
         doLoginEmployee(username, password) {
 
             // empty feilds
