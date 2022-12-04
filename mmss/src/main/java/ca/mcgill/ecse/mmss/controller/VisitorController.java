@@ -153,6 +153,12 @@ public class VisitorController {
         return new ResponseEntity<ArrayList<VisitorDto>>(allVisitorsDto, HttpStatus.OK);
     }
 
+    /**
+     * Get all visitors by person
+     * @param username a request parameter, the username of the visitor
+     * @param amount a double, the value of the visitors new balance
+     * @return a response entity with a {@link VisitorDto} and the HttpStatus
+     */
     @PutMapping({"/{username}", "/{username}/"})
     public ResponseEntity<VisitorDto> updateBalance(@PathVariable String username, @RequestParam double amount) { 
         Visitor visitor = visitorService.updateVisitorBalance(username, amount);
