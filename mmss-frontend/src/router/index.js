@@ -89,7 +89,7 @@ export default new Router({
       path: '/artefact/createForm',
       name: 'CreateArtefactForm',
       component: CreateArtefactForm,
-      //beforeEnter: requireStaff
+      beforeEnter: requireStaff
     },
     {
       path: '/room',

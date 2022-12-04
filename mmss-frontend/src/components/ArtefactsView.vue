@@ -5,8 +5,11 @@
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
-                <b-button size="sm" class="my-2 my-sm-0" type="submit" @click="$bvModal.show('CreateArtefactForm')">Create</b-button>
+                <b-button v-if="(loggedInEmployee != null || loggedInManager != null)" size="sm" class="my-2 my-sm-0" type="submit" @click="$bvModal.show('CreateArtefactForm')">Create</b-button>
             </b-navbar-nav>
+            <!-- <b-navbar-nav>
+                <b-button size="sm" class="my-2 my-sm-0" type="submit" @click="$bvModal.show('UpdateArtefactForm')">Update</b-button>
+            </b-navbar-nav> -->
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
             <b-nav-item-dropdown text="Loan Availability" right>
@@ -28,7 +31,7 @@
         </b-navbar>
         <b-container>
             <b-row align-v="center">
-                <custom-card v-for="artefact in artefacts" :key="artefact.artefactId" :artefact="artefact"/>
+                <custom-card v-for="artefact in artefacts" :key="artefact.artefactId" :artefact="artefact" @click="selectedArtefact(artefact.artefactId)"/>
             </b-row>
         </b-container>   
         <b-modal 
@@ -40,7 +43,16 @@
             hide-footer>
             <create-form/>
         </b-modal>  
-        <ErrorHandler :message="errorMessage" />     
+        <!-- <b-modal 
+            id='UpdateArtefactForm'
+            title="Update an Artefact"
+            centered 
+            size="xl" 
+            scrollable
+            hide-footer>
+            <update-artefact :artefactId="selected.artefactId" />
+        </b-modal>  -->
+        <!-- <ErrorHandler :message="errorMessage" />      -->
     </div>
 </template>
 
@@ -49,6 +61,7 @@ import Card from '@/components/ArtefactCard'
 import ErrorHandler from './ErrorPopUp.vue'
 import axios from 'axios'
 import CreateArtefactForm from './CreateArtefactForm.vue'
+import UpdateArtefactForm from './UpdateArtefactForm.vue'
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
@@ -63,14 +76,25 @@ export default {
     components: {
         "custom-card": Card,
         "create-form": CreateArtefactForm,
+        "update-artefact": UpdateArtefactForm,
         ErrorHandler
     },
     data() {
     return {
         artefacts: [],
-        errorMessage: ''
+        errorMessage: '',
+        selectedArtefactId: 0,
+        loggedInVisitor: '',
+        loggedInEmployee: '',
+        loggedInManager: '',
     }},
     created: function () {
+        this.loggedInVisitor = sessionStorage.getItem('loggedInVisitor');
+        this.loggedInEmployee = sessionStorage.getItem('loggedInEmployee');
+        this.oggedInManager = sessionStorage.getItem('loggedInManager');
+        console.log(this.loggedInEmployee)
+        console.log(this.loggedInManager)
+        console.log(this.loggedInVisitor)
         const self = this
         AXIOS.get('/artefact', {}, {})
         .then(response => {
@@ -90,5 +114,11 @@ export default {
             self.$bvModal.show('errorPopUp');
         })
     },
+    methods: {
+        selectedArtefact(id) {
+            this.selectedArtefactId = id
+            console.log(this.selectedArtefact)
+        },
+    }
 }
 </script>

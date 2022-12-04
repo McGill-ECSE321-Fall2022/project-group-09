@@ -6,7 +6,7 @@
             <b-card
             @click="$bvModal.show(String(artefact.artefactId))"
             :title=artefact.artefactName
-            img-src="https://picsum.photos/600/300/?image=25"
+            img-src="https://www.shutterstock.com/image-photo/los-angeles-usa-sep-26-600w-336733364.jpg"
             img-alt="Image"
             img-top
             tag="artefact"
@@ -42,15 +42,16 @@
                     </b-col>
                     <div class="modal-header">
                     <div class="ml-auto">
-                        <b-button v-if="(artefact.canLoan && !artefact.currentlyOnLoan)">Loan</b-button>
-                        <b-button @click="$bvModal.show('UpdateArtefactForm')">Edit</b-button>
+                        <b-button v-if="(loggedInVisitor != null && artefact.canLoan && !artefact.currentlyOnLoan)" @click="requestLoan(JSON.parse(loggedInVisitor).username)">Loan</b-button>
+                        <b-button v-if="(loggedInEmployee != null || loggedInManager != null)" @click="$bvModal.show('Edit' + String(artefact.artefactId))">Edit</b-button>
+                        <b-button v-if="(loggedInEmployee != null || loggedInManager != null)" @click="$bvModal.show('Move' + String(artefact.artefactId))">Move</b-button>
                     </div>
                 </div>
                 </b-row>
             </b-container>
         </b-modal>  
         <b-modal 
-            id='UpdateArtefactForm'
+            :id="'Edit' + String(artefact.artefactId)"
             title="Update an Artefact"
             centered 
             size="xl" 
@@ -58,7 +59,16 @@
             hide-footer>
             <update-form :artefactId="artefact.artefactId"/>
         </b-modal>  
-        <ErrorHandler :message="errorMessage" />       
+        <b-modal 
+            :id="'Move' + String(artefact.artefactId)"
+            title="Move an Artefact"
+            centered 
+            size="xl" 
+            scrollable
+            hide-footer>
+            <move-form :artefactId="artefact.artefactId" :roomId="artefact.roomId"/>
+        </b-modal>  
+        <!-- <ErrorHandler :message="errorMessage" />        -->
     </div>    
 </template>
 
@@ -66,6 +76,7 @@
 <script>
 import axios from 'axios'
 import UpdateArtefactForm from './UpdateArtefactForm.vue'
+import MoveToRoomForm from './MoveToRoomForm.vue'
 import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
 var config = require('../../config')
 
@@ -82,16 +93,24 @@ export default {
         return {
             errorMessage: '',
             room: '',
+            loggedInVisitor: '',
+            loggedInEmployee: '',
+            loggedInManager: '',
         }
     },
     components: {
         ErrorHandler,
         "update-form": UpdateArtefactForm,
+        "move-form": MoveToRoomForm,
     },
     props: {
         artefact : Object
     },
     created: function() {
+        this.loggedInVisitor = sessionStorage.getItem('loggedInVisitor');
+        this.loggedInEmployee = sessionStorage.getItem('loggedInEmployee');
+        this.oggedInManager = sessionStorage.getItem('loggedInManager');
+
         const self = this
         AXIOS.get(`/room/${self.artefact.roomId}`, {}, {})
         .then(response => {
@@ -110,6 +129,23 @@ export default {
             // call the error handler component modal (named errorPopUp) to display the error message
             self.$bvModal.show('errorPopUp');
         })
-    }
+    },
+    methods: {
+        requestLoan(username) {
+            const self = this
+            AXIOS.post('/loan', { visitorId: username, artefactId: self.artefact.artefactId }, {})
+            .then(response => {
+                alert(JSON.stringify(response))
+            })
+            .catch(error => {
+                if (error.response.status >= 450) {
+                    self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                } else {
+                    self.errorMessage = error.response.data;
+                }
+                self.$bvModal.show('errorPopUp');
+            })
+        }
+    }   
 }
 </script>

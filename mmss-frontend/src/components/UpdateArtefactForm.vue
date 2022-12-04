@@ -8,7 +8,7 @@
     What to do with on reset
  -->
  <template>
-    <div id="CreateArtefactForm">
+    <div>
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
        
         <b-form-group 
@@ -76,7 +76,7 @@
             ></b-form-input>
         </b-form-group> 
   
-        <b-button type="submit" variant="primary">Create</b-button>
+        <b-button type="submit" variant="primary">Update</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
       </b-form>
         <!-- The component that displays the error message. Links the message of that component to -->
@@ -89,8 +89,7 @@
   
   <script>
 import axios from 'axios'
-// Import the component that displays the error message
-import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
+import ErrorHandler from './ErrorPopUp.vue';
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
@@ -109,6 +108,7 @@ export default {
         return {
             roomOptions:[],
             request: {
+                artefactId: 0,
                 artefactName: '',
                 description: '',
                 canLoan: false,
@@ -133,7 +133,8 @@ export default {
         .then(response => {
         //Assign the roomId to the room names
         const artefact = response.data
-        console.log(artefact)
+        console.log(artefact) 
+        self.request.artefactId = artefact.artefactId
         self.request.artefactName = artefact.artefactName
         self.request.description = artefact.description
         self.request.canLoan = artefact.canLoan
@@ -175,6 +176,7 @@ export default {
         },
         onReset(event) {
           event.preventDefault()
+          const self = this
           // Reset our form values
           self.resetVariables()
           // Trick to reset/clear native browser form validation state
@@ -190,6 +192,7 @@ export default {
             //Assign the roomId to the room names
             const artefact = response.data
             console.log(artefact)
+            self.request.artefactId = artefact.artefactId
             self.request.artefactName = artefact.artefactName
             self.request.description = artefact.description
             self.request.canLoan = artefact.canLoan
