@@ -7,6 +7,7 @@ import LoginEmployee from '@/components/LoginEmployee'
 import ManageLoan from '@/components/ManageLoan'
 import ManageAccount from '@/components/ManageAccount'
 import ManageDonation from '@/components/ManageDonation'
+import DonationVisitor from '@/components/DonationVisitor'
 
 Vue.use(Router);
 
@@ -90,7 +91,12 @@ export default new Router({
       path: '/accounts/manage',
       name: 'ManageAccount',
       component: ManageAccount
-    }, 
+    },
+    {
+      path: '/donation/visitor',
+      name: 'DonationVisitor',
+      component: DonationVisitor
+    },
     {
       path: "*",
       redirect: "/404"

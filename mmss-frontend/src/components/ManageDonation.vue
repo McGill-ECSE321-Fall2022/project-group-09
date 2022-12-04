@@ -73,17 +73,12 @@ import axios from 'axios'
 // Import the component that displays the error message
 import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
 var config = require('../../config')
-
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
 var backendUrl = 'http://' + config.dev.backendHost + ':' + config.dev.backendPort
-
 var AXIOS = axios.create({
     baseURL: backendUrl,
     headers: { 'Access-Control-Allow-Origin': frontendUrl }
 })
-
-
-
 export default {
     name: 'ManageDonation',
     components: {
@@ -113,7 +108,6 @@ export default {
             .catch(error => {
                 self.errorMessage = error.response.data
             });
-
     },
     methods: {
         onRowSelected(selectedRows) {
@@ -141,7 +135,6 @@ export default {
                     this.donations = response.data;
                     //clear the input
                     this.username = '';
-
                 })
                 .catch(error => {
                     // logic on the error status. Display backend error message if status is below 450
@@ -199,11 +192,7 @@ export default {
         }
     },
 }
-
-
-
 </script>
 
 <style>
-
 </style>
