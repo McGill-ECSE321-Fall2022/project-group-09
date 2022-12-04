@@ -31,7 +31,7 @@ public class ScheduleService {
      */
     @Transactional
     public Schedule getSchedule() {
-        if (scheduleRepository.findAll() == null) {
+        if (scheduleRepository.findAll().size() == 0) {
             throw new MmssException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
         Schedule schedule = scheduleRepository.findAll().get(0);
@@ -44,7 +44,7 @@ public class ScheduleService {
     @Transactional
     public Schedule createSchedule() {
     	ArrayList<Schedule> existingSchedule = scheduleRepository.findAll();
-    	if (existingSchedule != null) {
+    	if (existingSchedule.size() != 0) {
             throw new MmssException(HttpStatus.BAD_REQUEST, "A schedule already exists.");
     	}
     	Schedule schedule = new Schedule();

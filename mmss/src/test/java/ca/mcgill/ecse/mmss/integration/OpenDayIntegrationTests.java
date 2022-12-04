@@ -87,8 +87,6 @@ public class OpenDayIntegrationTests {
      */
     @Test
     public void testCreateAndGetOpenDay() {
-        // create donation dto
-        //OpenDayDto request = new OpenDayDto(openDay);
 
         // make the post
         ResponseEntity<OpenDayDto> response1 = client.postForEntity("/openday?date=2022-10-10", null, OpenDayDto.class);

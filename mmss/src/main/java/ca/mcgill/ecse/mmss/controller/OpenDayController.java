@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,12 +50,12 @@ public class OpenDayController {
      * @return the created OpenDay as a Dto with status ok
      */
     @PostMapping
-    public ResponseEntity<OpenDayDto> createOpenDay(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+    public ResponseEntity<OpenDayDto> createOpenDay( @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         // get parameters
-        // Date date = request.getDate();
+        Date newDate = Date.valueOf(date);
 
         // create the object with the service
-        OpenDay retreivedOpenDay = openDayService.createOpenDay(Date.valueOf(date));
+        OpenDay retreivedOpenDay = openDayService.createOpenDay(newDate);
 
         // return it in the response entity
         return new ResponseEntity<OpenDayDto>(new OpenDayDto(retreivedOpenDay), HttpStatus.CREATED);
