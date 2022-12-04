@@ -1,8 +1,10 @@
 package ca.mcgill.ecse.mmss.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse.mmss.dto.OpenDayDto;
@@ -46,12 +49,12 @@ public class OpenDayController {
      * @return the created OpenDay as a Dto with status ok
      */
     @PostMapping
-    public ResponseEntity<OpenDayDto> createOpenDay(@RequestBody OpenDayDto request) {
+    public ResponseEntity<OpenDayDto> createOpenDay(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         // get parameters
-        Date date = request.getDate();
+        // Date date = request.getDate();
 
         // create the object with the service
-        OpenDay retreivedOpenDay = openDayService.createOpenDay(date);
+        OpenDay retreivedOpenDay = openDayService.createOpenDay(Date.valueOf(date));
 
         // return it in the response entity
         return new ResponseEntity<OpenDayDto>(new OpenDayDto(retreivedOpenDay), HttpStatus.CREATED);

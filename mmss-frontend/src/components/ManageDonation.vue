@@ -109,7 +109,7 @@ export default {
         const self = this
         AXIOS.get('/donations', {}, {})
             .then(response => {
-                // add response to all loans
+                // add response to all donations
                 self.donations = response.data
             })
             .catch(error => {
@@ -177,7 +177,7 @@ export default {
             this.clearSelected();
             this.refreshTable();
         },
-        async doDeclineLoan() {
+        async doDeclineDonation() {
             for (let i = 0; i < this.selectedDonations.length; i++) {
                 let exchangeId = this.selectedDonations[i].exchangeId;
                 AXIOS.put('/donation/', exchangeId, {})
