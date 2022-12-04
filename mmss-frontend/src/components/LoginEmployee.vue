@@ -7,24 +7,29 @@ t <template>
             Employee Login Page
         </h2>
 
-        <table class="center">
+        <!-- Table that displays the login buttons-->
+        <table class="center" width="30%">
             <tr>
                 <td>
-                    Username:
-                </td>
-                <td>
-                    <input type="text" v-model="employeeUsername" @keydown.space.prevent placeholder="Username">
+                    <!-- Username input-->
+                    <div align="left"><i>Username:</i></div>
+                    <b-input type="email" :state="usernameState" v-model="employeeUsername" @keydown.space.prevent
+                        placeholder=""></b-input>
+                    <span v-if="usernameError" style="color: red;">{{ usernameError }}</span>
+                    <span v-else> <br> </span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    Password:
+                    <!-- Password input-->
+                    <div align="left"><i>Password:</i></div>
+                    <b-input type="password" v-model="employeePassword" placeholder=""
+                        @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
                 </td>
+            </tr>
+            <tr>
                 <td>
-                    <input type="password" v-model="employeePassword" placeholder="Password">
-                </td>
-
-                <td>
+                    <br>
                     <!-- Button is disabled untill there is non whitespace text. Clicking triggers login-->
                     <b-button v-bind:disabled="!employeeUsername.trim() || !employeePassword.trim()"
                         @click="doLoginEmployee(employeeUsername, employeePassword)">Login</b-button>
@@ -88,6 +93,11 @@ export default {
     },
     methods: {
         // the employee login method
+        /**
+         * This method logs in the employee
+         * @param {String} username The username of the employee
+         * @param {String} password The password of the employee
+         */
         doLoginEmployee(username, password) {
             const self = this;
             // empty feilds
@@ -114,6 +124,21 @@ export default {
                 });
 
         }
+    },
+    // functions that display input state ( simple checks )
+    computed: {
+        usernameState() {
+            this.usernameError = '';
+            if (this.employeeUsername.includes("@")) {
+                return true;
+            } else if (this.employeeUsername.trim() === '') {
+                return false;
+            } else {
+                this.usernameError = "Please enter a valid email address";
+                return false;
+            }
+        },
+
     }
 }
 

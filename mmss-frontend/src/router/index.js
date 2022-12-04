@@ -7,6 +7,8 @@ import LoginEmployee from '@/components/LoginEmployee'
 import ManageLoan from '@/components/ManageLoan'
 import ManageShift from '@/components/ManageShift'
 import ManageNotification from '@/components/ManageNotification'
+import ManageAccount from '@/components/ManageAccount'
+// import NavBar from '@/components/NavBar'
 
 Vue.use(Router)
 
@@ -47,6 +49,16 @@ export default new Router({
       name: 'ManageNotification',
       component: ManageNotification
     },
+    {
+      path: '/accounts/manage',
+      name: 'ManageAccount',
+      component: ManageAccount
+    }, 
+    // {
+    //   path: '/navbar',
+    //   name: 'NavBar',
+    //   component: NavBar
+    // }, 
     {
       path: "*",
       redirect: "/404"

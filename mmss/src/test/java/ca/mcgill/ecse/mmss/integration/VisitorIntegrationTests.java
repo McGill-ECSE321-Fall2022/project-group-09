@@ -125,7 +125,7 @@ public class VisitorIntegrationTests {
         assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertTrue(response.getBody().getUsername() != null, "Response has a valid username");
+        assertTrue(response.getBody().getUserName() != null, "Response has a valid username");
 
     }
     
@@ -148,7 +148,7 @@ public class VisitorIntegrationTests {
         assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertTrue(response.getBody().getUsername() != null, "Response has a valid username");
+        assertTrue(response.getBody().getUserName() != null, "Response has a valid username");
 
     }
 
@@ -169,7 +169,7 @@ public class VisitorIntegrationTests {
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertEquals(response.getBody().getUsername(), username, "Response has correct username");
+        assertEquals(response.getBody().getUserName(), username, "Response has correct username");
 
     }
     
@@ -193,7 +193,6 @@ public class VisitorIntegrationTests {
         assertNotNull(response); 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody()); 
-        assertEquals(response.getBody().getPassword(), "Ilovejava23"); 
 
         // get the updated visitor from the database
         Visitor updatedVisitor = visitorRepository.findVisitorByUsername(visitor.getUsername());
@@ -215,7 +214,7 @@ public class VisitorIntegrationTests {
 
         // make Dto for request
         VisitorDto request = new VisitorDto(visitor);
-        String username = request.getUsername();
+        String username = request.getUserName();
 
         
         ResponseEntity<String> response = client.exchange("/visitor/" + username, HttpMethod.DELETE,null, String.class);

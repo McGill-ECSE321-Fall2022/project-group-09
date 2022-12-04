@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
@@ -28,7 +27,6 @@ import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Employee;
-import ca.mcgill.ecse.mmss.model.Shift;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTests {
@@ -50,6 +48,9 @@ public class EmployeeServiceTests {
 	 
 	 @InjectMocks
 	 private EmployeeService employeeService;
+
+	 @Mock
+	 private LoginService loginService;
 
 	 // Four objects we will need in all our tests
 	 private Person person;
@@ -98,7 +99,7 @@ public class EmployeeServiceTests {
 	 @Test
 	 public void testCreateEmployee() {
 		 
-		 when(employeeRepository.findEmployeeByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
+		 when(loginService.getAccountByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
 		 
 		 when(personRepository.save(any(Person.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0)); 
 		 
@@ -113,7 +114,7 @@ public class EmployeeServiceTests {
 	     assertEquals(employee.getUsername(), employeeCreated.getUsername());
 	     assertEquals(employee.getPhoneNumber(), employeeCreated.getPhoneNumber());
 	     
-	     verify(employeeRepository, times(1)).findEmployeeByUsername(employee.getUsername());
+	     verify(loginService, times(1)).getAccountByUsername(employee.getUsername());
 	     verify(personRepository, times(1)).save(any(Person.class)); 
 	     verify(employeeRepository, times(1)).save(any(Employee.class)); 
 	     
@@ -131,14 +132,14 @@ public class EmployeeServiceTests {
 	 
 	 @Test
 	 public void testCreateInvalidEmployeeUsernameTaken() {
-		 when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
+		 when(loginService.getAccountByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
 		 MmssException ex = assertThrows(MmssException.class, () -> employeeService.createEmployee("John", "Coder", employee.getUsername(), "password", "514-396-2314"));
 
 	     // assert the exception is thrown with the right message and status
 
 	     assertEquals("The username entered is taken. Please enter another username.", ex.getMessage()); 
 	     assertEquals (HttpStatus.NOT_ACCEPTABLE, ex.getStatus()); 
-	     verify(employeeRepository, times(1)).findEmployeeByUsername(employee.getUsername());
+	     verify(loginService, times(1)).getAccountByUsername(employee.getUsername());
 	 }
 	 
 	 @Test
@@ -156,7 +157,7 @@ public class EmployeeServiceTests {
 	 @Test
 	 public void testCreateAdditionalVisitor() {
 		 when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
-		 when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> null); 
+		 when(loginService.getAccountByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> null); 
 		 when(visitorRepository.save(any(Visitor.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
 		 
 		 // call the service to create a loan
@@ -168,7 +169,7 @@ public class EmployeeServiceTests {
 	     assertEquals(visitor.getPassword(), visitorCreated.getPassword());
 	     
 	     verify(employeeRepository, times(1)).findEmployeeByUsername(employee.getUsername()); 
-	     verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername()); 
+	     verify(loginService, times(1)).getAccountByUsername(visitor.getUsername()); 
 	     verify(visitorRepository, times(1)).save(any(Visitor.class)); 
 	 }
 	 
@@ -208,7 +209,7 @@ public class EmployeeServiceTests {
 	 public void testCreateAdditionalInvalidVisitorExisting() {
 		 
 		 when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
-		 when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor);
+		 when(loginService.getAccountByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor);
 		 MmssException ex = assertThrows(MmssException.class, () -> employeeService.createVisitorForEmployee(employee.getUsername(),visitor.getUsername(), visitor.getPassword())); 
 
 	     // assert the exception is thrown with the right message and status
@@ -219,14 +220,14 @@ public class EmployeeServiceTests {
 	     // verify the repository calls
 
 	    verify(employeeRepository, times(1)).findEmployeeByUsername(employee.getUsername());
-	    verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
+	    verify(loginService, times(1)).getAccountByUsername(visitor.getUsername());
 	 }
 	 
 	 @Test
 	 public void testCreateAdditionalInvalidVisitorBadPw() {
 		 
 		 when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
-		 when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> null); 
+		 when(loginService.getAccountByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> null); 
 		 MmssException ex = assertThrows(MmssException.class, () -> employeeService.createVisitorForEmployee(employee.getUsername(),visitor.getUsername(), "kulkulan")); 
 
 	     // assert the exception is thrown with the right message and status
@@ -236,7 +237,7 @@ public class EmployeeServiceTests {
 
 	     // verify the repository calls
 	    verify(employeeRepository, times(1)).findEmployeeByUsername(employee.getUsername());
-	    verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
+	    verify(loginService, times(1)).getAccountByUsername(visitor.getUsername());
 	 }
 	 
 	 @Test 
@@ -278,15 +279,14 @@ public class EmployeeServiceTests {
 	 @Test
 	 public void testUpdateEmployeeUsername() {
 		when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
-		when(employeeRepository.findEmployeeByUsername(newName)).thenAnswer((InvocationOnMock invocation) -> null); 
+		when(loginService.getAccountByUsername(newName)).thenAnswer((InvocationOnMock invocation) -> null); 
 		when(employeeRepository.save(any(Employee.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
 			
 		Employee employeeUpdated = employeeService.updateEmployeeUsername(employee.getUsername(), newName);
 			
 		assertEquals(newName, employeeUpdated.getUsername());
 			
-		verify(employeeRepository, times (1)).findEmployeeByUsername(employee.getUsername()); 
-		verify(employeeRepository, times (1)).findEmployeeByUsername(newName); 
+		verify(loginService, times (1)).getAccountByUsername(newName); 
 		verify(employeeRepository, times(1)).save(any(Employee.class)); 
 	}
 	 
@@ -326,7 +326,7 @@ public class EmployeeServiceTests {
 	public void testUpdateEmployeeInvalidExistingUsername() {
 	        
 		when(employeeRepository.findEmployeeByUsername(employee.getUsername())).thenAnswer((InvocationOnMock invocation) -> employee); 
-		when(employeeRepository.findEmployeeByUsername(employeeTwo.getUsername())).thenAnswer((InvocationOnMock invocation) -> employeeTwo); 
+		when(loginService.getAccountByUsername(employeeTwo.getUsername())).thenAnswer((InvocationOnMock invocation) -> employeeTwo); 
 		MmssException ex = assertThrows(MmssException.class, () -> employeeService.updateEmployeeUsername(employee.getUsername(),employeeTwo.getUsername()));
 			
 		// check the message contains the right message and status
@@ -334,7 +334,7 @@ public class EmployeeServiceTests {
 	    assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
 	        
 	    verify(employeeRepository, times(1)).findEmployeeByUsername(employee.getUsername());
-	    verify(employeeRepository, times(1)).findEmployeeByUsername(employeeTwo.getUsername());
+	    verify(loginService, times(1)).getAccountByUsername(employeeTwo.getUsername());
 	}
 	
 	@Test

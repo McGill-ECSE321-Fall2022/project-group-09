@@ -1,6 +1,7 @@
 <template>
     <div id="LoginManager">
         <br>
+        <!-- Welcome messages - can be changed-->
         <h1>
             Welcome to Marwan's Museum!
         </h1>
@@ -8,6 +9,7 @@
             Manager Login Page
         </h2>
 
+        <!-- Table that contains login buttons-->
         <table class="center" width="30%">
             <tr>
                 <td>
@@ -21,7 +23,7 @@
             <tr>
                 <td>
                     <div align="left"><i>Password:</i></div>
-                    <b-input id="passwordInput" type="password" v-model="managerPassword" :state="passwordState" placeholder="" @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
+                    <b-input id="passwordInput" type="password" v-model="managerPassword" placeholder="" @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
                 </td>
             </tr>
             <tr>
@@ -99,6 +101,12 @@ export default {
     },
     methods: {
         // the manager login method
+        /**
+         * This method is called when the login button is clicked. It sends a request to the backend to login the manager.
+         * @param {String} username The username of the manager
+         * @param {String} password The password of the manager
+         * @author Shidan Javaheri
+         */
         doLoginManager(username, password) {
 
             // empty feilds
@@ -126,28 +134,21 @@ export default {
 
         }
     },
+    // computed functions
     computed: {
+        // make sure username is valid
         usernameState() {
             this.usernameError = '';
-            if (this.managerUsername.trim() === '') {
-                this.usernameError = 'Please enter your email address';
-                return false;
-            }
             if (this.managerUsername.includes("@")) {
                 return true;
-            } else if (this.managerUsername.length > 0) {
-                this.usernameError = "Please enter a valid email address";
+            } else if (this.managerUsername.trim() === '') {
                 return false;
             } else {
-                this.usernameError = "";
-                return true;
-            };
+                this.usernameError = "Please enter a valid email address";
+                return false;
+            }
         },
-        passwordState() {
-            const hasNumber = /\d/;
-            const upper = /[A-Z]/;
-            return this.managerPassword.length >= 8 && hasNumber.test(this.managerPassword) && upper.test(this.managerPassword);
-        }
+
     }
 }
 
