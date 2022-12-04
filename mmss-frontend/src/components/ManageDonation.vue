@@ -30,8 +30,6 @@
         Can Loan?
         </b-form-checkbox>
 
-        <div>State: <strong>{{ request.canLoan }}</strong></div>
-
         <b-form-group 
             id="input-group-4" 
             label="Insurance Fee:" 
@@ -107,7 +105,7 @@ export default {
     },
     created: function () {
         const self = this
-        AXIOS.get('/donations', {}, {})
+        AXIOS.get('/donation', {}, {})
             .then(response => {
                 // add response to all donations
                 self.donations = response.data
@@ -128,8 +126,9 @@ export default {
         refreshTable() {
             AXIOS.get('/donation', {}, {})
                 .then(response => {
-                    // add response to all loans
-                    this.loans = response.data
+                    // add response to all donations
+                    console.log(response.data)
+                    this.donations = response.data
                 })
                 .catch(error => {
                     this.errorMessage = error.response.data
@@ -138,7 +137,7 @@ export default {
         doGetVisitor(username) {
             AXIOS.get('/donation/visitor/?username=' + username, {}, {})
                 .then(response => {
-                    // replace loans with response
+                    // replace donations with response
                     this.donations = response.data;
                     //clear the input
                     this.username = '';
@@ -180,7 +179,7 @@ export default {
         async doDeclineDonation() {
             for (let i = 0; i < this.selectedDonations.length; i++) {
                 let exchangeId = this.selectedDonations[i].exchangeId;
-                AXIOS.put('/donation/', exchangeId, {})
+                AXIOS.put('/donation/?id=' + exchangeId, {}, {})
                     .then(response => {
                         //refresh the table on the last request
                         this.refreshTable();

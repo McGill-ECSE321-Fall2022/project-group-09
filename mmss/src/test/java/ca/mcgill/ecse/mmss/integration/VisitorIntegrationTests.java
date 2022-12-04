@@ -29,6 +29,7 @@ import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.utils.Util;
 
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class VisitorIntegrationTests {
 	

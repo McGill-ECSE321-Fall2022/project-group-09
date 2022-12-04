@@ -41,6 +41,7 @@ import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Visitor;
 
 
+
 /**
  * Integration tests for Donation
  */
