@@ -16,15 +16,15 @@
                     <b-input id="usernameInput" type="email" v-model="visitorUsername" :state="usernameState"
                         @keydown.space.prevent placeholder=""></b-input>
                     <span v-if="usernameError" style="color: red;">{{ usernameError }}</span>
-                    <span v-else >  <br> </span>
+                    <span v-else> <br> </span>
                 </td>
             </tr>
             <tr>
 
                 <td>
                     <div align="left"><i>Password:</i></div>
-                    <b-input id="emailInput" type="password" v-model="visitorPassword" 
-                        placeholder="" @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
+                    <b-input id="emailInput" type="password" v-model="visitorPassword" placeholder=""
+                        @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
                 </td>
             </tr>
 
@@ -37,7 +37,8 @@
                         @click="doLoginVisitor(visitorUsername, visitorPassword)">Login</b-button>
 
                     <hr>
-                    <b-button block variant="primary" @click="$router.push({ name: 'Hello' })">Create an Account</b-button>
+                    <b-button block variant="primary" @click="$router.push({ name: 'Hello' })">Create an
+                        Account</b-button>
                     <hr>
                     <b-button block @click="$router.push({ name: 'LoginManager' })">Login as the manager</b-button>
                     <hr>
@@ -148,25 +149,15 @@ export default {
     computed: {
         usernameState() {
             this.usernameError = '';
-            if (this.visitorUsername.trim() === '') {
-                this.usernameError = 'Please enter your email address';
-                return false;
-            }
             if (this.visitorUsername.includes("@")) {
                 return true;
-            } else if (this.visitorUsername.length > 0) {
-                this.usernameError = "Please enter a valid email address";
+            } else if (this.visitorUsername.trim() === '') {
                 return false;
             } else {
-                this.usernameError = "";
-                return true;
-            };
+                this.usernameError = "Please enter a valid email address";
+                return false;
+            }
         },
-        passwordState() {
-            const hasNumber = /\d/;
-            const upper = /[A-Z]/;
-            return this.visitorPassword.length >= 8 && hasNumber.test(this.visitorPassword) && upper.test(this.visitorPassword);
-        }
     }
 }
 

@@ -1,11 +1,10 @@
 <template>
     <div id="NotificationPopUp">
         <b-modal size="lg" hide-footer id="NotificationPopUp" centered title="Send Notification">
-            <b-form-input v-model="message" id="input-default" placeholder="Enter your message (Max 300 Characters)" :state="messageState"></b-form-input>
+            <b-form-textarea v-model="message" id="input-default" placeholder="Enter your message (Max 300 Characters)" :state="messageState" rows="3"></b-form-textarea>
             <br>
-            <div align="center">
+
             <b-button block v-bind:disabled="((!message.trim()))" variant="success" @click="doSendNotification(message)">Send</b-button>
-            </div>
 
         </b-modal>
     </div>

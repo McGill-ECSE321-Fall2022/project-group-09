@@ -129,25 +129,16 @@ export default {
     computed: {
         usernameState() {
             this.usernameError = '';
-            if (this.managerUsername.trim() === '') {
-                this.usernameError = 'Please enter your email address';
-                return false;
-            }
             if (this.managerUsername.includes("@")) {
                 return true;
-            } else if (this.managerUsername.length > 0) {
-                this.usernameError = "Please enter a valid email address";
+            } else if (this.managerUsername.trim() === '') {
                 return false;
             } else {
-                this.usernameError = "";
-                return true;
-            };
+                this.usernameError = "Please enter a valid email address";
+                return false;
+            }
         },
-        passwordState() {
-            const hasNumber = /\d/;
-            const upper = /[A-Z]/;
-            return this.managerPassword.length >= 8 && hasNumber.test(this.managerPassword) && upper.test(this.managerPassword);
-        }
+
     }
 }
 

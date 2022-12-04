@@ -33,11 +33,15 @@
                 </b-navbar-nav>
             </b-navbar>
         </div>
-        <b-table ref="VisitorTable" striped hover sticky-header="200px" :items="visitors" selectable
+        <b-table ref="VisitorTable" striped hover sticky-header="600px" :items="visitors" selectable
             :select-mode="selectMode" @row-selected="onVisitorRowSelected"></b-table>
 
-        <b-button variant="success" @click="doRaiseNotification(selectedVisitors)">Send Notification</b-button>
-        <b-button variant="danger" @click="doDelete(selectedVisitors, visitorType)"> Delete </b-button>
+        <b-button variant="success" @click="doRaiseNotification(selectedVisitors)"
+            :disabled="(this.selectedVisitors.length === 0)">Send Notification</b-button>
+        <b-button variant="primary" @click="doClearBalance(selectedVisitors)"
+            :disabled="(this.selectedVisitors.length === 0)">Clear Balance</b-button>
+        <b-button variant="danger" @click="callDelete(visitorType)"
+            :disabled="this.selectedVisitors.length === 0">Delete </b-button>
         <br>
         <br>
         <br>
@@ -68,15 +72,19 @@
                 </b-navbar-nav>
             </b-navbar>
         </div>
-        <b-table ref="EmployeeTable" striped hover sticky-header="200px" :items="employees" selectable
+        <b-table ref="EmployeeTable" striped hover sticky-header="600px" :items="employees" selectable
             :select-mode="selectMode" @row-selected="onEmployeeRowSelected"></b-table>
 
-        <b-button variant="success" @click="doRaiseNotification(selectedEmployees)">Send Notification</b-button>
-        <b-button variant="danger" @click="doDelete(selectedEmployees, employeeType)"> Delete </b-button>
+        <b-button variant="success" @click="doRaiseNotification(selectedEmployees)"
+            :disabled="(this.selectedEmployees.length === 0)">Send Notification</b-button>
+        <b-button variant="danger" @click="callDelete(employeeType)" :disabled="this.selectedEmployees.length === 0">
+            Delete </b-button>
 
         <br>
         <br>
+        <b-button variant="success" @click="$bvModal.show('CreateEmployeeForm')"> Create New Employee </b-button>
         <br>
+
         <br>
         <br>
         <br>
@@ -84,6 +92,17 @@
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />
         <notification :selectedAccounts="selectedForNotification" />
+
+        <!-- The component to create an employee-->
+
+        <b-modal id='CreateEmployeeForm' title="Create an Employee" centered size="xl" scrollable hide-footer>
+            <create-form />
+        </b-modal>
+
+        <b-modal id="deleteConfirmation" title="Delete Confirmation" centered hide-footer>
+            <delete-confirmation @delete="refresh()" :method="accountType" :selectedAccounts="selectedForDelete" />
+        </b-modal>
+
 
     </div>
 
@@ -95,6 +114,8 @@ import axios from 'axios'
 import notification from './NotificationPopUp.vue';
 // Import the component that displays the error message
 import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
+import CreateForm from './CreateEmployeeForm.vue';
+import DeleteConfirmation from './DeleteConfirmation.vue';
 var config = require('../../config')
 
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
@@ -111,7 +132,9 @@ export default {
     name: 'ManageAccount',
     components: {
         ErrorHandler,
-        notification
+        notification,
+        "create-form": CreateForm,
+        deleteConfirmation: DeleteConfirmation
     },
     data() {
         return {
@@ -122,10 +145,12 @@ export default {
             selectedVisitors: [],
             selectedEmployees: [],
             selectedForNotification: [],
+            selectedForDelete: [],
             visitorUsername: '',
             employeeUsername: '',
-            visitorType: 'visitor',
+            accountType: '',
             employeeType: 'employee',
+            visitorType: 'visitor',
             status: false,
             request: {
                 username: '',
@@ -269,6 +294,18 @@ export default {
                     this.clearEmployeesSelected();
                 }
             }
+        }, callDelete(input) {
+            this.selectedForDelete = '';
+            this.accountType = '';
+            console.log("clicked")
+            if (input === 'visitor') {
+                this.selectedForDelete = this.selectedVisitors;
+                this.accountType = 'visitor';
+            } else {
+                this.selectedForDelete = this.selectedEmployees;
+                this.accountType = 'employee';
+            }
+            this.$bvModal.show('deleteConfirmation');
         },
         doRaiseNotification(selected) {
             this.selectedForNotification = selected;
@@ -285,9 +322,35 @@ export default {
                 this.visitors = this.visitors.filter(visitor => visitor.balance > 0);
             }
         },
-    }
+        refresh() {
+            this.refreshVisitorTable();
+            this.refreshEmployeeTable();
+        },
+        async doClearBalance() {
+            const self = this;
+            for (var i = 0; i < self.selectedVisitors.length; i++) {
+                await AXIOS.put('/visitor/' + self.selectedVisitors[i].userName + '/?amount=0', {}, {})
+                    .then(response => {
 
+                    })
+                    .catch(error => {
+                        // logic on the error status. Display backend error message if status is below 450
+                        // otherwise display something went wrong
+                        if (error.response.status >= 450) {
+                            this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                        } else {
+                            this.errorMessage = error.response.data;
+                        }
+                        // call the error handler component modal (named errorPopUp) to display the error message
+                        this.$bvModal.show('errorPopUp');
+                    });
+            }
+            this.refreshVisitorTable();
+            this.clearVisitorsSelected();
+        }
+    },
 }
+
 
 
 
