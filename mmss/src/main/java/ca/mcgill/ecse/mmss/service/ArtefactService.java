@@ -137,11 +137,12 @@ public class ArtefactService {
      * @param canLoan whether an artefact is available for loan
      * @param insuranceFee the artefact's insurance fee
      * @param loanFee the artefact's loan fee
+     * @param url the artefact's image url
      * @return the artefact instance
      * @throws MmssException
      */
     @Transactional
-    public Artefact createArtefact(String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
+    public Artefact createArtefact(String name, String description, boolean canLoan, double insuranceFee, double loanFee, String url) {
         // Check valid parameters
         checkValidArtefactParams(name, description, canLoan, insuranceFee, loanFee);
         // Create artefact
@@ -151,6 +152,7 @@ public class ArtefactService {
         artefact.setCanLoan(canLoan);
         artefact.setInsuranceFee(insuranceFee);
         artefact.setLoanFee(loanFee);
+        artefact.setImageUrl(url);
         // Persist to DB
         return artefactRepository.save(artefact);
     }
@@ -164,11 +166,12 @@ public class ArtefactService {
      * @param canLoan whether an artefact is available for loan
      * @param insuranceFee the artefact's insurance fee
      * @param loanFee the artefact's loan fee
+     * @param url the artefact's image url
      * @return the artefact instance
      * @throws MmssException
      */
     @Transactional
-    public Artefact updateArtefact(int artefactId, String name, String description, boolean canLoan, double insuranceFee, double loanFee) {
+    public Artefact updateArtefact(int artefactId, String name, String description, boolean canLoan, double insuranceFee, double loanFee, String url) {
         // Check for valid artefact id
         Artefact artefact = getArtefactById(artefactId);
         // Check valid parameters
@@ -179,6 +182,7 @@ public class ArtefactService {
         artefact.setCanLoan(canLoan);
         artefact.setInsuranceFee(insuranceFee);
         artefact.setLoanFee(loanFee);
+        artefact.setImageUrl(url);
         // Persist to DB
         return artefactRepository.save(artefact);
     }

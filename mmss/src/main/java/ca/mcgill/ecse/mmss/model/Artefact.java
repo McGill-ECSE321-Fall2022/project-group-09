@@ -32,6 +32,7 @@ public class Artefact
   @Column(nullable = false)
   private boolean currentlyOnLoan;
 
+  private String imageUrl;
   private double insuranceFee;
   private double loanFee;
 
@@ -108,6 +109,14 @@ public class Artefact
     return wasSet;
   }
 
+  public boolean setImageUrl(String url)
+  {
+    boolean wasSet = false;
+    imageUrl = url;
+    wasSet = true;
+    return wasSet;
+  }
+
   public  int getArtefactId()
   {
     return artefactId;
@@ -137,6 +146,12 @@ public class Artefact
   {
     return loanFee;
   }
+
+  public String getImageUrl()
+  {
+    return imageUrl;
+  }
+  
   /* Code from template attribute_IsBoolean */
   public boolean isCanLoan()
   {

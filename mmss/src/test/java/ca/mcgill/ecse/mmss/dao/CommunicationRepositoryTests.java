@@ -20,11 +20,17 @@ public class CommunicationRepositoryTests {
   // instance of tested repository
   @Autowired
   private CommunicationRepository communicationRepository;
+  @Autowired
+  private PersonRepository personRepository;
+  @Autowired
+  private ManagerRepository managerRepository;
   
   @AfterEach
   public void clearDatabase() {
     
       // clear communications after each execution
+      managerRepository.deleteAll();
+      personRepository.deleteAll();
       communicationRepository.deleteAll();    
   }
 

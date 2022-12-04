@@ -197,6 +197,7 @@ public class DonationIntegrationTests {
         artefactDto.setCanLoan(false);
         artefactDto.setInsuranceFee(1.0);
         artefactDto.setLoanFee(0.5);
+        artefactDto.setImageUrl("nullable.jpg");
 
         // make an entity to send the request with
         HttpEntity<ArtefactDto> request = new HttpEntity<>(artefactDto);
