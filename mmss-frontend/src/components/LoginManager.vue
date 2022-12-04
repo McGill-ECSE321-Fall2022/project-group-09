@@ -21,7 +21,7 @@
             <tr>
                 <td>
                     <div align="left"><i>Password:</i></div>
-                    <b-input id="passwordInput" type="password" v-model="managerPassword" :state="passwordState" placeholder="" @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
+                    <b-input id="passwordInput" type="password" v-model="managerPassword" placeholder="" @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
                 </td>
             </tr>
             <tr>

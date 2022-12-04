@@ -22,7 +22,7 @@
             <tr>
                 <td>
                     <div align="left"><i>Password:</i></div>
-                    <b-input type="password" :state="passwordState" v-model="employeePassword"
+                    <b-input type="password"  v-model="employeePassword"
                         placeholder="" @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
                 </td>
             </tr>
@@ -132,26 +132,16 @@ export default {
     computed: {
         usernameState() {
             this.usernameError = '';
-            if (this.employeeUsername.trim() === '') {
-                this.usernameError = 'Please enter your email address';
-                return false;
-            }
             if (this.employeeUsername.includes("@")) {
                 return true;
-            } else if (this.employeeUsername.length > 0) {
-                this.usernameError = "Please enter a valid email address";
+            } else if (this.employeeUsername.trim() === '') {
                 return false;
             } else {
-                this.usernameError = "";
-                return true;
-            };
+                this.usernameError = "Please enter a valid email address";
+                return false;
+            }
         },
-        passwordState() {
-            const hasNumber = /\d/;
-            const upper = /[A-Z]/;
 
-            return hasNumber.test(this.employeePassword) && upper.test(this.employeePassword) && this.employeePassword.length >= 8;
-        }
     }
 }
 
