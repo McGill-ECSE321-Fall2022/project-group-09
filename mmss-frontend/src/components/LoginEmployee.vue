@@ -132,7 +132,7 @@ export default {
                     // call the error handler component modal (named errorPopUp) to display the error message
                     this.$bvModal.show('errorPopUp');
                 });
-
+            location.reload();
         }
     },
     // functions that display input state ( simple checks )

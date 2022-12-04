@@ -6,7 +6,7 @@ import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
 import ManageLoan from '@/components/ManageLoan'
 import ManageAccount from '@/components/ManageAccount'
-// import NavBar from '@/components/NavBar'
+import NavBar from '@/components/NavBar'
 
 Vue.use(Router);
 
@@ -86,11 +86,11 @@ export default new Router({
       name: 'ManageAccount',
       component: ManageAccount
     }, 
-    // {
-    //   path: '/navbar',
-    //   name: 'NavBar',
-    //   component: NavBar
-    // }, 
+    {
+       path: '/navbar',
+       name: 'NavBar',
+       component: NavBar
+    }, 
     {
       path: "*",
       redirect: "/404"
