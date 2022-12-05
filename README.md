@@ -82,3 +82,42 @@ The task of writing classes and its tests were split as follows:
 | Saviru Perera | - Employee, Visitor, and Login classes <br> - Writing Service, Service Tests <br> - Writing Controllers and Controller Tests <br> | 40 hours |
 | Shidan Javaheri | - Providing code examples and templates <br> - Static code reviews for all classes, and debugging assistance <br> - Loan and Manager classes <br> - Review code and PRs <br> - Writing API documentation <br> - Final wiki review <br> | 60 hours |
 | Shyam Desai | - Writing the GitHub issues, service class, controller class, service tests, and integration tests for Tour and Ticket <br> - Keeping track of the meeting minutes <br> - Writing the API documentation in the wiki <br> | 32 hours |
+
+- - -
+
+# Deliverable 3
+
+The architecture model can be found [here].(https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/API-Documentation#api-documentation). The implementation of the Web Frontend can be found [here].(https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Test-Plan). The Build System and CI specifications can be found [here]. The key design decisions, additional features, and changes to the backend can be found [here].(https://github.com/orgs/McGill-ECSE321-Fall2022/projects/21). The project report detailing meeting minutes is [here].(https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report-Deliverable-2#meeting-minutes)
+
+## Team Roles
+
+The task of writing web pages were split as follows:
+* **Artefact:** Sasha Denouvilliez-Pech
+* **Room:** Sasha Denouvilliez-Pech
+* **Ticket:** Shyam Desai
+* **Tour:** Shyam Desai
+* **OpenDay:** Mohamed Elsamadouny
+* **Donation:** Mohamed Elsamadouny
+* **Employee:** Saviru Perera
+* **Visitor:** Saviru Perera
+* **Loan:** Shidan Javaheri
+* **Login:** Shidan Javaheri
+* **Manager:** Shidan Javaheri
+* **Notification:** Athmane
+* **Schedule:**  Athmane Benarous
+* **Shift:**  Athmane Benarous
+* **Communication:** Athmane
+* **Main navigation bar:** Athmane
+
+
+
+## Contributions
+| Name             | Responsibilities                                                  | Hours (incl. meetings) |
+|:----------------:|:----------------------------------------------------------------- |:----------------------:|
+| Athmane Benarous | -  <br> -  <br> | XX hours |
+| Mohamed Elsamadouny | -  <br> -  <br>  | XX hours |
+| Sasha Denouvilliez-Pech | - View, create, update, and move artefacts <br> - Room tables (Dashboard) <br> - Wiki <br> - Review code and PRs <br> | 35 hours |
+| Saviru Perera | -  <br> -  <br>  | XX hours |
+| Shidan Javaheri | -  <br> -  <br>  | XX hours |
+| Shyam Desai | -  <br> -  <br>  | XX hours |
+
