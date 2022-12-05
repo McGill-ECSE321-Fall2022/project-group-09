@@ -82,3 +82,24 @@ The task of writing classes and its tests were split as follows:
 | Saviru Perera | - Employee, Visitor, and Login classes <br> - Writing Service, Service Tests <br> - Writing Controllers and Controller Tests <br> | 40 hours |
 | Shidan Javaheri | - Providing code examples and templates <br> - Static code reviews for all classes, and debugging assistance <br> - Loan and Manager classes <br> - Review code and PRs <br> - Writing API documentation <br> - Final wiki review <br> | 60 hours |
 | Shyam Desai | - Writing the GitHub issues, service class, controller class, service tests, and integration tests for Tour and Ticket <br> - Keeping track of the meeting minutes <br> - Writing the API documentation in the wiki <br> | 32 hours |
+
+- - -
+
+# Deliverable 3
+
+(enter short description here)
+
+## Team Roles
+
+The task of creating the webpages were split as follows: <br>
+(enter roles here)
+
+## Contributions
+| Name             | Responsibilities                                                  | Hours (incl. meetings) |
+|:----------------:|:----------------------------------------------------------------- |:----------------------:|
+| Athmane Benarous | - xx <br> - xx <br> | xx hours |
+| Mohamed Elsamadouny | - xx <br> - xx <br> | xx hours |
+| Sasha Denouvilliez-Pech | - xx <br> - xx <br> | xx hours |
+| Saviru Perera | - xx <br> - xx <br> | xx hours |
+| Shidan Javaheri | - xx <br> - xx <br> | xx hours |
+| Shyam Desai | - xx <br> - xx <br> | xx hours |

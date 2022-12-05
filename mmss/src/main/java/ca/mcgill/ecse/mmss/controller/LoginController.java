@@ -18,7 +18,7 @@ import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.service.LoginService;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RequestMapping({ "/login", "/login/" })
 public class LoginController {
 

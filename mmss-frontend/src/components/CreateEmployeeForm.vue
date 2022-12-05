@@ -104,11 +104,11 @@ export default {
 
     methods: {
         // when the form is submitted 
-        onSubmit(event) {
+        async onSubmit(event) {
             event.preventDefault()
             const self = this
             // send a post request
-            AXIOS.post('/employee', self.request, {})
+            await AXIOS.post('/employee', self.request, {})
                 .then((response) => {
                     // Empty the form
                     self.resetVariables()
@@ -124,6 +124,8 @@ export default {
                     // call the error handler component modal (named errorPopUp) to display the error message
                     self.$bvModal.show('errorPopUp');
                 });
+            this.$emit('submitted');
+
         },
         // when the form is reset
         onReset(event) {
@@ -165,64 +167,68 @@ export default {
             else if (!this.request.username.includes('@')) {
                 this.usernameError = 'Please enter a valid email address';
                 return false;
-            } else {
-                this.usernameError = "";
-                return true;
-            };
-        },
-        // check if the password is valid
-        passwordState() {
-            const upper = /[A-Z]/;
-            const number = /[0-9]/;
-            if (this.request.password.trim() === '') {
+            } else if (this.request.username.includes(';')) {
+                this.usernameError = 'Please enter a valid email address';
                 return false;
-            } else if (!upper.test(this.request.password)) {
-                this.passwordError = "The password must contain at least one uppercase letter";
-                return false;
-
-            } else if (!number.test(this.request.password)) {
-                this.passwordError = "The password must contain at least one number";
-                return false;
-            } else if (this.request.password.length < 8) {
-                this.passwordError = "The password must be at least 8 characters long";
-                return false;
-            } else {
-                this.passwordError = "";
+            }
+            else {
+                this.usernameError = '';
                 return true;
             }
         },
-        // check if the first name is valid
-        phoneNumberState() {
-            // a regex for a phone number of the form xxx-xxx-xxxx (help from copilot)
-            const validRegex = /^\d{3}-\d{3}-\d{4}$/;
-            this.phoneNumberError = '';
-            if (this.request.phoneNumber.trim() === '') {
-                return false;
-            } else if (!validRegex.test(this.request.phoneNumber)) {
-                this.phoneNumberError = 'Please enter a phone number in the form xxx-xxx-xxxx';
-                return false;
-            } else {
-                this.phoneNumberError = "";
-                return true;
-            }
-        },
-        // check if first name is valid
-        firstNameState() {
-            this.firstNameError = '';
-            return this.request.firstName.length > 0
-        },
-        // check if last name is valid
-        lastNameState() {
-            this.lastNameError = '';
-            return this.request.lastName.length > 0
+            // check if the password is valid
+            passwordState() {
+                const upper = /[A-Z]/;
+                const number = /[0-9]/;
+                if (this.request.password.trim() === '') {
+                    return false;
+                } else if (!upper.test(this.request.password)) {
+                    this.passwordError = "The password must contain at least one uppercase letter";
+                    return false;
 
-        },
-        // check if the form is valid for submission
-        submitState() {
-            return this.usernameState && this.passwordState && this.phoneNumberState && this.firstNameState && this.lastNameState
+                } else if (!number.test(this.request.password)) {
+                    this.passwordError = "The password must contain at least one number";
+                    return false;
+                } else if (this.request.password.length < 8) {
+                    this.passwordError = "The password must be at least 8 characters long";
+                    return false;
+                } else {
+                    this.passwordError = "";
+                    return true;
+                }
+            },
+            // check if the first name is valid
+            phoneNumberState() {
+                // a regex for a phone number of the form xxx-xxx-xxxx (help from copilot)
+                const validRegex = /^\d{3}-\d{3}-\d{4}$/;
+                this.phoneNumberError = '';
+                if (this.request.phoneNumber.trim() === '') {
+                    return false;
+                } else if (!validRegex.test(this.request.phoneNumber)) {
+                    this.phoneNumberError = 'Please enter a phone number in the form xxx-xxx-xxxx';
+                    return false;
+                } else {
+                    this.phoneNumberError = "";
+                    return true;
+                }
+            },
+            // check if first name is valid
+            firstNameState() {
+                this.firstNameError = '';
+                return this.request.firstName.length > 0
+            },
+            // check if last name is valid
+            lastNameState() {
+                this.lastNameError = '';
+                return this.request.lastName.length > 0
+
+            },
+            // check if the form is valid for submission
+            submitState() {
+                return this.usernameState && this.passwordState && this.phoneNumberState && this.firstNameState && this.lastNameState
+            }
+
         }
 
     }
-
-}
 </script>

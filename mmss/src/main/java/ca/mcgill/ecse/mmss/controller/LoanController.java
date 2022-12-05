@@ -28,8 +28,8 @@ import ca.mcgill.ecse.mmss.service.LoanService;
 /**
  * API of all Loan services
  */
-@CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin
 @RequestMapping({ "/loan", "/loan/" })
 public class LoanController {
 

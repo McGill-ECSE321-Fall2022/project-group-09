@@ -19,6 +19,8 @@ public class RoomService {
     @Autowired
     private RoomRepository roomRepository;
 
+    String roomNames[] = {"Storage", "Large1", "Large2", "Large3", "Large4", "Large5", "Small1", "Small2", "Small3", "Small4", "Small5"};
+
     /**
      * Get a room by its primary key
      *
@@ -83,25 +85,32 @@ public class RoomService {
     @Transactional
     public ArrayList<Room> createRooms() {
         ArrayList<Room> museumRooms = new ArrayList<>();
-        // Create small rooms
-        for (int i = 0; i < 5; i++) {
-            Room smallRoom = new Room();
-            smallRoom.setRoomType(Room.RoomType.Small);
-            museumRooms.add(smallRoom);
-            roomRepository.save(smallRoom);
-        }
+        int roomNameIndex = 0;
+        // Create storage room
+        Room storage = new Room();
+        storage.setRoomType(Room.RoomType.Storage);
+        storage.setRoomName(roomNames[roomNameIndex]);
+        museumRooms.add(storage);
+        roomRepository.save(storage);    
+        roomNameIndex++;    
         // Create large rooms
         for (int i = 0; i < 5; i++) {
             Room largeRoom = new Room();
             largeRoom.setRoomType(Room.RoomType.Large);
+            largeRoom.setRoomName(roomNames[roomNameIndex]);
             museumRooms.add(largeRoom);
             roomRepository.save(largeRoom);
+            roomNameIndex++;
+        }        
+        // Create small rooms
+        for (int i = 0; i < 5; i++) {
+            Room smallRoom = new Room();
+            smallRoom.setRoomType(Room.RoomType.Small);
+            smallRoom.setRoomName(roomNames[roomNameIndex]);
+            museumRooms.add(smallRoom);
+            roomRepository.save(smallRoom);
+            roomNameIndex++;
         }
-        // Create storage room
-        Room storage = new Room();
-        storage.setRoomType(Room.RoomType.Storage);
-        museumRooms.add(storage);
-        roomRepository.save(storage);
         return museumRooms;
     }
 

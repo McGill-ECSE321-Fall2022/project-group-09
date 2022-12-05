@@ -23,6 +23,7 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Schedule;
 import ca.mcgill.ecse.mmss.utils.Util;
 
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class OpenDayIntegrationTests {
 
@@ -86,11 +87,9 @@ public class OpenDayIntegrationTests {
      */
     @Test
     public void testCreateAndGetOpenDay() {
-        // create donation dto
-        OpenDayDto request = new OpenDayDto(openDay);
 
         // make the post
-        ResponseEntity<OpenDayDto> response1 = client.postForEntity("/openday", request, OpenDayDto.class);
+        ResponseEntity<OpenDayDto> response1 = client.postForEntity("/openday?date=2022-10-10", null, OpenDayDto.class);
         
         // make assertions on the post
         assertNotNull(response1, "The response is not null");

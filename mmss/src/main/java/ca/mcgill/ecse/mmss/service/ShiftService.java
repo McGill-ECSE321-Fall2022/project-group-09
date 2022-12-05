@@ -68,13 +68,12 @@ public class ShiftService {
     /**
      * Create shifts, link them to schedule and persist them in the DB
      *
-     * @param time
      * @return the shift ArrayList
      */
     @Transactional
     public ArrayList<Shift> createShifts() {
     	for(ShiftTime time : ShiftTime.values()) {
-    		if (shiftRepository.findAllByShiftTime(time) != null)
+    		if (shiftRepository.findAllByShiftTime(time).size() != 0)
                 throw new MmssException(HttpStatus.BAD_REQUEST, "The shift " + time.name() + " already exists.");
         	Shift shift = new Shift();
         	shift.setShiftTime(time);

@@ -4,13 +4,23 @@ import Hello from '@/components/Hello'
 import LoginVisitor from '@/components/LoginVisitor'
 import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
+import RoomsTable from '@/components/RoomsTable'
+import ArtefactsView from '@/components/ArtefactsView'
 import ManageLoan from '@/components/ManageLoan'
+import ManageShift from '@/components/ManageShift'
+import ManageNotification from '@/components/ManageNotification'
 import ManageAccount from '@/components/ManageAccount'
 import CreateVisitor from '@/components/CreateVisitor'
 import UpdateVisitor from '@/components/UpdateVisitor'
 import UpdateEmployee from '@/components/UpdateEmployee'
 import UpdateManager from '@/components/UpdateManager'
-// import NavBar from '@/components/NavBar'
+import NavBar from '@/components/NavBar'
+import BookTicket from '@/components/BookTicket'
+import BookTour from '@/components/BookTour'
+import ManageBooking from '@/components/ManageBooking'
+import ManageDonation from '@/components/ManageDonation'
+import DonationVisitor from '@/components/DonationVisitor'
+import ManageOpenDay from '@/components/ManageOpenDay.vue'
 
 Vue.use(Router);
 
@@ -25,7 +35,6 @@ function requireVisitor(from, to, next) {
   // else continue to requested page
   else {
     next();
-
   }
 }
 
@@ -56,6 +65,16 @@ function requireEmployee(from, to, next) {
   }
 }
 
+function requireStaff(from, to, next) { 
+  // check that either the employee or manager is logged in
+  if (!sessionStorage.getItem('loggedInEmployee') && !sessionStorage.getItem('loggedInManager')) {
+    next({ name: 'LoginManager' });
+  }
+  else { 
+    next(); 
+  }
+}
+
 // routes to all pages
 
 export default new Router({
@@ -81,16 +100,57 @@ export default new Router({
       component: LoginEmployee
     },
     {
-      path: '/loans/manage', 
-      name: 'ManageLoan',
-      component: ManageLoan
+      path: '/donations/manage', 
+      name: 'ManageDonation',
+      component: ManageDonation
     },
     {
       path: '/accounts/manage',
       name: 'ManageAccount',
       component: ManageAccount
+    },
+    {
+      path: '/donation/visitor',
+      name: 'DonationVisitor',
+      component: DonationVisitor
+    },
+    {
+      path: '/openday',
+      name: 'ManageOpenDay',
+      component: ManageOpenDay
+    },
+    {
+      path: '/rooms',
+      name: 'RoomsTable',
+      component: RoomsTable
+    },
+    {
+      path: '/artefacts',
+      name: 'ArtefactsView',
+      component: ArtefactsView
+    },
+    {
+      path: '/loans/manage', 
+      name: 'ManageLoan',
+      component: ManageLoan
+    },
+    {
+      path: '/shift/manage', 
+      name: 'ManageShift',
+      component: ManageShift
+    },
+    {
+      path: '/notification/manage', 
+      name: 'ManageNotification',
+      component: ManageNotification
+    },
+    {
+       path: '/navbar',
+       name: 'NavBar',
+       component: NavBar
     }, 
     {
+      {
       path: '/createVisitor',
       name: 'CreateVisitor',
       component: CreateVisitor
@@ -110,11 +170,20 @@ export default new Router({
       name: 'UpdateManager',
       component: UpdateManager
     },
-    // {
-    //   path: '/navbar',
-    //   name: 'NavBar',
-    //   component: NavBar
-    // }, 
+    path: '/bookings/ticket',
+      name: 'BookTicket',
+      component: BookTicket
+    },
+    {
+      path: '/bookings/tour',
+      name: 'BookTour',
+      component: BookTour
+    },
+    {
+      path: '/bookings/manage',
+      name: 'ManageBooking',
+      component: ManageBooking
+    },
     {
       path: "*",
       redirect: "/404"

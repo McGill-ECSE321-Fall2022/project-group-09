@@ -56,16 +56,15 @@ export default {
                 // post request to backend
                 await AXIOS.post('/notification', self.request, {})
                 .then((response => {
-                    
                 }))
                 .catch((error) => {
-
                 })
                 // reset message at end, hide popup
-                self.message = ''; 
+                self.request.message = ''; 
                 this.$bvModal.hide('NotificationPopUp');
 
             }
+        self.message=''; 
         }
     }, 
     // make sure message is valid 

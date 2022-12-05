@@ -1,13 +1,9 @@
 <template>
     <div id="ManageLoan">
-        <br>
-        <h1>
-            Loans
-        </h1>
         <div>
             <!-- ToolBar to manage loans-->
-            <b-navbar type="dark" variant="info">
-                <b-navbar-brand>Tool Bar</b-navbar-brand>
+            <b-navbar class="secondaryBar" type="dark" variant="info">
+                <b-navbar-brand>Loans</b-navbar-brand>
                 <b-navbar-nav>
 
                     <!-- Navbar dropdowns - any status, approved loans, pending loans-->
@@ -189,11 +185,10 @@ export default {
                 this.request.exchangeId = selectedLoans[i].exchangeId;
                 this.request.exchangeStatus = status;
                 // send request to backend up update loan
-                AXIOS.put('/loan/', this.request, {})
+                 await AXIOS.put('/loan/', this.request, {})
                     .then(response => {
                         //refresh the table on the last request
 
-                        this.refreshTable();
                     })
                     .catch(error => {
                         if (error.response.status >= 450) {
@@ -204,8 +199,9 @@ export default {
                         // call the error handler component modal (named errorPopUp) to display the error message
                         this.$bvModal.show('errorPopUp');
                     });
-
+            
             }
+            this.refreshTable();
 
         },
         // approving a loan

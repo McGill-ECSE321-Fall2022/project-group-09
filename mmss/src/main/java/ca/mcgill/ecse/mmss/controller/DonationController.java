@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,8 +28,8 @@ import ca.mcgill.ecse.mmss.service.DonationService;
 /**
  * REST API for Donation 
  */
-
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/donation")
 public class DonationController {
 
@@ -103,9 +104,10 @@ public class DonationController {
         boolean canLoan = request.getCanLoan();
         double insuranceFee  = request.getInsuranceFee();
         double loanFee = request.getLoanFee();
+        String url = request.getImageUrl();
 
         // call service layer
-        Artefact createdArtefact = donationService.updateStatus(id, ExchangeStatus.Approved, canLoan, insuranceFee, loanFee);
+        Artefact createdArtefact = donationService.updateStatus(id, ExchangeStatus.Approved, canLoan, insuranceFee, loanFee, url);
 
         // return created Artefact as Dto
         return new ResponseEntity<ArtefactDto>(new ArtefactDto(createdArtefact), HttpStatus.OK);
