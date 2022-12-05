@@ -89,6 +89,7 @@
   
         <b-button type="submit" variant="primary">Update</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
+        <b-button variant="danger" @click="deleteArtefact()">Delete</b-button>
       </b-form>
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />    
@@ -226,6 +227,22 @@ export default {
                 // call the error handler component modal (named errorPopUp) to display the error message
                 self.$bvModal.show('errorPopUp');
             })
+        },
+        deleteArtefact() {
+            const self = this 
+            AXIOS.delete(`/artefact/${self.artefactId}`, {}, {})
+            .then(response => {
+                //refresh the table on the last request
+            })
+            .catch(error => {
+                if (error.response.status >= 450) {
+                    this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                } else {
+                    this.errorMessage = error.response.data;
+                }
+                // call the error handler component modal (named errorPopUp) to display the error message
+                this.$bvModal.show('errorPopUp');
+            });
         }
       }
     }
