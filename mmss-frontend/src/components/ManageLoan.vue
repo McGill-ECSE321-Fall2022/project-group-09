@@ -1,13 +1,9 @@
 <template>
     <div id="ManageLoan">
-        <br>
-        <h1>
-            Loans
-        </h1>
         <div>
             <!-- ToolBar to manage loans-->
-            <b-navbar type="dark" variant="info">
-                <b-navbar-brand>Tool Bar</b-navbar-brand>
+            <b-navbar class="secondaryBar" type="dark" variant="info">
+                <b-navbar-brand>Loans</b-navbar-brand>
                 <b-navbar-nav>
 
                     <!-- Navbar dropdowns - any status, approved loans, pending loans-->

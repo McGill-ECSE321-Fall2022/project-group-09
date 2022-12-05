@@ -27,8 +27,8 @@ import ca.mcgill.ecse.mmss.service.EmployeeService;
 /**
  * REST API for the Employee class
  */
-@CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin
 @RequestMapping({"/employee", "/employee/"})
 public class EmployeeController {
 	

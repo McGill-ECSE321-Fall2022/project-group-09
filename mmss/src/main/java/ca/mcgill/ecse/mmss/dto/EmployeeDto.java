@@ -1,12 +1,15 @@
 package ca.mcgill.ecse.mmss.dto;
 
 import ca.mcgill.ecse.mmss.model.Employee;
+import ca.mcgill.ecse.mmss.model.Shift;
+import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 
 public class EmployeeDto {
-	private String userName;
-	private String phoneNumber;
 	private String firstName;
 	private String lastName;
+	private String userName;
+	private String phoneNumber;
+	private ShiftTime shiftTime;
 
 	/**
 	 * Null constructor
@@ -23,10 +26,11 @@ public class EmployeeDto {
 	 * @param employee
 	 */
 	public EmployeeDto(Employee employee) {
-		this.phoneNumber = employee.getPhoneNumber();
-		this.userName = employee.getUsername();
 		this.firstName = employee.getPerson().getFirstName();
 		this.lastName = employee.getPerson().getLastName();
+		this.phoneNumber = employee.getPhoneNumber();
+		this.userName = employee.getUsername();
+		if(employee.getShift() != null) this.shiftTime = employee.getShift().getShiftTime();
 	}
 
 	/**
@@ -37,13 +41,14 @@ public class EmployeeDto {
 	 * @param userName
 	 * @param password
 	 * @param person
-	 * @param communication
+	 * @param shiftTime
 	 */
-	public EmployeeDto(String phoneNumber, String userName, String firstName, String lastName) {
+	public EmployeeDto(String phoneNumber, String userName, String firstName, String lastName, ShiftTime shiftTime) {
 		this.phoneNumber = phoneNumber;
 		this.userName = userName;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.shiftTime = shiftTime;
 	}
 
 	public String getPhoneNumber() {
@@ -60,6 +65,10 @@ public class EmployeeDto {
 
 	public String getLastName() {
 		return lastName;
+	}
+
+	public ShiftTime getShiftTime() {
+		return shiftTime;
 	}
 
 	public void setPhoneNumber(String phoneNumber) {

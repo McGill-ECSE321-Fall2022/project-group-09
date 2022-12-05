@@ -131,6 +131,7 @@ export default {
                     sessionStorage.setItem('loggedInVisitor', JSON.stringify(response.data));
                     // send to homepage
                     this.$router.push('/');
+                    location.reload();
                 })
                 .catch((error) => {
                     // empty the password
@@ -145,7 +146,6 @@ export default {
                     // call the error handler component modal (named errorPopUp) to display the error message
                     this.$bvModal.show('errorPopUp');
                 });
-
         }
     },
     computed: {

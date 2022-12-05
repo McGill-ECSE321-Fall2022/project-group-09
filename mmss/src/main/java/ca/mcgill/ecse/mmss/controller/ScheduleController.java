@@ -10,6 +10,7 @@ import ca.mcgill.ecse.mmss.model.Schedule;
 import ca.mcgill.ecse.mmss.service.ScheduleService;
 
 @RestController
+@CrossOrigin
 @RequestMapping ("/schedule")
 public class ScheduleController {
     @Autowired

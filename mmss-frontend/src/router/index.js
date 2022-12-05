@@ -7,8 +7,10 @@ import LoginEmployee from '@/components/LoginEmployee'
 import RoomsTable from '@/components/RoomsTable'
 import ArtefactsView from '@/components/ArtefactsView'
 import ManageLoan from '@/components/ManageLoan'
+import ManageShift from '@/components/ManageShift'
+import ManageNotification from '@/components/ManageNotification'
 import ManageAccount from '@/components/ManageAccount'
-// import NavBar from '@/components/NavBar'
+import NavBar from '@/components/NavBar'
 
 Vue.use(Router);
 
@@ -103,15 +105,25 @@ export default new Router({
       component: ManageLoan
     },
     {
+      path: '/shift/manage', 
+      name: 'ManageShift',
+      component: ManageShift
+    },
+    {
+      path: '/notification/manage', 
+      name: 'ManageNotification',
+      component: ManageNotification
+    },
+    {
       path: '/accounts/manage',
       name: 'ManageAccount',
       component: ManageAccount
     }, 
-    // {
-    //   path: '/navbar',
-    //   name: 'NavBar',
-    //   component: NavBar
-    // }, 
+    {
+       path: '/navbar',
+       name: 'NavBar',
+       component: NavBar
+    }, 
     {
       path: "*",
       redirect: "/404"

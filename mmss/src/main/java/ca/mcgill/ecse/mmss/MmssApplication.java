@@ -17,6 +17,7 @@ import ca.mcgill.ecse.mmss.model.Schedule;
 import ca.mcgill.ecse.mmss.service.ManagerService;
 import ca.mcgill.ecse.mmss.service.RoomService;
 import ca.mcgill.ecse.mmss.service.ScheduleService;
+import ca.mcgill.ecse.mmss.service.ShiftService;
 
 @SpringBootApplication
 public class MmssApplication {
@@ -28,6 +29,7 @@ public class MmssApplication {
 	private ManagerService managerService;
 
 	@Autowired ScheduleService scheduleService;
+	@Autowired ShiftService shiftService;
 
 
 	// method to create rooms and manager put it post construct
@@ -43,6 +45,9 @@ public class MmssApplication {
 		
 		try {scheduleService.getSchedule(); } 
 		catch (MmssException e) {scheduleService.createSchedule();}
+
+		try {shiftService.createShifts(); } 
+		catch (MmssException e) {}
 	
 		// create manager if he does not exist
 		if (manager == null) {
