@@ -96,14 +96,14 @@ public class ManagerIntegrationTests {
     public void testUpdateManger() { 
 
         // make the put request
-        client.put("/manager?oldPassword=aVerySecurePassword&newPassword=aNewVerySecurePassword", ManagerDto.class);
+        client.put("/manager?oldPassword=1VerySecurePassword&newPassword=1NewVerySecurePassword", ManagerDto.class);
 
         // find out if the manager is updated
         Manager manager = managerRepository.findManagerByUsername("marwan.kanaan@mcgill.ca"); 
 
         // assertions that the update worked
         assertEquals(manager.getUsername(), "marwan.kanaan@mcgill.ca"); 
-        assertEquals(manager.getPassword(), "aNewVerySecurePassword");
+        assertEquals(manager.getPassword(), "1NewVerySecurePassword");
                     
     }
     

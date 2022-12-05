@@ -29,7 +29,7 @@
 
             <!-- Input for the input for the password, with the error underneath-->
             <b-form-group id="input-group-4" label="Password:" label-for="input-4">
-                <b-form-input id="input-4" v-model="request.passWord" type="text" required
+                <b-form-input id="input-4" v-model="request.passWord" type="password" required
                     :state="passwordState"></b-form-input>
                 <span v-if="passwordError" style="color: red;">{{ passwordError }}</span>
                 <span v-else> <br> </span>
@@ -50,11 +50,12 @@
 import axios from 'axios'
 // Import the component that displays the error message
 import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
-
 // setup axios
 var config = require('../../config')
+
 var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
 var backendUrl = 'http://' + config.dev.backendHost + ':' + config.dev.backendPort
+
 var AXIOS = axios.create({
     baseURL: backendUrl,
     headers: { 'Access-Control-Allow-Origin': frontendUrl }
@@ -70,10 +71,13 @@ export default {
         return {
             // request to create a visitor
             request: {
-                userName: '',
-                passWord: '',
                 firstName: '',
                 lastName: '',
+                userName: '',
+                passWord: '',
+                newUserName: '',
+	            newPassword: '',
+	            balance: 0.0,
             },
             // other data
             errorMessage: '',
@@ -84,26 +88,23 @@ export default {
             lastNameError: '',
         }
     },
-    // no need to do anything on creation
-    created: function () {
-
-    },
-
     // METHODS 
-
     methods: {
         // when the form is submitted 
         onSubmit(event) {
             event.preventDefault()
             const self = this
             // send a post request
+            console.log(self.request)
             AXIOS.post('/visitor', self.request, {})
                 .then((response) => {
+                    alert('The visitor account was successfully created.')
                     // Empty the form
                     self.resetVariables()
 
                 })
                 .catch((error) => {
+                    console.log('hello')
                     // catch error and display it in a popup                    
                     if (error.response.status >= 450) {
                         self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
@@ -116,6 +117,7 @@ export default {
         },
         // when the form is reset
         onReset(event) {
+            const self = this
             event.preventDefault()
             // Reset our form values
             self.resetVariables()

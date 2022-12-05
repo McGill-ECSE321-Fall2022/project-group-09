@@ -5,7 +5,7 @@
 
             <!-- Input for the input for the password, with the error underneath-->
             <b-form-group id="input-group-1" label="Password:" label-for="input-1">
-                <b-form-input id="input-1" v-model="request.passWord" type="text" required
+                <b-form-input id="input-1" v-model="request.passWord" type="password" required
                     :state="passwordState"></b-form-input>
                 <span v-if="passwordError" style="color: red;">{{ passwordError }}</span>
                 <span v-else> <br> </span>
@@ -13,7 +13,7 @@
 
             <!-- Input for the new Password, with the error underneath-->
             <b-form-group id="input-group-2" label="New Password:" label-for="input-2">
-                <b-form-input id="input-2" v-model="request.newPassword" type="text" required :state="newPasswordState">
+                <b-form-input id="input-2" v-model="request.newPassword" type="password" required :state="newPasswordState">
                 </b-form-input>
                 <span v-if="newPasswordError" style="color: red;">{{ newPasswordError }}</span>
                 <span v-else> <br> </span>
@@ -79,9 +79,11 @@ export default {
             event.preventDefault()
             const self = this
             // send a put request
-            AXIOS.put('/manager?oldPassword=value&newPassword=value', self.request, {})
+            //console.log(self.request)
+            AXIOS.put('/manager', {}, { params: { oldPassword: self.request.passWord, newPassword: self.request.newPassword} })
                 .then((response) => {
                     // Empty the form
+                    alert('The password was successfully modified.')
                     self.resetVariables()
 
                 })
@@ -99,6 +101,7 @@ export default {
         // when the form is reset
         onReset(event) {
             event.preventDefault()
+            const self = this
             // Reset our form values
             self.resetVariables()
             // Trick to reset/clear native browser form validation state

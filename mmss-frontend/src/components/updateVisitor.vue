@@ -79,11 +79,12 @@ export default {
             event.preventDefault()
             const self = this
             // send a put request
+            console.log(self.request)
             AXIOS.put('/visitor', self.request, {})
                 .then((response) => {
                     // Empty the form
+                    alert('The password was successfully modified.')
                     self.resetVariables()
-
                 })
                 .catch((error) => {
                     // catch error and display it in a popup                    
@@ -98,6 +99,7 @@ export default {
         },
         // when the form is reset
         onReset(event) {
+            const self = this
             event.preventDefault()
             // Reset our form values
             self.resetVariables()

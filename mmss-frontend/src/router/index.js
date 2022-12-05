@@ -91,22 +91,22 @@ export default new Router({
       component: ManageAccount
     }, 
     {
-      path: '/createvisitor',
+      path: '/createVisitor',
       name: 'CreateVisitor',
       component: CreateVisitor
     }, 
     {
-      path: '/updatevisitor',
+      path: '/updateVisitor',
       name: 'UpdateVisitor',
       component: UpdateVisitor
     }, 
     {
-      path: '/updateemployee',
+      path: '/updateEmployee',
       name: 'UpdateEmployee',
       component: UpdateEmployee
     },
     {
-      path: '/Updatemanager',
+      path: '/updateManager',
       name: 'UpdateManager',
       component: UpdateManager
     },
