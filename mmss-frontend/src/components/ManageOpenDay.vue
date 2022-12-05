@@ -7,21 +7,14 @@
         <b-calendar v-model="value" @context="onContext" :date-disabled-fn="dateDisabled" locale="en-US" width="800px"></b-calendar>
         <br>
         <br>
-        <b-button variant="success" class="my-2 my-sm-0" @click="createOpenDay()"> Create OpenDays</b-button>
+        <b-button variant="success" class="my-2 my-sm-0" @click="createOpenDay()">Create OpenDays</b-button>
         <br>
-
-        <!-- <p>Value: <b>'{{ value }}'</b></p>
-        <p class="mb-0">Context:</p>
-        <pre class="small">{{ context }}</pre> -->
-       
     </div>
   </template>
   
   <script>
     import axios from 'axios'
-import { multiple } from 'webpack-merge';
     // Import the component that displays the error message
-    import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
     var config = require('../../config')
     var frontendUrl = 'http://' + config.dev.host + ':' + config.dev.port
     var backendUrl = 'http://' + config.dev.backendHost + ':' + config.dev.backendPort
@@ -41,8 +34,7 @@ import { multiple } from 'webpack-merge';
             this.context = ctx
             },
             dateDisabled(ymd, date) {
-            // Disable weekends (Sunday = `0`, Saturday = `6`) and
-            // disable days that fall on the 13th of the month
+            // Disable weekends (Sunday = `0`, Saturday = `6`)
             const weekday = date.getDay()
             // Return `true` if the date should be disabled
             return weekday === 0 || weekday === 6

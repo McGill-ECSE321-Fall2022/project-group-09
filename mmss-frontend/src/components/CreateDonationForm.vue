@@ -79,7 +79,6 @@ export default {
             AXIOS.post('/donation', this.request, {})
             .then((response) => {
                 // Show response
-                //alert('The donation was successfully created.')
                 // Empty the form
                 self.resetVariables()
                 //onReset
