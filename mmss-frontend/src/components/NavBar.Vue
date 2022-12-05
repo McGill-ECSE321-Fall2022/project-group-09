@@ -7,8 +7,9 @@
             </a>
             <label for="welcomeText">{{ welcomeText }}</label>
             </b-navbar-brand>
-            <b-navbar-nav class="ml-auto">
-                <b-button href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
+            <b-button v-if="loginStatus === 'out'" href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
+            <b-navbar-nav v-if="loginStatus !== 'out'" class="ml-auto">
+            <b-button href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
                 <!-- Visitor buttons-->
                 <b-button v-if="loginStatus === 'visitor'" href="/#/artefact/view" variant="outline-light" class="my-2 my-sm-0">Loans</b-button>
                 <b-button v-if="loginStatus === 'visitor'" href="/#/donation/request" variant="outline-light" class="my-2 my-sm-0">Donations</b-button>
@@ -18,18 +19,24 @@
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/loans/manage" variant="outline-light" class="my-2 my-sm-0">Loans</b-button>
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/booking/manage" variant="outline-light" class="my-2 my-sm-0">Donations</b-button>
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/booking/manage" variant="outline-light" class="my-2 my-sm-0">Bookings</b-button>
-                <!-- Staff buttons-->
+                <!-- Manager buttons-->
                 <b-button v-if="loginStatus === 'manager'" href="/#/opendays/manage" variant="outline-light" class="my-2 my-sm-0">Open Days</b-button>
                 <b-button v-if="loginStatus === 'manager'" href="/#/shift/manage" variant="outline-light" class="my-2 my-sm-0">Shifts</b-button>
                 <b-button v-if="loginStatus === 'manager'" href="/#/accounts/manage" variant="outline-light" class="my-2 my-sm-0">Accounts</b-button>
             </b-navbar-nav>
 
             <!-- Buttons to refresh, clear selections, and select all in table-->
-            <b-navbar-nav class="ml-auto">
-                <b-button variant="outline-light" class="my-2 my-sm-0" > Inbox</b-button>
+            <b-navbar-nav v-if="loginStatus !== 'out'" class="ml-auto">
+                <b-button href="/#/notification/manage" variant="outline-light" class="my-2 my-sm-0" > Inbox</b-button>
                 <b-nav-item-dropdown text="User" right>
-                    <b-dropdown-item >Edit Account</b-dropdown-item>
+                    <b-dropdown-item href="/#/opendays/manage">Edit Account</b-dropdown-item>
                     <b-dropdown-item @click="logout()">Logout</b-dropdown-item>
+                </b-nav-item-dropdown>
+            </b-navbar-nav>
+            <b-navbar-nav v-if="loginStatus === 'out'" class="ml-auto">
+                <b-nav-item-dropdown text="Account" right>
+                    <b-dropdown-item href="/#/opendays/manage">Create</b-dropdown-item>
+                    <b-dropdown-item href="/#/opendays/manage">Login</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-navbar>
@@ -58,14 +65,16 @@ export default {
             // redirect to page for visitors
             this.loginStatus = 'visitor';
             let userName = JSON.parse(loggedInVisitor).userName;
-            let firstName = userName.substr(0, userName.indexOf('.'));
+            let firstName = userName.substr(0, userName.indexOf('@'));
+            if(firstName.indexOf('.')>0) firstName = firstName.substr(0, firstName.indexOf('.'));
             this.welcomeText = 'Welcome, ' + firstName.charAt(0).toUpperCase() + firstName.slice(1);
         }
         else if (loggedInEmployee) {
             // redirect to page for employees
             this.loginStatus = 'employee';
             let userName = JSON.parse(loggedInEmployee).userName;
-            let firstName = userName.substr(0, userName.indexOf('.'));
+            let firstName = userName.substr(0, userName.indexOf('@'));
+            if(firstName.indexOf('.')>0) firstName = firstName.substr(0, firstName.indexOf('.'));
             this.welcomeText = 'Welcome, ' + firstName.charAt(0).toUpperCase() + firstName.slice(1);
 
         }
@@ -73,7 +82,8 @@ export default {
             // redirect to page for the manager
             this.loginStatus = 'manager';
             let userName = JSON.parse(loggedInManager).userName;
-            let firstName = userName.substr(0, userName.indexOf('.'));
+            let firstName = userName.substr(0, userName.indexOf('@'));
+            if(firstName.indexOf('.')>0) firstName = firstName.substr(0, firstName.indexOf('.'));
             this.welcomeText = 'Welcome, ' + firstName.charAt(0).toUpperCase() + firstName.slice(1);
         }
         else {
