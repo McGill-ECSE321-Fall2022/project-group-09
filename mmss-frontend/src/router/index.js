@@ -10,6 +10,10 @@ import ManageLoan from '@/components/ManageLoan'
 import ManageShift from '@/components/ManageShift'
 import ManageNotification from '@/components/ManageNotification'
 import ManageAccount from '@/components/ManageAccount'
+import CreateVisitor from '@/components/CreateVisitor'
+import UpdateVisitor from '@/components/UpdateVisitor'
+import UpdateEmployee from '@/components/UpdateEmployee'
+import UpdateManager from '@/components/UpdateManager'
 import NavBar from '@/components/NavBar'
 import BookTicket from '@/components/BookTicket'
 import BookTour from '@/components/BookTour'
@@ -146,7 +150,27 @@ export default new Router({
        component: NavBar
     }, 
     {
-      path: '/bookings/ticket',
+      {
+      path: '/createVisitor',
+      name: 'CreateVisitor',
+      component: CreateVisitor
+    }, 
+    {
+      path: '/updateVisitor',
+      name: 'UpdateVisitor',
+      component: UpdateVisitor
+    }, 
+    {
+      path: '/updateEmployee',
+      name: 'UpdateEmployee',
+      component: UpdateEmployee
+    },
+    {
+      path: '/updateManager',
+      name: 'UpdateManager',
+      component: UpdateManager
+    },
+    path: '/bookings/ticket',
       name: 'BookTicket',
       component: BookTicket
     },

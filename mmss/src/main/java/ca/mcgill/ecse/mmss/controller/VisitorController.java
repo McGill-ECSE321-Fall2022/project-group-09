@@ -24,8 +24,9 @@ import ca.mcgill.ecse.mmss.service.VisitorService;
 /**
  * REST API for the Visitor class
  */
-@CrossOrigin(origins = "*")
+
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping ({"/visitor","/visitor/"})
 public class VisitorController {
 	
@@ -92,11 +93,11 @@ public class VisitorController {
 	@PutMapping
     public ResponseEntity<VisitorDto> updateVisitorPassword(@RequestBody VisitorRequestDto request) {
         // get parameters
-        String username = request.getUsername();
+        String userName = request.getUsername();
         String oldPassword = request.getPassword();
         String newPassword = request.getNewPassword();
         // call service layer
-        Visitor updatedVisitor = visitorService.updateVisitorPassword(username, oldPassword, newPassword);
+        Visitor updatedVisitor = visitorService.updateVisitorPassword(userName, oldPassword, newPassword);
         // return updated Visitor as Dto
         return new ResponseEntity<VisitorDto>(new VisitorDto(updatedVisitor), HttpStatus.OK);
     }

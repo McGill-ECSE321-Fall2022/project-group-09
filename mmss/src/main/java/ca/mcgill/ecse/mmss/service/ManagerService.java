@@ -59,7 +59,7 @@ public class ManagerService {
         Communication communication = new Communication();
         communicationRepository.save(communication);
         // create manager with a communication
-        Manager manager = new Manager("marwan.kanaan@mcgill.ca", "aVerySecurePassword", marwan);
+        Manager manager = new Manager("marwan.kanaan@mcgill.ca", "1VerySecurePassword", marwan);
 
         manager.setCommunication(communication);
         managerRepository.save(manager);
