@@ -8,6 +8,7 @@ import ManageLoan from '@/components/ManageLoan'
 import ManageAccount from '@/components/ManageAccount'
 import ManageDonation from '@/components/ManageDonation'
 import DonationVisitor from '@/components/DonationVisitor'
+import ManageOpenDay from '@/components/ManageOpenDay.vue'
 
 Vue.use(Router);
 
@@ -96,6 +97,11 @@ export default new Router({
       path: '/donation/visitor',
       name: 'DonationVisitor',
       component: DonationVisitor
+    },
+    {
+      path: '/openday',
+      name: 'ManageOpenDay',
+      component: ManageOpenDay
     },
     {
       path: "*",
