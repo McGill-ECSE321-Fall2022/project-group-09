@@ -21,7 +21,7 @@
 
             <!-- Input for the username, with the error underneath-->
             <b-form-group id="input-group-3" label="Username" label-for="input-3">
-                <b-form-input id="input-3" v-model="request.userName" type="text" required
+                <b-form-input id="input-3" v-model="request.username" type="text" required
                     :state="usernameState"></b-form-input>
                 <span v-if="usernameError" style="color: red;">{{ usernameError }}</span>
                 <span v-else> <br> </span>
@@ -29,7 +29,7 @@
 
             <!-- Input for the input for the password, with the error underneath-->
             <b-form-group id="input-group-4" label="Password:" label-for="input-4">
-                <b-form-input id="input-4" v-model="request.passWord" type="password" required
+                <b-form-input id="input-4" v-model="request.password" type="password" required
                     :state="passwordState"></b-form-input>
                 <span v-if="passwordError" style="color: red;">{{ passwordError }}</span>
                 <span v-else> <br> </span>
@@ -73,11 +73,11 @@ export default {
             request: {
                 firstName: '',
                 lastName: '',
-                userName: '',
-                passWord: '',
+                username: '',
+                password: '',
                 newUserName: '',
-	            newPassword: '',
-	            balance: 0.0,
+                newPassword: '',
+                balance: 0.0,
             },
             // other data
             errorMessage: '',
@@ -98,13 +98,11 @@ export default {
             console.log(self.request)
             AXIOS.post('/visitor', self.request, {})
                 .then((response) => {
-                    alert('The visitor account was successfully created.')
                     // Empty the form
                     self.resetVariables()
 
                 })
                 .catch((error) => {
-                    console.log('hello')
                     // catch error and display it in a popup                    
                     if (error.response.status >= 450) {
                         self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
@@ -130,8 +128,8 @@ export default {
         // reset all the variables
         resetVariables() {
             const self = this
-            self.request.userName = ''
-            self.request.passWord = ''
+            self.request.username = ''
+            self.request.password = ''
             self.request.firstName = ''
             self.request.lastName = ''
             self.errorMessage = ''
@@ -146,11 +144,13 @@ export default {
         // check if the username is valid
         usernameState() {
             this.usernameError = '';
-            if (this.request.userName.trim() === '') {
+            if (this.request.username.trim() === '') {
                 return false;
-            }
-            else if (!this.request.userName.includes('@')) {
+            } else if (!this.request.username.includes('@')) {
                 this.usernameError = 'Please enter a valid email address';
+                return false;
+            } else if (this.request.username.includes(';')) {
+                this.usernameError = 'Please enter a valid username';
                 return false;
             } else {
                 this.usernameError = "";
@@ -161,16 +161,16 @@ export default {
         passwordState() {
             const upper = /[A-Z]/;
             const number = /[0-9]/;
-            if (this.request.passWord.trim() === '') {
+            if (this.request.password.trim() === '') {
                 return false;
-            } else if (!upper.test(this.request.passWord)) {
+            } else if (!upper.test(this.request.password)) {
                 this.passwordError = "The password must contain at least one uppercase letter";
                 return false;
 
-            } else if (!number.test(this.request.passWord)) {
+            } else if (!number.test(this.request.password)) {
                 this.passwordError = "The password must contain at least one number";
                 return false;
-            } else if (this.request.passWord.length < 8) {
+            } else if (this.request.password.length < 8) {
                 this.passwordError = "The password must be at least 8 characters long";
                 return false;
             } else {

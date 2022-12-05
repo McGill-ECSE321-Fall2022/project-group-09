@@ -79,7 +79,7 @@ export default {
             event.preventDefault()
             const self = this
             // send a put request
-            console.log(self.request)
+            console.log(self.request.userName)
             AXIOS.put('/visitor', self.request, {})
                 .then((response) => {
                     // Empty the form

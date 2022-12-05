@@ -4,7 +4,7 @@
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
 
             <!-- Input for the input for the password, with the error underneath-->
-            <b-form-group id="input-group-1" label="Password:" label-for="input-1">
+            <b-form-group id="input-group-1" label="Old Password:" label-for="input-1">
                 <b-form-input id="input-1" v-model="request.passWord" type="text" required
                     :state="passwordState"></b-form-input>
                 <span v-if="passwordError" style="color: red;">{{ passwordError }}</span>
