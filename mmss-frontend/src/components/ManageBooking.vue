@@ -4,7 +4,7 @@
 
         <b-card bg-variant="light">
             <h2>Tickets</h2>
-            <b-navbar type="dark" variant="info">
+            <b-navbar class="secondaryBar" type="dark" variant="info">
                 <!-- Buttons to refresh, clear selections, and select all in table-->
                 <b-navbar-nav class="ml-auto">
                     <b-button-group>
@@ -28,7 +28,7 @@
 
         <b-card bg-variant="light">
             <h2>Tours</h2>
-            <b-navbar type="dark" variant="info">
+            <b-navbar class="secondaryBar" type="dark" variant="info">
                 <!-- Buttons to refresh, clear selections, and select all in table-->
                 <b-navbar-nav class="ml-auto">
                     <b-button-group>

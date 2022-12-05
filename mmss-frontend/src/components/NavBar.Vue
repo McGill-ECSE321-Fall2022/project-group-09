@@ -12,14 +12,19 @@
                 <b-button href="/#/artefacts" variant="outline-light" class="my-2 my-sm-0">Artefacts</b-button>
                 <!-- Visitor buttons-->
                 <b-button v-if="loginStatus === 'visitor'" href="/#/donation/request" variant="outline-light" class="my-2 my-sm-0">Donations</b-button>
-                <b-button v-if="loginStatus === 'visitor'" href="/#/booking/request" variant="outline-light" class="my-2 my-sm-0">Bookings</b-button>
+
+                <b-nav-item-dropdown v-if="loginStatus === 'visitor'" text="Booking" right>
+                    <b-dropdown-item href="/#/bookings/ticket">Tickets</b-dropdown-item>
+                    <b-dropdown-item href="/#/bookings/tour">Tours</b-dropdown-item>
+                </b-nav-item-dropdown>
+
                 <!-- Staff buttons-->
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/rooms" variant="outline-light" class="my-2 my-sm-0">Rooms</b-button>
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/loans/manage" variant="outline-light" class="my-2 my-sm-0">Loans</b-button>
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/donations/manage" variant="outline-light" class="my-2 my-sm-0">Donations</b-button>
-                <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/booking/manage" variant="outline-light" class="my-2 my-sm-0">Bookings</b-button>
+                <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/bookings/manage" variant="outline-light" class="my-2 my-sm-0">Bookings</b-button>
                 <!-- Manager buttons-->
-                <b-button v-if="loginStatus === 'manager'" href="/#" variant="outline-light" class="my-2 my-sm-0">Open Days</b-button>
+                <b-button v-if="loginStatus === 'manager'" href="/#/openday" variant="outline-light" class="my-2 my-sm-0">Open Days</b-button>
                 <b-button v-if="loginStatus === 'manager'" href="/#/shift/manage" variant="outline-light" class="my-2 my-sm-0">Shifts</b-button>
                 <b-button v-if="loginStatus === 'manager'" href="/#/accounts/manage" variant="outline-light" class="my-2 my-sm-0">Accounts</b-button>
             </b-navbar-nav>
