@@ -15,8 +15,7 @@
             </b-navbar>
         </div>
         
-        <b-table ref="DonationTable" striped hover sticky-header="600px" :items="donations" selectable :select-mode="selectMode"
-            @row-selected="onRowSelected"></b-table>
+        <b-table ref="DonationTable" striped hover sticky-header="600px" :items="donations"></b-table>
 
         <b-modal 
             id='CreateDonationForm'
@@ -28,8 +27,6 @@
             <create-form/>
         </b-modal> 
 
-        <!-- The component that displays the error message. Links the message of that component to -->
-        <ErrorHandler :message="errorMessage" />
     </div>
 
 </template>
@@ -63,7 +60,7 @@ export default {
     created: function () {
         // Get session info
         this.loggedInVisitor = JSON.parse(sessionStorage.getItem("loggedInVisitor")).userName;
-        AXIOS.get('/donation/visitor/?username=' + loggedInVisitor, {}, {})
+        AXIOS.get('/donation/visitor/?username=' + this.loggedInVisitor, {}, {})
             .then(response => {
                 // add response to all donations
                 this.donations = response.data
@@ -82,9 +79,8 @@ export default {
     },
     methods: {
         refreshTable() {
-            console.log(sessionStorage)
-            const visitor = JSON.parse(sessionStorage.getItem("loggedInVisitor")).userName;            console.log(sessionStorage)
-            AXIOS.get('/donation/visitor/?username=' + visitor, {}, {})
+            this.loggedInVisitor = JSON.parse(sessionStorage.getItem("loggedInVisitor")).userName;
+            AXIOS.get('/donation/visitor/?username=' + this.loggedInVisitor, {}, {})
             .then(response => {
                 // add response to all donations
                 this.donations = response.data

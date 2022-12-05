@@ -56,6 +56,19 @@
             ></b-form-input>
         </b-form-group>
 
+        <!-- Image URL -->
+        <b-form-group 
+            id="input-group-7" 
+            label="Image URL:" 
+            label-for="input-4">
+            <b-form-input 
+                id="input-4" 
+                v-model="request.imageUrl" 
+                type="text" 
+                required>
+            </b-form-input>
+        </b-form-group>
+
         <b-button variant="success" @click="doApproveDonation(selectedDonations)">Approve</b-button>
         <b-button variant="danger" @click="doDeclineDonation(selectedDonations)">Decline</b-button>
 
@@ -95,6 +108,7 @@ export default {
                 canLoan: false,
                 insuranceFee: '0.00',
                 loanFee: '0.00',
+                imageUrl: ''
             }
         }
     },

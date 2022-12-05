@@ -10,7 +10,7 @@
                 id="input-1" 
                 v-model="request.itemName" 
                 type="text" 
-                :state="request.artefactName.length <= 50"
+                :state="request.itemName.length <= 50"
                 placeholder="Enter item's name (maximum 50 characters)" 
                 required>
             </b-form-input>
@@ -67,17 +67,19 @@ export default {
         }
       },
     created: function () {
-        this.visitorUserName = this.loggedInVisitor = JSON.parse(sessionStorage.getItem("loggedInVisitor")).userName;
+        
     },
     methods: {
         // When the Create button is clicked
         onSubmit(event) {
             event.preventDefault()
             const self = this
-            AXIOS.post('/donation', self.request, {})
+            this.request.visitorUsername = JSON.parse(sessionStorage.getItem('loggedInVisitor')).userName;
+            console.log(self.request)
+            AXIOS.post('/donation', this.request, {})
             .then((response) => {
                 // Show response
-                alert('The donation was successfully created.')
+                //alert('The donation was successfully created.')
                 // Empty the form
                 self.resetVariables()
                 //onReset
