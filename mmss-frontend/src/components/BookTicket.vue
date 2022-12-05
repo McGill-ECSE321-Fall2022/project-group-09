@@ -23,10 +23,6 @@
         </b-card>
 
         <ErrorHandler :message="errorMessage" />
-        <b-card class="mt-3" header="Form Data Result">
-            <pre class="m-0">{{ request }}</pre>
-        </b-card>
-
     </div>
 </template>
 
@@ -60,45 +56,12 @@ export default {
         }
     },
     created: function () {
-        const self = this
-
-        const visitor = {
-            username: "jon.snow@got.com",
-            password: "idontwantit",
-            firstName: "Jon",
-            lastName: "Snow",
-        }
-        sessionStorage.setItem('loggedInVisitor', JSON.stringify(visitor)); //store visitor
-        const visitorUsername = JSON.parse(sessionStorage.getItem("loggedInVisitor")).username; //get visitor username
-
-        self.request.visitorUsername = visitorUsername;
-
-        AXIOS.get('/ticket', {}, {}) // Initializing tickets from backend
-            .then(response => {
-                // JSON responses are automatically parsed.
-                const tickets = response.data
-                for (let i = 0; i < tours.length; i++) {
-                    const ticket = ticket[i]
-                    this.ticketBookings.push({ value: ticket.visitorUsername, text: ticket.date })
-                }
-                console.log(tickets)
-            })
-            .catch((error) => {
-                if (error.response.status >= 450) {
-                    self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
-                } else {
-                    self.errorMessage = error.response.data;
-                }
-                // call the error handler component modal (named errorPopUp) to display the error message
-                self.$bvModal.show('errorPopUp');
-            })
     },
     methods: {
         onSubmit(event) {
             event.preventDefault()
             const self = this
             AXIOS.post('/ticket', self.request, {}).then((response) => {
-                alert(JSON.stringify(response)) // Show response
                 self.resetVariables() // Empty the form
             })
                 .catch((error) => {
@@ -131,4 +94,5 @@ export default {
 </script>
 
 <style>
+
 </style>

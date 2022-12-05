@@ -2,28 +2,52 @@
     <div id="ManageBooking">
         <h1> Bookings </h1>
 
-        <h2>Tours</h2>
-        <b-navbar type="dark" variant="info">
-            <!-- Buttons to refresh, clear selections, and select all in table-->
-            <b-navbar-nav class="ml-auto">
-                <b-button-group>
-                    <b-button class="my-2 my-sm-0" @click="refreshTable()"> Refresh Table</b-button>
-                    <br>
-                    <b-button variant="primary" class="my-2 my-sm-0" @click="selectAll()"> Select
-                        All</b-button>
-                    <br>
-                    <b-button class="my-2 my-sm-0" @click="clearSelected()"> Clear Selected</b-button>
-                </b-button-group>
-            </b-navbar-nav>
-        </b-navbar>
+        <b-card bg-variant="light">
+            <h2>Tickets</h2>
+            <b-navbar type="dark" variant="info">
+                <!-- Buttons to refresh, clear selections, and select all in table-->
+                <b-navbar-nav class="ml-auto">
+                    <b-button-group>
+                        <b-button class="my-2 my-sm-0" @click="refreshTicketTable()"> Refresh Table</b-button>
+                        <br>
+                        <b-button variant="primary" class="my-2 my-sm-0" @click="selectAllTickets()"> Select
+                            All</b-button>
+                        <br>
+                        <b-button class="my-2 my-sm-0" @click="clearSelectedTickets()"> Clear Selected</b-button>
+                    </b-button-group>
+                </b-navbar-nav>
+            </b-navbar>
 
-        <!-- Table that displays the bookings-->
-        <b-table ref="TourBookingTable" striped hover sticky-header="200px" :items="tours" selectable
-            :select-mode="selectMode" @row-selected="onRowSelected"></b-table>
 
-        <b-button variant="success" @click="updateTours(selectedTours)"> Update Booking </b-button>
-        <b-button variant="danger" @click="deleteBooking(selectedBookings)"> Delete Booking </b-button>
+            <!-- Table that displays the ticket bookings-->
+            <b-table ref="TicketBookingTable" striped hover sticky-header="200px" :items="tickets" selectable
+                :select-mode="selectMode" @row-selected="onTicketRowSelected"></b-table>
 
+            <b-button variant="danger" @click="deleteTickets(selectedTickets)"> Delete Booking </b-button>
+        </b-card>
+
+        <b-card bg-variant="light">
+            <h2>Tours</h2>
+            <b-navbar type="dark" variant="info">
+                <!-- Buttons to refresh, clear selections, and select all in table-->
+                <b-navbar-nav class="ml-auto">
+                    <b-button-group>
+                        <b-button class="my-2 my-sm-0" @click="refreshTourTable()"> Refresh Table</b-button>
+                        <br>
+                        <b-button variant="primary" class="my-2 my-sm-0" @click="selectAllTours()"> Select
+                            All</b-button>
+                        <br>
+                        <b-button class="my-2 my-sm-0" @click="clearSelectedTours()"> Clear Selected</b-button>
+                    </b-button-group>
+                </b-navbar-nav>
+            </b-navbar>
+
+            <!-- Table that displays the tour bookings-->
+            <b-table ref="TourBookingTable" striped hover sticky-header="200px" :items="tours" selectable
+                :select-mode="selectMode" @row-selected="onTourRowSelected"></b-table>
+
+            <b-button variant="danger" @click="deleteTours(selectedTours)"> Delete Booking </b-button>
+        </b-card>
     </div>
 </template>
 
@@ -53,7 +77,8 @@ export default {
 
             // table selection mode
             selectMode: 'multi',
-            selectedBookings: [],
+            selectedTickets: [],
+            selectedTours: [],
             visitorUsername: '',
 
             // to update the status of a booking
@@ -66,9 +91,17 @@ export default {
     },
     created: function () {
         const self = this
+        AXIOS.get('/ticket', {}, {})
+            .then(response => {
+                self.tickets = response.data
+            })
+            .catch(error => {
+                self.errorMessage = error.response.data
+            });
+
         AXIOS.get('/tour', {}, {})
             .then(response => {
-                self.loans = response.data
+                self.tours = response.data
             })
             .catch(error => {
                 self.errorMessage = error.response.data
@@ -76,16 +109,34 @@ export default {
     },
     methods: {
         // select rows
-        onRowSelected(selectedRows) {
-            this.selectedLoans = selectedRows;
+        onTicketRowSelected(selectedRows) {
+            this.selectedTickets = selectedRows;
+        },
+        onTourRowSelected(selectedRows) {
+            this.selectedTours = selectedRows;
         },
         // clear selected rows
-        clearSelected() {
-            this.selectedLoans = [];
-            this.$refs.BookingTable.clearSelected();
+        clearSelectedTickets() {
+            this.selectedTickets = [];
+            this.$refs.TicketBookingTable.clearSelected();
+        },
+        // clear selected rows
+        clearSelectedTours() {
+            this.selectedTours = [];
+            this.$refs.TourBookingTable.clearSelected();
         },
         // refresh table
-        refreshTable() {
+        refreshTicketTable() {
+            AXIOS.get('/ticket', {}, {})
+                .then(response => {
+                    // add response to all tours
+                    this.tickets = response.data
+                })
+                .catch(error => {
+                    this.errorMessage = error.response.data
+                });
+        },
+        refreshTourTable() {
             AXIOS.get('/tour', {}, {})
                 .then(response => {
                     // add response to all tours
@@ -96,40 +147,22 @@ export default {
                 });
         },
         // select all
-        selectAll() {
-            this.$refs.BookingTable.selectAllRows();
+        selectAllTickets() {
+            this.$refs.TicketBookingTable.selectAllRows();
         },
-        // get a tour by a visitor
-        doGetTour(username) {
-            AXIOS.get('/tour/visitor/?username=' + username, {}, {})
-                .then(response => {
-                    // replace loans with response
-                    this.tours = response.data;
-                    //clear the input
-                    this.username = '';
-                })
-                .catch(error => {
-                    // logic on the error status. Display backend error message if status is below 450
-                    // otherwise display something went wrong
-                    if (error.response.status >= 450) {
-                        this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
-                    } else {
-                        this.errorMessage = error.response.data;
-                    }
-                    // call the error handler component modal (named errorPopUp) to display the error message
-                    this.$bvModal.show('errorPopUp');
-                });
+        selectAllTours() {
+            this.$refs.TourBookingTable.selectAllRows();
         },
-        // update the status of all selected tours
+        // update all selected tours
         async doUpdateTour(selectedTours, date, numberOfParticipants) {
             for (var i = 0; i < selectedTours.length; i++) {
                 this.request.date = selectedTours[i].date;
                 this.request.numberOfParticipants = numberOfParticipants;
-                // send request to backend up update loan
+                // send request to backend up update tour
                 AXIOS.put('/tour', this.request, {})
                     .then(response => {
                         //refresh the table on the last request
-                        this.refreshTable();
+                        this.refreshTourTable();
                     })
                     .catch(error => {
                         if (error.response.status >= 450) {
@@ -142,17 +175,86 @@ export default {
                     });
             }
         },
-        // updating a booking
-        async updateTours() {
-            await this.doUpdateTour(this.selectedTours, "Updated");
-            this.clearSelected();
-            this.refreshTable();
+        // update all selected tickets
+        async doUpdateTicket(selectedTickets, date) {
+            for (var i = 0; i < selectedTickets.length; i++) {
+                this.request.date = selectedTickets[i].date;
+                // send request to backend up update ticket
+                AXIOS.put('/ticket', this.request, {})
+                    .then(response => {
+                        //refresh the table on the last request
+                        this.refreshTicketTable();
+                    })
+                    .catch(error => {
+                        if (error.response.status >= 450) {
+                            this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                        } else {
+                            this.errorMessage = error.response.data;
+                        }
+                        // call the error handler component modal (named errorPopUp) to display the error message
+                        this.$bvModal.show('errorPopUp');
+                    });
+            }
         },
-        // deleting a booking
-        async deleteBooking() {
-            await this.doDeleteBooking(this.selectedBookings, "Deleted");
-            this.clearSelected();
-            this.refreshTable();
+        // delete all selected tours
+        async doDeleteTour(selectedTours) {
+            for (var i = 0; i < selectedTours.length; i++) {
+                AXIOS.delete('/tour/' + selectedTours[i].bookingId, {}, {})
+                    .then(response => {
+                        this.refreshTourTable(); //refresh the table on the last request
+                    })
+                    .catch(error => {
+                        if (error.response.status >= 450) {
+                            this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                        } else {
+                            this.errorMessage = error.response.data;
+                        }
+                        // call the error handler component modal (named errorPopUp) to display the error message
+                        this.$bvModal.show('errorPopUp');
+                    });
+            }
+        },
+        // delete all selected tickets
+        async doDeleteTicket(selectedTickets) {
+            for (var i = 0; i < selectedTickets.length; i++) {
+                AXIOS.delete('/ticket/' + selectedTickets[i].bookingId, {}, {})
+                    .then(response => {
+                        this.refreshTicketTable(); //refresh the table on the last request
+                    })
+                    .catch(error => {
+                        if (error.response.status >= 450) {
+                            this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                        } else {
+                            this.errorMessage = error.response.data;
+                        }
+                        // call the error handler component modal (named errorPopUp) to display the error message
+                        this.$bvModal.show('errorPopUp');
+                    });
+            }
+        },
+        // updating a tour booking
+        async updateTours() {
+            await this.doUpdateTour(this.selectedTours);
+            this.clearSelectedTours();
+            this.refreshTourTable();
+        },
+        // updating a ticket booking
+        async updateTickets() {
+            await this.doUpdateTicket(this.selectedTickets);
+            this.clearSelectedTickets();
+            this.refreshTicketTable();
+        },
+        // deleting a tour booking
+        async deleteTours() {
+            await this.doDeleteTour(this.selectedTours);
+            this.clearSelectedTours();
+            this.refreshTourTable();
+        },
+        // deleting a ticket booking
+        async deleteTickets() {
+            await this.doDeleteTicket(this.selectedTickets);
+            this.clearSelectedTickets();
+            this.refreshTicketTable();
         }
     },
 }
