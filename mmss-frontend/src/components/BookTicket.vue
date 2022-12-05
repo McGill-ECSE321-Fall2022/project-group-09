@@ -1,7 +1,7 @@
 <template>
     <div id="CreateTicket">
         <b-card bg-variant="light">
-            <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+            <b-form id="createTicketForm" @submit="onSubmit" @reset="onReset" v-if="show">
 
                 <b-form-group id="booking-datepicker">
                     <label for="booking-datepicker">Choose a Ticket Date</label>
@@ -94,5 +94,8 @@ export default {
 </script>
 
 <style>
-
+#createTicketForm {
+    width: 50% !important;
+    margin: 0 auto !important;
+}
 </style>

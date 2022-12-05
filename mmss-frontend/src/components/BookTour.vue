@@ -1,7 +1,7 @@
 <template>
     <div id="CreateTour">
         <b-card bg-variant="light">
-            <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+            <b-form id="CreateTourForm" @submit="onSubmit" @reset="onReset" v-if="show">
 
                 <b-form-group id="booking-datepicker">
                     <label for="booking-datepicker">Choose a Tour Date</label>
@@ -64,7 +64,7 @@ export default {
             request: {
                 visitorUsername: '',
                 date: '',
-                numberOfParticipants: '',
+                numberOfParticipants: 0,
                 shiftTime: null,
             },
             timeSlotOptions: [
@@ -118,5 +118,13 @@ export default {
 </script>
 
 <style>
+#CreateTourForm {
+    width: 50% !important;
+    margin: 0 auto !important;
+}
 
+#booking-timepicker .custom-select {
+    width: 100% !important;
+    text-align: center !important;
+}
 </style>
