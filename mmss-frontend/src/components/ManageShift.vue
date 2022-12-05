@@ -70,8 +70,7 @@ export default {
             selectedEmployees: [],
             request: {
                 userName: '',
-                shiftTime: '',
-                shiftId: ''
+                shiftTime: ''
             }
 
         }
@@ -104,8 +103,8 @@ export default {
                     this.errorMessage = error.response.data
                 });
         },
-        showShifts(shiftTime) {
-            AXIOS.get('/employee/byShift?id=' + shiftTime, {}, {})
+        async showEmployees(shiftId) {
+            await AXIOS.get('/employee/byShift?id=' + shiftId, {}, {})
                 .then(response => {
                     // replace employees with response
                     this.employees = response.data;
@@ -121,21 +120,23 @@ export default {
                 });
         },
         showMorningShifts() {
-            this.showEmployees("Morning");
+            let id = this.doGetShiftId("Morning");
+            this.showEmployees(id);
         },
         showAfternoonShifts() {
-            this.showEmployees("Afternoon");
+            let id = this.doGetShiftId("Afternoon");
+            this.showEmployees(id);
         },
         showEveningShifts() {
-            this.showEmployees("Evening");
+            let id = this.doGetShiftId("Evening");
+            this.showEmployees(id);
         },
-        doUpdateEmployee(selectedEmployees, shiftTime) {
+        async doUpdateEmployee(selectedEmployees, shiftTime) {
             for (var i = 0; i < selectedEmployees.length; i++) {
                 this.request.userName = selectedEmployees[i].userName;
                 this.request.shiftTime = shiftTime;
-                console.log("PRE GOING IN:" + this.request.shiftTime);
-                this.doGetShiftId(shiftTime);
-                AXIOS.put('/shift/assign?shiftId=' + this.request.shiftId + "&username=" + this.request.userName, {})
+                let id = this.doGetShiftId(shiftTime);
+                await AXIOS.put('/shift/assign?shiftId=' + id + "&username=" + this.request.userName, {})
                     .then(response => {
                         // do nothing
                     })
@@ -167,14 +168,11 @@ export default {
             this.clearSelected();
             this.refreshTable();
         },
-        doGetShiftId(shiftTime) {
-            console.log("POST GOING IN:" + this.request.shiftTime);
-            AXIOS.get('/shift/' + shiftTime, {}, {})
+        async doGetShiftId(shiftTime) {
+            await AXIOS.get('/shift/' + shiftTime, {}, {})
                 .then(response => {
                     // replace loans with response
-                    console.log("PRE GOING OUT:" + this.request.shiftId);
-                    this.request.shiftId = response.data.shiftId;
-                    console.log("POST GOING OUT:" + this.request.shiftId);
+                    return response.data.shiftId;
                 })
                 .catch(error => {
                     // logic on the error status. Display backend error message if status is below 450

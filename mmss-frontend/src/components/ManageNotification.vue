@@ -117,13 +117,7 @@ export default {
             for (var i = 0; i < selectedNotifications.length; i++) {
                 await AXIOS.delete('/notification/' + selectedNotifications[i].notificationId)
                     .then(response => {
-                        for (var j = 0; j < this.notifications.length; j++){
-                            if(this.notifications[j].notificationId === this.selectedNotifications[i].notificationId){
-                                this.notifications.splice(j);
-                                this.selectedNotifications.splice(i);
-                                break;
-                            }
-                        }
+                        
                     })
                     .catch(error => {
                         if (error.response.status >= 450) {
@@ -135,6 +129,7 @@ export default {
                         this.$bvModal.show('errorPopUp');
                     });
                 }
+            this.refreshTable();
         }
     },
 }
