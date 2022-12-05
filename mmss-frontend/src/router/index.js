@@ -14,6 +14,9 @@ import NavBar from '@/components/NavBar'
 import BookTicket from '@/components/BookTicket'
 import BookTour from '@/components/BookTour'
 import ManageBooking from '@/components/ManageBooking'
+import ManageDonation from '@/components/ManageDonation'
+import DonationVisitor from '@/components/DonationVisitor'
+import ManageOpenDay from '@/components/ManageOpenDay.vue'
 
 Vue.use(Router);
 
