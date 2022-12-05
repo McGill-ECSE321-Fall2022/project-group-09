@@ -74,9 +74,6 @@
 
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />
-        <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ request }}</pre>
-      </b-card>
     </div>
 
 </template>
