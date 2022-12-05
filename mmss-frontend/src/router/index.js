@@ -150,7 +150,6 @@ export default new Router({
        component: NavBar
     }, 
     {
-      {
       path: '/createVisitor',
       name: 'CreateVisitor',
       component: CreateVisitor
@@ -170,7 +169,8 @@ export default new Router({
       name: 'UpdateManager',
       component: UpdateManager
     },
-    path: '/bookings/ticket',
+    {
+      path: '/bookings/ticket',
       name: 'BookTicket',
       component: BookTicket
     },

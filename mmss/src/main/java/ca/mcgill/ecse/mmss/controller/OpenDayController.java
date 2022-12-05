@@ -20,8 +20,9 @@ import ca.mcgill.ecse.mmss.dto.OpenDayDto;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.service.OpenDayService;
 
-@CrossOrigin(origins = "*")
+
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/openday")
 public class OpenDayController {
 
@@ -73,8 +74,8 @@ public class OpenDayController {
      * @param date
      * @return A message saying the openDay was deleted
      */
-    @DeleteMapping({"/{id}", "/{id}/"})
-    public ResponseEntity<String> deleteDonation(@PathVariable String date) {
+    @DeleteMapping({"/{date}", "/{date}/"})
+    public ResponseEntity<String> deleteOpenDay(@PathVariable String date) {
         // call service layer
         openDayService.deleteOpenDay(Date.valueOf(date));
 

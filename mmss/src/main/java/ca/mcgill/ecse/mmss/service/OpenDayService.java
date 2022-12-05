@@ -53,8 +53,9 @@ public class OpenDayService {
 
         // use repository method
         ArrayList<OpenDay> openDays = openDayRepository.findAll();
+        // sort the openDays by date
+        openDays.sort(new ComparatorForOpenDay ()); 
         
-
         return openDays;
     }
 
