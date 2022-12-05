@@ -18,13 +18,7 @@
                     <b-table striped hover :items="storageAndDisplay"></b-table>
                 </b-col>
             </b-row>
-            <b-row>
-                <b-col><p><b>Total: </b>{{ smallCount }}</p></b-col>
-                <b-col><p><b>Total: </b>{{ largeCount }}</p></b-col>
-                <b-col><p><b>Total: </b>{{ count }}</p></b-col>
-            </b-row>
-        </b-container>
-        
+        </b-container>        
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />
     </div>
@@ -57,32 +51,40 @@ export default {
         smallCount: 0,
         largeCount: 0,
         count: 0,
+        displayCount: 0,
     }
     },
     created: function () {
         const self = this
-        self.count += self.getDisplayCapacity()
         // Call getAllRooms
         AXIOS.get('/room', {}, {})
         .then(response => {
         const rooms = response.data
+        // Build the infor for the tables
         for (let i = 0; i < rooms.length; i++)
             {
                 const room = rooms[i]
                 if (room.roomtype == 'Small') {
+                    self.displayCount += room.artefactCount
                     self.smallCount += room.artefactCount
                     self.smallRooms.push({roomName: room.roomName, artefactCount: room.artefactCount})
                 }
                 if (room.roomtype == 'Large') {
+                    self.displayCount += room.artefactCount
                     self.largeCount += room.artefactCount
                     self.largeRooms.push({roomName: room.roomName, artefactCount: room.artefactCount})
                 }
                 if (room.roomtype == 'Storage') {
                     self.count += room.artefactCount
+                    console.log(room.artefactCount)
+                    console.log(self.count)
                     self.storageAndDisplay.push({roomName: room.roomName, artefactCount: room.artefactCount})
                 }
             }
-        console.log(roomList)
+        self.smallRooms.push({roomName: 'Total: ', artefactCount: self.smallCount})
+        self.largeRooms.push({roomName: 'Total: ', artefactCount: self.largeCount})
+        self.storageAndDisplay.push({roomName: 'Display', artefactCount: self.displayCount})
+        self.storageAndDisplay.push({roomName: 'Total: ', artefactCount: self.count + self.displayCount})
         })
         .catch(error => {
             console.log(error)
@@ -103,6 +105,7 @@ export default {
             const self = this
             AXIOS.get('/room/displayCapacity', {}, {})
             .then(response => {
+            console.log(response.data + ' from display')
             return response.data
             })
             .catch(error => {

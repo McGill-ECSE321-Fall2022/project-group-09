@@ -305,7 +305,7 @@ public class ArtefactService {
             throw new MmssException(HttpStatus.BAD_REQUEST,
                     "The artefact’s description cannot be empty or longer than 300 characters.");
         // Check for fees
-        if (canLoan & (insuranceFee == 0 || loanFee == 0))
+        if (canLoan && (insuranceFee == 0 || loanFee == 0))
             throw new MmssException(HttpStatus.BAD_REQUEST, "If the artefact is available for loan, the fees cannot be $0.");
     }
 }
