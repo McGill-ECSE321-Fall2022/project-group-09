@@ -227,6 +227,7 @@ public class ArtefactIntegrationTests {
         request.setInsuranceFee(1);
         request.setLoanFee(1);
         request.setRoomId(smallRoom.getRoomId());
+        request.setImageUrl("Hello.jpg");
         // make the post
         ResponseEntity<ArtefactDto> response = client.postForEntity("/artefact", request, ArtefactDto.class);
         // make assertions on the post
@@ -248,6 +249,7 @@ public class ArtefactIntegrationTests {
         artefactDto.setCanLoan(false);
         artefactDto.setInsuranceFee(0);
         artefactDto.setLoanFee(0);
+        artefactDto.setImageUrl("Hello.jpg");
         // make an entity to send the request with
         HttpEntity<ArtefactDto> request = new HttpEntity<>(artefactDto);
         // make the post

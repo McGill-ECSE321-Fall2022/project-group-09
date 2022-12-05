@@ -5,6 +5,7 @@ import ca.mcgill.ecse.mmss.model.Room.RoomType;
 
 public class RoomDto {
     private int roomId; 
+    private String roomName;
     private int artefactCount; 
     private RoomType roomtype;
 
@@ -23,6 +24,7 @@ public class RoomDto {
         this.roomId = room.getRoomId();
         this.artefactCount = room.getArtefactCount();
         this.roomtype = room.getRoomType();
+        this.roomName = room.getRoomName();
     }
     
     /**
@@ -39,14 +41,13 @@ public class RoomDto {
     public int getRoomId() {
         return roomId;
     }
+    public String getRoomName() {
+      return roomName;
+    }
     public int getArtefactCount() {
         return artefactCount;
     }
     public RoomType getRoomtype() {
         return roomtype;
-    } 
-
-    
-    
-    
+    }  
 }

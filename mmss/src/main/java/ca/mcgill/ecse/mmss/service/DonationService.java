@@ -227,7 +227,7 @@ public class DonationService {
      */
     
     @Transactional
-    public Artefact updateStatus(int id, ExchangeStatus status, boolean canLoan, double insuraceFees, double loanFee) {
+    public Artefact updateStatus(int id, ExchangeStatus status, boolean canLoan, double insuraceFees, double loanFee, String url) {
     	
     	// Create an Artifact Object so if the donation was approved
     	Artefact artefact = null;
@@ -244,7 +244,7 @@ public class DonationService {
             } else if (status == ExchangeStatus.Approved) {
             	
             	// Once Donation has been approved, create a new artifact and delete donation from the repository
-                artefact = artefactService.createArtefact(donation.getItemName(), donation.getDescription(), canLoan, insuraceFees, loanFee);
+                artefact = artefactService.createArtefact(donation.getItemName(), donation.getDescription(), canLoan, insuraceFees, loanFee, url);
 
                 // set room to storage
                 ArrayList<Room> storageRoomList = roomService.getAllRoomsByRoomType(RoomType.Storage); 

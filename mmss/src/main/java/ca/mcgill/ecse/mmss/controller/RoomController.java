@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping ({"/room", "/room/"})
 public class RoomController {
 
