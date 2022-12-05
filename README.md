@@ -87,7 +87,7 @@ The task of writing classes and its tests were split as follows:
 
 # Deliverable 3
 
-The architecture model can be found [here].(https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/API-Documentation#api-documentation). The implementation of the Web Frontend can be found [here].(https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Test-Plan). The Build System and CI specifications can be found [here]. The key design decisions, additional features, and changes to the backend can be found [here].(https://github.com/orgs/McGill-ECSE321-Fall2022/projects/21). The project report detailing meeting minutes is [here].(https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report-Deliverable-2#meeting-minutes)
+The architecture model can be found [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Architecture-Model). The implementation of the Web Frontend can be found [here].(xx). The Build System and CI specifications can be found [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Build-System-and-CI-Specifications#build-system-and-ci-specifications). The key design decisions are found [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report-Deliverable-3#key-design-decisions), additional features are [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report-Deliverable-3#additional-features), and changes made to the backend can be found [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report-Deliverable-3#backend-modifications). The project report detailing meeting minutes is [here](https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report-Deliverable-3#meeting-minutes).
 
 ## Team Roles
 
@@ -103,12 +103,11 @@ The task of writing web pages were split as follows:
 * **Loan:** Shidan Javaheri
 * **Login:** Shidan Javaheri
 * **Manager:** Shidan Javaheri
-* **Notification:** Athmane
+* **Notification:** Athmane Benarous
 * **Schedule:**  Athmane Benarous
 * **Shift:**  Athmane Benarous
-* **Communication:** Athmane
-* **Main navigation bar:** Athmane
-
+* **Communication:** Athmane Benarous
+* **Main Navigation Bar:** Athmane Benarous
 
 
 ## Contributions
@@ -119,5 +118,5 @@ The task of writing web pages were split as follows:
 | Sasha Denouvilliez-Pech | - View, create, update, and move artefacts <br> - Room tables (Dashboard) <br> - Wiki <br> - Review code and PRs <br> | 35 hours |
 | Saviru Perera | -  <br> -  <br>  | XX hours |
 | Shidan Javaheri | -  <br> -  <br>  | XX hours |
-| Shyam Desai | -  <br> -  <br>  | XX hours |
+| Shyam Desai | - Wrote GitHub issues for ticket and tour webpages <br> - Create ticket and tour booking for visitors <br> - Manage ticket and tour booking for employees <br> - Keeping track of the meeting minutes <br> - GitHub wiki <br> | 28 hours |
 
