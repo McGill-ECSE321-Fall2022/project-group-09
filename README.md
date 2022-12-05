@@ -106,7 +106,6 @@ The task of writing web pages were split as follows:
 * **Notification:** Athmane Benarous + Shidan Javaheri
 * **Schedule:**  Athmane Benarous
 * **Shift:**  Athmane Benarous
-* **Communication:** Athmane Benarous
 * **Main Navigation Bar:** Athmane Benarous
 
 
