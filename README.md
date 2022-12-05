@@ -113,9 +113,9 @@ The task of writing web pages were split as follows:
 ## Contributions
 | Name             | Responsibilities                                                  | Hours (incl. meetings) |
 |:----------------:|:----------------------------------------------------------------- |:----------------------:|
-| Athmane Benarous | - Manage shifts and manage notifications <br> - User navigation bar <br> - Global and specific CSS styling <br> - Handle merging for pull requests <br> - Code review <br> | 40 hours |
+| Athmane Benarous | - Manage shifts and manage notifications <br> - User navigation bar <br> - Global and specific CSS styling <br> - Handle merging for pull requests <br> - Code review <br> | 30 hours |
 | Mohamed Elsamadouny | - Updates to OpenDay backend <br> - Created the Manage Donations, Visitor Donations and Manage OpenDays pages <br> | 25 hours |
-| Sasha Denouvilliez-Pech | - View, create, update, and move artefacts <br> - Room tables (Dashboard) <br> - Wiki <br> - Review code and PRs <br> | 35 hours |
+| Sasha Denouvilliez-Pech | - View, create, update, and move artefacts <br> - Room tables (Dashboard) <br> - Wiki <br> - Review code and PRs <br> - Architecture Model <br> - Architecture Model <br>| 40 hours |
 | Saviru Perera | - Create visitor page <br> - Wiki <br>  | 20 hours |
 | Shidan Javaheri | - Login pages <br> - View and update page <br> - Review PRs <br> - Final review <br> | 50 hours |
 | Shyam Desai | - Wrote GitHub issues for ticket and tour webpages <br> - Create ticket and tour booking for visitors <br> - Manage ticket and tour booking for employees <br> - Keeping track of the meeting minutes <br> - GitHub wiki <br> - Presentation Slides <br> | 28 hours |
