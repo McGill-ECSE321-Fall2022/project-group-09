@@ -105,9 +105,10 @@ public class DonationController {
         boolean canLoan = request.getCanLoan();
         double insuranceFee  = request.getInsuranceFee();
         double loanFee = request.getLoanFee();
+        String url = request.getImageUrl();
 
         // call service layer
-        Artefact createdArtefact = donationService.updateStatus(id, ExchangeStatus.Approved, canLoan, insuranceFee, loanFee);
+        Artefact createdArtefact = donationService.updateStatus(id, ExchangeStatus.Approved, canLoan, insuranceFee, loanFee, url);
 
         // return created Artefact as Dto
         return new ResponseEntity<ArtefactDto>(new ArtefactDto(createdArtefact), HttpStatus.OK);
