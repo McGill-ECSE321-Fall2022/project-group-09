@@ -108,6 +108,7 @@ export default {
                     sessionStorage.setItem('loggedInEmployee', JSON.stringify(response.data));
                     // send to home page
                     self.$router.push('/');
+                    location.reload();
                 })
                 .catch((error) => {
                     // empty the password
@@ -122,7 +123,6 @@ export default {
                     // call the error handler component modal (named errorPopUp) to display the error message
                     self.$bvModal.show('errorPopUp');
                 });
-
         }
     },
     // functions that display input state ( simple checks )
