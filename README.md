@@ -114,7 +114,7 @@ The task of writing web pages were split as follows:
 | Name             | Responsibilities                                                  | Hours (incl. meetings) |
 |:----------------:|:----------------------------------------------------------------- |:----------------------:|
 | Athmane Benarous | - Manage shifts and manage notifications <br> - User navigation bar <br> - Global and specific CSS styling <br> - Handle merging for pull requests <br> - Code review <br> | 30 hours |
-| Mohamed Elsamadouny | - Updates to OpenDay and Donation backend <br> - Created the Manage Donations, Visitor Donations and Manage OpenDays pages <br> | 25 hours |
+| Mohamed Elsamadouny | - Updates to OpenDay backend <br> - Created the Manage Donations, Visitor Donations and Manage OpenDays pages <br> | 25 hours |
 | Sasha Denouvilliez-Pech | - View, create, update, and move artefacts <br> - Room tables (Dashboard) <br> - Wiki <br> - Review code and PRs <br> | 35 hours |
 | Saviru Perera | -  <br> -  <br>  | XX hours |
 | Shidan Javaheri | -  <br> -  <br>  | XX hours |
