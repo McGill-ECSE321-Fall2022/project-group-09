@@ -13,14 +13,14 @@
                 <!-- Visitor buttons-->
                 <b-button v-if="loginStatus === 'visitor'" href="/#/artefact/view" variant="outline-light" class="my-2 my-sm-0">Loans</b-button>
                 <b-button v-if="loginStatus === 'visitor'" href="/#/donation/request" variant="outline-light" class="my-2 my-sm-0">Donations</b-button>
-                <b-button v-if="loginStatus === 'visitor'" href="/#/booking/manage" variant="outline-light" class="my-2 my-sm-0">Bookings</b-button>
+                <b-button v-if="loginStatus === 'visitor'" href="/#/booking/request" variant="outline-light" class="my-2 my-sm-0">Bookings</b-button>
                 <!-- Staff buttons-->
-                <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/booking/manage" variant="outline-light" class="my-2 my-sm-0">Artefacts</b-button>
+                <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/aretfact/manage" variant="outline-light" class="my-2 my-sm-0">Artefacts</b-button>
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/loans/manage" variant="outline-light" class="my-2 my-sm-0">Loans</b-button>
-                <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/booking/manage" variant="outline-light" class="my-2 my-sm-0">Donations</b-button>
+                <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/donations/manage" variant="outline-light" class="my-2 my-sm-0">Donations</b-button>
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/booking/manage" variant="outline-light" class="my-2 my-sm-0">Bookings</b-button>
                 <!-- Manager buttons-->
-                <b-button v-if="loginStatus === 'manager'" href="/#/opendays/manage" variant="outline-light" class="my-2 my-sm-0">Open Days</b-button>
+                <b-button v-if="loginStatus === 'manager'" href="/#" variant="outline-light" class="my-2 my-sm-0">Open Days</b-button>
                 <b-button v-if="loginStatus === 'manager'" href="/#/shift/manage" variant="outline-light" class="my-2 my-sm-0">Shifts</b-button>
                 <b-button v-if="loginStatus === 'manager'" href="/#/accounts/manage" variant="outline-light" class="my-2 my-sm-0">Accounts</b-button>
             </b-navbar-nav>
@@ -29,14 +29,14 @@
             <b-navbar-nav v-if="loginStatus !== 'out'" class="ml-auto">
                 <b-button href="/#/notification/manage" variant="outline-light" class="my-2 my-sm-0" > Inbox</b-button>
                 <b-nav-item-dropdown text="User" right>
-                    <b-dropdown-item href="/#/opendays/manage">Edit Account</b-dropdown-item>
+                    <b-dropdown-item href="/#">Edit Account</b-dropdown-item>
                     <b-dropdown-item @click="logout()">Logout</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
             <b-navbar-nav v-if="loginStatus === 'out'" class="ml-auto">
                 <b-nav-item-dropdown text="Account" right>
-                    <b-dropdown-item href="/#/opendays/manage">Create</b-dropdown-item>
-                    <b-dropdown-item href="/#/opendays/manage">Login</b-dropdown-item>
+                    <b-dropdown-item href="/#">Create</b-dropdown-item>
+                    <b-dropdown-item href="/#/login/visitor">Login</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-navbar>
