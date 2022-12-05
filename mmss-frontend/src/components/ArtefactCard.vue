@@ -98,6 +98,7 @@ export default {
             loggedInVisitor: '',
             loggedInEmployee: '',
             loggedInManager: '',
+            username: ''
         }
     },
     components: {
@@ -113,6 +114,11 @@ export default {
         this.loggedInVisitor = sessionStorage.getItem('loggedInVisitor');
         this.loggedInEmployee = sessionStorage.getItem('loggedInEmployee');
         this.loggedInManager = sessionStorage.getItem('loggedInManager');
+
+        if (this.loggedInVisitor) { 
+            this.username = JSON.parse(this.loggedInVisitor).userName;
+
+        }
         // Get info on the artefact's room
         const self = this
         AXIOS.get(`/room/${self.artefact.roomId}`, {}, {})
@@ -137,9 +143,8 @@ export default {
         // Once the Loan button is clicked
         requestLoan(username) {
             const self = this
-            AXIOS.post('/loan', { visitorId: username, artefactId: self.artefact.artefactId }, {})
+            AXIOS.post('/loan', { visitorId: self.username, artefactId: self.artefact.artefactId }, {})
             .then(response => {
-                alert(JSON.stringify(response))
             })
             .catch(error => {
                 if (error.response.status >= 450) {
