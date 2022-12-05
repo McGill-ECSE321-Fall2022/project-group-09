@@ -103,7 +103,7 @@ The task of writing web pages were split as follows:
 * **Loan:** Shidan Javaheri
 * **Login:** Shidan Javaheri
 * **Manager:** Shidan Javaheri
-* **Notification:** Athmane Benarous
+* **Notification:** Athmane Benarous + Shidan Javaheri
 * **Schedule:**  Athmane Benarous
 * **Shift:**  Athmane Benarous
 * **Communication:** Athmane Benarous
@@ -117,6 +117,6 @@ The task of writing web pages were split as follows:
 | Mohamed Elsamadouny | - Updates to OpenDay backend <br> - Created the Manage Donations, Visitor Donations and Manage OpenDays pages <br> | 25 hours |
 | Sasha Denouvilliez-Pech | - View, create, update, and move artefacts <br> - Room tables (Dashboard) <br> - Wiki <br> - Review code and PRs <br> - Architecture Model <br> - Architecture Model <br>| 40 hours |
 | Saviru Perera | - Create visitor page <br> - Wiki <br>  | 20 hours |
-| Shidan Javaheri | - Login pages <br> - View and update page <br> - Review PRs <br> - Final review <br> | 50 hours |
+| Shidan Javaheri | - Login pages <br> - View and Update Loans page <br> - View and Delete Accounts Page <br> - Send notifications to all accounts <br> - Register Employees <br> - Static Code Reviews + Debugging Assistance <br> - Review PRs <br> - Final review <br> | 50 hours |
 | Shyam Desai | - Wrote GitHub issues for ticket and tour webpages <br> - Create ticket and tour booking for visitors <br> - Manage ticket and tour booking for employees <br> - Keeping track of the meeting minutes <br> - GitHub wiki <br> - Presentation Slides <br> | 28 hours |
 
