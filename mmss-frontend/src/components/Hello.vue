@@ -1,4 +1,5 @@
 <template>
+  <!-- Adding the image -->
   <div id="mainPage">
     <img id="mainLogo" src="../assets/logo.png">
   </div>
@@ -15,8 +16,9 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- Styling and centering the logo image on the main page -->
 <style>
+
   #mainPage{
     display: flex;
     justify-content: center;

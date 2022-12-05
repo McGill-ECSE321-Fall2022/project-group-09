@@ -1,11 +1,14 @@
 <template>
         <b-navbar class="NavBar" type="dark" variant="dark">
+            <!-- band with the clickable logo and description -->
             <b-navbar-brand class="icon_band">
             <a href="/#">
                 <img src="../assets/icon.png">
             </a>
+            <!-- label containing a welcome text with the name of the user -->
             <label for="welcomeText">{{ welcomeText }}</label>
             </b-navbar-brand>
+            <!-- Common buttons-->
             <b-button v-if="loginStatus === 'out'" href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
             <b-navbar-nav v-if="loginStatus !== 'out'" class="ml-auto">
                 <b-button href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
@@ -31,12 +34,14 @@
 
             <!-- Buttons to refresh, clear selections, and select all in table-->
             <b-navbar-nav v-if="loginStatus !== 'out'" class="ml-auto">
+                <!-- Inbox and User settings for the logged in -->
                 <b-button href="/#/notification/manage" variant="outline-light" class="my-2 my-sm-0" > Inbox</b-button>
                 <b-nav-item-dropdown text="User" right>
                     <b-dropdown-item href="/#">Edit Account</b-dropdown-item>
                     <b-dropdown-item @click="logout()">Logout</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
+            <!-- Account buttons for the logged out -->
             <b-navbar-nav v-if="loginStatus === 'out'" class="ml-auto">
                 <b-nav-item-dropdown text="Account" right>
                     <b-dropdown-item href="/#">Create</b-dropdown-item>
@@ -96,6 +101,7 @@ export default {
         }
         console.log(this.welcomeText)
     }, 
+    // logout function for the logout button
     methods: { 
         logout () { 
         sessionStorage.removeItem('loggedInEmployee');
@@ -108,6 +114,7 @@ export default {
 }
 </script>
 
+<!-- Styling the image and other buttons of the navigation bar -->
 <style>
 .NavBar{
     width: 100%;
