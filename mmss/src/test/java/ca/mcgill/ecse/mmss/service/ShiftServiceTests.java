@@ -208,9 +208,11 @@ public class ShiftServiceTests {
     public void testInvalidCreateShifts() {
         // setup mocks
     	ArrayList<Shift> preExistingShifts = new ArrayList<>();
+		Shift shift = this.shifts.get(0);
+        preExistingShifts.add(shift);
+
         lenient().when(shiftRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> this.shifts);
         
-		Shift shift = this.shifts.get(0);
         lenient().when(shiftRepository.findAllByShiftTime(shift.getShiftTime())).thenAnswer((InvocationOnMock invocation) -> preExistingShifts);
         lenient().when(shiftRepository.save(shift)).thenAnswer((InvocationOnMock invocation) -> shift);
         

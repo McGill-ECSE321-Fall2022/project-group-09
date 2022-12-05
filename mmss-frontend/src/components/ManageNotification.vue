@@ -113,10 +113,9 @@ export default {
                     this.errorMessage = error.response.data
                 });
         },
-        doDeleteNotification(selectedNotifications) {
+        async doDeleteNotification(selectedNotifications) {
             for (var i = 0; i < selectedNotifications.length; i++) {
-                this.request.notificationId = selectedNotifications[i].notificationId;
-                AXIOS.delete('/notification/' + this.request.notificationId)
+                await AXIOS.delete('/notification/' + selectedNotifications[i].notificationId)
                     .then(response => {
                         for (var j = 0; j < this.notifications.length; j++){
                             if(this.notifications[j].notificationId === this.selectedNotifications[i].notificationId){

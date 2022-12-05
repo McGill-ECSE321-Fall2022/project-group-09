@@ -13,6 +13,7 @@ import java.util.ArrayList;
 /**
  * REST API for the Artefact class
  */
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping({"/artefact", "/artefact/"})
 public class ArtefactController {
