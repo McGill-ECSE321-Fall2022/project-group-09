@@ -6,6 +6,9 @@ import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
 import RoomsTable from '@/components/RoomsTable'
 import ArtefactsView from '@/components/ArtefactsView'
+import ManageLoan from '@/components/ManageLoan'
+import ManageAccount from '@/components/ManageAccount'
+// import NavBar from '@/components/NavBar'
 
 Vue.use(Router);
 
@@ -94,6 +97,21 @@ export default new Router({
       name: 'ArtefactsView',
       component: ArtefactsView
     },
+    {
+      path: '/loans/manage', 
+      name: 'ManageLoan',
+      component: ManageLoan
+    },
+    {
+      path: '/accounts/manage',
+      name: 'ManageAccount',
+      component: ManageAccount
+    }, 
+    // {
+    //   path: '/navbar',
+    //   name: 'NavBar',
+    //   component: NavBar
+    // }, 
     {
       path: "*",
       redirect: "/404"

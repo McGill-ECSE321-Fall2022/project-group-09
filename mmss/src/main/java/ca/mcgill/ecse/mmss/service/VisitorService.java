@@ -14,6 +14,7 @@ import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
+import ca.mcgill.ecse.mmss.model.AccountType;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Person;
@@ -33,6 +34,8 @@ public class VisitorService {
 	VisitorRepository visitorRepository;
 	@Autowired
 	EmployeeRepository employeeRepository;
+	@Autowired
+	LoginService loginService;
 
 	/**
 	 * Create a visitor
@@ -49,8 +52,8 @@ public class VisitorService {
 		if (checkValidUser(userName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		Visitor existVisit = visitorRepository.findVisitorByUsername(userName);
-		if (existVisit!=null) {
+		AccountType existingAccount = loginService.getAccountByUsername(userName);
+		if (existingAccount!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
 		if(checkValidPassword(passWord)==false) {
@@ -89,8 +92,8 @@ public class VisitorService {
 		if (checkValidUser(newUserName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		Visitor existVisit = visitorRepository.findVisitorByUsername(newUserName);
-		if (existVisit!=null) {
+		AccountType existingAccount = loginService.getAccountByUsername(newUserName);
+		if (existingAccount!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
 		if (checkValidPassword(newPassWord)==false) {
@@ -143,8 +146,8 @@ public class VisitorService {
 		if (checkValidUser(newUser)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		Visitor existVisit = visitorRepository.findVisitorByUsername(newUser);
-		if (existVisit!=null) {
+		AccountType existingAccount = loginService.getAccountByUsername(newUser);
+		if (existingAccount!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
 		visitor.setUsername(newUser);

@@ -7,11 +7,11 @@ import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 public class LoanDto {
 
 	private Integer exchangeId;
-	private Date dueDate;
+	private Integer artefactId;
+	private String visitorId;
 	private Date submittedDate;
 	private ExchangeStatus exchangeStatus;
-	private String visitorId;
-	private Integer artefactId;
+	private Date dueDate;
 
 	/**
 	 * Null constructor

@@ -1,5 +1,6 @@
 <template>
     <div id="LoginVisitor">
+        <br>
         <h1>
             Welcome to Marwan's Museum!
         </h1>
@@ -7,27 +8,43 @@
             Visitor Login Page
         </h2>
 
-        <table class="center">
+        <!-- Table that displays the login buttons-->
+        <table class="center" width="30%">
             <tr>
+
+                <!-- Username input-->
                 <td>
-                    Username:
-                </td>
-                <td>
-                    <input type="text" v-model="visitorUsername" @keydown.space.prevent placeholder="Username">
+                    <div align="left"><i>Username:</i></div>
+                    <b-input id="usernameInput" type="email" v-model="visitorUsername" :state="usernameState"
+                        @keydown.space.prevent placeholder=""></b-input>
+                    <span v-if="usernameError" style="color: red;">{{ usernameError }}</span>
+                    <span v-else> <br> </span>
                 </td>
             </tr>
             <tr>
+                <!-- Password input-->
                 <td>
-                    Password:
+                    <div align="left"><i>Password:</i></div>
+                    <b-input id="emailInput" type="password" v-model="visitorPassword" placeholder=""
+                        @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
                 </td>
-                <td>
-                    <input type="password" v-model="visitorPassword" placeholder="Password">
-                </td>
+            </tr>
 
+            <tr>
                 <td>
+                    <br>
                     <!-- Button is disabled untill there is non whitespace text. Clicking triggers login-->
-                    <b-button v-bind:disabled="!visitorUsername.trim() || !visitorPassword.trim()"
+                    <b-button block variant="success"
+                        v-bind:disabled="((!visitorUsername.trim() || !visitorPassword.trim()) || !usernameState)"
                         @click="doLoginVisitor(visitorUsername, visitorPassword)">Login</b-button>
+
+                    <hr>
+                    <b-button block variant="primary" @click="$router.push({ name: 'Hello' })">Create an
+                        Account</b-button>
+                    <hr>
+                    <b-button block @click="$router.push({ name: 'LoginManager' })">Login as the manager</b-button>
+                    <hr>
+                    <b-button block @click="$router.push({ name: 'LoginEmployee' })">Login as an employee</b-button>
                 </td>
             </tr>
 
@@ -66,7 +83,10 @@ export default {
             visitorUsername: '',
             visitorPassword: '',
             // the error message to be displayed by the Error Handler component
-            errorMessage: ''
+            errorMessage: '',
+            // errors in input
+            usernameError: '',
+
 
         }
     },
@@ -101,41 +121,55 @@ export default {
          * @param {String} password the password of the visitor
          */
         doLoginVisitor(username, password) {
-            const self = this;
+
             AXIOS.get('/login', { params: { username, password } }, {})
                 .then((response) => {
                     // empty the feilds
-                    self.visitorUsername = '';
-                    self.visitorPassword = '';
+                    this.visitorUsername = '';
+                    this.visitorPassword = '';
                     // store the logged in visitor
                     sessionStorage.setItem('loggedInVisitor', JSON.stringify(response.data));
                     // send to homepage
-                    self.$router.push('/');
+                    this.$router.push('/');
                 })
                 .catch((error) => {
                     // empty the password
-                    self.visitorPassword = '';
+                    this.visitorPassword = '';
                     // logic on the error status. Display backend error message if status is below 450
                     // otherwise display something went wrong
                     if (error.response.status >= 450) {
-                        self.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                        this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
                     } else {
-                        self.errorMessage = error.response.data;
+                        this.errorMessage = error.response.data;
                     }
                     // call the error handler component modal (named errorPopUp) to display the error message
-                    self.$bvModal.show('errorPopUp');
+                    this.$bvModal.show('errorPopUp');
                 });
 
         }
+    },
+    computed: {
+        usernameState() {
+            this.usernameError = '';
+            if (this.visitorUsername.includes("@")) {
+                return true;
+            } else if (this.visitorUsername.trim() === '') {
+                return false;
+            } else {
+                this.usernameError = "Please enter a valid email address";
+                return false;
+            }
+        },
     }
 }
+
 
 </script> 
 
 <style>
 .center {
-  margin-left: auto;
-  margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>
 

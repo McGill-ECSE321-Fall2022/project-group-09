@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import org.springframework.http.HttpStatus;
 
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
@@ -29,58 +28,61 @@ import ca.mcgill.ecse.mmss.model.Communication;
 
 @ExtendWith(MockitoExtension.class)
 public class VisitorServiceTests {
-	
-	 @Mock
-	 private PersonRepository personRepository;
 
-	 @Mock
-	 private VisitorRepository visitorRepository;
-	 
-	 @Mock
-	 private EmployeeRepository employeeRepository;
-	 
-	 @Mock
-	 private CommunicationRepository communicationRepository;
-	 
-	 @InjectMocks
-	 private VisitorService visitorService;
+	@Mock
+	private PersonRepository personRepository;
 
-	 // Four objects we will need in all our tests
-	 private Person person;
-	 private Visitor visitor;
-	 private Visitor visitorTwo;
-	 private Communication communication;
-	 private String newName;
-	 
-	 @BeforeEach
-	 public void createObjects() {
+	@Mock
+	private VisitorRepository visitorRepository;
 
-		 // create necessary objects for test
-		 // This will Mock the content of your database
-		 // Basically a fake database system
-		 this.person = new Person(0, "John", "Coder");
-		 this.communication = new Communication(2);
-		 this.visitor = new Visitor("John@Coder", "ILikeSoftwareTests1", person);
-		 this.visitor.setCommunication(communication);
-		 this.visitor.setBalance(0); // setting it for test purposes
-		 this.visitorTwo = new Visitor("Jon@Jones","Fngannou270", person);
-		 this.newName = "travis@scott";
-	 }
-	 
-	 @AfterEach
-	 public void deleteObjects() {
-		 // delete the objects from the test
-	     
-	     this.communication.delete();
-	     this.visitor.delete();
-	     this.visitorTwo.delete();
-	     this.person.delete();
-	 }
-	 
-	 @Test
+	@Mock
+	private EmployeeRepository employeeRepository;
+
+	@Mock
+	private CommunicationRepository communicationRepository;
+
+	@InjectMocks
+	private VisitorService visitorService;
+
+	@Mock
+	private LoginService loginService;
+
+	// Four objects we will need in all our tests
+	private Person person;
+	private Visitor visitor;
+	private Visitor visitorTwo;
+	private Communication communication;
+	private String newName;
+
+	@BeforeEach
+	public void createObjects() {
+
+		// create necessary objects for test
+		// This will Mock the content of your database
+		// Basically a fake database system
+		this.person = new Person(0, "John", "Coder");
+		this.communication = new Communication(2);
+		this.visitor = new Visitor("John@Coder", "ILikeSoftwareTests1", person);
+		this.visitor.setCommunication(communication);
+		this.visitor.setBalance(0); // setting it for test purposes
+		this.visitorTwo = new Visitor("Jon@Jones", "Fngannou270", person);
+		this.newName = "travis@scott";
+	}
+
+	@AfterEach
+	public void deleteObjects() {
+		// delete the objects from the test
+
+		this.communication.delete();
+		this.visitor.delete();
+		this.visitorTwo.delete();
+		this.person.delete();
+	}
+
+	@Test
 	 public void testCreateVisitor() {
 		 
-		 when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
+		 when(loginService.getAccountByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
 		 
 		 when(personRepository.save(any(Person.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0)); 
 		 
@@ -96,79 +98,78 @@ public class VisitorServiceTests {
 	     assertEquals(visitor.getUsername(), visitorCreated.getUsername());
 	     assertEquals(visitor.getPassword(), visitorCreated.getPassword());
 	     
-	     verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
+	     verify(loginService, times(1)).getAccountByUsername(visitor.getUsername());
 	     verify(personRepository, times(1)).save(any(Person.class)); 
 	     verify(visitorRepository, times(1)).save(any(Visitor.class)); 
 	     
 	 }
-	 
-	 @Test
-	 public void testCreateInvalidVisitorUsername() {
-		 
-		 MmssException ex = assertThrows(MmssException.class, () -> visitorService.createVisitor("John", "Coder", "badUsernameNoSign", "ILikeSoftwareTests1")); 
 
-	     // assert the exception is thrown with the right message and status
+	@Test
+	public void testCreateInvalidVisitorUsername() {
 
-	     assertEquals("The username entered is an invalid email address. Please enter another username.", ex.getMessage()); 
-	     assertEquals (HttpStatus.NOT_ACCEPTABLE, ex.getStatus()); 
+		MmssException ex = assertThrows(MmssException.class,
+				() -> visitorService.createVisitor("John", "Coder", "badUsernameNoSign", "ILikeSoftwareTests1"));
 
-	 }
-	 
-	 @Test
+		// assert the exception is thrown with the right message and status
+
+		assertEquals("The username entered is an invalid email address. Please enter another username.",
+				ex.getMessage());
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
+
+	}
+
+	@Test
 	 public void testCreateInvalidVisitorUsernameTaken() {
-		 when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor); 
+		 when(loginService.getAccountByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor); 
 		 MmssException ex = assertThrows(MmssException.class, () -> visitorService.createVisitor("John", "Coder", visitor.getUsername(), "ILikeSoftwareTests1")); 
 
 	     // assert the exception is thrown with the right message and status
 
 	     assertEquals("The username entered is taken. Please enter another username.", ex.getMessage()); 
 	     assertEquals (HttpStatus.NOT_ACCEPTABLE, ex.getStatus()); 
-	     verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
+	     verify(loginService, times(1)).getAccountByUsername(visitor.getUsername());
 	 }
-	 
-	 @Test
-	 public void testCreateInvalidVisitorPassword() {
-		 
-		 MmssException ex = assertThrows(MmssException.class, () -> visitorService.createVisitor("John", "Coder", "John@Coder", "password")); 
 
-	     // assert the exception is thrown with the right message and status
+	@Test
+	public void testCreateInvalidVisitorPassword() {
 
-	     assertEquals("The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.", ex.getMessage()); 
-	     assertEquals (HttpStatus.NOT_ACCEPTABLE, ex.getStatus()); 
+		MmssException ex = assertThrows(MmssException.class,
+				() -> visitorService.createVisitor("John", "Coder", "John@Coder", "password"));
 
-	 }
-	 
-	 // a series of tests for create additional visitor
-	 
-	 @Test
+		// assert the exception is thrown with the right message and status
+
+		assertEquals(
+				"The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.",
+				ex.getMessage());
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
+
+	}
+
+	// a series of tests for create additional visitor
+
+	@Test
 	 public void testCreateAdditionalVisitor() {
-		 when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer(new Answer() {
-			 private int count = 0;
-			 public Object answer (InvocationOnMock invocation) {
-				 if (++count==1) {
-					 return visitor;
-				 }
-				 return null;
-			 }
-		 }
-			 
-		 ); 
+		 when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer( (InvocationOnMock invocation) -> visitor);
+		when (loginService.getAccountByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null);
 
-		 when(visitorRepository.save(any(Visitor.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
-		 
-		 // call the service to create a loan
-	     Visitor visitorCreated = visitorService.createAdditionalVisitor(visitor.getUsername(),"Jon@Jones", "Fngannou270"); 
-	     
-	     assertEquals(person.getFirstName(), visitorCreated.getPerson().getFirstName());
+	when(visitorRepository.save(any(Visitor.class))).thenAnswer((
+
+	InvocationOnMock invocation)->invocation.getArgument(0));
+
+	// call the service to create a loan
+	Visitor visitorCreated = visitorService.createAdditionalVisitor(visitor.getUsername(), "Jon@Jones", "Fngannou270");
+
+	assertEquals(person.getFirstName(), visitorCreated.getPerson().getFirstName());
 	     assertEquals(person.getLastName(), visitorCreated.getPerson().getLastName());
 	     assertEquals(visitorTwo.getUsername(), visitorCreated.getUsername());
 	     assertEquals(visitorTwo.getPassword(), visitorCreated.getPassword());
 	     
 	     verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername()); 
+		verify(loginService, times(1)).getAccountByUsername(visitorTwo.getUsername());
 	     verify(visitorRepository, times(1)).save(any(Visitor.class)); 
 	 }
-	 
-	 @Test
+
+	@Test
 	 public void testCreateAdditionalInvalidVisitor() {
 		 when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
 		 
@@ -183,8 +184,8 @@ public class VisitorServiceTests {
 
 	    verify(visitorRepository, times(1)).findVisitorByUsername("badUsername");
 	 }
-	 
-	 @Test
+
+	@Test
 	 public void testCreateAdditionalInvalidVisitorBadNew() {
 		 
 		 when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor); 
@@ -199,12 +200,12 @@ public class VisitorServiceTests {
 
 	    verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
 	 }
-	 
-	 @Test
+
+	@Test
 	 public void testCreateAdditionalInvalidVisitorExisting() {
 		 
 		 when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor); 
-		 when(visitorRepository.findVisitorByUsername(visitorTwo.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitorTwo);
+		 when(loginService.getAccountByUsername(visitorTwo.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitorTwo);
 		 MmssException ex = assertThrows(MmssException.class, () -> visitorService.createAdditionalVisitor(visitor.getUsername(),visitorTwo.getUsername(), "Fngannou270")); 
 
 	     // assert the exception is thrown with the right message and status
@@ -215,14 +216,14 @@ public class VisitorServiceTests {
 	     // verify the repository calls
 
 	    verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
-	    verify(visitorRepository, times(1)).findVisitorByUsername(visitorTwo.getUsername());
+	    verify(loginService, times(1)).getAccountByUsername(visitorTwo.getUsername());
 	 }
-	 
-	 @Test
+
+	@Test
 	 public void testCreateAdditionalInvalidVisitorBadPw() {
 		 
 		 when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor); 
-		 when(visitorRepository.findVisitorByUsername("John@Jones")).thenAnswer((InvocationOnMock invocation) -> null); 
+		 when(loginService.getAccountByUsername("John@Jones")).thenAnswer((InvocationOnMock invocation) -> null); 
 		 MmssException ex = assertThrows(MmssException.class, () -> visitorService.createAdditionalVisitor(visitor.getUsername(),"John@Jones", "travgoat")); 
 
 	     // assert the exception is thrown with the right message and status
@@ -233,10 +234,10 @@ public class VisitorServiceTests {
 	     // verify the repository calls
 
 	    verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
-	    verify(visitorRepository, times(1)).findVisitorByUsername("John@Jones");
+	    verify(loginService, times(1)).getAccountByUsername("John@Jones");
 	 }
-	 
-	 @Test 
+
+	@Test 
 	 public void testGetVisitorByUsername() { 
 
 		 // setup mocks
@@ -254,35 +255,30 @@ public class VisitorServiceTests {
 	     verify(visitorRepository, times (1)).findVisitorByUsername("John@Coder"); 
 	     
 	}
-	 
+
 	@Test
 	public void testGetVisitorByInvalidUsername() {
 		final String invalidUsername = "bobcode";
-        // set up mock
-        when(visitorRepository.findVisitorByUsername(invalidUsername)).thenAnswer((InvocationOnMock invocation) -> null);
+		// set up mock
+		when(visitorRepository.findVisitorByUsername(invalidUsername))
+				.thenAnswer((InvocationOnMock invocation) -> null);
 
-        // call service layer and get the exception
-        MmssException ex = assertThrows(MmssException.class, () -> visitorService.getVisitorByUsername(invalidUsername));
+		// call service layer and get the exception
+		MmssException ex = assertThrows(MmssException.class,
+				() -> visitorService.getVisitorByUsername(invalidUsername));
 
-        // check the message contains the right message and status
-        assertEquals("There is no such visitor account with this username.", ex.getMessage());
-        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+		// check the message contains the right message and status
+		assertEquals("There is no such visitor account with this username.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
 
-        // verify calls to repositories
-        verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
+		// verify calls to repositories
+		verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
 	}
-	
+
 	@Test
 	public void testUpdateVisitorUsername() {
-		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer(new Answer() {
-			 private int count = 0;
-			 public Object answer (InvocationOnMock invocation) {
-				 if (++count==1) {
-					 return visitor;
-				 }
-				 return null;
-			 }
-		 }); 
+		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor);
+		when(loginService.getAccountByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null);
 
 		when(visitorRepository.save(any(Visitor.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
 		
@@ -290,47 +286,53 @@ public class VisitorServiceTests {
 		
 		assertEquals(newName, visitorUpdated.getUsername());
 		
-		verify(visitorRepository, times (1)).findVisitorByUsername(visitor.getUsername()); 
-		verify(visitorRepository, times(1)).save(any(Visitor.class)); 
+		verify(visitorRepository, times (1)).findVisitorByUsername("John@Coder");
+		verify(loginService, times (1)).getAccountByUsername(newName);
+
 	}
-	
+
 	@Test
 	public void testUpdateVisitorInvalidUsernameNotExisting() {
 		final String invalidUsername = "bobcode";
-        
-		when(visitorRepository.findVisitorByUsername(invalidUsername)).thenAnswer((InvocationOnMock invocation) -> null); 
-		
-		MmssException ex = assertThrows(MmssException.class, () -> visitorService.updateVisitorUsername(invalidUsername,"Skeletons@travis"));
-		
+
+		when(visitorRepository.findVisitorByUsername(invalidUsername))
+				.thenAnswer((InvocationOnMock invocation) -> null);
+
+		MmssException ex = assertThrows(MmssException.class,
+				() -> visitorService.updateVisitorUsername(invalidUsername, "Skeletons@travis"));
+
 		// check the message contains the right message and status
-        assertEquals("There is no such visitor account with this username.", ex.getMessage());
-        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
-        
-        verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
-        
+		assertEquals("There is no such visitor account with this username.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+
+		verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
+
 	}
-	
+
 	@Test
 	public void testUpdateVisitorInvalidUsername() {
 		final String invalidUsername = "bobcode";
-        
-		when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor); 
-		
-		MmssException ex = assertThrows(MmssException.class, () -> visitorService.updateVisitorUsername(visitor.getUsername(),invalidUsername));
-		
+
+		when(visitorRepository.findVisitorByUsername(visitor.getUsername()))
+				.thenAnswer((InvocationOnMock invocation) -> visitor);
+
+		MmssException ex = assertThrows(MmssException.class,
+				() -> visitorService.updateVisitorUsername(visitor.getUsername(), invalidUsername));
+
 		// check the message contains the right message and status
-        assertEquals("The username entered is an invalid email address. Please enter another username.", ex.getMessage());
-        assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
-        
-        verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
-        
+		assertEquals("The username entered is an invalid email address. Please enter another username.",
+				ex.getMessage());
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
+
+		verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
+
 	}
-	
+
 	@Test
 	public void testUpdateVisitorInvalidExistingUsername() {
         
 		when(visitorRepository.findVisitorByUsername(visitor.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitor); 
-		when(visitorRepository.findVisitorByUsername(visitorTwo.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitorTwo); 
+		when(loginService.getAccountByUsername(visitorTwo.getUsername())).thenAnswer((InvocationOnMock invocation) -> visitorTwo); 
 		MmssException ex = assertThrows(MmssException.class, () -> visitorService.updateVisitorUsername(visitor.getUsername(),visitorTwo.getUsername()));
 		
 		// check the message contains the right message and status
@@ -338,9 +340,9 @@ public class VisitorServiceTests {
         assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
         
         verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
-        verify(visitorRepository, times(1)).findVisitorByUsername(visitorTwo.getUsername());
+        verify(loginService, times(1)).getAccountByUsername(visitorTwo.getUsername());
 	}
-	
+
 	@Test
 	public void testUpdateVisitorPassword() {
 		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor); 
@@ -354,52 +356,60 @@ public class VisitorServiceTests {
 		verify(visitorRepository, times (1)).findVisitorByUsername(visitor.getUsername());
 		verify(visitorRepository, times(1)).save(any(Visitor.class)); 
 	}
-	
+
 	@Test
 	public void testUpdateVisitorInvalidPasswordNoSpecial() {
 		final String invalidPassword = "sdpisabeauty";
-        
-		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor); 
-		
-		MmssException ex = assertThrows(MmssException.class, () -> visitorService.updateVisitorPassword(visitor.getUsername(),visitor.getPassword(),invalidPassword));
-		
+
+		when(visitorRepository.findVisitorByUsername(any(String.class)))
+				.thenAnswer((InvocationOnMock invocation) -> visitor);
+
+		MmssException ex = assertThrows(MmssException.class, () -> visitorService
+				.updateVisitorPassword(visitor.getUsername(), visitor.getPassword(), invalidPassword));
+
 		// check the message contains the right message and status
-        assertEquals("The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.", ex.getMessage());
-        assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
-        
-        verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
+		assertEquals(
+				"The password entered is invalid. Please make sure to include one uppercase letter and one digit and make sure it is at least 8 characters long.",
+				ex.getMessage());
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
+
+		verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
 	}
-	
+
 	@Test
 	public void testUpdateVisitorInvalidPasswordBadPw() {
 		final String invalidPassword = "IlikeJava1";
-        
-		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor); 
-		
-		MmssException ex = assertThrows(MmssException.class, () -> visitorService.updateVisitorPassword(visitor.getUsername(),"savCodes3",invalidPassword));
-		
+
+		when(visitorRepository.findVisitorByUsername(any(String.class)))
+				.thenAnswer((InvocationOnMock invocation) -> visitor);
+
+		MmssException ex = assertThrows(MmssException.class,
+				() -> visitorService.updateVisitorPassword(visitor.getUsername(), "savCodes3", invalidPassword));
+
 		// check the message contains the right message and status
-        assertEquals("The password entered is not correct. Please enter correct password.", ex.getMessage());
-        assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
-        
-        verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
+		assertEquals("The password entered is not correct. Please enter correct password.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_ACCEPTABLE, ex.getStatus());
+
+		verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
 	}
-	
+
 	@Test
 	public void testUpdateVisitorInvalidPasswordInvalidUser() {
 		final String validPassword = "IlikeJava1";
-        
-		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
-		
-		MmssException ex = assertThrows(MmssException.class, () -> visitorService.updateVisitorPassword("ksi@deji","savCodes3",validPassword));
-		
+
+		when(visitorRepository.findVisitorByUsername(any(String.class)))
+				.thenAnswer((InvocationOnMock invocation) -> null);
+
+		MmssException ex = assertThrows(MmssException.class,
+				() -> visitorService.updateVisitorPassword("ksi@deji", "savCodes3", validPassword));
+
 		// check the message contains the right message and status
-        assertEquals("There is no such visitor account with this username.", ex.getMessage());
-        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
-        
-        verify(visitorRepository, times(1)).findVisitorByUsername("ksi@deji");
+		assertEquals("There is no such visitor account with this username.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+
+		verify(visitorRepository, times(1)).findVisitorByUsername("ksi@deji");
 	}
-	
+
 	@Test
 	public void testUpdateVisitorBalance() {
 		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> visitor);
@@ -411,22 +421,24 @@ public class VisitorServiceTests {
 		verify(visitorRepository, times(1)).findVisitorByUsername(visitor.getUsername());
 		verify(visitorRepository, times(1)).save(any(Visitor.class));
 	}
-	
+
 	@Test
 	public void testUpdateVisitorBalanceInvalidUser() {
 		final String invalidUsername = "bobcode";
-        
-		when(visitorRepository.findVisitorByUsername(invalidUsername)).thenAnswer((InvocationOnMock invocation) -> null); 
-		
-		MmssException ex = assertThrows(MmssException.class, () -> visitorService.updateVisitorBalance(invalidUsername,25));
-		
+
+		when(visitorRepository.findVisitorByUsername(invalidUsername))
+				.thenAnswer((InvocationOnMock invocation) -> null);
+
+		MmssException ex = assertThrows(MmssException.class,
+				() -> visitorService.updateVisitorBalance(invalidUsername, 25));
+
 		// check the message contains the right message and status
-        assertEquals("There is no such visitor account with this username.", ex.getMessage());
-        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
-        
-        verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
+		assertEquals("There is no such visitor account with this username.", ex.getMessage());
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+
+		verify(visitorRepository, times(1)).findVisitorByUsername(invalidUsername);
 	}
-	
+
 	// needs modification
 	@Test
 	public void testDeleteVisitor() {
@@ -436,7 +448,7 @@ public class VisitorServiceTests {
    
         verify(visitorRepository, times(1)).deleteById(visitor.getUsername());
 	}
-	
+
 	@Test
 	public void testDeleteVisitorInvalidUsername() {
 		when(visitorRepository.findVisitorByUsername(any(String.class))).thenAnswer((InvocationOnMock invocation) -> null); 
@@ -447,7 +459,7 @@ public class VisitorServiceTests {
         assertEquals("The visitor with this username was not found", ex.getMessage()); 
         assertEquals (HttpStatus.NOT_FOUND, ex.getStatus());
 	}
-	
+
 	@Test
 	public void testGetAllVisitorsInvalidPerson() {
 		when(personRepository.findPersonByPersonId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> null);
@@ -458,52 +470,52 @@ public class VisitorServiceTests {
         assertEquals("The person with this id was not found", ex.getMessage()); 
         assertEquals (HttpStatus.NOT_FOUND, ex.getStatus());
 	}
-	
+
 	@Test
 	public void testCheckValidUser() {
-		
+
 		boolean isValidUser = visitorService.checkValidUser("John@Jones");
 		assertEquals(true, isValidUser);
-	
+
 	}
-	
+
 	@Test
 	public void testCheckInvalidUserBadUser() {
-		
+
 		boolean isValidUser = visitorService.checkValidUser("travis");
 		assertEquals(false, isValidUser);
-		
-	}	
-	
+
+	}
+
 	@Test
 	public void testCheckValidPassword() {
-		
+
 		boolean isValidPass = visitorService.checkValidPassword("IlikeCoding1");
 		assertEquals(true, isValidPass);
-	
+
 	}
-	
+
 	@Test
 	public void testCheckInValidPasswordShort() {
-		
+
 		boolean isValidPass = visitorService.checkValidPassword("hi");
 		assertEquals(false, isValidPass);
-	
+
 	}
-	
+
 	@Test
 	public void testCheckInValidPasswordNoDigit() {
-		
+
 		boolean isValidPass = visitorService.checkValidPassword("IlikeCoding");
 		assertEquals(false, isValidPass);
-	
+
 	}
-	
+
 	@Test
 	public void testCheckInValidPasswordNoCapital() {
-		
+
 		boolean isValidPass = visitorService.checkValidPassword("ilikecoding2");
 		assertEquals(false, isValidPass);
-	
+
 	}
 }
