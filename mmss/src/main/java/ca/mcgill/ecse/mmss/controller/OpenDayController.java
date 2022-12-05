@@ -2,7 +2,6 @@ package ca.mcgill.ecse.mmss.controller;
 
 import java.sql.Date;
 import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -14,14 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import ca.mcgill.ecse.mmss.dto.OpenDayDto;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.service.OpenDayService;
 
-@RestController
 @CrossOrigin(origins = "*")
-@RequestMapping ("/openday")
+@RestController
+@RequestMapping("/openday")
 public class OpenDayController {
 
     @Autowired
@@ -29,12 +28,13 @@ public class OpenDayController {
 
     /**
      * Get an openDay by date
+     * 
      * @author Mohamed Elsamadouny
      * 
      * @param date
      * @return a response entity with the donation and ok status
      */
-    @GetMapping({"/{date}", "/{date}/"})
+    @GetMapping({ "/{date}", "/{date}/" })
     public ResponseEntity<OpenDayDto> getOpenDay(@PathVariable Date date) {
         // call service
         OpenDay retreivedOpenDay = openDayService.getOpenDayByDate(date);
@@ -44,13 +44,15 @@ public class OpenDayController {
 
     /**
      * Create a new OpenDay
+     * 
      * @author Mohamed Elsamadouny
      * 
      * @param request a OpenDayDTO
      * @return the created OpenDay as a Dto with status ok
      */
     @PostMapping
-    public ResponseEntity<OpenDayDto> createOpenDay( @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+    public ResponseEntity<OpenDayDto> createOpenDay(
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         // get parameters
         Date newDate = Date.valueOf(date);
 
@@ -61,5 +63,5 @@ public class OpenDayController {
         return new ResponseEntity<OpenDayDto>(new OpenDayDto(retreivedOpenDay), HttpStatus.CREATED);
 
     }
-    
+
 }

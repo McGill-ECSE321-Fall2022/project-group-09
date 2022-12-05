@@ -11,10 +11,9 @@ import ManageShift from '@/components/ManageShift'
 import ManageNotification from '@/components/ManageNotification'
 import ManageAccount from '@/components/ManageAccount'
 import NavBar from '@/components/NavBar'
-import ManageLoan from '@/components/ManageLoan'
-import ManageAccount from '@/components/ManageAccount'
-import RoomsTable from '@/components/RoomsTable'
-import ArtefactsView from '@/components/ArtefactsView'
+import BookTicket from '@/components/BookTicket'
+import BookTour from '@/components/BookTour'
+import ManageBooking from '@/components/ManageBooking'
 
 Vue.use(Router);
 
@@ -94,11 +93,6 @@ export default new Router({
       component: LoginEmployee
     },
     {
-      path: '/loans/manage', 
-      name: 'ManageLoan',
-      component: ManageLoan
-    },
-    {
       path: '/donations/manage', 
       name: 'ManageDonation',
       component: ManageDonation
@@ -148,6 +142,21 @@ export default new Router({
        name: 'NavBar',
        component: NavBar
     }, 
+    {
+      path: '/bookings/ticket',
+      name: 'BookTicket',
+      component: BookTicket
+    },
+    {
+      path: '/bookings/tour',
+      name: 'BookTour',
+      component: BookTour
+    },
+    {
+      path: '/bookings/manage',
+      name: 'ManageBooking',
+      component: ManageBooking
+    },
     {
       path: "*",
       redirect: "/404"
