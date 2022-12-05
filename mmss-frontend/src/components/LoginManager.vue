@@ -2,9 +2,7 @@
     <div id="LoginManager">
         <br>
         <!-- Welcome messages - can be changed-->
-        <h1>
-            Welcome to Marwan's Museum!
-        </h1>
+
         <h2>
             Manager Login Page
         </h2>
@@ -33,9 +31,6 @@
                     <b-button block variant="success"
                         v-bind:disabled="!managerUsername.trim() || !managerPassword.trim()"
                         @click="doLoginManager(managerUsername, managerPassword)">Login</b-button>
-                    <hr>
-                    <b-button block variant="primary" @click="$router.push({ name: 'Hello' })">Create an
-                        Account</b-button>
                     <hr>
                     <b-button block @click="$router.push({ name: 'LoginVisitor' })">Login as a visitor</b-button>
                     <hr>

@@ -10,9 +10,9 @@
                 <b-navbar-nav>
                     <b-nav-form>
                         <b-form-input class="mr-sm-2" placeholder="Enter Username" v-model="username"
-                        @keyup.enter="doGetVisitor(username)"></b-form-input>
+                            @keyup.enter="doGetVisitor(username)"></b-form-input>
                         <b-button v-bind:disabled="(!username.trim())" variant="success" class="my-2 my-sm-0"
-                            @click="doGetVisitor(username)" >Search</b-button>
+                            @click="doGetVisitor(username)">Search</b-button>
                     </b-nav-form>
                 </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
@@ -22,53 +22,34 @@
                 </b-navbar-nav>
             </b-navbar>
         </div>
-        
-        <b-table ref="DonationTable" striped hover sticky-header="200px" :items="donations" selectable :select-mode="selectMode"
-            @row-selected="onRowSelected"></b-table>
 
-        <b-form-checkbox id="checkbox-1" v-model="request.canLoan" name="checkbox-1" value='true'>
-        Can Loan?
-        </b-form-checkbox>
+        <b-table ref="DonationTable" striped hover sticky-header="200px" :items="donations" selectable
+            :select-mode="selectMode" @row-selected="onRowSelected"></b-table>
+        <table class="center" width="50%">
+            <tr>
+                <td>
+                    <b-form-checkbox id="checkbox-1" v-model="request.canLoan" name="checkbox-1" value='true'>
+                        Can Loan?
+                    </b-form-checkbox>
 
-        <b-form-group 
-            id="input-group-4" 
-            label="Insurance Fee:" 
-            label-for="input-2">
-            <b-form-input
-                id="input-2"
-                v-model="request.insuranceFee"
-                type="number"
-                placeholder="Enter artefact's insurance fee"
-                required
-            ></b-form-input>
-        </b-form-group> 
+                    <b-form-group id="input-group-4" label="Insurance Fee:" label-for="input-2">
+                        <b-form-input id="input-2" v-model="request.insuranceFee" type="number"
+                            placeholder="Enter artefact's insurance fee" required></b-form-input>
+                    </b-form-group>
 
-        <b-form-group 
-            id="input-group-5" 
-            label="Loan Fee:" 
-            label-for="input-3">
-            <b-form-input
-                id="input-3"
-                v-model="request.loanFee"
-                type="number"
-                placeholder="Enter artefact's loan fee"
-                required
-            ></b-form-input>
-        </b-form-group>
+                    <b-form-group id="input-group-5" label="Loan Fee:" label-for="input-3">
+                        <b-form-input id="input-3" v-model="request.loanFee" type="number"
+                            placeholder="Enter artefact's loan fee" required></b-form-input>
+                    </b-form-group>
 
-        <!-- Image URL -->
-        <b-form-group 
-            id="input-group-7" 
-            label="Image URL:" 
-            label-for="input-4">
-            <b-form-input 
-                id="input-4" 
-                v-model="request.imageUrl" 
-                type="text" 
-                required>
-            </b-form-input>
-        </b-form-group>
-
+                    <!-- Image URL -->
+                    <b-form-group id="input-group-7" label="Image URL:" label-for="input-4">
+                        <b-form-input id="input-4" v-model="request.imageUrl" type="text" required>
+                        </b-form-input>
+                    </b-form-group>
+                </td>
+            </tr>
+        </table>
         <b-button variant="success" @click="doApproveDonation(selectedDonations)">Approve</b-button>
         <b-button variant="danger" @click="doDeclineDonation(selectedDonations)">Decline</b-button>
 
@@ -162,7 +143,7 @@ export default {
         async doApproveDonation() {
             for (let i = 0; i < this.selectedDonations.length; i++) {
                 let exchangeId = this.selectedDonations[i].exchangeId;
-                AXIOS.put('/donation/' + exchangeId, this.request, {})
+                await AXIOS.put('/donation/' + exchangeId, this.request, {})
                     .then(response => {
                         //refresh the table on the last request
                         this.refreshTable();
@@ -183,7 +164,7 @@ export default {
         async doDeclineDonation() {
             for (let i = 0; i < this.selectedDonations.length; i++) {
                 let exchangeId = this.selectedDonations[i].exchangeId;
-                AXIOS.put('/donation/?id=' + exchangeId, {}, {})
+                await AXIOS.put('/donation/?id=' + exchangeId, {}, {})
                     .then(response => {
                         //refresh the table on the last request
                         this.refreshTable();
@@ -206,4 +187,8 @@ export default {
 </script>
 
 <style>
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
 </style>

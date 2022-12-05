@@ -72,7 +72,7 @@ export default {
 
         if (loggedInVisitor) {
             // get visitor username
-            this.username = JSON.parse(loggedInEmployee).userName;
+            this.username = JSON.parse(loggedInVisitor).userName;
         }
         else if (loggedInEmployee) {
             // get employee username

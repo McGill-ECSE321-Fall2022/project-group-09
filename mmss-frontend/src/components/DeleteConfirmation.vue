@@ -39,10 +39,11 @@ export default {
                     .catch(error => {
 
                     });
-                this.$emit('delete');
-                this.$bvModal.hide('deleteConfirmation');
+
 
             }
+            this.$emit('delete');
+            this.$bvModal.hide('deleteConfirmation');
         },
 
     }

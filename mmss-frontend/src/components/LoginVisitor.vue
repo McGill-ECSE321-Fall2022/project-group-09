@@ -1,9 +1,7 @@
 <template>
     <div id="LoginVisitor">
         <br>
-        <h1>
-            Welcome to Marwan's Museum!
-        </h1>
+
         <h2>
             Visitor Login Page
         </h2>
@@ -39,7 +37,7 @@
                         @click="doLoginVisitor(visitorUsername, visitorPassword)">Login</b-button>
 
                     <hr>
-                    <b-button block variant="primary" @click="$router.push({ name: 'Hello' })">Create an
+                    <b-button block variant="primary" @click="$bvModal.show('CreateVisitorForm')"> Create an
                         Account</b-button>
                     <hr>
                     <b-button block @click="$router.push({ name: 'LoginManager' })">Login as the manager</b-button>
@@ -51,6 +49,8 @@
         </table>
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />
+
+
     </div>
 
 </template> 
@@ -75,7 +75,7 @@ export default {
     name: 'LoginVisitor',
     // Add the error handler component to the components list
     components: {
-        ErrorHandler
+        ErrorHandler,
     },
     data() {
         return {

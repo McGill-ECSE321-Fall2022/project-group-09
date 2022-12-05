@@ -56,6 +56,8 @@ export default {
         }
     },
     created: function () {
+        const loggedInVisitor = sessionStorage.getItem('loggedInVisitor');
+        this.request.visitorUsername = JSON.parse(loggedInVisitor).userName;
     },
     methods: {
         onSubmit(event) {
@@ -86,7 +88,6 @@ export default {
         },
         resetVariables() {
             const self = this
-            self.request.visitorUsername = ''
             self.request.date = ''
         }
     }

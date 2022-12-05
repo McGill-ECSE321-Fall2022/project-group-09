@@ -10,7 +10,7 @@
                 id="input-1" 
                 v-model="request.itemName" 
                 type="text" 
-                :state="request.itemName.length <= 50"
+                :state="(request.itemName.length <= 50 && request.itemName.length != 0)"
                 placeholder="Enter item's name (maximum 50 characters)" 
                 required>
             </b-form-input>
@@ -23,7 +23,7 @@
             <b-form-textarea
                 id="textarea-1"
                 v-model="request.description"
-                :state="request.description.length <= 300"
+                :state="(request.description.length <= 300 && request.description.length != 0)"
                 placeholder="Enter items's description (maximum 300 characters)"
                 rows="3"
                 required>
@@ -71,12 +71,12 @@ export default {
     },
     methods: {
         // When the Create button is clicked
-        onSubmit(event) {
+        async onSubmit(event) {
             event.preventDefault()
             const self = this
             this.request.visitorUsername = JSON.parse(sessionStorage.getItem('loggedInVisitor')).userName;
             console.log(self.request)
-            AXIOS.post('/donation', this.request, {})
+            await AXIOS.post('/donation', this.request, {})
             .then((response) => {
                 // Show response
                 // Empty the form
@@ -94,6 +94,8 @@ export default {
                 // call the error handler component modal (named errorPopUp) to display the error message
                 self.$bvModal.show('errorPopUp');
             });
+            this.resetVariables(); 
+            this.$emit('submitted');
         },
         // When the Reset button is clicked
         onReset(event) {

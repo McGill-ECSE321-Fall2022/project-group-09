@@ -5,12 +5,12 @@
             Donations
         </h1>
         <div>
-            <b-navbar type="dark" variant="info">
+            <b-navbar class="secondaryBar" type="dark" variant="info">
                 <b-navbar-brand>Your Pending Donations</b-navbar-brand>
                 
                 <b-navbar-nav class="ml-auto">
                     <b-button class="my-2 my-sm-0" @click="refreshTable()">Refresh Table</b-button>
-                    <b-button class="my-2 my-sm-0" type="submit" @click="$bvModal.show('CreateDonationForm')">Create</b-button>
+                    <b-button variant="success" class="my-2 my-sm-0" type="submit" @click="$bvModal.show('CreateDonationForm')">Create</b-button>
                 </b-navbar-nav>
             </b-navbar>
         </div>
@@ -24,7 +24,7 @@
             size="xl" 
             scrollable
             hide-footer>
-            <create-form/>
+            <create-form @submitted="refreshTable()"/>
         </b-modal> 
 
     </div>

@@ -36,8 +36,7 @@
             </b-form-group>
 
             <!-- Buttons to submit or reset the form-->
-            <b-button type="submit" variant="primary" v-bind:disabled="!submitState">Create New
-                Visitor </b-button>
+            <b-button type="submit" variant="primary" v-bind:disabled="!submitState">Create Account </b-button>
             <b-button type="reset" variant="danger" @click="resetVariables">Reset</b-button>
         </b-form>
 

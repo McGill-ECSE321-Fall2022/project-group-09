@@ -149,27 +149,8 @@ export default new Router({
        name: 'NavBar',
        component: NavBar
     }, 
+    
     {
-      {
-      path: '/createVisitor',
-      name: 'CreateVisitor',
-      component: CreateVisitor
-    }, 
-    {
-      path: '/updateVisitor',
-      name: 'UpdateVisitor',
-      component: UpdateVisitor
-    }, 
-    {
-      path: '/updateEmployee',
-      name: 'UpdateEmployee',
-      component: UpdateEmployee
-    },
-    {
-      path: '/updateManager',
-      name: 'UpdateManager',
-      component: UpdateManager
-    },
     path: '/bookings/ticket',
       name: 'BookTicket',
       component: BookTicket

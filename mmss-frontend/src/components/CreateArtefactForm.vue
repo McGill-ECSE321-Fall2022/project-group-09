@@ -9,6 +9,8 @@
  -->
 <template>
     <div id="CreateArtefactForm">
+        <br>
+        <br> 
       <b-form @submit="onSubmit" @reset="onReset" v-if="show">
         <!-- Name -->
         <b-form-group 
@@ -183,7 +185,6 @@ export default {
             AXIOS.post('/artefact', self.request, {})
             .then((response) => {
                 // Show response
-                alert('The artefact was successfully created.')
                 // Empty the form
                 self.resetVariables()
                 //onReset

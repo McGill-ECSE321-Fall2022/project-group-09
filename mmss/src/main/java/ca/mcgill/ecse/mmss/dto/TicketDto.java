@@ -5,7 +5,6 @@ import ca.mcgill.ecse.mmss.model.Ticket;
 
 public class TicketDto {
 	private int bookingId;
-	private double pricePerPerson;
 	private String visitorUsername;
 	private Date date;
 
@@ -25,7 +24,6 @@ public class TicketDto {
 	 */
 	public TicketDto(Ticket ticket) {
 		this.bookingId = ticket.getBookingId();
-		this.pricePerPerson = ticket.getPricePerPerson();
 		this.visitorUsername = ticket.getVisitor().getUsername();
 		this.date = ticket.getDate().getDate();
 	}
@@ -38,9 +36,8 @@ public class TicketDto {
 	 * @param pricePerPerson
 	 * @param visitorUsername
 	 */
-	public TicketDto(int bookingId, double pricePerPerson, String visitorUsername, Date date) {
+	public TicketDto(int bookingId, String visitorUsername, Date date) {
 		this.bookingId = bookingId;
-		this.pricePerPerson = pricePerPerson;
 		this.visitorUsername = visitorUsername;
 		this.date = date;
 	}
@@ -49,9 +46,6 @@ public class TicketDto {
 		return bookingId;
 	}
 
-	public double getPricePerPerson() {
-		return pricePerPerson;
-	}
 
 	public String getVisitorUsername() {
 		return visitorUsername;
@@ -73,7 +67,4 @@ public class TicketDto {
 		this.bookingId = bookingId;
 	}
 
-	public void setPricePerPerson(double pricePerPerson) {
-		this.pricePerPerson = pricePerPerson;
-	}
 }

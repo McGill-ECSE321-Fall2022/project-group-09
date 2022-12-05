@@ -78,12 +78,16 @@ export default {
         }
     },
     created: function () {
+        const loggedInVisitor = sessionStorage.getItem('loggedInVisitor');
+        this.request.visitorUsername = JSON.parse(loggedInVisitor).userName;
+
     },
     methods: {
-        onSubmit(event) {
+        async onSubmit(event) {
+
             event.preventDefault()
             const self = this
-            AXIOS.post('/tour', self.request, {}).then((response) => {
+            await AXIOS.post('/tour', self.request, {}).then((response) => {
                 self.resetVariables() // Empty the form
             })
                 .catch((error) => {
@@ -108,7 +112,6 @@ export default {
         },
         resetVariables() {
             const self = this
-            self.request.visitorUsername = ''
             self.request.date = ''
             self.request.numberOfParticipants = ''
             self.request.shiftTime = ''
