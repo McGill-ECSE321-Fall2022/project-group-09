@@ -53,8 +53,9 @@ public class OpenDayService {
 
         // use repository method
         ArrayList<OpenDay> openDays = openDayRepository.findAll();
+        // sort the openDays by date
+        openDays.sort(new ComparatorForOpenDay ()); 
         
-
         return openDays;
     }
 
@@ -82,6 +83,25 @@ public class OpenDayService {
         OpenDay dueDate = openDays.get(6);
         
         return dueDate;
+    }
+
+    /**
+	 * @author Mohamed Elsamadouny
+	 * 
+	 * Deletes an openday
+	 *
+	 * @param date
+	 */
+    
+    @Transactional
+    public void deleteOpenDay(Date date) {
+
+        OpenDay openDay = openDayRepository.findOpenDayByDate(date);
+        if (openDay == null)
+            throw new MmssException(HttpStatus.NOT_FOUND, "The OpenDay with this Date was not found");
+
+        // calls the repository to delete the donation
+        openDayRepository.delete(openDay);
     }
     
     /**
