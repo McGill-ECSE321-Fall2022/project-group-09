@@ -53,7 +53,7 @@
             <!-- Account buttons for the logged out -->
             <b-navbar-nav v-if="loginStatus === 'out'" class="ml-auto">
                 <b-nav-item-dropdown text="Account" right>
-                    <b-dropdown-item @click="$bvModal.show('CreateVisitorForm')">Create</b-dropdown-item>
+                    <b-dropdown-item href= "/#/login/visitor" @click="$bvModal.show('CreateVisitorForm')">Create</b-dropdown-item>
                     <b-dropdown-item href="/#/login/visitor">Login</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
@@ -129,7 +129,6 @@ export default {
             this.loginStatus = 'out';
             this.welcomeText = 'Welcome, stranger';
         }
-        console.log(this.welcomeText)
     }, 
     // logout function for the logout button
     methods: { 
@@ -139,6 +138,8 @@ export default {
         sessionStorage.removeItem('loggedInManager');
         this.$router.push('/login/visitor');
         location.reload();
+        }, update() {
+            this.$bvModal.show('UpdateManagerForm');
         }
     }
 }

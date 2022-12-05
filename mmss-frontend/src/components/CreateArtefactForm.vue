@@ -21,7 +21,7 @@
                 id="input-1" 
                 v-model="request.artefactName" 
                 type="text" 
-                :state="request.artefactName.length <= 50"
+                :state="(request.artefactName.length <= 50 && request.artefactName.length != 0)"
                 placeholder="Enter artefact's name (maximum 50 characters)" 
                 required>
             </b-form-input>
@@ -34,7 +34,7 @@
             <b-form-textarea
                 id="textarea-1"
                 v-model="request.description"
-                :state="request.description.length <= 300"
+                :state="(request.description.length <= 300 && request.description.length != 0)"
                 placeholder="Enter artefact's description (maximum 300 characters)"
                 rows="3"
                 required>

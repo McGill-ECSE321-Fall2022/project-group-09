@@ -137,7 +137,6 @@ public class TicketIntegrationTests {
 		TicketDto request = new TicketDto();
 		request.setVisitorUsername("jon.snow@got.com");
 		request.setDate(Date.valueOf("2022-11-15"));
-		request.setPricePerPerson(20);
 
 		ResponseEntity<TicketDto> response = client.postForEntity("/ticket", request, TicketDto.class);
 

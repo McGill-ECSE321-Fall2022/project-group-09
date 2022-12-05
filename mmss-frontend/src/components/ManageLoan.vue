@@ -35,7 +35,7 @@
         </div>
 
         <!-- Table that displays the loans-->
-        <b-table ref="LoanTable" striped hover sticky-header="200px" :items="loans" selectable :select-mode="selectMode"
+        <b-table ref="LoanTable" striped hover sticky-header="600px" :items="loans" selectable :select-mode="selectMode"
             @row-selected="onRowSelected"></b-table>
 
         <b-button variant="success" @click="doApproveLoan(selectedLoans)">Approve</b-button>

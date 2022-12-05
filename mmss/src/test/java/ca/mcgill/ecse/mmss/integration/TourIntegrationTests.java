@@ -139,7 +139,6 @@ public class TourIntegrationTests {
         request.setVisitorUsername("jon.snow@got.com");
         request.setDate(Date.valueOf("2022-11-15"));
         request.setNumberOfParticipants(5);
-        request.setPricePerPerson(25);
         request.setShiftTime(ShiftTime.Morning);
 
         ResponseEntity<TourDto> response = client.postForEntity("/tour", request, TourDto.class);

@@ -388,9 +388,9 @@ public class DonationServiceTests {
         verify(artefactService, times(1)).createArtefact(any(String.class), any(String.class), any(boolean.class), any(double.class), any(double.class), any(String.class));
         verify(artefactService, times(1)).moveArtefactToRoom(0, 0);
 
-        String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
-                + "with name: " + String.valueOf(donation.getItemName())
-                + "has been approved! Thank you very much for your donation!";
+        String message = "Your donation request submitted on date " + donation.getSubmittedDate().toString()
+                + " with name: " + String.valueOf(donation.getItemName())
+                + " has been approved! Thank you very much for your donation!";
 
         // verify notification was created
         verify(notificationService, times (1)).createNotificationByUsername(donation.getVisitor().getUsername(), message);

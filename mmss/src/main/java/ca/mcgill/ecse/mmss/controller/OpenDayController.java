@@ -74,8 +74,8 @@ public class OpenDayController {
      * @param date
      * @return A message saying the openDay was deleted
      */
-    @DeleteMapping({"/{date}", "/{date}/"})
-    public ResponseEntity<String> deleteOpenDay(@PathVariable String date) {
+    @DeleteMapping()
+    public ResponseEntity<String> deleteOpenDay(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         // call service layer
         openDayService.deleteOpenDay(Date.valueOf(date));
 

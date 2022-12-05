@@ -24,7 +24,7 @@
                 <td>
                     <div align="left"><i>Password:</i></div>
                     <b-input id="emailInput" type="password" v-model="visitorPassword" placeholder=""
-                        @keyup.enter="doLoginManager(managerUsername, managerPassword)"></b-input>
+                        @keyup.enter="doLoginVisitor(visitorUsername, visitorPassword)"></b-input>
                 </td>
             </tr>
 

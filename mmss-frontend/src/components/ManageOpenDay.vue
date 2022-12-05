@@ -4,14 +4,14 @@
         <h1>
             OpenDays
         </h1>
-        <b-calendar v-model="value" @context="onContext" :date-disabled-fn="dateDisabled" locale="en-US" width="800px"></b-calendar>
+        <b-calendar v-model="value" @context="onContext"  locale="en-US" width="800px"></b-calendar>
         <br>
         <br>
         <b-button variant="success" class="my-2 my-sm-0" @click="createOpenDay()">Create OpenDay</b-button>
         <br>
         <br>
-        <b-navbar type="dark" variant="info">
-                <b-navbar-brand>All OpenDay</b-navbar-brand>
+        <b-navbar class="secondaryBar" type="dark" variant="info">
+                <b-navbar-brand>All OpenDays</b-navbar-brand>
                 
                 <b-navbar-nav class="ml-auto">
                     <b-button class="my-2 my-sm-0" @click="refreshTable()">Refresh Table</b-button>
@@ -40,7 +40,8 @@
           openDays: [],
           selectedOpenDays: [],  
           value: '',
-          context: null
+          context: null, 
+          selectMode: 'multi',
         }
       },
       created: function () {
@@ -90,10 +91,9 @@
         async doDeleteOpenDays() {
             for (let i = 0; i < this.selectedOpenDays.length; i++) {
                 let date = this.selectedOpenDays[i].date;
-                AXIOS.delete('/openday/' + date, {}, {})
+                await AXIOS.delete('/openday/?date=' + date, {}, {})
                     .then(response => {
                         //refresh the table on the last request
-                        this.refreshTable();
                     })
                     .catch(error => {
                         if (error.response.status >= 450) {
@@ -111,12 +111,12 @@
             onContext(ctx) {
             this.context = ctx
             },
-            dateDisabled(ymd, date) {
-            // Disable weekends (Sunday = `0`, Saturday = `6`)
-            const weekday = date.getDay()
-            // Return `true` if the date should be disabled
-            return weekday === 0 || weekday === 6
-        },
+        //     dateDisabled(ymd, date) {
+        //     // Disable weekends (Sunday = `0`, Saturday = `6`)
+        //     const weekday = date.getDay()
+        //     // Return `true` if the date should be disabled
+        //     return weekday === 0 || weekday === 6
+        // },
         async createOpenDay(){
             console.log(this.value)
             await AXIOS.post('/openday/?date=' + this.value, {}, {})
