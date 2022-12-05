@@ -9,6 +9,7 @@ import ManageAccount from '@/components/ManageAccount'
 import CreateVisitor from '@/components/CreateVisitor'
 import updateVisitor from '@/components/updateVisitor'
 import updateEmployee from '@/components/updateEmployee'
+import updateManager from '@/components/updateManager'
 // import NavBar from '@/components/NavBar'
 
 Vue.use(Router);
@@ -103,6 +104,11 @@ export default new Router({
       path: '/updateemployee',
       name: 'updateEmployee',
       component: updateEmployee
+    },
+    {
+      path: '/updatemanager',
+      name: 'updateManager',
+      component: updateManager
     },
     // {
     //   path: '/navbar',
