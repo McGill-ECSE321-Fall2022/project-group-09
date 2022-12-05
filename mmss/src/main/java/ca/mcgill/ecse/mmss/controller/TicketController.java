@@ -23,7 +23,6 @@ import ca.mcgill.ecse.mmss.service.TicketService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@CrossOrigin
 @RequestMapping({ "/ticket", "/ticket/" })
 public class TicketController {
 

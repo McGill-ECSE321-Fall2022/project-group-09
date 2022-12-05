@@ -1,7 +1,6 @@
 package ca.mcgill.ecse.mmss.dto;
 
 import ca.mcgill.ecse.mmss.model.Employee;
-import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
 
 public class EmployeeDto {

@@ -24,7 +24,6 @@ import ca.mcgill.ecse.mmss.service.TourService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@CrossOrigin
 @RequestMapping({ "/tour", "/tour/" })
 public class TourController {
 
