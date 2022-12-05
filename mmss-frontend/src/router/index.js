@@ -6,6 +6,9 @@ import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
 import ManageLoan from '@/components/ManageLoan'
 import ManageAccount from '@/components/ManageAccount'
+import CreateVisitor from '@/components/CreateVisitor'
+import updateVisitor from '@/components/updateVisitor'
+import updateEmployee from '@/components/updateEmployee'
 // import NavBar from '@/components/NavBar'
 
 Vue.use(Router);
@@ -86,6 +89,21 @@ export default new Router({
       name: 'ManageAccount',
       component: ManageAccount
     }, 
+    {
+      path: '/createvisitor',
+      name: 'CreateVisitor',
+      component: CreateVisitor
+    }, 
+    {
+      path: '/updatevisitor',
+      name: 'updateVisitor',
+      component: updateVisitor
+    }, 
+    {
+      path: '/updateemployee',
+      name: 'updateEmployee',
+      component: updateEmployee
+    },
     // {
     //   path: '/navbar',
     //   name: 'NavBar',
