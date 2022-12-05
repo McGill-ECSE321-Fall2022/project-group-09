@@ -2,7 +2,7 @@
     <div id="ManageLoan">
         <div>
             <!-- ToolBar to manage loans-->
-            <b-navbar type="dark" variant="info">
+            <b-navbar class="secondaryBar" type="dark" variant="info">
                 <b-navbar-brand>Loans</b-navbar-brand>
                 <b-navbar-nav>
 

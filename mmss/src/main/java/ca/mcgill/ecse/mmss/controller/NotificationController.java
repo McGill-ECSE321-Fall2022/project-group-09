@@ -14,8 +14,8 @@ import java.util.ArrayList;
 /**
  * REST API for the Notification class
  */
-@CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin
 @RequestMapping ({"/notification", "/notification/"})
 public class NotificationController {
 

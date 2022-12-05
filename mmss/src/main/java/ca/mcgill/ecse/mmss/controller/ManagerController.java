@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Shidan Javaheri
  */
 
-@CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin
 @RequestMapping({ "/manager", "/manager/" })
 public class ManagerController {
 

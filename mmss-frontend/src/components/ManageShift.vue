@@ -1,12 +1,8 @@
 <template>
     <div id="ManageShift">
-        <br>
-        <h1>
-            Employee Shifts
-        </h1>
         <div>
-            <b-navbar type="dark" variant="info">
-                <b-navbar-brand>Tool Bar</b-navbar-brand>
+            <b-navbar class="secondaryBar" type="dark" variant="info">
+                <b-navbar-brand>Employee Shifts</b-navbar-brand>
                 <b-navbar-nav>
 
                     <!-- Navbar dropdowns -->
@@ -18,6 +14,11 @@
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
+                    <b-button variant="success" @click="doSetToMorning(selectedEmployees)">Assign to morning</b-button>
+                    <b-button variant="warning" @click="doSetToAfternoon(selectedEmployees)">Assign to afternoon</b-button>
+                    <b-button variant="dark" @click="doSetToEvening(selectedEmployees)">Assign to evening</b-button>
+                </b-navbar-nav>
+                <b-navbar-nav class="ml-auto">
                     <b-button class="my-2 my-sm-0" @click="refreshTable()"> Refresh</b-button>
                     <br>
                     <b-button variant="primary" class="my-2 my-sm-0" @click="clearSelected()"> Clear Selection</b-button>
@@ -26,10 +27,6 @@
         </div>
         <b-table ref="EmployeeTable" striped hover sticky-header="200px" :items="employees" selectable :select-mode="selectMode"
             @row-selected="onRowSelected"></b-table>
-
-        <b-button variant="outline-success" @click="doSetToMorning(selectedEmployees)">Assign to morning</b-button>
-        <b-button variant="outline-warning" @click="doSetToAfternoon(selectedEmployees)">Assign to afternoon</b-button>
-        <b-button variant="outline-dark" @click="doSetToEvening(selectedEmployees)">Assign to evening</b-button>
 
 
 
@@ -71,7 +68,8 @@ export default {
             request: {
                 userName: '',
                 shiftTime: ''
-            }
+            },
+            shiftId: ''
 
         }
     },
@@ -103,8 +101,8 @@ export default {
                     this.errorMessage = error.response.data
                 });
         },
-        async showEmployees(shiftId) {
-            await AXIOS.get('/employee/byShift?id=' + shiftId, {}, {})
+        showEmployees(shiftId) {
+            AXIOS.get('/employee/byShift?id=' + shiftId, {}, {})
                 .then(response => {
                     // replace employees with response
                     this.employees = response.data;
@@ -119,24 +117,43 @@ export default {
                     this.$bvModal.show('errorPopUp');
                 });
         },
-        showMorningShifts() {
-            let id = this.doGetShiftId("Morning");
-            this.showEmployees(id);
+        async showMorningShifts() {
+            await this.doGetShiftId("Morning");
+            this.showEmployees(this.shiftId);
         },
-        showAfternoonShifts() {
-            let id = this.doGetShiftId("Afternoon");
-            this.showEmployees(id);
+        async showAfternoonShifts() {
+            await this.doGetShiftId("Afternoon");
+            this.showEmployees(this.shiftId);
         },
-        showEveningShifts() {
-            let id = this.doGetShiftId("Evening");
-            this.showEmployees(id);
+        async showEveningShifts() {
+            await this.doGetShiftId("Evening");
+            this.showEmployees(this.shiftId);
+        },
+        async doGetShiftId(shiftTime) {
+            await AXIOS.get('/shift/' + shiftTime, {}, {})
+                .then(response => {
+                    // replace loans with response
+                    console.log(response.data.shiftId);
+                    this.shiftId = response.data.shiftId;
+                })
+                .catch(error => {
+                    // logic on the error status. Display backend error message if status is below 450
+                    // otherwise display something went wrong
+                    if (error.response.status >= 450) {
+                        this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
+                    } else {
+                        this.errorMessage = error.response.data;
+                    }
+                    // call the error handler component modal (named errorPopUp) to display the error message
+                    this.$bvModal.show('errorPopUp');
+                });
         },
         async doUpdateEmployee(selectedEmployees, shiftTime) {
             for (var i = 0; i < selectedEmployees.length; i++) {
                 this.request.userName = selectedEmployees[i].userName;
                 this.request.shiftTime = shiftTime;
-                let id = this.doGetShiftId(shiftTime);
-                await AXIOS.put('/shift/assign?shiftId=' + id + "&username=" + this.request.userName, {})
+                await this.doGetShiftId(shiftTime);
+                await AXIOS.put('/shift/assign?shiftId=' + this.shiftId + "&username=" + this.request.userName, {})
                     .then(response => {
                         // do nothing
                     })
@@ -149,7 +166,7 @@ export default {
                         // call the error handler component modal (named errorPopUp) to display the error message
                         this.$bvModal.show('errorPopUp');
                     });
-
+                this.refreshTable();
             }
 
         },
@@ -167,24 +184,6 @@ export default {
             this.doUpdateEmployee(this.selectedEmployees, "Evening");
             this.clearSelected();
             this.refreshTable();
-        },
-        async doGetShiftId(shiftTime) {
-            await AXIOS.get('/shift/' + shiftTime, {}, {})
-                .then(response => {
-                    // replace loans with response
-                    return response.data.shiftId;
-                })
-                .catch(error => {
-                    // logic on the error status. Display backend error message if status is below 450
-                    // otherwise display something went wrong
-                    if (error.response.status >= 450) {
-                        this.errorMessage = "Oops! An error occured. Please contact the musuem directly.";
-                    } else {
-                        this.errorMessage = error.response.data;
-                    }
-                    // call the error handler component modal (named errorPopUp) to display the error message
-                    this.$bvModal.show('errorPopUp');
-                });
         }
     },
 }
@@ -198,5 +197,4 @@ export default {
 </script>
 
 <style>
-
 </style>

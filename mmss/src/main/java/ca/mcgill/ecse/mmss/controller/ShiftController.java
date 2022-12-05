@@ -11,8 +11,8 @@ import ca.mcgill.ecse.mmss.dto.ShiftDto;
 import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.service.ShiftService;
 
-@CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin
 @RequestMapping ("/shift")
 public class ShiftController {
     @Autowired

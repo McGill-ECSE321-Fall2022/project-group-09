@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div>
+    <div id="globalNavBar">
       <NavBar></NavBar>
     </div>
     <div>
@@ -28,6 +28,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+#globalNavBar .NavBar{
+  height: 90px;
+}
+.secondaryBar{
+  background-color: 	#787878!important;
+}
+.secondaryBar .btn{
+  margin-right: 10px!important;
+  margin-left: 10px!important;
 }
 </style>

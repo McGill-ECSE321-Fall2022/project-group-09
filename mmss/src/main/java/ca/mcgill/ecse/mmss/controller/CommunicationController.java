@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST API for the Communication class
  */
-@CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin
 @RequestMapping({"/communication", "/communication/"})
 public class CommunicationController {
 

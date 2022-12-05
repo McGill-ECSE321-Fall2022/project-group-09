@@ -22,8 +22,8 @@ import ca.mcgill.ecse.mmss.model.Tour;
 import ca.mcgill.ecse.mmss.model.Tour.ShiftTime;
 import ca.mcgill.ecse.mmss.service.TourService;
 
-@CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin
 @RequestMapping({ "/tour", "/tour/" })
 public class TourController {
 

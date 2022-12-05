@@ -7,7 +7,7 @@
 
         <!-- Tool bar for visitor accounts -->
         <div id=visitorTableToolBar>
-            <b-navbar type="dark" variant="info">
+            <b-navbar class="secondaryBar" type="dark" variant="info">
                 <b-navbar-brand>Tool Bar</b-navbar-brand>
                 <b-navbar-nav>
                     <b-nav-form>

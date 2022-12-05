@@ -187,16 +187,18 @@ public class ShiftServiceTests {
     @Test
     public void testCreateShifts() {
         // setup mocks
+        ArrayList<Shift> emptyList = new ArrayList<>();
     	for(int i=0; i<=2; i++) {
     		Shift shift = this.shifts.get(i);
-            lenient().when(shiftRepository.findAllByShiftTime(shift.getShiftTime())).thenAnswer((InvocationOnMock invocation) -> null);
+            lenient().when(shiftRepository.findAllByShiftTime(shift.getShiftTime())).thenAnswer((InvocationOnMock invocation) -> emptyList);
             lenient().when(shiftRepository.save(shift)).thenAnswer((InvocationOnMock invocation) -> shift);
     	}
         lenient().when(shiftRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> shifts);
         // call service layer
-        ArrayList<Shift> shiftList = shiftService.createShifts();
+        ArrayList<Shift> outputList = new ArrayList<>();
+        outputList = shiftService.createShifts();
         // assertion
-        for(int i=0; i<=2; i++) assertEquals(this.shifts.get(i).getShiftTime(), shiftList.get(i).getShiftTime());
+        for(int i=0; i<=2; i++) assertEquals(this.shifts.get(i).getShiftTime(), outputList.get(i).getShiftTime());
         // Verify
         verify(shiftRepository, times(3)).save(any(Shift.class));
     }

@@ -1,12 +1,11 @@
 <template>
     <div id="ManageNotification">
-        <br>
-        <h1>
-            Notifications
-        </h1>
         <div>
-            <b-navbar type="dark" variant="info">
-                <b-navbar-brand>Tool Bar</b-navbar-brand>
+            <b-navbar class="secondaryBar" type="dark" variant="dark">
+                <b-navbar-brand>Notifications</b-navbar-brand>
+                <b-navbar-nav class="ml-auto">
+                    <b-button variant="danger" @click="doDeleteNotification(selectedNotifications)">Delete</b-button>
+                </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
                     <b-button class="my-2 my-sm-0" @click="refreshTable()"> Refresh</b-button>
                     <br>
@@ -14,10 +13,8 @@
                 </b-navbar-nav>
             </b-navbar>
         </div>
-        <b-table ref="NotificationTable" striped hover sticky-header="200px" :items="notifications" selectable :select-mode="selectMode"
+        <b-table ref="NotificationTable" striped hover sticky-header="500px" :items="sortedItems" selectable :select-mode="selectMode"
             @row-selected="onRowSelected"></b-table>
-
-        <b-button variant="outline-danger" @click="doDeleteNotification(selectedNotifications)">Delete</b-button>
 
 
 
@@ -132,6 +129,11 @@ export default {
             this.refreshTable();
         }
     },
+    computed: {
+        sortedItems: function() {
+            return this.notifications.sort((a, b) => b.notificationId - a.notificationId)
+        }
+    }
 }
 
 

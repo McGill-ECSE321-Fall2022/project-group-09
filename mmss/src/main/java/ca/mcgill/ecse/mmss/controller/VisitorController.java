@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import ca.mcgill.ecse.mmss.dto.EmployeeDto;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +26,8 @@ import ca.mcgill.ecse.mmss.service.VisitorService;
 /**
  * REST API for the Visitor class
  */
-@CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin
 @RequestMapping ({"/visitor","/visitor/"})
 public class VisitorController {
 	

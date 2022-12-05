@@ -1,5 +1,4 @@
 <template>
-    <div>
         <b-navbar class="NavBar" type="dark" variant="dark">
             <b-navbar-brand class="icon_band">
             <a href="/#">
@@ -40,7 +39,6 @@
                 </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-navbar>
-    </div>
 </template>
 
 <script>
@@ -107,11 +105,11 @@ export default {
 
 <style>
 .NavBar{
-    position: fixed;
-    top: 0;
     width: 100%;
-    height: 7%;
-    bottom: 0px;
+    height: 10px;
+    }
+.NavBar label{
+    color: goldenrod!important;
     }
 .icon_band{
     padding: 0px;
@@ -124,8 +122,8 @@ export default {
 .NavBar .navbar-nav .nav-link{
     display: inline-block!important;
     font-weight: 400!important;
-    color: #f8f9fa!important;
-    border-color: #f8f9fa!important;
+    color: goldenrod!important;
+    border-color: goldenrod!important;
     text-align: center!important;
     vertical-align: middle!important;
     -webkit-user-select: none!important;
@@ -146,6 +144,8 @@ export default {
     background-color: #f8f9fa!important;
 }
 .NavBar .btn {
+    color: goldenrod!important;
+    border-color: goldenrod!important;
     margin: 7px!important;
 }
 </style>
