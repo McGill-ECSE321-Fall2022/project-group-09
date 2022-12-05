@@ -189,11 +189,10 @@ export default {
                 this.request.exchangeId = selectedLoans[i].exchangeId;
                 this.request.exchangeStatus = status;
                 // send request to backend up update loan
-                AXIOS.put('/loan/', this.request, {})
+                 await AXIOS.put('/loan/', this.request, {})
                     .then(response => {
                         //refresh the table on the last request
 
-                        this.refreshTable();
                     })
                     .catch(error => {
                         if (error.response.status >= 450) {
@@ -204,8 +203,9 @@ export default {
                         // call the error handler component modal (named errorPopUp) to display the error message
                         this.$bvModal.show('errorPopUp');
                     });
-
+            
             }
+            this.refreshTable();
 
         },
         // approving a loan

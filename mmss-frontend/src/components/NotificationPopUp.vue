@@ -53,19 +53,22 @@ export default {
 
                 self.request.username = self.selectedAccounts[i].userName
                 self.request.message = self.message
+                console.log("Sending notification to " + self.request.username)
+                console.log("sending notification with message " + self.request.message)
                 // post request to backend
                 await AXIOS.post('/notification', self.request, {})
                 .then((response => {
-                    
+                   console.log("response recieved") 
                 }))
                 .catch((error) => {
-
+                    console.log("error")
                 })
                 // reset message at end, hide popup
-                self.message = ''; 
+                self.request.message = ''; 
                 this.$bvModal.hide('NotificationPopUp');
 
             }
+        self.message=''; 
         }
     }, 
     // make sure message is valid 

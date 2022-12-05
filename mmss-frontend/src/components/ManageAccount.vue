@@ -116,7 +116,7 @@
 
         <!-- The component to create an employee-->
         <b-modal id='CreateEmployeeForm' title="Create an Employee" centered size="xl" scrollable hide-footer>
-            <create-form />
+            <create-form @submitted="refresh()"/>
         </b-modal>
         <!-- The component to confirm to delete accounts -->
         <b-modal id="deleteConfirmation" title="Delete Confirmation" centered hide-footer>
