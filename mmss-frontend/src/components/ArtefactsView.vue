@@ -1,6 +1,6 @@
 <template>
     <div id="ArtefactsView">
-        <b-navbar toggleable="lg" type="dark" variant="info">
+        <b-navbar class="secondaryBar" toggleable="lg" type="dark" variant="info">
         <b-navbar-brand href="#">Artefact Navigation</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>

@@ -7,7 +7,7 @@
 
         <!-- Tool bar for visitor accounts -->
         <div id=visitorTableToolBar>
-            <b-navbar class="secondaryBar" type="dark" variant="info">
+            <b-navbar class="secondaryBar" type="dark" variant="dark">
                 <b-navbar-brand>Tool Bar</b-navbar-brand>
                 <b-navbar-nav>
                     <b-nav-form>
@@ -64,7 +64,7 @@
 
         <!-- Tool bar for employee accounts -->
         <div id=visitorTableToolBar>
-            <b-navbar type="dark" variant="info">
+            <b-navbar class="secondaryBar" type="dark" variant="dark">
                 <b-navbar-brand>Tool Bar</b-navbar-brand>
                 <b-navbar-nav>
                     <b-nav-form>
@@ -116,7 +116,7 @@
 
         <!-- The component to create an employee-->
         <b-modal id='CreateEmployeeForm' title="Create an Employee" centered size="xl" scrollable hide-footer>
-            <create-form />
+            <create-form @submitted="refresh()"/>
         </b-modal>
         <!-- The component to confirm to delete accounts -->
         <b-modal id="deleteConfirmation" title="Delete Confirmation" centered hide-footer>

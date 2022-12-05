@@ -39,4 +39,8 @@ export default {
   margin-right: 10px!important;
   margin-left: 10px!important;
 }
+.secondaryBar .custom-select{
+  margin-right: 10px!important;
+  margin-left: 10px!important;
+}
 </style>

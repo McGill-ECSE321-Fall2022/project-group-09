@@ -104,11 +104,11 @@ export default {
 
     methods: {
         // when the form is submitted 
-        onSubmit(event) {
+        async onSubmit(event) {
             event.preventDefault()
             const self = this
             // send a post request
-            AXIOS.post('/employee', self.request, {})
+            await AXIOS.post('/employee', self.request, {})
                 .then((response) => {
                     // Empty the form
                     self.resetVariables()
@@ -124,6 +124,8 @@ export default {
                     // call the error handler component modal (named errorPopUp) to display the error message
                     self.$bvModal.show('errorPopUp');
                 });
+            this.$emit('submitted');
+
         },
         // when the form is reset
         onReset(event) {

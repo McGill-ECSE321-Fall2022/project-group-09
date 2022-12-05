@@ -1,6 +1,7 @@
 <!-- Show the rooms' artefact counts -->
 <template>
     <div id="RoomsTable">
+        <br>
         <b-container fluid>
             <b-row>
                 <b-col><p><b>Small Rooms</b></p></b-col>
@@ -121,3 +122,9 @@ export default {
 
 }
 </script>
+
+<style>
+    #RoomsTable{
+        margin: 20px;
+    }
+</style>

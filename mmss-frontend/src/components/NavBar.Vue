@@ -8,13 +8,13 @@
             </b-navbar-brand>
             <b-button v-if="loginStatus === 'out'" href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
             <b-navbar-nav v-if="loginStatus !== 'out'" class="ml-auto">
-            <b-button href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
+                <b-button href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
+                <b-button href="/#/artefacts" variant="outline-light" class="my-2 my-sm-0">Artefacts</b-button>
                 <!-- Visitor buttons-->
-                <b-button v-if="loginStatus === 'visitor'" href="/#/artefact/view" variant="outline-light" class="my-2 my-sm-0">Loans</b-button>
                 <b-button v-if="loginStatus === 'visitor'" href="/#/donation/request" variant="outline-light" class="my-2 my-sm-0">Donations</b-button>
                 <b-button v-if="loginStatus === 'visitor'" href="/#/booking/request" variant="outline-light" class="my-2 my-sm-0">Bookings</b-button>
                 <!-- Staff buttons-->
-                <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/aretfact/manage" variant="outline-light" class="my-2 my-sm-0">Artefacts</b-button>
+                <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/rooms" variant="outline-light" class="my-2 my-sm-0">Rooms</b-button>
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/loans/manage" variant="outline-light" class="my-2 my-sm-0">Loans</b-button>
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/donations/manage" variant="outline-light" class="my-2 my-sm-0">Donations</b-button>
                 <b-button v-if="loginStatus === 'employee' || loginStatus === 'manager'" href="/#/booking/manage" variant="outline-light" class="my-2 my-sm-0">Bookings</b-button>
