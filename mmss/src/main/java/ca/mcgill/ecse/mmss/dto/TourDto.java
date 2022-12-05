@@ -6,11 +6,10 @@ import ca.mcgill.ecse.mmss.model.Tour.ShiftTime;
 
 public class TourDto {
 	private int bookingId;
-	private double pricePerPerson;
-	private int numberOfParticipants;
-	private ShiftTime shiftTime;
 	private String visitorUsername;
 	private Date date;
+	private int numberOfParticipants;
+	private ShiftTime shiftTime;
 
 	/**
 	 * Null constructor
@@ -28,7 +27,6 @@ public class TourDto {
 	 */
 	public TourDto(Tour tour) {
 		this.bookingId = tour.getBookingId();
-		this.pricePerPerson = tour.getPricePerPerson();
 		this.numberOfParticipants = tour.getNumberOfParticipants();
 		this.shiftTime = tour.getTourTime();
 		this.visitorUsername = tour.getVisitor().getUsername();
@@ -46,10 +44,9 @@ public class TourDto {
 	 * @param visitorUsername
 	 * @param date
 	 */
-	public TourDto(int bookingId, double pricePerPerson, int numberOfParticipants, ShiftTime shiftTime,
+	public TourDto(int bookingId, int numberOfParticipants, ShiftTime shiftTime,
 			String visitorUsername, Date date) {
 		this.bookingId = bookingId;
-		this.pricePerPerson = pricePerPerson;
 		this.numberOfParticipants = numberOfParticipants;
 		this.shiftTime = shiftTime;
 		this.visitorUsername = visitorUsername;
@@ -60,9 +57,6 @@ public class TourDto {
 		return bookingId;
 	}
 
-	public double getPricePerPerson() {
-		return pricePerPerson;
-	}
 
 	public int getNumberOfParticipants() {
 		return numberOfParticipants;
@@ -92,9 +86,6 @@ public class TourDto {
 		this.bookingId = bookingId;
 	}
 
-	public void setPricePerPerson(double pricePerPerson) {
-		this.pricePerPerson = pricePerPerson;
-	}
 
 	public void setNumberOfParticipants(int numberOfParticipants) {
 		this.numberOfParticipants = numberOfParticipants;

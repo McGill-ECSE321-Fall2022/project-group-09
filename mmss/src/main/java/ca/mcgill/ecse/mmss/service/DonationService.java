@@ -200,9 +200,9 @@ public class DonationService {
         
         if (status == ExchangeStatus.Declined) {
         // create notification message
-        String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
-        + "with name: " + String.valueOf(donation.getItemName())
-        + "has been declined!";
+        String message = "Your donation request submitted on date: " + donation.getSubmittedDate().toString()
+        + " with name: " + String.valueOf(donation.getItemName())
+        + " has been declined!";
 
         // send notification method
         notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message); 
@@ -254,9 +254,9 @@ public class DonationService {
                 artefactService.moveArtefactToRoom(artefact.getArtefactId(), roomId);
                 
                 // create notification message
-                String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
-                        + "with name: " + String.valueOf(donation.getItemName())
-                        + "has been approved! Thank you very much for your donation!";
+                String message = "Your donation request submitted on date " + donation.getSubmittedDate().toString()
+                        + " with name: " + String.valueOf(donation.getItemName())
+                        + " has been approved! Thank you very much for your donation!";
 
                 // send notification method
                 notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message);

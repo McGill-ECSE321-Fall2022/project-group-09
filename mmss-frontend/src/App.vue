@@ -11,6 +11,7 @@
 </template>
 
 <script>
+// loading the navigation bar on top of every page
 import NavBar from './components/NavBar.vue';
 export default {
   name: 'app',
@@ -20,6 +21,7 @@ export default {
 }
 </script>
 
+<!-- Styling the global and secondary bars -->
 <style>
 @import './styles.css';
 #app {
