@@ -328,7 +328,7 @@ public class ArtefactServiceTests {
         // setup mocks
         when(artefactRepository.save(any(Artefact.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
         // call service layer
-        Artefact artefact = artefactService.createArtefact("Hello", "World", true, 2, 3);
+        Artefact artefact = artefactService.createArtefact("Hello", "World", true, 2, 3, "hello world");
         // assertion
         assertEquals("Hello", artefact.getArtefactName());
         assertEquals("World", artefact.getDescription());
@@ -350,7 +350,7 @@ public class ArtefactServiceTests {
         when(artefactRepository.findArtefactByArtefactId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> artefactTest);
         when(artefactRepository.save(any(Artefact.class))).thenAnswer((InvocationOnMock invocation) -> invocation.getArgument(0));
         // call service layer
-        Artefact artefact = artefactService.updateArtefact(10,"Hello", "World", true, 2, 3);
+        Artefact artefact = artefactService.updateArtefact(10,"Hello", "World", true, 2, 3, "hello world");
         // assertion
         assertEquals("Hello", artefact.getArtefactName());
         assertEquals("World", artefact.getDescription());

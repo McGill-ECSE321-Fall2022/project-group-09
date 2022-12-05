@@ -27,7 +27,8 @@ public class Room
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int roomId;
-
+  @Collumn(nullable = false)
+  private String roomName;
   @Column(nullable = false)
   private int artefactCount;
   @Column(nullable = false)
@@ -72,6 +73,19 @@ public class Room
   {
     boolean wasSet = false;
     roomType = aRoomType;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public String getRoomName() 
+  {
+    return roomName;
+  }
+
+  public boolean setRoomName(String name)
+  {
+    boolean wasSet = false;
+    roomName = name;
     wasSet = true;
     return wasSet;
   }

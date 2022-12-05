@@ -4,6 +4,8 @@ import Hello from '@/components/Hello'
 import LoginVisitor from '@/components/LoginVisitor'
 import LoginManager from '@/components/LoginManager'
 import LoginEmployee from '@/components/LoginEmployee'
+import RoomsTable from '@/components/RoomsTable'
+import ArtefactsView from '@/components/ArtefactsView'
 
 Vue.use(Router);
 
@@ -18,7 +20,6 @@ function requireVisitor(from, to, next) {
   // else continue to requested page
   else {
     next();
-
   }
 }
 
@@ -49,6 +50,16 @@ function requireEmployee(from, to, next) {
   }
 }
 
+function requireStaff(from, to, next) { 
+  // check that either the employee or manager is logged in
+  if (!sessionStorage.getItem('loggedInEmployee') && !sessionStorage.getItem('loggedInManager')) {
+    next({ name: 'LoginManager' });
+  }
+  else { 
+    next(); 
+  }
+}
+
 // routes to all pages
 
 export default new Router({
@@ -72,6 +83,16 @@ export default new Router({
       path: '/login/employee',
       name: 'LoginEmployee',
       component: LoginEmployee
+    },
+    {
+      path: '/rooms',
+      name: 'RoomsTable',
+      component: RoomsTable
+    },
+    {
+      path: '/artefacts',
+      name: 'ArtefactsView',
+      component: ArtefactsView
     },
     {
       path: "*",
