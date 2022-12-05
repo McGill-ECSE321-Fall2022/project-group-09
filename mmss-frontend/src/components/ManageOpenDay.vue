@@ -4,10 +4,11 @@
         <h1>
             OpenDays
         </h1>
-        <b-calendar v-model="value" @context="onContext" :date-disabled-fn="dateDisabled" locale="en-US"></b-calendar>
+        <b-calendar v-model="value" @context="onContext" :date-disabled-fn="dateDisabled" locale="en-US" width="800px"></b-calendar>
         <br>
         <br>
-        <b-button variant="success" class="my-2 my-sm-0" @click="createOpenDay()"> Create OpenDay</b-button>
+        <b-button variant="success" class="my-2 my-sm-0" @click="createOpenDay()"> Create OpenDays</b-button>
+        <br>
 
         <!-- <p>Value: <b>'{{ value }}'</b></p>
         <p class="mb-0">Context:</p>
@@ -18,6 +19,7 @@
   
   <script>
     import axios from 'axios'
+import { multiple } from 'webpack-merge';
     // Import the component that displays the error message
     import ErrorHandler from './ErrorPopUp.vue'; // This is the error component
     var config = require('../../config')
@@ -29,8 +31,8 @@
     })
     export default {
       data() {
-        return {
-          value: '',
+        return {  
+          value: [],
           context: null
         }
       },

@@ -24,12 +24,14 @@ public class CommunicationRepositoryTests {
   private PersonRepository personRepository;
   @Autowired
   private ManagerRepository managerRepository;
-  
+  @Autowired
+  private VisitorRepository visitorRepository;
   @AfterEach
   public void clearDatabase() {
     
       // clear communications after each execution
       managerRepository.deleteAll();
+      visitorRepository.deleteAll();
       personRepository.deleteAll();
       communicationRepository.deleteAll();    
   }
