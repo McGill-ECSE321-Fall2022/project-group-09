@@ -4,7 +4,7 @@
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
 
             <!-- Input for the input for the password, with the error underneath-->
-            <b-form-group id="input-group-1" label="Password:" label-for="input-1">
+            <b-form-group id="input-group-1" label="Old Password:" label-for="input-1">
                 <b-form-input id="input-1" v-model="request.passWord" type="text" required
                     :state="passwordState"></b-form-input>
                 <span v-if="passwordError" style="color: red;">{{ passwordError }}</span>
@@ -45,6 +45,7 @@ var AXIOS = axios.create({
 })
 // script
 export default {
+    name : 'UpdateVisitor',
     // declare the components
     components: {
         ErrorHandler,
@@ -120,20 +121,6 @@ export default {
     },
     // COMPUTED PROPERTIES for states and errors
     computed: {
-        // check if the username is valid
-        usernameState() {
-            this.usernameError = '';
-            if (this.request.userName.trim() === '') {
-                return false;
-            }
-            else if (!this.request.userName.includes('@')) {
-                this.usernameError = 'Please enter a valid email address';
-                return false;
-            } else {
-                this.usernameError = "";
-                return true;
-            };
-        },
         // check if the password is valid
         passwordState() {
             const upper = /[A-Z]/;
@@ -178,7 +165,7 @@ export default {
         },
         // check if the form is valid for submission
         submitState() {
-            return this.usernameState && this.passwordState && this.newPasswordState 
+            return this.passwordState && this.newPasswordState 
         }
     }
 }

@@ -7,9 +7,9 @@ import LoginEmployee from '@/components/LoginEmployee'
 import ManageLoan from '@/components/ManageLoan'
 import ManageAccount from '@/components/ManageAccount'
 import CreateVisitor from '@/components/CreateVisitor'
-import updateVisitor from '@/components/updateVisitor'
-import updateEmployee from '@/components/updateEmployee'
-import updateManager from '@/components/updateManager'
+import UpdateVisitor from '@/components/UpdateVisitor'
+import UpdateEmployee from '@/components/UpdateEmployee'
+import UpdateManager from '@/components/UpdateManager'
 // import NavBar from '@/components/NavBar'
 
 Vue.use(Router);
@@ -97,18 +97,18 @@ export default new Router({
     }, 
     {
       path: '/updatevisitor',
-      name: 'updateVisitor',
-      component: updateVisitor
+      name: 'UpdateVisitor',
+      component: UpdateVisitor
     }, 
     {
       path: '/updateemployee',
-      name: 'updateEmployee',
-      component: updateEmployee
+      name: 'UpdateEmployee',
+      component: UpdateEmployee
     },
     {
-      path: '/updatemanager',
-      name: 'updateManager',
-      component: updateManager
+      path: '/Updatemanager',
+      name: 'UpdateManager',
+      component: UpdateManager
     },
     // {
     //   path: '/navbar',

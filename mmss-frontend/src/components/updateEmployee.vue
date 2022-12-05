@@ -53,6 +53,7 @@ var AXIOS = axios.create({
 })
 // script
 export default {
+    name: 'UpdateEmployee',
     // declare the components
     components: {
         ErrorHandler,

@@ -45,6 +45,7 @@ var AXIOS = axios.create({
 })
 // script
 export default {
+    name : 'UpdateManager',
     // declare the components
     components: {
         ErrorHandler,
