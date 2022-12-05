@@ -27,7 +27,7 @@ import ca.mcgill.ecse.mmss.service.VisitorService;
  * REST API for the Visitor class
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping ({"/visitor","/visitor/"})
 public class VisitorController {
 	

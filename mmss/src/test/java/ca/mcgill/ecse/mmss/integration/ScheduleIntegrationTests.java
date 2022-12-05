@@ -19,6 +19,7 @@ import ca.mcgill.ecse.mmss.dto.ScheduleDto;
 import ca.mcgill.ecse.mmss.model.Schedule;
 import ca.mcgill.ecse.mmss.utils.Util;
 
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ScheduleIntegrationTests {
 

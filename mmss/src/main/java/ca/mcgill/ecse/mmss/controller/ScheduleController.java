@@ -9,8 +9,9 @@ import ca.mcgill.ecse.mmss.dto.ScheduleDto;
 import ca.mcgill.ecse.mmss.model.Schedule;
 import ca.mcgill.ecse.mmss.service.ScheduleService;
 
+
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping ("/schedule")
 public class ScheduleController {
     @Autowired

@@ -27,24 +27,16 @@ public class CommunicationRepositoryTests {
   private PersonRepository personRepository;
   @Autowired
   private ManagerRepository managerRepository;
-
-  /**
-   * Clear the database before all tests
-   * 
-   * @author Shidan Javaheri
-   */
-  @BeforeAll
-  public static void clearDatabase(@Autowired Util util) {
-    util.clearDatabase();
-  }
-
+  @Autowired
+  private VisitorRepository visitorRepository;
   @AfterEach
   public void clearDatabase() {
-
-    // clear communications after each execution
-    managerRepository.deleteAll();
-    personRepository.deleteAll();
-    communicationRepository.deleteAll();
+    
+      // clear communications after each execution
+      managerRepository.deleteAll();
+      visitorRepository.deleteAll();
+      personRepository.deleteAll();
+      communicationRepository.deleteAll();    
   }
 
   /**

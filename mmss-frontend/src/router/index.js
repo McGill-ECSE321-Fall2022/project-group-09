@@ -11,6 +11,10 @@ import ManageShift from '@/components/ManageShift'
 import ManageNotification from '@/components/ManageNotification'
 import ManageAccount from '@/components/ManageAccount'
 import NavBar from '@/components/NavBar'
+import ManageLoan from '@/components/ManageLoan'
+import ManageAccount from '@/components/ManageAccount'
+import RoomsTable from '@/components/RoomsTable'
+import ArtefactsView from '@/components/ArtefactsView'
 
 Vue.use(Router);
 
@@ -90,6 +94,31 @@ export default new Router({
       component: LoginEmployee
     },
     {
+      path: '/loans/manage', 
+      name: 'ManageLoan',
+      component: ManageLoan
+    },
+    {
+      path: '/donations/manage', 
+      name: 'ManageDonation',
+      component: ManageDonation
+    },
+    {
+      path: '/accounts/manage',
+      name: 'ManageAccount',
+      component: ManageAccount
+    },
+    {
+      path: '/donation/visitor',
+      name: 'DonationVisitor',
+      component: DonationVisitor
+    },
+    {
+      path: '/openday',
+      name: 'ManageOpenDay',
+      component: ManageOpenDay
+    },
+    {
       path: '/rooms',
       name: 'RoomsTable',
       component: RoomsTable
@@ -114,11 +143,6 @@ export default new Router({
       name: 'ManageNotification',
       component: ManageNotification
     },
-    {
-      path: '/accounts/manage',
-      name: 'ManageAccount',
-      component: ManageAccount
-    }, 
     {
        path: '/navbar',
        name: 'NavBar',

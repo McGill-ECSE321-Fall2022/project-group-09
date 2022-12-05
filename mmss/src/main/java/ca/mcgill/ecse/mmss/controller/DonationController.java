@@ -29,7 +29,7 @@ import ca.mcgill.ecse.mmss.service.DonationService;
  * REST API for Donation 
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping("/donation")
 public class DonationController {
 
