@@ -117,5 +117,5 @@ The task of writing web pages were split as follows:
 | Sasha Denouvilliez-Pech | - View, create, update, and move artefacts <br> - Room tables (Dashboard) <br> - Wiki <br> - Review code and PRs <br> - Architecture Model <br> - Architecture Model <br>| 40 hours |
 | Saviru Perera | - Create visitor page <br> - Wiki <br>  | 20 hours |
 | Shidan Javaheri | - Login pages <br> - View and Update Loans page <br> - View and Delete Accounts Page <br> - Send notifications to all accounts <br> - Register Employees <br> - Static Code Reviews + Debugging Assistance <br> - Review PRs <br> - Final review <br> | 50 hours |
-| Shyam Desai | - Wrote GitHub issues for ticket and tour webpages <br> - Create ticket and tour booking for visitors <br> - Manage ticket and tour booking for employees <br> - Keeping track of the meeting minutes <br> - GitHub wiki <br> - Presentation Slides <br> | 28 hours |
+| Shyam Desai | - Wrote GitHub issues for ticket and tour webpages <br> - Create ticket and tour booking for visitors <br> - Manage ticket and tour booking for employees <br> - Keeping track of the meeting minutes <br> - GitHub wiki <br> - Presentation Slides <br> | 28 hours | 
 
