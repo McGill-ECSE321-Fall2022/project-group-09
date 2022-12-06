@@ -317,8 +317,8 @@ public class LoanService {
                 deleteLoan(loan.getExchangeId());
 
                 // create a notification with this message, attached to this visitor
-                String message = "Your loan request submitted on date" + loan.getSubmittedDate().toString()
-                        + "with id: " + String.valueOf(loan.getExchangeId()) + "has been denied";
+                String message = "Your loan request submitted on date " + loan.getSubmittedDate().toString()
+                        + " with id: " + String.valueOf(loan.getExchangeId()) + " has been denied";
 
                 // use create notification method from Sasha
                 notificationService.createNotificationByUsername(loan.getVisitor().getUsername(), message);
@@ -334,9 +334,9 @@ public class LoanService {
                 loanRepository.save(loan);
                 artefactRepository.save(loan.getArtefact());
                 // create notification message
-                String message = "Your loan request submitted on date" + loan.getSubmittedDate().toString()
-                        + "with id: " + String.valueOf(loan.getExchangeId())
-                        + "has been approved! Please follow this link to process payment, and pass by the Museum to pick up the related artefact. http://payhere.com";
+                String message = "Your loan request submitted on date " + loan.getSubmittedDate().toString()
+                        + " with id: " + String.valueOf(loan.getExchangeId())
+                        + " has been approved! Please follow this link to process payment, and pass by the Museum to pick up the related artefact. http://payhere.com";
                 // use create notification method from Sasha
                 notificationService.createNotificationByUsername(loan.getVisitor().getUsername(), message);
             }

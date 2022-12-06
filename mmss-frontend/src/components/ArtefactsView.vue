@@ -31,6 +31,9 @@
             hide-footer>
             <create-form/>
         </b-modal>  
+
+        <!-- The component that displays the error message. Links the message of that component to -->
+                <ErrorHandler v-if="errorMessage" :message="errorMessage" />    
     </div>
 </template>
 
@@ -284,6 +287,8 @@ export default {
                 self.$bvModal.show('errorPopUp');
             })            
         }
+    }, computed: { 
+        
     }
 }
 </script>

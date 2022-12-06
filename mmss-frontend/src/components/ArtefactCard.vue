@@ -33,16 +33,16 @@
                         <b-img fluid-grow :src=artefact.imageUrl alt="Image"></b-img>
                     </b-col>
                     <b-col>
-                            <b-row align-self="stretch">Description: {{ artefact.description }}</b-row>
-                            <b-row align-v="end">In {{ room.roomName }}</b-row>
-                            <b-row align-v="end">{{ (artefact.canLoan && !artefact.currentlyOnLoan)? 'Available for loan' : 'Not available for loan' }}</b-row>
-                            <b-row align-v="end" v-if="(artefact.canLoan && !artefact.currentlyOnLoan)">Insurance fee: {{ artefact.insuranceFee }}</b-row>
-                            <b-row align-v="end" v-if="(artefact.canLoan && !artefact.currentlyOnLoan)">Loan fee: {{ artefact.loanFee }}</b-row>
+                            <b-row align-self="stretch"> <b> Description: </b> {{ artefact.description }} <br> </b-row>
+                            <b-row align-v="end"><br><br> <b> In {{ room.roomName }}</b> <br><br></b-row>
+                            <b-row align-v="end"> <br><b> {{ (artefact.canLoan && !artefact.currentlyOnLoan)? 'Available for loan' : 'Not available for loan' }} </b><br></b-row>
+                            <b-row align-v="end" v-if="(artefact.canLoan && !artefact.currentlyOnLoan)"><br> <b>Insurance fee:</b> <br> &nbsp&nbsp${{ artefact.insuranceFee }}</b-row>
+                            <b-row align-v="end" v-if="(artefact.canLoan && !artefact.currentlyOnLoan)"> <b>Loan fee: </b>  &nbsp&nbsp${{ artefact.loanFee }}</b-row>
                     </b-col>
                     <div class="modal-header">
                         <!-- Buttons depending on the user -->
                         <div class="ml-auto">
-                        <b-button v-if="(loggedInVisitor && artefact.canLoan && !artefact.currentlyOnLoan)" @click="requestLoan(JSON.parse(loggedInVisitor).username)">Loan</b-button>
+                        <b-button variant ="success" v-if="(loggedInVisitor && artefact.canLoan && !artefact.currentlyOnLoan)" @click="requestLoan(JSON.parse(loggedInVisitor).username)">Loan</b-button>
                         <b-button v-if="(loggedInEmployee || loggedInManager)" @click="$bvModal.show('Edit' + String(artefact.artefactId))">Edit</b-button>
                         <b-button v-if="(loggedInEmployee || loggedInManager)" @click="$bvModal.show('Move' + String(artefact.artefactId))">Move</b-button>
                     </div>
@@ -69,7 +69,7 @@
             scrollable
             hide-footer>
             <move-form :artefactId="artefact.artefactId" :roomId="artefact.roomId"/>
-        </b-modal>       
+        </b-modal>     
     </div>    
 </template>
 
@@ -154,6 +154,7 @@ export default {
                 }
                 self.$bvModal.show('errorPopUp');
             })
+           
         }
     }   
 }

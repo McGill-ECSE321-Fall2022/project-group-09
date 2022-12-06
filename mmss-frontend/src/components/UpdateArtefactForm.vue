@@ -89,7 +89,8 @@
   
         <b-button type="submit" variant="primary">Update</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
-      </b-form>
+        
+    </b-form>
         <!-- The component that displays the error message. Links the message of that component to -->
         <ErrorHandler :message="errorMessage" />    
     </div>

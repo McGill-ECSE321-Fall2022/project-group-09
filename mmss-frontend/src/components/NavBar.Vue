@@ -11,6 +11,7 @@
             </b-navbar-brand>
             <!-- Common buttons-->
             <b-button v-if="loginStatus === 'out'" href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
+            <b-button v-if="loginStatus === 'out'" href="/#/artefacts" variant="outline-light" class="my-2 my-sm-0">Artefacts</b-button>
             <b-navbar-nav v-if="loginStatus !== 'out'" class="ml-auto">
                 <b-button href="/" variant="outline-light" class="my-2 my-sm-0">Home</b-button>
                 <b-button href="/#/artefacts" variant="outline-light" class="my-2 my-sm-0">Artefacts</b-button>
