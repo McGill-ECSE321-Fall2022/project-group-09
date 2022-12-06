@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import ca.mcgill.ecse.mmss.dao.ManagerRepository;
 import ca.mcgill.ecse.mmss.dto.ManagerDto;
 import ca.mcgill.ecse.mmss.model.Manager;
 import ca.mcgill.ecse.mmss.service.ManagerService;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 /**
  * Tests the functionality of all services exposed through the URL "/manager"
@@ -33,6 +35,14 @@ public class ManagerIntegrationTests {
 
 
     @Autowired ManagerService managerService; 
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
 
    /**
      * Create objects needed for tests. 
@@ -86,14 +96,14 @@ public class ManagerIntegrationTests {
     public void testUpdateManger() { 
 
         // make the put request
-        client.put("/manager?oldPassword=aVerySecurePassword&newPassword=aNewVerySecurePassword", ManagerDto.class);
+        client.put("/manager?oldPassword=1VerySecurePassword&newPassword=1NewVerySecurePassword", ManagerDto.class);
 
         // find out if the manager is updated
         Manager manager = managerRepository.findManagerByUsername("marwan.kanaan@mcgill.ca"); 
 
         // assertions that the update worked
         assertEquals(manager.getUsername(), "marwan.kanaan@mcgill.ca"); 
-        assertEquals(manager.getPassword(), "aNewVerySecurePassword");
+        assertEquals(manager.getPassword(), "1NewVerySecurePassword");
                     
     }
     

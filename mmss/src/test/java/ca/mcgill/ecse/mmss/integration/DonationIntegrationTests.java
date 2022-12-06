@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,11 @@ import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
+import ca.mcgill.ecse.mmss.utils.Util;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Visitor;
+
 
 
 /**
@@ -73,6 +76,15 @@ public class DonationIntegrationTests {
     private Donation donation;
     private Person person;
     private Visitor visitor;
+
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
 
     /**
      * Creates the obejcts needed by all test cases. 
@@ -186,6 +198,7 @@ public class DonationIntegrationTests {
         artefactDto.setCanLoan(false);
         artefactDto.setInsuranceFee(1.0);
         artefactDto.setLoanFee(0.5);
+        artefactDto.setImageUrl("nullable.jpg");
 
         // make an entity to send the request with
         HttpEntity<ArtefactDto> request = new HttpEntity<>(artefactDto);

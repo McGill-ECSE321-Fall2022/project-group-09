@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.sql.Date;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ca.mcgill.ecse.mmss.model.Donation;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
+import ca.mcgill.ecse.mmss.utils.Util;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
+
 
 /**
  * Donation Repository testing class which initiates a donation, visitor, and person repository, executes the tests, then clears each instance from the database.
@@ -35,6 +38,14 @@ public class DonationRepositoryTests {
   // need a person for visitor
   @Autowired  
   private PersonRepository personRepository; 
+      /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
   
   @AfterEach
   public void clearDatabase() {

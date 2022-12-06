@@ -200,9 +200,9 @@ public class DonationService {
         
         if (status == ExchangeStatus.Declined) {
         // create notification message
-        String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
-        + "with name: " + String.valueOf(donation.getItemName())
-        + "has been declined!";
+        String message = "Your donation request submitted on date: " + donation.getSubmittedDate().toString()
+        + " with name: " + String.valueOf(donation.getItemName())
+        + " has been declined!";
 
         // send notification method
         notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message); 
@@ -227,7 +227,7 @@ public class DonationService {
      */
     
     @Transactional
-    public Artefact updateStatus(int id, ExchangeStatus status, boolean canLoan, double insuraceFees, double loanFee) {
+    public Artefact updateStatus(int id, ExchangeStatus status, boolean canLoan, double insuraceFees, double loanFee, String url) {
     	
     	// Create an Artifact Object so if the donation was approved
     	Artefact artefact = null;
@@ -244,7 +244,7 @@ public class DonationService {
             } else if (status == ExchangeStatus.Approved) {
             	
             	// Once Donation has been approved, create a new artifact and delete donation from the repository
-                artefact = artefactService.createArtefact(donation.getItemName(), donation.getDescription(), canLoan, insuraceFees, loanFee);
+                artefact = artefactService.createArtefact(donation.getItemName(), donation.getDescription(), canLoan, insuraceFees, loanFee, url);
 
                 // set room to storage
                 ArrayList<Room> storageRoomList = roomService.getAllRoomsByRoomType(RoomType.Storage); 
@@ -254,9 +254,9 @@ public class DonationService {
                 artefactService.moveArtefactToRoom(artefact.getArtefactId(), roomId);
                 
                 // create notification message
-                String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
-                        + "with name: " + String.valueOf(donation.getItemName())
-                        + "has been approved! Thank you very much for your donation!";
+                String message = "Your donation request submitted on date " + donation.getSubmittedDate().toString()
+                        + " with name: " + String.valueOf(donation.getItemName())
+                        + " has been approved! Thank you very much for your donation!";
 
                 // send notification method
                 notificationService.createNotificationByUsername(donation.getVisitor().getUsername(), message);

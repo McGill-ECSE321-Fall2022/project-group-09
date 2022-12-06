@@ -441,8 +441,8 @@ public class LoanServiceTests {
         // verify that the delete method was called
         verify(loanRepository, times(1)).deleteById(0);
 
-        String message = "Your loan request submitted on date" + updatedLoan.getSubmittedDate().toString()
-                        + "with id: " + String.valueOf(updatedLoan.getExchangeId()) + "has been denied";
+        String message = "Your loan request submitted on date " + updatedLoan.getSubmittedDate().toString()
+                        + " with id: " + String.valueOf(updatedLoan.getExchangeId()) + " has been denied";
 
         // verify that a notification was created
         verify (notificationService, times(1)).createNotificationByUsername(updatedLoan.getVisitor().getUsername(),(message)); 
@@ -486,9 +486,9 @@ public class LoanServiceTests {
         verify(artefactRepository, times(1)).save((any(Artefact.class))); 
 
 
-        String message = "Your loan request submitted on date" + loan.getSubmittedDate().toString()
-                + "with id: " + String.valueOf(loan.getExchangeId())
-                + "has been approved! Please follow this link to process payment, and pass by the Museum to pick up the related artefact. http://payhere.com";
+        String message = "Your loan request submitted on date " + loan.getSubmittedDate().toString()
+                + " with id: " + String.valueOf(loan.getExchangeId())
+                + " has been approved! Please follow this link to process payment, and pass by the Museum to pick up the related artefact. http://payhere.com";
 
         verify(notificationService,times(1)).createNotificationByUsername(updatedLoan.getVisitor().getUsername(), message); 
 

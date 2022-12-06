@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import ca.mcgill.ecse.mmss.dao.*;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Employee;
 import ca.mcgill.ecse.mmss.model.Shift;
 import ca.mcgill.ecse.mmss.model.Shift.ShiftTime;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class EmployeeIntegrationTests {
@@ -59,6 +61,15 @@ public class EmployeeIntegrationTests {
     private Schedule schedule;
     private Employee employee;
 
+
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
     /**
      * Creates the obejcts needed by all test cases
      * BeforeAll because these objects are only modified in the database,
@@ -126,7 +137,7 @@ public class EmployeeIntegrationTests {
         assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertTrue(response.getBody().getUserName() != null, "Response has a valid username");
+        assertEquals(response.getBody().getUserName() , "sasha@gmail");
     }
     
     /**
@@ -148,7 +159,7 @@ public class EmployeeIntegrationTests {
         assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertTrue(response.getBody().getUsername() != null, "Response has a valid username");
+        assertTrue(response.getBody().getUserName() != null, "Response has a valid username");
 
     }
 
@@ -192,7 +203,7 @@ public class EmployeeIntegrationTests {
         assertNotNull(response); 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody()); 
-        assertEquals(response.getBody().getPassword(), "Ilovejava23"); 
+        assertEquals(response.getBody().getPhoneNumber(), "514-987-5786"); 
 
         // get the updated employee from the database
         Employee updatedEmployee = employeeRepository.findEmployeeByUsername(employee.getUsername());

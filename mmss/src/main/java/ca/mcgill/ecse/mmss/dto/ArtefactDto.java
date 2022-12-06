@@ -11,6 +11,7 @@ public class ArtefactDto {
 	private double loanFee;
 	private boolean currentlyOnLoan;
 	private int roomId;
+	private String imageUrl;
 
 	/**
 	 * Null constructor
@@ -33,6 +34,7 @@ public class ArtefactDto {
 		this.loanFee = artefact.getLoanFee();
 		this.currentlyOnLoan = artefact.getCurrentlyOnLoan();
 		this.roomId = artefact.getRoom().getRoomId();
+		this.imageUrl = artefact.getImageUrl();
 	}
 
 	/**
@@ -86,6 +88,10 @@ public class ArtefactDto {
 		return roomId;
 	}
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
 	public void setRoomId(int roomId) {
 		this.roomId = roomId;
 	}
@@ -116,6 +122,10 @@ public class ArtefactDto {
 
 	public void setCurrentlyOnLoan(boolean currentlyOnLoan) {
 		this.currentlyOnLoan = currentlyOnLoan;
+	}
+
+    public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	public boolean isCurrentlyOnLoan() {

@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * REST API for the Artefact class
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping({"/artefact", "/artefact/"})
 public class ArtefactController {
 
@@ -148,8 +149,9 @@ public class ArtefactController {
         double insuranceFee = request.getInsuranceFee();
         double loanFee = request.getLoanFee();
         int roomId = request.getRoomId();
+        String imageUrl = request.getImageUrl();
         // create the artefact
-        Artefact artefact = artefactService.createArtefact(name, description, canLoan, insuranceFee, loanFee);
+        Artefact artefact = artefactService.createArtefact(name, description, canLoan, insuranceFee, loanFee, imageUrl);
         // add the artefact to a room
         artefactService.moveArtefactToRoom(artefact.getArtefactId(), roomId);
         // return it in the response entity
@@ -171,8 +173,9 @@ public class ArtefactController {
         boolean canLoan = request.getCanLoan();
         double insuranceFee = request.getInsuranceFee();
         double loanFee = request.getLoanFee();
+        String imageUrl = request.getImageUrl();
         // Update the artefact
-        Artefact artefact = artefactService.updateArtefact(artefactId, name, description, canLoan, insuranceFee, loanFee);
+        Artefact artefact = artefactService.updateArtefact(artefactId, name, description, canLoan, insuranceFee, loanFee, imageUrl);
         // return it in the response entity
         return new ResponseEntity<ArtefactDto>(new ArtefactDto(artefact), HttpStatus.OK);
     }

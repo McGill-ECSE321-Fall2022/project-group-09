@@ -16,6 +16,7 @@ import ca.mcgill.ecse.mmss.dao.EmployeeRepository;
 import ca.mcgill.ecse.mmss.dao.ShiftRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
 import ca.mcgill.ecse.mmss.exception.MmssException;
+import ca.mcgill.ecse.mmss.model.AccountType;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Employee;
@@ -38,6 +39,8 @@ public class EmployeeService {
 	EmployeeRepository employeeRepository;
 	@Autowired
 	VisitorRepository visitorRepository;
+	@Autowired
+	LoginService loginService;
 
 
 	/**
@@ -56,11 +59,14 @@ public class EmployeeService {
 		if(checkValidUser(userName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		Employee existEmp = employeeRepository.findEmployeeByUsername(userName);
-		if (existEmp!=null) {
+		AccountType exisitingAccount = loginService.getAccountByUsername(userName);
+		if (exisitingAccount!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
 		// check for valid phone number
+		if ( phoneNumber == null) { 
+			throw new MmssException (HttpStatus.NOT_ACCEPTABLE, "Please enter a phone number");
+		}
 		if (phoneNumber.length()!=12) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "Please enter a valid phone number in the format xxx-xxx-xxxx.");
 		}
@@ -98,8 +104,8 @@ public class EmployeeService {
 		if (checkValidUser(newUserName)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		Visitor existVisit = visitorRepository.findVisitorByUsername(newUserName);
-		if (existVisit!=null) {
+		AccountType existingAccount = loginService.getAccountByUsername(newUserName);
+		if (existingAccount!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
 		if (checkValidPassword(newPassword)==false) {
@@ -152,8 +158,8 @@ public class EmployeeService {
 		if(checkValidUser(newUser)==false) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is an invalid email address. Please enter another username.");
 		}
-		Employee existEmp = employeeRepository.findEmployeeByUsername(newUser);
-		if (existEmp!=null) {
+		AccountType exisitingAccount = loginService.getAccountByUsername(newUser);
+		if (exisitingAccount!=null) {
 			throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The username entered is taken. Please enter another username.");
 		}
 		employee.setUsername(newUser);

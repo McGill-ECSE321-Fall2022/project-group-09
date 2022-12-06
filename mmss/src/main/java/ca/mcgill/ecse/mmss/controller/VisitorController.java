@@ -1,11 +1,12 @@
 package ca.mcgill.ecse.mmss.controller;
 
 import java.util.ArrayList;
-
 import ca.mcgill.ecse.mmss.dto.EmployeeDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import ca.mcgill.ecse.mmss.dto.VisitorDto;
 import ca.mcgill.ecse.mmss.dto.VisitorRequestDto;
 import ca.mcgill.ecse.mmss.model.Visitor;
@@ -24,7 +24,9 @@ import ca.mcgill.ecse.mmss.service.VisitorService;
 /**
  * REST API for the Visitor class
  */
+
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping ({"/visitor","/visitor/"})
 public class VisitorController {
 	
@@ -91,11 +93,11 @@ public class VisitorController {
 	@PutMapping
     public ResponseEntity<VisitorDto> updateVisitorPassword(@RequestBody VisitorRequestDto request) {
         // get parameters
-        String username = request.getUsername();
+        String userName = request.getUsername();
         String oldPassword = request.getPassword();
         String newPassword = request.getNewPassword();
         // call service layer
-        Visitor updatedVisitor = visitorService.updateVisitorPassword(username, oldPassword, newPassword);
+        Visitor updatedVisitor = visitorService.updateVisitorPassword(userName, oldPassword, newPassword);
         // return updated Visitor as Dto
         return new ResponseEntity<VisitorDto>(new VisitorDto(updatedVisitor), HttpStatus.OK);
     }
@@ -148,4 +150,16 @@ public class VisitorController {
         // return the Dtos
         return new ResponseEntity<ArrayList<VisitorDto>>(allVisitorsDto, HttpStatus.OK);
     }
+
+    /**
+     * Get all visitors by person
+     * @param username a request parameter, the username of the visitor
+     * @param amount a double, the value of the visitors new balance
+     * @return a response entity with a {@link VisitorDto} and the HttpStatus
+     */
+    @PutMapping({"/{username}", "/{username}/"})
+    public ResponseEntity<VisitorDto> updateBalance(@PathVariable String username, @RequestParam double amount) { 
+        Visitor visitor = visitorService.updateVisitorBalance(username, amount);
+        return new ResponseEntity<VisitorDto>(new VisitorDto(visitor), HttpStatus.OK);
+    } 
 }

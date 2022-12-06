@@ -98,6 +98,7 @@ public class DonationServiceTests {
         artefact.setCanLoan(false);
         artefact.setInsuranceFee(1.0);
         artefact.setLoanFee(0.5);
+        artefact.setImageUrl("hello.jpg");
         artefact.setRoom(storageRoom);
         donation.setItemName("Lightsaber");
         donation.setDescription("From the death star");
@@ -368,7 +369,7 @@ public class DonationServiceTests {
         when(donationRepository.findDonationByExchangeId(any(int.class))).thenAnswer((InvocationOnMock invocation) -> donation); 
 
         // create the artefact
-        when(artefactService.createArtefact((any(String.class)), any(String.class), any(boolean.class), any(double.class), any(double.class))).thenAnswer((InvocationOnMock invocation) -> artefact);
+        when(artefactService.createArtefact(any(String.class), any(String.class), any(boolean.class), any(double.class), any(double.class), any(String.class))).thenAnswer((InvocationOnMock invocation) -> artefact);
 
         // get the id of the storage room
         ArrayList<Room> rooms = new ArrayList<Room>();
@@ -376,7 +377,7 @@ public class DonationServiceTests {
         when(roomService.getAllRoomsByRoomType(RoomType.Storage)).thenAnswer((InvocationOnMock invocation) -> rooms);
         
         // call the service layer
-        Artefact createdArtefact = donationService.updateStatus(0, ExchangeStatus.Approved, false, 1.0, 0.5); 
+        Artefact createdArtefact = donationService.updateStatus(0, ExchangeStatus.Approved, false, 1.0, 0.5, "Hello world"); 
 
         // assertions
         assertEquals(createdArtefact.getArtefactId(), artefact.getArtefactId());
@@ -384,12 +385,12 @@ public class DonationServiceTests {
         
         // verify the calls to the repository are with the correct arguments
         verify(donationRepository, times(1)).findDonationByExchangeId(0); 
-        verify(artefactService, times(1)).createArtefact(donation.getItemName(), donation.getDescription(), false, 1.0, 0.5);
+        verify(artefactService, times(1)).createArtefact(any(String.class), any(String.class), any(boolean.class), any(double.class), any(double.class), any(String.class));
         verify(artefactService, times(1)).moveArtefactToRoom(0, 0);
 
-        String message = "Your donation request submitted on date" + donation.getSubmittedDate().toString()
-                + "with name: " + String.valueOf(donation.getItemName())
-                + "has been approved! Thank you very much for your donation!";
+        String message = "Your donation request submitted on date " + donation.getSubmittedDate().toString()
+                + " with name: " + String.valueOf(donation.getItemName())
+                + " has been approved! Thank you very much for your donation!";
 
         // verify notification was created
         verify(notificationService, times (1)).createNotificationByUsername(donation.getVisitor().getUsername(), message);

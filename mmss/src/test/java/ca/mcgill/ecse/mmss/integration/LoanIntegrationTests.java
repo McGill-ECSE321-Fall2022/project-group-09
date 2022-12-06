@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 import ca.mcgill.ecse.mmss.dao.ArtefactRepository;
 import ca.mcgill.ecse.mmss.dao.CommunicationRepository;
 import ca.mcgill.ecse.mmss.dao.LoanRepository;
-import ca.mcgill.ecse.mmss.dao.NotificationRepository;
 import ca.mcgill.ecse.mmss.dao.OpenDayRepository;
 import ca.mcgill.ecse.mmss.dao.PersonRepository;
 import ca.mcgill.ecse.mmss.dao.VisitorRepository;
@@ -36,6 +36,10 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
+
+// import clear database util 
+
+import ca.mcgill.ecse.mmss.utils.Util; 
 
 
 /** 
@@ -66,7 +70,8 @@ public class LoanIntegrationTests {
     @Autowired
     private CommunicationRepository communicationRepository;
 
-    @Autowired NotificationRepository notificationRepository;
+    @Autowired
+    private Util util;
 
     // Four objects we will need in all our tests
     private Person person;
@@ -74,6 +79,16 @@ public class LoanIntegrationTests {
     private Artefact artefact;
     private Artefact artefactWithLoan;
     private Loan loan;
+
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
+
 
     /**
      * Creates the obejcts needed by all test cases. 
@@ -141,12 +156,7 @@ public class LoanIntegrationTests {
         this.visitor.delete();
         this.artefact.delete();
         this.loan.delete();
-        loanRepository.deleteAll();
-        visitorRepository.deleteAll();
-        notificationRepository.deleteAll(); 
-        communicationRepository.deleteAll();
-        artefactRepository.deleteAll();
-        personRepository.deleteAll();
+        util.clearDatabase(); 
         
     }
 

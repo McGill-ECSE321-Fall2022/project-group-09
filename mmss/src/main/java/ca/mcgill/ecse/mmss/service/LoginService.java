@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+/**
+ * Service class for logging in
+ */
 @Service
 public class LoginService {
 
@@ -44,7 +46,7 @@ public class LoginService {
         else if (manager != null)
             return manager;
         else
-            throw new MmssException(HttpStatus.NOT_FOUND, "Account with this username not found");
+            return null; 
     }
     
     /**
@@ -62,4 +64,68 @@ public class LoginService {
     	}
     	return loginInfo;
     }
+
+    /**
+     * Logs a visitor into their account, or declines the login
+     * @author Shidan Javaheri
+     * @author Github Copilot
+     * @param username the username of the visitor
+     * @param password the password of the visitor
+     * @return the visitor
+     */
+   
+    @Transactional
+    public Visitor loginVisitor ( String username, String password ) {
+        Visitor visitor = visitorRepository.findVisitorByUsername(username);
+        if (visitor == null) {
+            throw new MmssException(HttpStatus.NOT_FOUND, "We do not seem to have this username in our system. Please try again!");
+        }
+        if (!visitor.getPassword().equals(password)) {
+            throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again!");
+        }
+        return visitor;
+    }
+
+    
+    /**
+     * Logs an employee into their account, or declines the login
+     * @author Shidan Javaheri
+     * @author Github Copilot
+     * @param username the username of the employee
+     * @param password the password of the employee
+     * @return the employee
+     */
+    @Transactional
+    public Employee loginEmployee ( String username, String password ) {
+        Employee employee = employeeRepository.findEmployeeByUsername(username);
+        if (employee == null) {
+            throw new MmssException(HttpStatus.NOT_FOUND, "The username entered is incorrect. Please try again!");
+        }
+        if (!employee.getPassword().equals(password)) {
+            throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again.");
+        }
+        return employee;
+    }
+
+    /**
+     * Logs a manager into their account, or declines the login
+     * @author Shidan Javaheri
+     * @author Github Copilot
+     * @param username the username of the manager
+     * @param password the password of the manager
+     * @return the manager
+     */
+    @Transactional
+    public Manager loginManager ( String username, String password ) {
+        Manager manager = managerRepository.findManagerByUsername(username);
+        if (manager == null) {
+            throw new MmssException(HttpStatus.NOT_FOUND, "You seem to have mistyped your username. Please try again!");
+        }
+        if (!manager.getPassword().equals(password)) {
+            throw new MmssException(HttpStatus.NOT_ACCEPTABLE, "The password entered is incorrect. Please try again.");
+        }
+        return manager;
+    }
+
+
 }

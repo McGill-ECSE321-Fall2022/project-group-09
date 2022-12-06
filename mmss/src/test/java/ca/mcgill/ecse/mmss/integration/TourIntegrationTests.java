@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.sql.Date;
 import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Tour;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Tour.ShiftTime;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TourIntegrationTests {
@@ -60,6 +62,14 @@ public class TourIntegrationTests {
     private OpenDay openDay;
     private Communication commmunication;
     private Tour tour;
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
 
     /**
      * Create objects needed for all test cases, only modified in DB
@@ -129,7 +139,6 @@ public class TourIntegrationTests {
         request.setVisitorUsername("jon.snow@got.com");
         request.setDate(Date.valueOf("2022-11-15"));
         request.setNumberOfParticipants(5);
-        request.setPricePerPerson(25);
         request.setShiftTime(ShiftTime.Morning);
 
         ResponseEntity<TourDto> response = client.postForEntity("/tour", request, TourDto.class);

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import ca.mcgill.ecse.mmss.dto.VisitorRequestDto;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Visitor;
+import ca.mcgill.ecse.mmss.utils.Util;
+
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class VisitorIntegrationTests {
@@ -45,6 +48,14 @@ public class VisitorIntegrationTests {
     private Person person;
     private Communication communication;
     private Visitor visitor;
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
 
     /**
      * Creates the obejcts needed by all test cases
@@ -115,7 +126,7 @@ public class VisitorIntegrationTests {
         assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertTrue(response.getBody().getUsername() != null, "Response has a valid username");
+        assertTrue(response.getBody().getUserName() != null, "Response has a valid username");
 
     }
     
@@ -138,7 +149,7 @@ public class VisitorIntegrationTests {
         assertNotNull(response, "The response is not null");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertTrue(response.getBody().getUsername() != null, "Response has a valid username");
+        assertTrue(response.getBody().getUserName() != null, "Response has a valid username");
 
     }
 
@@ -159,7 +170,7 @@ public class VisitorIntegrationTests {
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody(), "Response has a body");
-        assertEquals(response.getBody().getUsername(), username, "Response has correct username");
+        assertEquals(response.getBody().getUserName(), username, "Response has correct username");
 
     }
     
@@ -183,7 +194,6 @@ public class VisitorIntegrationTests {
         assertNotNull(response); 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody()); 
-        assertEquals(response.getBody().getPassword(), "Ilovejava23"); 
 
         // get the updated visitor from the database
         Visitor updatedVisitor = visitorRepository.findVisitorByUsername(visitor.getUsername());
@@ -205,7 +215,7 @@ public class VisitorIntegrationTests {
 
         // make Dto for request
         VisitorDto request = new VisitorDto(visitor);
-        String username = request.getUsername();
+        String username = request.getUserName();
 
         
         ResponseEntity<String> response = client.exchange("/visitor/" + username, HttpMethod.DELETE,null, String.class);

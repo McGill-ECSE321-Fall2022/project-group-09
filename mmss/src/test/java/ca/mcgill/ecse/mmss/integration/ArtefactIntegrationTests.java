@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import ca.mcgill.ecse.mmss.dao.RoomRepository;
 import ca.mcgill.ecse.mmss.dto.ArtefactDto;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Room;
+import ca.mcgill.ecse.mmss.utils.Util;
+
+
 
 /**
  * Tests for the ArtefactController class
@@ -35,11 +39,21 @@ public class ArtefactIntegrationTests {
     @Autowired
     private RoomRepository roomRepository;
 
+    
+    
     ArrayList<Artefact> artefacts;
     Room smallRoom;
     Room largeRoom;
     Room storage;
-
+    /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
+    
     /**
      * @author: Sasha Denouvilliez-Pech
      * Create the rooms and the artefacts needed by all the tests
@@ -213,6 +227,7 @@ public class ArtefactIntegrationTests {
         request.setInsuranceFee(1);
         request.setLoanFee(1);
         request.setRoomId(smallRoom.getRoomId());
+        request.setImageUrl("Hello.jpg");
         // make the post
         ResponseEntity<ArtefactDto> response = client.postForEntity("/artefact", request, ArtefactDto.class);
         // make assertions on the post
@@ -234,6 +249,7 @@ public class ArtefactIntegrationTests {
         artefactDto.setCanLoan(false);
         artefactDto.setInsuranceFee(0);
         artefactDto.setLoanFee(0);
+        artefactDto.setImageUrl("Hello.jpg");
         // make an entity to send the request with
         HttpEntity<ArtefactDto> request = new HttpEntity<>(artefactDto);
         // make the post

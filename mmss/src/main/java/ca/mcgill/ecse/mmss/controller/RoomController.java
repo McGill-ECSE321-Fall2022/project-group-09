@@ -13,7 +13,9 @@ import java.util.ArrayList;
 /**
  * REST API for the Room class
  */
+
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping ({"/room", "/room/"})
 public class RoomController {
 

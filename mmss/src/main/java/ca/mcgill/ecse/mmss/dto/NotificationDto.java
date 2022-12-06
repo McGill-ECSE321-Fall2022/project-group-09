@@ -8,7 +8,6 @@ public class NotificationDto {
 	private int notificationId;
 	private String message;
 	private Date date;
-	private int communicationId;
 
 	/**
 	 * Null constructor
@@ -26,7 +25,6 @@ public class NotificationDto {
 		this.notificationId = notification.getNotificationId();
 		this.message = notification.getMessage();
 		this.date = notification.getDate();
-		this.communicationId = notification.getSentNotification().getCommunicationId();
 
 	}
 
@@ -36,14 +34,12 @@ public class NotificationDto {
 	 * @param notificationId
 	 * @param message
 	 * @param date
-	 * @param communicationId
 	 * @author Shidan Javaheri, Shyam Desai
 	 */
-	public NotificationDto(int notificationId, String message, Date date, int communicationId) {
+	public NotificationDto(int notificationId, String message, Date date) {
 		this.notificationId = notificationId;
 		this.message = message;
 		this.date = date;
-		this.communicationId = communicationId;
 	}
 
 	public int getNotificationId() {
@@ -56,14 +52,6 @@ public class NotificationDto {
 
 	public Date getDate() {
 		return date;
-	}
-
-	public int getCommunicationId() {
-		return communicationId;
-	}
-
-	public void setCommunicationId(int communicationId) {
-		this.communicationId = communicationId;
 	}
 
 	public void setNotificationId(int notificationId) {
