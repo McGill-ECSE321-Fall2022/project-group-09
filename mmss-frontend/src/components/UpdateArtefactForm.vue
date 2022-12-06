@@ -232,7 +232,7 @@ export default {
             const self = this 
             AXIOS.delete(`/artefact/${self.artefactId}`, {}, {})
             .then(response => {
-                //refresh the table on the last request
+                alert('The artefact was successfully deleted. Please refresh the page!');
             })
             .catch(error => {
                 if (error.response.status >= 450) {

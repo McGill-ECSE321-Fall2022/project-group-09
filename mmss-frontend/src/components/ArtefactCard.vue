@@ -69,7 +69,9 @@
             scrollable
             hide-footer>
             <move-form :artefactId="artefact.artefactId" :roomId="artefact.roomId"/>
-        </b-modal>     
+        </b-modal>   
+        <!-- The component that displays the error message. Links the message of that component to -->
+        <ErrorHandler v-if="errorPresent" :message="errorMessage" />
     </div>    
 </template>
 
@@ -145,6 +147,7 @@ export default {
             const self = this
             AXIOS.post('/loan', { visitorId: self.username, artefactId: self.artefact.artefactId }, {})
             .then(response => {
+                alert("Loan request sent!")
             })
             .catch(error => {
                 if (error.response.status >= 450) {
@@ -156,6 +159,11 @@ export default {
             })
            
         }
-    }   
+    }, 
+    computed: { 
+        errorPresent() {
+            return this.errorMessage != '';
+        }
+    }
 }
 </script>

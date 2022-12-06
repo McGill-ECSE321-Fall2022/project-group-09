@@ -10,10 +10,6 @@ import ManageLoan from '@/components/ManageLoan'
 import ManageShift from '@/components/ManageShift'
 import ManageNotification from '@/components/ManageNotification'
 import ManageAccount from '@/components/ManageAccount'
-import CreateVisitor from '@/components/CreateVisitor'
-import UpdateVisitor from '@/components/UpdateVisitor'
-import UpdateEmployee from '@/components/UpdateEmployee'
-import UpdateManager from '@/components/UpdateManager'
 import NavBar from '@/components/NavBar'
 import BookTicket from '@/components/BookTicket'
 import BookTour from '@/components/BookTour'
@@ -75,6 +71,16 @@ function requireStaff(from, to, next) {
   }
 }
 
+function requireLoggedIn(from,to,next) { 
+  // check that either the employee or manager or visitor is logged in
+  if (!sessionStorage.getItem('loggedInEmployee') && !sessionStorage.getItem('loggedInManager') && !sessionStorage.getItem('loggedInVisitor')) {
+    next({ name: 'LoginVisitor' });
+  }
+  else { 
+    next(); 
+  } 
+}
+
 // routes to all pages
 
 export default new Router({
@@ -102,27 +108,32 @@ export default new Router({
     {
       path: '/donations/manage', 
       name: 'ManageDonation',
-      component: ManageDonation
+      component: ManageDonation,
+      beforeEnter: requireStaff
     },
     {
       path: '/accounts/manage',
       name: 'ManageAccount',
-      component: ManageAccount
+      component: ManageAccount,
+      beforeEnter: requireManager
     },
     {
       path: '/donation/visitor',
       name: 'DonationVisitor',
-      component: DonationVisitor
+      component: DonationVisitor,
+      beforeEnter: requireVisitor
     },
     {
       path: '/openday',
       name: 'ManageOpenDay',
-      component: ManageOpenDay
+      component: ManageOpenDay, 
+      beforeEnter: requireManager
     },
     {
       path: '/rooms',
       name: 'RoomsTable',
-      component: RoomsTable
+      component: RoomsTable, 
+      beforeEnter: requireStaff
     },
     {
       path: '/artefacts',
@@ -132,17 +143,21 @@ export default new Router({
     {
       path: '/loans/manage', 
       name: 'ManageLoan',
-      component: ManageLoan
+      component: ManageLoan,
+      beforeEnter: requireStaff
     },
     {
       path: '/shift/manage', 
       name: 'ManageShift',
-      component: ManageShift
+      component: ManageShift,
+      beforeEnter: requireManager
     },
     {
       path: '/notification/manage', 
       name: 'ManageNotification',
-      component: ManageNotification
+      component: ManageNotification,
+      beforeEnter: requireLoggedIn
+      
     },
     {
        path: '/navbar',
@@ -153,17 +168,20 @@ export default new Router({
     {
     path: '/bookings/ticket',
       name: 'BookTicket',
-      component: BookTicket
+      component: BookTicket,
+      beforeEnter: requireVisitor
     },
     {
       path: '/bookings/tour',
       name: 'BookTour',
-      component: BookTour
+      component: BookTour,
+      beforeEnter: requireVisitor
     },
     {
       path: '/bookings/manage',
       name: 'ManageBooking',
-      component: ManageBooking
+      component: ManageBooking,
+      beforeEnter : requireStaff
     },
     {
       path: "*",

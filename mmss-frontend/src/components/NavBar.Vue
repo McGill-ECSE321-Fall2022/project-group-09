@@ -140,6 +140,7 @@ export default {
         this.$router.push('/login/visitor');
         location.reload();
         }, update() {
+            if (this.loginStatus === 'manager')
             this.$bvModal.show('UpdateManagerForm');
         }
     }

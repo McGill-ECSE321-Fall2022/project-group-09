@@ -23,12 +23,12 @@
                 <!-- Buttons to refresh, clear selections, and select all in table-->
                 <b-navbar-nav class="ml-auto">
                     <b-button-group>
-                    <b-button class="my-2 my-sm-0" @click="refreshTable()"> Refresh Table</b-button>
-                    <br>
-                    <b-button variant="primary" class="my-2 my-sm-0" @click="selectAll()"> Select
-                        All</b-button>
-                    <br>
-                    <b-button class="my-2 my-sm-0" @click="clearSelected()"> Clear Selected</b-button>
+                        <b-button class="my-2 my-sm-0" @click="refreshTable()"> Refresh Table</b-button>
+                        <br>
+                        <b-button variant="primary" class="my-2 my-sm-0" @click="selectAll()"> Select
+                            All</b-button>
+                        <br>
+                        <b-button class="my-2 my-sm-0" @click="clearSelected()"> Clear Selected</b-button>
                     </b-button-group>
                 </b-navbar-nav>
             </b-navbar>
@@ -182,10 +182,16 @@ export default {
         // update the status of all selected loans
         async doUpdateLoan(selectedLoans, status) {
             for (var i = 0; i < selectedLoans.length; i++) {
+                if (status.includes("Declined")) {
+                    if (selectedLoans[i].exchangeStatus === "Approved") {
+                        this.errorMessage = "You cannot decline a loan that has already been approved. Approved loans were not declined";
+                        continue;
+                    }
+                }
                 this.request.exchangeId = selectedLoans[i].exchangeId;
                 this.request.exchangeStatus = status;
                 // send request to backend up update loan
-                 await AXIOS.put('/loan/', this.request, {})
+                await AXIOS.put('/loan/', this.request, {})
                     .then(response => {
                         //refresh the table on the last request
 
@@ -199,8 +205,10 @@ export default {
                         // call the error handler component modal (named errorPopUp) to display the error message
                         this.$bvModal.show('errorPopUp');
                     });
-            
+
             }
+            if (this.errorMessage !== "") {this.$bvModal.show('errorPopUp')};
+
             this.refreshTable();
 
         },
