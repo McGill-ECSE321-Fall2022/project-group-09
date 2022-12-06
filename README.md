@@ -87,19 +87,37 @@ The task of writing classes and its tests were split as follows:
 
 # Deliverable 3
 
-(enter short description here)
+The architecture model can be found [here].(https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/API-Documentation#api-documentation). The implementation of the Web Frontend can be found [here].(https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Test-Plan). The Build System and CI specifications can be found [here]. The key design decisions, additional features, and changes to the backend can be found [here].(https://github.com/orgs/McGill-ECSE321-Fall2022/projects/21). The project report detailing meeting minutes is [here].(https://github.com/McGill-ECSE321-Fall2022/project-group-09/wiki/Project-Report-Deliverable-2#meeting-minutes)
 
 ## Team Roles
 
-The task of creating the webpages were split as follows: <br>
-(enter roles here)
+The task of writing web pages were split as follows:
+* **Artefact:** Sasha Denouvilliez-Pech
+* **Room:** Sasha Denouvilliez-Pech
+* **Ticket:** Shyam Desai
+* **Tour:** Shyam Desai
+* **OpenDay:** Mohamed Elsamadouny
+* **Donation:** Mohamed Elsamadouny
+* **Employee:** Saviru Perera
+* **Visitor:** Saviru Perera
+* **Loan:** Shidan Javaheri
+* **Login:** Shidan Javaheri
+* **Manager:** Shidan Javaheri
+* **Notification:** Athmane
+* **Schedule:**  Athmane Benarous
+* **Shift:**  Athmane Benarous
+* **Communication:** Athmane
+* **Main navigation bar:** Athmane
+
+
 
 ## Contributions
 | Name             | Responsibilities                                                  | Hours (incl. meetings) |
 |:----------------:|:----------------------------------------------------------------- |:----------------------:|
-| Athmane Benarous | - xx <br> - xx <br> | xx hours |
-| Mohamed Elsamadouny | - xx <br> - xx <br> | xx hours |
-| Sasha Denouvilliez-Pech | - xx <br> - xx <br> | xx hours |
-| Saviru Perera | - xx <br> - xx <br> | xx hours |
-| Shidan Javaheri | - xx <br> - xx <br> | xx hours |
-| Shyam Desai | - xx <br> - xx <br> | xx hours |
+| Athmane Benarous | -  <br> -  <br> | XX hours |
+| Mohamed Elsamadouny | -  <br> -  <br>  | XX hours |
+| Sasha Denouvilliez-Pech | - View, create, update, and move artefacts <br> - Room tables (Dashboard) <br> - Wiki <br> - Review code and PRs <br> | 35 hours |
+| Saviru Perera | -  <br> -  <br>  | XX hours |
+| Shidan Javaheri | -  <br> -  <br>  | XX hours |
+| Shyam Desai | -  <br> -  <br>  | XX hours |
+
