@@ -3,6 +3,7 @@ package ca.mcgill.ecse.mmss.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Manager;
 import ca.mcgill.ecse.mmss.model.Person;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 /**
  * Manager Repository testing class which initiates a manager and a person repository, executes the tests, then clears each instance from the database.
@@ -25,6 +27,14 @@ public class ManagerRepositoryTests {
   // also need person database to store the manager
   @Autowired
   private PersonRepository personRepository;
+      /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
   
   @AfterEach
   public void clearDatabase() {

@@ -3,6 +3,7 @@ package ca.mcgill.ecse.mmss.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Communication;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Visitor;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 /**
  * Visitor Repository testing class which initiates a visitor, person, and communication repository, executes the tests, then clears each instance from the database.
@@ -29,6 +31,14 @@ public class VisitorRepositoryTests {
 	  //also need a person in order to have a visitor account
 	  @Autowired  
 	  private CommunicationRepository communicationRepository; 
+      /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
 	  
 	  @AfterEach
 	  public void clearDatabase() {

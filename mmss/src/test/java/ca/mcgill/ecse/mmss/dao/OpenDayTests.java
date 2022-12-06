@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.sql.Date;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Schedule;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 /**
  * Open Day Repository testing class which initiates an open day and a schedule repository, executes the tests, then clears each instance from the database.
@@ -27,6 +29,15 @@ public class OpenDayTests {
   
   @Autowired 
   private ScheduleRepository weeklyScheduleRepository; 
+
+      /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
   
   @AfterEach
   public void clearDatabase() {

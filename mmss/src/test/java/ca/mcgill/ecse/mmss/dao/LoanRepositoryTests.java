@@ -7,6 +7,7 @@ import java.sql.Date;
 
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Visitor;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Exchange.ExchangeStatus;
+import ca.mcgill.ecse.mmss.utils.Util;
 import ca.mcgill.ecse.mmss.model.Artefact;
 
 /**
@@ -48,6 +50,14 @@ public class LoanRepositoryTests {
   // a loan may optionally have a due date
   @Autowired
   private OpenDayRepository openDayRepository;
+      /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
 
   @AfterEach
   public void clearDatabase() {

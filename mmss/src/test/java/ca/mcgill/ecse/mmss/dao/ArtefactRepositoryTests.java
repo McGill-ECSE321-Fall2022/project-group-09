@@ -3,6 +3,7 @@ package ca.mcgill.ecse.mmss.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ca.mcgill.ecse.mmss.model.Artefact;
 import ca.mcgill.ecse.mmss.model.Room;
 import ca.mcgill.ecse.mmss.model.Room.RoomType;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 /**
  * Artefact Repository testing class which initiates an artefact and a room repository, executes the tests, then clears each instance from the database.
@@ -26,7 +28,14 @@ public class ArtefactRepositoryTests {
   // also need a room in order to add an artefact
   @Autowired  
   private RoomRepository roomRepository; 
-  
+        /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
   @AfterEach
   public void clearDatabase() {
     

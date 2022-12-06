@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.sql.Date;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import ca.mcgill.ecse.mmss.model.OpenDay;
 import ca.mcgill.ecse.mmss.model.Person;
 import ca.mcgill.ecse.mmss.model.Tour;
 import ca.mcgill.ecse.mmss.model.Visitor;
+import ca.mcgill.ecse.mmss.utils.Util;
 
 /**
  * Tour Repository testing class which initiates a tour, open day, visitor, employee, and person repository, executes the tests, then clears each instance from the database.
@@ -42,6 +44,14 @@ public class TourRepositoryTests {
   // visitor needs a person
   @Autowired
   private PersonRepository personRepository;
+      /**
+     * Clear the database before all tests
+     * @author Shidan Javaheri
+     */
+    @BeforeAll
+    public static void clearDatabase(@Autowired Util util) {
+        util.clearDatabase();
+    }
   
   @AfterEach
   public void clearDatabase() {
